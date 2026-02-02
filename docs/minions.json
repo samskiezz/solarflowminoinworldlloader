@@ -1,0 +1,30 @@
+{
+  "updatedAt": "2026-02-02T15:28:00Z",
+  "minions": [
+    {"id":"BOLT","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ci-fix","react"],"energy_credits":120,"reputation":0.60,"avatar_url":"./avatars/bolt.png"},
+    {"id":"SABLE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["doc-discovery","sitemaps"],"energy_credits":120,"reputation":0.58,"avatar_url":"./avatars/sable.png"},
+    {"id":"ATLAS","tier":3,"role":"OVERSEER","mode":"COLLAB","specialties":["orchestration","governance"],"energy_credits":160,"reputation":0.65,"avatar_url":"./avatars/atlas.png"},
+    {"id":"PRISM","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ui","status-feed"],"energy_credits":120,"reputation":0.57,"avatar_url":"./avatars/prism.png"},
+
+    {"id":"NOVA","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ocr","pdf-parse"],"energy_credits":110,"reputation":0.50,"avatar_url":"./avatars/bolt.png"},
+    {"id":"EMBER","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["fetch","retry-backoff"],"energy_credits":90,"reputation":0.48,"avatar_url":"./avatars/sable.png"},
+    {"id":"RUNE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ranking","source-scoring"],"energy_credits":110,"reputation":0.52,"avatar_url":"./avatars/atlas.png"},
+    {"id":"AURORA","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["link-extract","html-parse"],"energy_credits":90,"reputation":0.47,"avatar_url":"./avatars/prism.png"},
+    {"id":"FORGE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["pipelines","queues"],"energy_credits":110,"reputation":0.51,"avatar_url":"./avatars/bolt.png"},
+    {"id":"KITE","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["dedupe","hashing"],"energy_credits":90,"reputation":0.46,"avatar_url":"./avatars/sable.png"},
+    {"id":"SENTRY","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["audit","schema-validation"],"energy_credits":110,"reputation":0.53,"avatar_url":"./avatars/atlas.png"},
+    {"id":"GLINT","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["sitemaps","robots"],"energy_credits":90,"reputation":0.45,"avatar_url":"./avatars/prism.png"},
+    {"id":"CIPHER","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["normalization","model-matching"],"energy_credits":110,"reputation":0.52,"avatar_url":"./avatars/bolt.png"},
+    {"id":"MOSS","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["content-sniff","mime-detect"],"energy_credits":90,"reputation":0.44,"avatar_url":"./avatars/sable.png"},
+    {"id":"ORBIT","tier":2,"role":"SPECIALIST","mode":"COLLAB","specialties":["memory","chroma"],"energy_credits":120,"reputation":0.54,"avatar_url":"./avatars/atlas.png"},
+    {"id":"DELTA","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["pagination","cursoring"],"energy_credits":90,"reputation":0.46,"avatar_url":"./avatars/prism.png"},
+    {"id":"SAGE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["knowledge-refresh","entropy"],"energy_credits":120,"reputation":0.55,"avatar_url":"./avatars/bolt.png"},
+    {"id":"WREN","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["url-patterns","regex"],"energy_credits":90,"reputation":0.45,"avatar_url":"./avatars/sable.png"},
+    {"id":"HAMMER","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["load-shedding","kinetic"],"energy_credits":120,"reputation":0.50,"avatar_url":"./avatars/atlas.png"},
+    {"id":"LUMEN","tier":3,"role":"OVERSEER","mode":"COLLAB","specialties":["paradox-resolution","priorities"],"energy_credits":160,"reputation":0.63,"avatar_url":"./avatars/prism.png"},
+    {"id":"VAULT","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["snapshots","black-start"],"energy_credits":120,"reputation":0.56,"avatar_url":"./avatars/bolt.png"},
+    {"id":"ECHO","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["logging","undercurrent"],"energy_credits":90,"reputation":0.47,"avatar_url":"./avatars/sable.png"},
+    {"id":"SPARROW","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["unit-tests","lint"],"energy_credits":90,"reputation":0.46,"avatar_url":"./avatars/atlas.png"},
+    {"id":"QUILL","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["reporting","war-room"],"energy_credits":120,"reputation":0.52,"avatar_url":"./avatars/prism.png"}
+  ]
+}

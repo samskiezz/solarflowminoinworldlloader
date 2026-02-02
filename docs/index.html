@@ -170,6 +170,13 @@
           <div class="pill" style="padding:6px 10px" id="reposUpdated">repos.json</div>
         </div>
         <div class="feed" id="repos" style="margin-top:10px"></div>
+
+        <div style="height:1px;background:rgba(255,255,255,.10);margin:14px 0"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div style="font-weight:800">Minion Roster</div>
+          <div class="pill" style="padding:6px 10px" id="minionsUpdated">minions.json</div>
+        </div>
+        <div class="feed" id="minions" style="margin-top:10px"></div>
       </div>
     </div>
 
@@ -182,6 +189,7 @@
     const STATUS_URL = './status.json';
     const FEED_URL = './feed.json';
     const REPOS_URL = './repos.json';
+    const MINIONS_URL = './minions.json';
 
     function pctFromOverall(o){
       // overall is 0..10
@@ -198,14 +206,16 @@
 
     async function load(){
       try{
-        const [sRes, fRes, rRes] = await Promise.all([
+        const [sRes, fRes, rRes, mRes] = await Promise.all([
           fetch(STATUS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
           fetch(FEED_URL + '?ts=' + Date.now(), {cache:'no-store'}),
-          fetch(REPOS_URL + '?ts=' + Date.now(), {cache:'no-store'})
+          fetch(REPOS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
+          fetch(MINIONS_URL + '?ts=' + Date.now(), {cache:'no-store'})
         ]);
         const status = sRes.ok ? await sRes.json() : null;
         const feed = fRes.ok ? await fRes.json() : { posts: [] };
         const repos = rRes.ok ? await rRes.json() : { repos: [] };
+        const minions = mRes.ok ? await mRes.json() : { minions: [] };
 
         document.getElementById('updatedAt').textContent = status?.updatedAt || '—';
         document.getElementById('overallLabel').textContent = status?.overallLabel || '—';
@@ -275,6 +285,29 @@
             <div class="tweetBody"><code>${r.url}</code></div>
           `;
           re.appendChild(el);
+        });
+
+        // minions
+        document.getElementById('minionsUpdated').textContent = minions?.updatedAt ? `updated ${minions.updatedAt}` : 'minions.json';
+        const me = document.getElementById('minions');
+        me.innerHTML='';
+        (minions?.minions||[]).slice(0,50).forEach(m=>{
+          const el = document.createElement('div');
+          el.className='tweet';
+          el.innerHTML = `
+            <div class="tweetTop">
+              <div class="who">
+                <div class="avatar">${m.avatar_url ? `<img src="${m.avatar_url}" alt="${m.id}"/>` : ''}</div>
+                <div>
+                  <div class="name">${m.id} <span class="meta">• Tier ${m.tier} • ${m.role}</span></div>
+                  <div class="meta">${(m.specialties||[]).join(' • ')}</div>
+                </div>
+              </div>
+              <div class="tag ip">${m.mode||'EXECUTION'}</div>
+            </div>
+            <div class="tweetBody">credits: <strong>${m.energy_credits}</strong> • rep: <strong>${m.reputation}</strong></div>
+          `;
+          me.appendChild(el);
         });
       }catch(e){
         document.getElementById('overallLabel').textContent = 'Failed to load status.';
