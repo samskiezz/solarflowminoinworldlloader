@@ -14,6 +14,13 @@ const pTags = document.getElementById('pTags');
 const pHappy = document.getElementById('pHappy');
 const pHappyVal = document.getElementById('pHappyVal');
 
+const btnMap = document.getElementById('btnMap');
+const btnCloseMap = document.getElementById('btnCloseMap');
+const btnFocusAtlas = document.getElementById('btnFocusAtlas');
+const mapEl = document.getElementById('map');
+const mapList = document.getElementById('mapList');
+const searchEl = document.getElementById('search');
+
 const MINIONS_URL = './minions.json';
 const AGORA_URL = './agora.json';
 
@@ -48,14 +55,25 @@ function resize(){
 window.addEventListener('resize', resize);
 resize();
 
-// Controls (lets it feel like a game)
+// Controls (game navigation)
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.06;
 controls.target.set(0, 0.8, 0);
-controls.minDistance = 8;
-controls.maxDistance = 28;
+controls.minDistance = 4;
+controls.maxDistance = 40;
 controls.maxPolarAngle = Math.PI * 0.49;
+
+// WASD navigation (pan the whole rig)
+const keys = new Set();
+window.addEventListener('keydown', (e)=>{
+  const k = (e.key||'').toLowerCase();
+  if(['w','a','s','d','q','e','shift'].includes(k)) keys.add(k);
+});
+window.addEventListener('keyup', (e)=>{
+  const k = (e.key||'').toLowerCase();
+  keys.delete(k);
+});
 
 // Lights (neon)
 scene.add(new THREE.AmbientLight(0x8aa2ff, 0.35));
@@ -89,6 +107,18 @@ const capsuleGeo = new THREE.CapsuleGeometry(0.60, 1.35, 8, 22);
 
 const pods = []; // { id, meshGroup, data }
 const podById = new Map();
+let minionList = [];
+
+function focusPodById(id){
+  const p = podById.get((id||'').toUpperCase());
+  if(!p) return;
+  const pos = p.meshGroup.position.clone();
+  // move target to pod and bring camera in closer
+  controls.target.lerp(pos, 0.45);
+  const dir = camera.position.clone().sub(controls.target).normalize();
+  camera.position.copy(pos.clone().add(dir.multiplyScalar(14)));
+  setPanel(p);
+}
 
 function makePod(data, i, total){
   const group = new THREE.Group();
@@ -218,6 +248,9 @@ function onPointerMove(e){
 function onClick(){
   if(hovered){
     setPanel(hovered);
+    // also focus camera a bit
+    const pos = hovered.meshGroup.position.clone();
+    controls.target.lerp(pos, 0.35);
   }
 }
 window.addEventListener('pointermove', onPointerMove);
@@ -265,6 +298,40 @@ function buildPost(){
   composer.addPass(smaaPass);
 }
 
+function renderMap(){
+  const q = (searchEl?.value || '').trim().toLowerCase();
+  mapList.innerHTML = '';
+  const filtered = minionList.filter(m => !q || (m.id||'').toLowerCase().includes(q) || (m.role||'').toLowerCase().includes(q));
+  filtered.slice(0,80).forEach(m=>{
+    const row = document.createElement('div');
+    row.style.display='flex';
+    row.style.gap='10px';
+    row.style.alignItems='center';
+    row.style.justifyContent='space-between';
+    row.style.padding='10px';
+    row.style.border='1px solid rgba(255,255,255,.14)';
+    row.style.background='rgba(255,255,255,.06)';
+    row.style.borderRadius='12px';
+
+    const left = document.createElement('div');
+    left.innerHTML = `<div style="font-weight:800">${m.id}</div><div style="color:rgba(255,255,255,.72);font-size:12px">Tier ${m.tier} • ${m.role} • ${(m.specialties||[]).slice(0,2).join(' • ')}</div>`;
+
+    const btn = document.createElement('button');
+    btn.className='btn';
+    btn.textContent='Teleport';
+    btn.onclick = ()=>{ focusPodById(m.id); mapEl.style.display='none'; };
+
+    row.appendChild(left);
+    row.appendChild(btn);
+    mapList.appendChild(row);
+  });
+}
+
+btnMap?.addEventListener('click', ()=>{ mapEl.style.display = 'block'; renderMap(); });
+btnCloseMap?.addEventListener('click', ()=>{ mapEl.style.display = 'none'; });
+btnFocusAtlas?.addEventListener('click', ()=> focusPodById('ATLAS'));
+searchEl?.addEventListener('input', renderMap);
+
 async function loadData(){
   statusEl.textContent = 'loading minions…';
   buildEnv();
@@ -277,6 +344,7 @@ async function loadData(){
   const agora = agoraRes.ok ? await agoraRes.json() : {messages:[]};
 
   const list = (minions.minions||[]);
+  minionList = list;
   statusEl.textContent = `realm online • pods ${list.length} • comms ${(agora.messages||[]).length}`;
 
   // build pods
@@ -289,17 +357,36 @@ async function loadData(){
 
   // links/packets from agora
   rebuildLinks(agora.messages||[]);
+  renderMap();
 }
 
 function animate(tms){
   requestAnimationFrame(animate);
   const t = tms*0.001;
 
-  // gentle idle drift (controls still allow manual orbit)
-  if(!controls.dragging){
-    camera.position.x += Math.sin(t*0.25) * 0.002;
-    camera.position.z += Math.cos(t*0.25) * 0.002;
+  // keyboard navigation: move target + camera together (feels like flying the rig)
+  const dt = 1/60;
+  const speed = (keys.has('shift') ? 12 : 6) * dt;
+  const forward = new THREE.Vector3();
+  camera.getWorldDirection(forward);
+  forward.y = 0;
+  forward.normalize();
+  const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0,1,0)).normalize();
+
+  const move = new THREE.Vector3();
+  if(keys.has('w')) move.add(forward);
+  if(keys.has('s')) move.sub(forward);
+  if(keys.has('d')) move.add(right);
+  if(keys.has('a')) move.sub(right);
+  if(keys.has('q')) move.y -= 1;
+  if(keys.has('e')) move.y += 1;
+
+  if(move.lengthSq() > 0){
+    move.normalize().multiplyScalar(speed);
+    controls.target.add(move);
+    camera.position.add(move);
   }
+
   controls.update();
 
   // subtle pod bob + emissive pulse
