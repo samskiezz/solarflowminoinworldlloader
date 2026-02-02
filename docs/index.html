@@ -297,20 +297,45 @@
       return 'todo';
     }
 
+    async function safeJson(url){
+      const out = { url, ok:false, status:0, error:null, data:null };
+      try{
+        const res = await fetch(url + (url.includes('?')?'&':'?') + 'ts=' + Date.now(), { cache: 'no-store' });
+        out.status = res.status;
+        out.ok = res.ok;
+        if(!res.ok){
+          out.error = 'HTTP_' + res.status;
+          return out;
+        }
+        const txt = await res.text();
+        try{
+          out.data = JSON.parse(txt);
+          return out;
+        }catch(e){
+          out.error = 'JSON_PARSE_ERROR';
+          out.data = { _raw: txt.slice(0, 240) };
+          return out;
+        }
+      }catch(e){
+        out.error = String(e && (e.message || e));
+        return out;
+      }
+    }
+
     async function load(){
       try{
-        const [sRes, fRes, rRes, mRes, aRes] = await Promise.all([
-          fetch(STATUS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
-          fetch(FEED_URL + '?ts=' + Date.now(), {cache:'no-store'}),
-          fetch(REPOS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
-          fetch(MINIONS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
-          fetch(AGORA_URL + '?ts=' + Date.now(), {cache:'no-store'})
+        const [s, f, r, m, a] = await Promise.all([
+          safeJson(STATUS_URL),
+          safeJson(FEED_URL),
+          safeJson(REPOS_URL),
+          safeJson(MINIONS_URL),
+          safeJson(AGORA_URL)
         ]);
-        const status = sRes.ok ? await sRes.json() : null;
-        const feed = fRes.ok ? await fRes.json() : { posts: [] };
-        const repos = rRes.ok ? await rRes.json() : { repos: [] };
-        const minions = mRes.ok ? await mRes.json() : { minions: [] };
-        const agora = aRes.ok ? await aRes.json() : { messages: [] };
+        const status = s.data;
+        const feed = f.data || { posts: [] };
+        const repos = r.data || { repos: [] };
+        const minions = m.data || { minions: [] };
+        const agora = a.data || { messages: [] };
 
         document.getElementById('updatedAt').textContent = status?.updatedAt || '—';
         document.getElementById('overallLabel').textContent = status?.overallLabel || '—';
@@ -477,7 +502,7 @@
           urls: { STATUS_URL, FEED_URL, REPOS_URL, MINIONS_URL, AGORA_URL },
           error: String(e && (e.stack || e.message || e))
         };
-        el.insertAdjacentHTML('afterend', `<pre style="margin-top:8px;white-space:pre-wrap;word-break:break-word;color:rgba(255,255,255,.55);font-size:12px">debug:\n${abs('').includes('http') ? '' : ''}${JSON.stringify(dbg,null,2)}</pre>`);
+        el.insertAdjacentHTML('afterend', `<pre style="margin-top:8px;white-space:pre-wrap;word-break:break-word;color:rgba(255,255,255,.55);font-size:12px">debug:\n${JSON.stringify(dbg,null,2)}</pre>`);
       }
     }
 
