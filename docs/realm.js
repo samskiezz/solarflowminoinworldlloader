@@ -178,6 +178,31 @@ const pods = []; // { id, meshGroup, data }
 const podById = new Map();
 let minionList = [];
 
+// Avatar textures (for hologram characters)
+const texLoader = new THREE.TextureLoader();
+const avatarTexCache = new Map();
+function resolveAvatarUrl(url){
+  if(!url) return null;
+  // make relative avatar paths work under any base
+  if(url.startsWith('http')) return url;
+  const clean = url.replace(/^\.\//,'');
+  return BASE + clean;
+}
+async function loadAvatarTexture(url){
+  const u = resolveAvatarUrl(url);
+  if(!u) return null;
+  if(avatarTexCache.has(u)) return avatarTexCache.get(u);
+  const t = await new Promise((resolve, reject)=>{
+    texLoader.load(u, resolve, undefined, reject);
+  }).catch(()=>null);
+  if(t){
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 4;
+    avatarTexCache.set(u, t);
+  }
+  return t;
+}
+
 function focusPodById(id){
   const p = podById.get((id||'').toUpperCase());
   if(!p) return;
@@ -190,7 +215,54 @@ function focusPodById(id){
   setPanel(p);
 }
 
-function makePod(data, i, total){
+async function addHologram(group, data){
+  const tex = await loadAvatarTexture(data.avatar_url);
+  if(!tex) return;
+
+  // Character billboard (inside pod)
+  const mat = new THREE.SpriteMaterial({
+    map: tex,
+    transparent: true,
+    opacity: 0.85,
+    depthWrite: false
+  });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(1.35, 1.35, 1);
+  sprite.position.set(0, 0.15, 0);
+
+  // Neon rim glow hologram
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: tex,
+    color: 0x00ffff,
+    transparent: true,
+    opacity: 0.20,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  }));
+  glow.scale.set(1.55, 1.55, 1);
+  glow.position.copy(sprite.position);
+
+  // Scanline plane (fake hologram shimmer)
+  const scan = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.55, 1.55),
+    new THREE.MeshBasicMaterial({
+      color: 0x00ffff,
+      transparent: true,
+      opacity: 0.08,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    })
+  );
+  scan.position.copy(sprite.position);
+
+  group.add(glow);
+  group.add(sprite);
+  group.add(scan);
+
+  group.userData.holo = { sprite, glow, scan };
+}
+
+async function makePod(data, i, total){
   const group = new THREE.Group();
 
   const glassMat = new THREE.MeshPhysicalMaterial({
@@ -238,6 +310,9 @@ function makePod(data, i, total){
   if((data.id||'').toUpperCase()==='ATLAS') group.position.set(0, 0.9, 0);
 
   group.userData = { type:'pod', id: data.id, data };
+
+  // hologram character
+  await addHologram(group, data);
 
   scene.add(group);
   return group;
@@ -417,13 +492,14 @@ async function loadData(){
   minionList = list;
   statusEl.textContent = `realm online • pods ${list.length} • comms ${(agora.messages||[]).length}`;
 
-  // build pods
-  list.forEach((m,i)=>{
-    const meshGroup = makePod(m, i, list.length);
+  // build pods (await so hologram textures load)
+  for(let i=0;i<list.length;i++){
+    const m = list[i];
+    const meshGroup = await makePod(m, i, list.length);
     const obj = { id: (m.id||'').toUpperCase(), meshGroup, data: m };
     pods.push(obj);
     podById.set(obj.id, obj);
-  });
+  }
 
   // links/packets from agora
   rebuildLinks(agora.messages||[]);
@@ -460,12 +536,24 @@ function animate(tms){
 
   controls.update();
 
-  // subtle pod bob + emissive pulse
+  // subtle pod bob + hologram shimmer
   for(const p of pods){
     const g = p.meshGroup;
     g.position.y = (g.userData?.id==='ATLAS'?0.9:g.position.y);
     g.position.y += Math.sin(t*1.2 + g.position.x*0.2 + g.position.z*0.2) * 0.002;
     g.rotation.y = Math.sin(t*0.6 + g.position.x*0.1) * 0.12;
+
+    const holo = g.userData?.holo;
+    if(holo){
+      const wob = 0.03*Math.sin(t*2.2 + g.position.x*0.15);
+      holo.sprite.material.opacity = 0.78 + 0.10*Math.sin(t*1.7 + g.position.z*0.2);
+      holo.glow.material.opacity = 0.16 + 0.07*Math.sin(t*2.6 + g.position.x*0.2);
+      holo.scan.rotation.z = t*0.25;
+      holo.scan.material.opacity = 0.05 + 0.05*Math.max(0, Math.sin(t*3.2 + g.position.x*0.2));
+      holo.sprite.position.y = 0.15 + wob;
+      holo.glow.position.y = holo.sprite.position.y;
+      holo.scan.position.y = holo.sprite.position.y;
+    }
   }
 
   // raycast hover
