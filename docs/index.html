@@ -257,11 +257,19 @@
     })();
     const BASE = window.location.origin + ROOT;
 
-    const STATUS_URL = BASE + 'status.json';
-    const FEED_URL = BASE + 'feed.json';
-    const REPOS_URL = BASE + 'repos.json';
-    const MINIONS_URL = BASE + 'minions.json';
-    const AGORA_URL = BASE + 'agora.json';
+    function abs(u){
+      if(!u) return u;
+      if(u.startsWith('http')) return u;
+      if(u.startsWith('./')) return BASE + u.slice(2);
+      if(u.startsWith('/')) return window.location.origin + u;
+      return BASE + u;
+    }
+
+    const STATUS_URL = abs('status.json');
+    const FEED_URL = abs('feed.json');
+    const REPOS_URL = abs('repos.json');
+    const MINIONS_URL = abs('minions.json');
+    const AGORA_URL = abs('agora.json');
 
     function pctFromOverall(o){
       // overall is 0..10
@@ -325,7 +333,7 @@
           el.innerHTML = `
             <div class="tweetTop">
               <div class="who">
-                <div class="avatar">${p.avatar_url ? `<img src="${p.avatar_url}" alt="${p.who||'Minion'}"/>` : ''}</div>
+                <div class="avatar">${p.avatar_url ? `<img src="${abs(p.avatar_url)}" alt="${p.who||'Minion'}"/>` : ''}</div>
                 <div>
                   <div class="name">${p.who||'Minion'} <span class="meta">• ${p.when||''}</span></div>
                   <div class="meta">${p.topic||''}</div>
@@ -371,7 +379,7 @@
           el.innerHTML = `
             <div class="tweetTop">
               <div class="who">
-                <div class="avatar">${m.avatar_url ? `<img src="${m.avatar_url}" alt="${m.id}"/>` : ''}</div>
+                <div class="avatar">${m.avatar_url ? `<img src="${abs(m.avatar_url)}" alt="${m.id}"/>` : ''}</div>
                 <div>
                   <div class="name">${m.id} <span class="meta">• Tier ${m.tier} • ${m.role}</span></div>
                   <div class="meta">${(m.specialties||[]).join(' • ')}</div>
@@ -448,8 +456,15 @@
       }catch(e){
         const el = document.getElementById('overallLabel');
         el.textContent = 'Failed to load status.';
-        // Minimal debug hint (shows the computed base URL)
-        el.insertAdjacentHTML('afterend', `<div style="margin-top:6px;color:rgba(255,255,255,.55);font-size:12px">debug: BASE=${BASE}</div>`);
+        const dbg = {
+          href: window.location.href,
+          pathname: window.location.pathname,
+          ROOT,
+          BASE,
+          urls: { STATUS_URL, FEED_URL, REPOS_URL, MINIONS_URL, AGORA_URL },
+          error: String(e && (e.stack || e.message || e))
+        };
+        el.insertAdjacentHTML('afterend', `<pre style="margin-top:8px;white-space:pre-wrap;word-break:break-word;color:rgba(255,255,255,.55);font-size:12px">debug:\n${abs('').includes('http') ? '' : ''}${JSON.stringify(dbg,null,2)}</pre>`);
       }
     }
 
