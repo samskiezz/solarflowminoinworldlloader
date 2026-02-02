@@ -251,6 +251,8 @@
     // Robust base path (works whether GitHub Pages is served from /docs or root)
     const ROOT = (()=>{
       const p = window.location.pathname;
+      // handle repo root when user opens without trailing slash: /solarflow-status
+      if(/^\/[^\/]+$/.test(p)) return p + '/';
       if(p.includes('/docs/')) return p.split('/docs/')[0] + '/';
       return p.endsWith('/') ? p : p.replace(/[^/]+$/,'');
     })();
@@ -445,7 +447,10 @@
           try{ await navigator.clipboard.writeText(out.value); }catch(e){}
         });
       }catch(e){
-        document.getElementById('overallLabel').textContent = 'Failed to load status.';
+        const el = document.getElementById('overallLabel');
+        el.textContent = 'Failed to load status.';
+        // Minimal debug hint (shows the computed base URL)
+        el.insertAdjacentHTML('afterend', `<div style="margin-top:6px;color:rgba(255,255,255,.55);font-size:12px">debug: BASE=${BASE}</div>`);
       }
     }
 
