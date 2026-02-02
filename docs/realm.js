@@ -21,8 +21,16 @@ const mapEl = document.getElementById('map');
 const mapList = document.getElementById('mapList');
 const searchEl = document.getElementById('search');
 
-const MINIONS_URL = './minions.json';
-const AGORA_URL = './agora.json';
+// Robust base path (works whether GitHub Pages is served from /docs or root)
+const ROOT = (()=>{
+  const p = window.location.pathname;
+  if(p.includes('/docs/')) return p.split('/docs/')[0] + '/';
+  return p.endsWith('/') ? p : p.replace(/[^/]+$/,'');
+})();
+const BASE = window.location.origin + ROOT;
+
+const MINIONS_URL = BASE + 'minions.json';
+const AGORA_URL = BASE + 'agora.json';
 
 // --- Sound FX (WebAudio synth, no external assets) ---
 let audioOn = false;

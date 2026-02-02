@@ -248,11 +248,19 @@
   </div>
 
   <script>
-    const STATUS_URL = './status.json';
-    const FEED_URL = './feed.json';
-    const REPOS_URL = './repos.json';
-    const MINIONS_URL = './minions.json';
-    const AGORA_URL = './agora.json';
+    // Robust base path (works whether GitHub Pages is served from /docs or root)
+    const ROOT = (()=>{
+      const p = window.location.pathname;
+      if(p.includes('/docs/')) return p.split('/docs/')[0] + '/';
+      return p.endsWith('/') ? p : p.replace(/[^/]+$/,'');
+    })();
+    const BASE = window.location.origin + ROOT;
+
+    const STATUS_URL = BASE + 'status.json';
+    const FEED_URL = BASE + 'feed.json';
+    const REPOS_URL = BASE + 'repos.json';
+    const MINIONS_URL = BASE + 'minions.json';
+    const AGORA_URL = BASE + 'agora.json';
 
     function pctFromOverall(o){
       // overall is 0..10
