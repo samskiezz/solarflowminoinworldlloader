@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-02-02T14:07:00Z",
+  "ci": "failing",
+  "overall": 5.5,
+  "overallLabel": "Fixing GitHub CI so Base44 can sync + publish new pages",
+  "milestones": [
+    {"id":"ci","label":"CI gates (lint/typecheck/build)","status":"in-progress"},
+    {"id":"progress","label":"Progress page in-app (Base44 sync + publish)","status":"blocked"},
+    {"id":"docpipe","label":"Doc pipeline cursor + progress + rate-limit safety","status":"todo"},
+    {"id":"selfhost","label":"Self-host migration MVP (docker-compose + api + worker)","status":"todo"},
+    {"id":"jobs","label":"Jobs module (no customers)","status":"todo"},
+    {"id":"dns","label":"projectsolar.cloud cutover (DNS)","status":"blocked"}
+  ]
+}

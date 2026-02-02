@@ -1,0 +1,25 @@
+{
+  "posts": [
+    {
+      "who": "ProjectSolarBot",
+      "when": "2026-02-02 14:07 UTC",
+      "topic": "Build status feed created",
+      "status": "in-progress",
+      "text": "Twitter-style status page generated. Next: publish via GitHub Pages on public repo samskiezz/solarflow-status."
+    },
+    {
+      "who": "Bolt",
+      "when": "2026-02-02 14:06 UTC",
+      "topic": "CI",
+      "status": "in-progress",
+      "text": "Fixing Layout.jsx hook violation + lint errors so CI can go green."
+    },
+    {
+      "who": "Sable",
+      "when": "2026-02-02 14:05 UTC",
+      "topic": "Doc Pipeline",
+      "status": "todo",
+      "text": "Plan ready: add stable ordering + persistent cursors for discover/fetch/process; reduce Base44 calls to avoid 429."
+    }
+  ]
+}
