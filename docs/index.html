@@ -327,6 +327,23 @@
         const minions = m.data || { minions: [] };
         const agora = a.data || { messages: [] };
 
+        // surface fetch diagnostics (helps on Telegram/Chrome caches)
+        const diag = { build: BUILD, status: s, feed: f, repos: r, minions: m, agora: a };
+        const anyErr = [s,f,r,m,a].some(x=>x && x.error);
+        const diagElId = 'diag';
+        let diagEl = document.getElementById(diagElId);
+        if(!diagEl){
+          diagEl = document.createElement('pre');
+          diagEl.id = diagElId;
+          diagEl.style.marginTop = '8px';
+          diagEl.style.whiteSpace = 'pre-wrap';
+          diagEl.style.wordBreak = 'break-word';
+          diagEl.style.color = 'rgba(255,255,255,.55)';
+          diagEl.style.fontSize = '12px';
+          document.getElementById('overallLabel').insertAdjacentElement('afterend', diagEl);
+        }
+        diagEl.textContent = anyErr ? ('diagnostics:\n' + JSON.stringify(diag, null, 2)) : '';
+
         document.getElementById('updatedAt').textContent = status?.updatedAt || '—';
         document.getElementById('overallLabel').textContent = status?.overallLabel || '—';
         const p = pctFromOverall(status?.overall);
