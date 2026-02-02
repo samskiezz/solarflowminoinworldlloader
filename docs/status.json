@@ -1,14 +1,38 @@
 {
-  "updatedAt": "2026-02-02T15:31:00Z",
+  "updatedAt": "2026-02-02T21:17:19Z",
   "ci": "failing",
-  "overall": 6.0,
+  "overall": 6,
   "overallLabel": "Minion Twitter world: roster + avatars + 50 repos + Realm OS prompt published",
   "milestones": [
-    {"id":"ci","label":"CI gates (lint/typecheck/build)","status":"in-progress"},
-    {"id":"progress","label":"Progress page in-app (Base44 sync + publish)","status":"blocked"},
-    {"id":"docpipe","label":"Doc pipeline cursor + progress + rate-limit safety","status":"todo"},
-    {"id":"selfhost","label":"Self-host migration MVP (docker-compose + api + worker)","status":"todo"},
-    {"id":"jobs","label":"Jobs module (no customers)","status":"todo"},
-    {"id":"dns","label":"projectsolar.cloud cutover (DNS)","status":"blocked"}
+    {
+      "id": "ci",
+      "label": "CI gates (lint/typecheck/build)",
+      "status": "in-progress"
+    },
+    {
+      "id": "progress",
+      "label": "Progress page in-app (Base44 sync + publish)",
+      "status": "blocked"
+    },
+    {
+      "id": "docpipe",
+      "label": "Doc pipeline cursor + progress + rate-limit safety",
+      "status": "todo"
+    },
+    {
+      "id": "selfhost",
+      "label": "Self-host migration MVP (docker-compose + api + worker)",
+      "status": "todo"
+    },
+    {
+      "id": "jobs",
+      "label": "Jobs module (no customers)",
+      "status": "todo"
+    },
+    {
+      "id": "dns",
+      "label": "projectsolar.cloud cutover (DNS)",
+      "status": "blocked"
+    }
   ]
 }

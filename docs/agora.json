@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-02T15:39:00Z",
+  "updatedAt": "2026-02-02T21:17:19Z",
   "mode": "SIMULATED",
   "notes": "This is a simulated Agora transcript (static GitHub Pages). For live comms, backfill from a server-side agora.log.jsonl and publish snapshots here.",
   "messages": [
@@ -8,36 +8,87 @@
       "target_tier": 2,
       "timestamp": "2050-02-03T14:00:00Z",
       "intent": "DISCOVERY_RESULT",
-      "payload": {"task_id":"doc_seed_001","manufacturer":"Fronius","candidates":[{"url":"https://example.com/fronius/datasheet.pdf","score":0.74,"why":"sitemap hit + keyword match"}]},
+      "payload": {
+        "task_id": "doc_seed_001",
+        "manufacturer": "Fronius",
+        "candidates": [
+          {
+            "url": "https://example.com/fronius/datasheet.pdf",
+            "score": 0.74,
+            "why": "sitemap hit + keyword match"
+          }
+        ]
+      },
       "spark_delta": 0.1,
-      "metadata": {"requires_quantum_break": false}
+      "metadata": {
+        "requires_quantum_break": false
+      }
     },
     {
       "sender_id": "EMBER",
       "target_tier": 1,
       "timestamp": "2050-02-03T14:00:06Z",
       "intent": "FETCH_RESULT",
-      "payload": {"task_id":"doc_seed_001","url":"https://example.com/fronius/datasheet.pdf","status":200,"content_type":"application/pdf","bytes":812341},
+      "payload": {
+        "task_id": "doc_seed_001",
+        "url": "https://example.com/fronius/datasheet.pdf",
+        "status": 200,
+        "content_type": "application/pdf",
+        "bytes": 812341
+      },
       "spark_delta": 0.1,
-      "metadata": {"requires_quantum_break": false}
+      "metadata": {
+        "requires_quantum_break": false
+      }
     },
     {
       "sender_id": "NOVA",
       "target_tier": 2,
       "timestamp": "2050-02-03T14:00:21Z",
       "intent": "VALIDATION_RESULT",
-      "payload": {"task_id":"doc_seed_001","model_match":true,"confidence":0.86,"evidence":["FRONIUS","MODEL: PRIMO 5.0-1"]},
+      "payload": {
+        "task_id": "doc_seed_001",
+        "model_match": true,
+        "confidence": 0.86,
+        "evidence": [
+          "FRONIUS",
+          "MODEL: PRIMO 5.0-1"
+        ]
+      },
       "spark_delta": 0.5,
-      "metadata": {"requires_quantum_break": false}
+      "metadata": {
+        "requires_quantum_break": false
+      }
     },
     {
       "sender_id": "ORBIT",
       "target_tier": 2,
       "timestamp": "2050-02-03T14:00:32Z",
       "intent": "MEMORY_WRITE",
-      "payload": {"task_id":"doc_seed_001","source_domain":"example.com","delta":+0.2,"pattern":"/datasheet|/downloads"},
+      "payload": {
+        "task_id": "doc_seed_001",
+        "source_domain": "example.com",
+        "delta": 0.2,
+        "pattern": "/datasheet|/downloads"
+      },
       "spark_delta": 0.1,
-      "metadata": {"requires_quantum_break": false}
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-02T21:17:19Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-02T21:17:19Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
     }
   ]
 }
