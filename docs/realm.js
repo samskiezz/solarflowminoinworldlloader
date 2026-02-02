@@ -16,12 +16,73 @@ const pHappyVal = document.getElementById('pHappyVal');
 const btnMap = document.getElementById('btnMap');
 const btnCloseMap = document.getElementById('btnCloseMap');
 const btnFocusAtlas = document.getElementById('btnFocusAtlas');
+const btnSound = document.getElementById('btnSound');
 const mapEl = document.getElementById('map');
 const mapList = document.getElementById('mapList');
 const searchEl = document.getElementById('search');
 
 const MINIONS_URL = './minions.json';
 const AGORA_URL = './agora.json';
+
+// --- Sound FX (WebAudio synth, no external assets) ---
+let audioOn = false;
+let audioCtx = null;
+let master = null;
+
+function ensureAudio(){
+  if(audioCtx) return true;
+  try{
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    master = audioCtx.createGain();
+    master.gain.value = 0.35;
+    master.connect(audioCtx.destination);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function blip({f=440, dur=0.08, type='sine', gain=0.12, glide=0, endF=null}={}){
+  if(!audioOn) return;
+  if(!ensureAudio()) return;
+  const t0 = audioCtx.currentTime;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(f, t0);
+  if(glide && endF){
+    o.frequency.exponentialRampToValueAtTime(endF, t0 + glide);
+  }
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g);
+  g.connect(master);
+  o.start(t0);
+  o.stop(t0 + dur + 0.02);
+}
+
+function clickFx(){ blip({f:620, endF:820, glide:0.05, dur:0.09, type:'triangle', gain:0.14}); }
+function hoverFx(){ blip({f:520, dur:0.05, type:'sine', gain:0.07}); }
+function openFx(){ blip({f:320, endF:640, glide:0.09, dur:0.14, type:'sawtooth', gain:0.10}); }
+function closeFx(){ blip({f:640, endF:280, glide:0.09, dur:0.12, type:'sawtooth', gain:0.09}); }
+function teleportFx(){ blip({f:220, endF:1320, glide:0.12, dur:0.18, type:'square', gain:0.10}); blip({f:1320, endF:520, glide:0.10, dur:0.16, type:'triangle', gain:0.08}); }
+function packetFx(){ blip({f:880, dur:0.04, type:'triangle', gain:0.06}); }
+
+btnSound?.addEventListener('click', async ()=>{
+  // Audio must start on a user gesture on mobile.
+  audioOn = !audioOn;
+  if(audioOn){
+    ensureAudio();
+    if(audioCtx?.state === 'suspended'){
+      try{ await audioCtx.resume(); }catch(e){}
+    }
+    btnSound.textContent = 'Sound: ON';
+    openFx();
+  }else{
+    btnSound.textContent = 'Sound: OFF';
+  }
+});
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x030615, 0.06);
@@ -111,6 +172,7 @@ function focusPodById(id){
   const p = podById.get((id||'').toUpperCase());
   if(!p) return;
   const pos = p.meshGroup.position.clone();
+  teleportFx();
   // move target to pod and bring camera in closer
   controls.target.lerp(pos, 0.45);
   const dir = camera.position.clone().sub(controls.target).normalize();
@@ -210,7 +272,7 @@ function rebuildLinks(messages){
       new THREE.MeshBasicMaterial({ color: 0xb400ff })
     );
     packetGroup.add(pm);
-    packets.push({ mesh: pm, a: pa.clone(), b: pb.clone(), t: Math.random(), speed: 0.15 + Math.random()*0.25 });
+    packets.push({ mesh: pm, a: pa.clone(), b: pb.clone(), t: Math.random(), speed: 0.15 + Math.random()*0.25, nextBeep: 0.15 + Math.random()*0.25 });
   }
 }
 
@@ -245,6 +307,7 @@ function onPointerMove(e){
 
 function onClick(){
   if(hovered){
+    clickFx();
     setPanel(hovered);
     // also focus camera a bit
     const pos = hovered.meshGroup.position.clone();
@@ -316,7 +379,7 @@ function renderMap(){
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent='Teleport';
-    btn.onclick = ()=>{ focusPodById(m.id); mapEl.style.display='none'; };
+    btn.onclick = ()=>{ teleportFx(); focusPodById(m.id); mapEl.style.display='none'; };
 
     row.appendChild(left);
     row.appendChild(btn);
@@ -324,9 +387,9 @@ function renderMap(){
   });
 }
 
-btnMap?.addEventListener('click', ()=>{ mapEl.style.display = 'block'; renderMap(); });
-btnCloseMap?.addEventListener('click', ()=>{ mapEl.style.display = 'none'; });
-btnFocusAtlas?.addEventListener('click', ()=> focusPodById('ATLAS'));
+btnMap?.addEventListener('click', ()=>{ mapEl.style.display = 'block'; openFx(); renderMap(); });
+btnCloseMap?.addEventListener('click', ()=>{ mapEl.style.display = 'none'; closeFx(); });
+btnFocusAtlas?.addEventListener('click', ()=>{ clickFx(); focusPodById('ATLAS'); });
 searchEl?.addEventListener('input', renderMap);
 
 async function loadData(){
@@ -409,12 +472,16 @@ function animate(tms){
   hovered = found;
   canvas.style.cursor = hovered ? 'pointer' : 'default';
 
-  // move packets
+  // move packets (with subtle beeps when they arrive)
   for(const p of packets){
     p.t = (p.t + p.speed*0.01) % 1;
     p.mesh.position.lerpVectors(p.a, p.b, p.t);
     // tiny arc
     p.mesh.position.y += Math.sin(p.t*Math.PI) * 0.4;
+    if(p.t > p.nextBeep){
+      packetFx();
+      p.nextBeep = p.t + 0.25 + Math.random()*0.35;
+    }
   }
 
   composer.render();
