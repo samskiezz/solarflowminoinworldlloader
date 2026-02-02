@@ -24,6 +24,8 @@ const searchEl = document.getElementById('search');
 // Robust base path (works whether GitHub Pages is served from /docs or root)
 const ROOT = (()=>{
   const p = window.location.pathname;
+  // handle repo root when user opens without trailing slash: /solarflow-status
+  if(/^\/[^\/]+$/.test(p)) return p + '/';
   if(p.includes('/docs/')) return p.split('/docs/')[0] + '/';
   return p.endsWith('/') ? p : p.replace(/[^/]+$/,'');
 })();
