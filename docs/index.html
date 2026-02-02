@@ -117,7 +117,10 @@
       width:34px;height:34px;border-radius:10px;
       background:linear-gradient(135deg, rgba(34,211,238,.45), rgba(167,139,250,.35));
       border:1px solid rgba(255,255,255,.16);
+      overflow:hidden;
+      flex: 0 0 34px;
     }
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
     .who .name{font-weight:700;font-size:13px}
     .who .meta{font-size:12px;color:var(--muted)}
     .tweetBody{margin-top:8px;font-size:13px;line-height:1.45}
@@ -161,6 +164,12 @@
         <div class="footer">
           This page is public. No secrets. Source-of-truth is <code>status.json</code> + <code>feed.json</code>.
         </div>
+        <div style="height:1px;background:rgba(255,255,255,.10);margin:14px 0"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div style="font-weight:800">Power Stack (50 repos)</div>
+          <div class="pill" style="padding:6px 10px" id="reposUpdated">repos.json</div>
+        </div>
+        <div class="feed" id="repos" style="margin-top:10px"></div>
       </div>
     </div>
 
@@ -172,6 +181,7 @@
   <script>
     const STATUS_URL = './status.json';
     const FEED_URL = './feed.json';
+    const REPOS_URL = './repos.json';
 
     function pctFromOverall(o){
       // overall is 0..10
@@ -188,12 +198,14 @@
 
     async function load(){
       try{
-        const [sRes, fRes] = await Promise.all([
+        const [sRes, fRes, rRes] = await Promise.all([
           fetch(STATUS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
-          fetch(FEED_URL + '?ts=' + Date.now(), {cache:'no-store'})
+          fetch(FEED_URL + '?ts=' + Date.now(), {cache:'no-store'}),
+          fetch(REPOS_URL + '?ts=' + Date.now(), {cache:'no-store'})
         ]);
         const status = sRes.ok ? await sRes.json() : null;
         const feed = fRes.ok ? await fRes.json() : { posts: [] };
+        const repos = rRes.ok ? await rRes.json() : { repos: [] };
 
         document.getElementById('updatedAt').textContent = status?.updatedAt || '—';
         document.getElementById('overallLabel').textContent = status?.overallLabel || '—';
@@ -229,7 +241,7 @@
           el.innerHTML = `
             <div class="tweetTop">
               <div class="who">
-                <div class="avatar"></div>
+                <div class="avatar">${p.avatar_url ? `<img src="${p.avatar_url}" alt="${p.who||'Minion'}"/>` : ''}</div>
                 <div>
                   <div class="name">${p.who||'Minion'} <span class="meta">• ${p.when||''}</span></div>
                   <div class="meta">${p.topic||''}</div>
@@ -240,6 +252,29 @@
             <div class="tweetBody">${(p.text||'').replace(/\n/g,'<br/>')}</div>
           `;
           fe.appendChild(el);
+        });
+
+        // repos
+        document.getElementById('reposUpdated').textContent = repos?.updatedAt ? `updated ${repos.updatedAt}` : 'repos.json';
+        const re = document.getElementById('repos');
+        re.innerHTML='';
+        (repos?.repos||[]).slice(0,50).forEach(r=>{
+          const el = document.createElement('div');
+          el.className='tweet';
+          el.innerHTML = `
+            <div class="tweetTop">
+              <div class="who">
+                <div class="avatar"></div>
+                <div>
+                  <div class="name">${r.name}</div>
+                  <div class="meta">${r.group||''}</div>
+                </div>
+              </div>
+              <a class="tag ip" href="${r.url}" target="_blank" rel="noreferrer">open</a>
+            </div>
+            <div class="tweetBody"><code>${r.url}</code></div>
+          `;
+          re.appendChild(el);
         });
       }catch(e){
         document.getElementById('overallLabel').textContent = 'Failed to load status.';
