@@ -1,9 +1,8 @@
-import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
-import { EffectComposer } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { SMAAPass } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/SMAAPass.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.161.0/examples/jsm/controls/OrbitControls.js';
+import * as THREE from './vendor/three/build/three.module.js';
+import { EffectComposer } from './vendor/three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from './vendor/three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from './vendor/three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { OrbitControls } from './vendor/three/examples/jsm/controls/OrbitControls.js';
 
 const canvas = document.getElementById('c');
 const statusEl = document.getElementById('status');
@@ -40,7 +39,6 @@ renderer.physicallyCorrectLights = true;
 
 let composer;
 let bloomPass;
-let smaaPass;
 
 function resize(){
   const w = window.innerWidth;
@@ -50,7 +48,7 @@ function resize(){
   camera.updateProjectionMatrix();
   if(composer) composer.setSize(w, h);
   if(bloomPass) bloomPass.setSize(w, h);
-  if(smaaPass) smaaPass.setSize(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
+  // SMAA removed (vendoring minimized dependencies)
 }
 window.addEventListener('resize', resize);
 resize();
@@ -294,8 +292,7 @@ function buildPost(){
   composer.addPass(new RenderPass(scene, camera));
   bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 0.5, 0.18);
   composer.addPass(bloomPass);
-  smaaPass = new SMAAPass(window.innerWidth * renderer.getPixelRatio(), window.innerHeight * renderer.getPixelRatio());
-  composer.addPass(smaaPass);
+  // SMAA removed (vendoring minimized dependencies)
 }
 
 function renderMap(){
