@@ -248,18 +248,8 @@
   </div>
 
   <script>
-    // Hard cache-bust (Telegram/Chrome can be extremely sticky)
-    // If this page isn't loaded with the current build id, force a reload.
-    (function(){
-      const BUILD = '4e40a69';
-      const q = new URLSearchParams(window.location.search);
-      if(q.get('v') !== BUILD){
-        q.set('v', BUILD);
-        const next = window.location.pathname + '?' + q.toString();
-        window.location.replace(next);
-        return;
-      }
-    })();
+    // Build id (for debugging only)
+    const BUILD = '01a168a';
 
     // Robust base path for GitHub Pages project sites:
     // Always use the first path segment as the repo name.
