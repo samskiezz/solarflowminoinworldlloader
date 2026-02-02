@@ -1,4 +1,9 @@
 import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
+import { EffectComposer } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { SMAAPass } from 'https://unpkg.com/three@0.161.0/examples/jsm/postprocessing/SMAAPass.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.161.0/examples/jsm/controls/OrbitControls.js';
 
 const canvas = document.getElementById('c');
 const statusEl = document.getElementById('status');
@@ -18,9 +23,17 @@ scene.fog = new THREE.FogExp2(0x030615, 0.06);
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 camera.position.set(0, 10, 18);
 
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
 renderer.setClearColor(0x02030a, 1);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+renderer.physicallyCorrectLights = true;
+
+let composer;
+let bloomPass;
+let smaaPass;
 
 function resize(){
   const w = window.innerWidth;
@@ -28,20 +41,32 @@ function resize(){
   renderer.setSize(w, h, false);
   camera.aspect = w/h;
   camera.updateProjectionMatrix();
+  if(composer) composer.setSize(w, h);
+  if(bloomPass) bloomPass.setSize(w, h);
+  if(smaaPass) smaaPass.setSize(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
 }
 window.addEventListener('resize', resize);
 resize();
 
+// Controls (lets it feel like a game)
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.target.set(0, 0.8, 0);
+controls.minDistance = 8;
+controls.maxDistance = 28;
+controls.maxPolarAngle = Math.PI * 0.49;
+
 // Lights (neon)
-scene.add(new THREE.AmbientLight(0x6b7cff, 0.35));
-const key = new THREE.DirectionalLight(0x88ffff, 0.8);
-key.position.set(10, 20, 8);
+scene.add(new THREE.AmbientLight(0x8aa2ff, 0.35));
+const key = new THREE.DirectionalLight(0x9dffff, 2.0);
+key.position.set(12, 18, 8);
 scene.add(key);
-const mag = new THREE.PointLight(0xb400ff, 2.2, 80);
-mag.position.set(-10, 8, -8);
+const mag = new THREE.PointLight(0xb400ff, 80, 120);
+mag.position.set(-12, 10, -10);
 scene.add(mag);
-const cya = new THREE.PointLight(0x00ffff, 2.0, 80);
-cya.position.set(10, 6, 10);
+const cya = new THREE.PointLight(0x00ffff, 70, 120);
+cya.position.set(12, 8, 12);
 scene.add(cya);
 
 // Floor grid
@@ -59,23 +84,8 @@ grid.material.opacity = 0.35;
 grid.material.transparent = true;
 scene.add(grid);
 
-// Pod geometry (capsule-ish)
-function capsuleGeometry(radius=0.55, length=1.25, segments=16){
-  // Approx: cylinder + two spheres
-  const g = new THREE.Group();
-  const cyl = new THREE.CylinderGeometry(radius, radius, length, segments, 1, true);
-  const sph = new THREE.SphereGeometry(radius, segments, segments);
-  const m = new THREE.MeshBasicMaterial();
-  const a = new THREE.Mesh(cyl, m);
-  const b = new THREE.Mesh(sph, m);
-  const c = new THREE.Mesh(sph, m);
-  b.position.y = length/2;
-  c.position.y = -length/2;
-  g.add(a,b,c);
-  // merge not needed; we’ll clone meshes per pod
-  return { cyl, sph };
-}
-const baseGeo = capsuleGeometry();
+// Pod geometry (real capsule geometry, smoother)
+const capsuleGeo = new THREE.CapsuleGeometry(0.60, 1.35, 8, 22);
 
 const pods = []; // { id, meshGroup, data }
 const podById = new Map();
@@ -103,24 +113,20 @@ function makePod(data, i, total){
     emissiveIntensity: 1.2
   });
 
-  const cyl = new THREE.Mesh(baseGeo.cyl, glassMat);
-  const top = new THREE.Mesh(baseGeo.sph, glassMat);
-  const bot = new THREE.Mesh(baseGeo.sph, glassMat);
-  top.position.y = 1.25/2;
-  bot.position.y = -1.25/2;
+  const capsule = new THREE.Mesh(capsuleGeo, glassMat);
 
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.05, 12, 40), edgeMat);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.80, 0.06, 16, 64), edgeMat);
   ring.rotation.x = Math.PI/2;
 
-  group.add(cyl, top, bot, ring);
+  group.add(capsule, ring);
 
-  // glow sprite
+  // subtle halo (kept small; bloom does the heavy lifting)
   const glow = new THREE.Sprite(new THREE.SpriteMaterial({
     color: 0x00f5ff,
     transparent: true,
-    opacity: 0.22
+    opacity: 0.10
   }));
-  glow.scale.set(6,6,1);
+  glow.scale.set(3.8,3.8,1);
   group.add(glow);
 
   // layout: hub-spoke with gentle spiral
@@ -217,8 +223,52 @@ function onClick(){
 window.addEventListener('pointermove', onPointerMove);
 window.addEventListener('click', onClick);
 
+function buildEnv(){
+  // Procedural HDR-ish environment (canvas gradient) to make glass feel 3D.
+  const c = document.createElement('canvas');
+  c.width = 512; c.height = 256;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0,0,0,c.height);
+  g.addColorStop(0,'#0b1030');
+  g.addColorStop(0.35,'#060a1e');
+  g.addColorStop(0.7,'#040612');
+  g.addColorStop(1,'#02030a');
+  ctx.fillStyle = g; ctx.fillRect(0,0,c.width,c.height);
+  // neon band
+  ctx.globalAlpha = 0.35;
+  const g2 = ctx.createRadialGradient(380, 70, 10, 380, 70, 240);
+  g2.addColorStop(0,'#00ffff');
+  g2.addColorStop(1,'transparent');
+  ctx.fillStyle = g2; ctx.fillRect(0,0,c.width,c.height);
+  ctx.globalAlpha = 0.28;
+  const g3 = ctx.createRadialGradient(120, 120, 10, 120, 120, 260);
+  g3.addColorStop(0,'#b400ff');
+  g3.addColorStop(1,'transparent');
+  ctx.fillStyle = g3; ctx.fillRect(0,0,c.width,c.height);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const env = pmrem.fromEquirectangular(tex).texture;
+  scene.environment = env;
+  scene.background = null;
+  pmrem.dispose();
+}
+
+function buildPost(){
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 0.5, 0.18);
+  composer.addPass(bloomPass);
+  smaaPass = new SMAAPass(window.innerWidth * renderer.getPixelRatio(), window.innerHeight * renderer.getPixelRatio());
+  composer.addPass(smaaPass);
+}
+
 async function loadData(){
   statusEl.textContent = 'loading minions…';
+  buildEnv();
+  buildPost();
   const [minionsRes, agoraRes] = await Promise.all([
     fetch(MINIONS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
     fetch(AGORA_URL + '?ts=' + Date.now(), {cache:'no-store'})
@@ -245,12 +295,12 @@ function animate(tms){
   requestAnimationFrame(animate);
   const t = tms*0.001;
 
-  // auto camera orbit
-  const r = 18;
-  camera.position.x = Math.cos(t*0.18) * r;
-  camera.position.z = Math.sin(t*0.18) * r;
-  camera.position.y = 9 + Math.sin(t*0.10)*0.5;
-  camera.lookAt(0, 0.8, 0);
+  // gentle idle drift (controls still allow manual orbit)
+  if(!controls.dragging){
+    camera.position.x += Math.sin(t*0.25) * 0.002;
+    camera.position.z += Math.cos(t*0.25) * 0.002;
+  }
+  controls.update();
 
   // subtle pod bob + emissive pulse
   for(const p of pods){
@@ -283,7 +333,7 @@ function animate(tms){
     p.mesh.position.y += Math.sin(p.t*Math.PI) * 0.4;
   }
 
-  renderer.render(scene, camera);
+  composer.render();
 }
 
 loadData().then(()=>animate(0)).catch(err=>{
