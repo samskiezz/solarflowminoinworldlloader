@@ -99,11 +99,13 @@ const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 camera.position.set(0, 10, 18);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+// Chrome Android (S25 Ultra): prefer higher fidelity but keep a cap to avoid thermal throttling.
+const dpr = window.devicePixelRatio || 1;
+renderer.setPixelRatio(Math.min(2.25, dpr));
 renderer.setClearColor(0x02030a, 1);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
+renderer.toneMappingExposure = 1.28;
 renderer.physicallyCorrectLights = true;
 
 let composer;
@@ -125,7 +127,7 @@ resize();
 // Controls (game navigation)
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.06;
+controls.dampingFactor = 0.075;
 controls.target.set(0, 0.8, 0);
 controls.minDistance = 4;
 controls.maxDistance = 40;
@@ -361,7 +363,7 @@ function buildEnv(){
 function buildPost(){
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 0.5, 0.18);
+  bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.05, 0.55, 0.14);
   composer.addPass(bloomPass);
   // SMAA removed (vendoring minimized dependencies)
 }
@@ -434,7 +436,8 @@ function animate(tms){
 
   // keyboard navigation: move target + camera together (feels like flying the rig)
   const dt = 1/60;
-  const speed = (keys.has('shift') ? 12 : 6) * dt;
+  // tuned for mobile touch + WASD on Chrome Android
+  const speed = (keys.has('shift') ? 16 : 8) * dt;
   const forward = new THREE.Vector3();
   camera.getWorldDirection(forward);
   forward.y = 0;
