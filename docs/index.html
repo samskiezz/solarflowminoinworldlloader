@@ -248,13 +248,12 @@
   </div>
 
   <script>
-    // Robust base path (works whether GitHub Pages is served from /docs or root)
+    // Robust base path for GitHub Pages project sites:
+    // Always use the first path segment as the repo name.
     const ROOT = (()=>{
-      const p = window.location.pathname;
-      // handle repo root when user opens without trailing slash: /solarflow-status
-      if(/^\/[^\/]+$/.test(p)) return p + '/';
-      if(p.includes('/docs/')) return p.split('/docs/')[0] + '/';
-      return p.endsWith('/') ? p : p.replace(/[^/]+$/,'');
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const repo = parts[0] || 'solarflow-status';
+      return '/' + repo + '/';
     })();
     const BASE = window.location.origin + ROOT;
 
