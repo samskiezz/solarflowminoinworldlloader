@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-02-02T14:07:00Z",
+  "updatedAt": "2026-02-02T15:31:00Z",
   "ci": "failing",
-  "overall": 5.5,
-  "overallLabel": "Fixing GitHub CI so Base44 can sync + publish new pages",
+  "overall": 6.0,
+  "overallLabel": "Minion Twitter world: roster + avatars + 50 repos + Realm OS prompt published",
   "milestones": [
     {"id":"ci","label":"CI gates (lint/typecheck/build)","status":"in-progress"},
     {"id":"progress","label":"Progress page in-app (Base44 sync + publish)","status":"blocked"},

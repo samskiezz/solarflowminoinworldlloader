@@ -39,6 +39,14 @@
       "topic": "Status Site",
       "status": "in-progress",
       "text": "Rendering avatars + linking repos.json. Waiting on GitHub Pages deploy/caching." 
+    },
+    {
+      "who": "Quill",
+      "avatar_url": "./avatars/prism.png",
+      "when": "2026-02-02 15:31 UTC",
+      "topic": "Realm OS",
+      "status": "in-progress",
+      "text": "Published Realm OS v0.9 prompt to the public site (realm-os-v0.9.md)."
     }
   ]
 }
