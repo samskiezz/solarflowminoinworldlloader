@@ -27,12 +27,36 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       color:var(--text);
       background:
-        radial-gradient(1200px 600px at 10% 10%, rgba(167,139,250,.30), transparent 60%),
-        radial-gradient(900px 500px at 85% 20%, rgba(34,211,238,.22), transparent 55%),
-        radial-gradient(1000px 700px at 50% 110%, rgba(96,165,250,.18), transparent 60%),
+        radial-gradient(1200px 600px at 10% 10%, rgba(167,139,250,.22), transparent 60%),
+        radial-gradient(900px 500px at 85% 20%, rgba(34,211,238,.18), transparent 55%),
+        radial-gradient(1000px 700px at 50% 110%, rgba(96,165,250,.14), transparent 60%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
       min-height:100vh;
       overflow-x:hidden;
+    }
+
+    /* Vision-Pro-ish glass depth */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-40px;
+      background:
+        radial-gradient(900px 500px at 20% 20%, rgba(255,255,255,.08), transparent 60%),
+        radial-gradient(700px 450px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(900px 700px at 50% 120%, rgba(255,255,255,.05), transparent 60%);
+      filter: blur(10px);
+      opacity:.9;
+      pointer-events:none;
+      z-index:-1;
+    }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background: linear-gradient(120deg, rgba(255,255,255,.05), transparent 35%, rgba(255,255,255,.03));
+      opacity:.55;
+      pointer-events:none;
+      z-index:-1;
     }
     .wrap{max-width:980px;margin:0 auto;padding:28px 18px 80px}
     .top{
@@ -190,6 +214,14 @@
 
         <div style="height:1px;background:rgba(255,255,255,.10);margin:14px 0"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div style="font-weight:800">Agora Comms (Minion ↔ Minion)</div>
+          <div class="pill" style="padding:6px 10px" id="agoraUpdated">agora.json</div>
+        </div>
+        <div class="feed" id="agora" style="margin-top:10px"></div>
+        <div class="footer" style="margin-top:8px">You chose <strong>C</strong>: show public Agora + keep an Undercurrent channel available on request. This panel is the public Agora transcript.</div>
+
+        <div style="height:1px;background:rgba(255,255,255,.10);margin:14px 0"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
           <div style="font-weight:800">Talk to Minions (Public)</div>
           <div class="pill" style="padding:6px 10px">copy JSON → send in Telegram</div>
         </div>
@@ -219,6 +251,7 @@
     const FEED_URL = './feed.json';
     const REPOS_URL = './repos.json';
     const MINIONS_URL = './minions.json';
+    const AGORA_URL = './agora.json';
 
     function pctFromOverall(o){
       // overall is 0..10
@@ -235,16 +268,18 @@
 
     async function load(){
       try{
-        const [sRes, fRes, rRes, mRes] = await Promise.all([
+        const [sRes, fRes, rRes, mRes, aRes] = await Promise.all([
           fetch(STATUS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
           fetch(FEED_URL + '?ts=' + Date.now(), {cache:'no-store'}),
           fetch(REPOS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
-          fetch(MINIONS_URL + '?ts=' + Date.now(), {cache:'no-store'})
+          fetch(MINIONS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
+          fetch(AGORA_URL + '?ts=' + Date.now(), {cache:'no-store'})
         ]);
         const status = sRes.ok ? await sRes.json() : null;
         const feed = fRes.ok ? await fRes.json() : { posts: [] };
         const repos = rRes.ok ? await rRes.json() : { repos: [] };
         const minions = mRes.ok ? await mRes.json() : { minions: [] };
+        const agora = aRes.ok ? await aRes.json() : { messages: [] };
 
         document.getElementById('updatedAt').textContent = status?.updatedAt || '—';
         document.getElementById('overallLabel').textContent = status?.overallLabel || '—';
@@ -342,6 +377,30 @@
             </div>
           `;
           me.appendChild(el);
+        });
+
+        // agora
+        document.getElementById('agoraUpdated').textContent = agora?.updatedAt ? `updated ${agora.updatedAt}` : 'agora.json';
+        const ae = document.getElementById('agora');
+        ae.innerHTML='';
+        (agora?.messages||[]).slice(0,25).forEach(msg=>{
+          const el = document.createElement('div');
+          el.className='tweet';
+          const payload = JSON.stringify(msg.payload||{}, null, 0);
+          el.innerHTML = `
+            <div class="tweetTop">
+              <div class="who">
+                <div class="avatar"></div>
+                <div>
+                  <div class="name">${msg.sender_id} <span class="meta">• ${msg.intent||''}</span></div>
+                  <div class="meta">${msg.timestamp||''}</div>
+                </div>
+              </div>
+              <div class="tag ip">tier ${msg.target_tier ?? ''}</div>
+            </div>
+            <div class="tweetBody"><code>${payload.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></div>
+          `;
+          ae.appendChild(el);
         });
 
         // command composer
