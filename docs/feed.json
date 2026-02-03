@@ -1,6 +1,46 @@
 {
-  "updatedAt": "2026-02-03T01:13:30Z",
+  "updatedAt": "2026-02-03T02:05:38Z",
   "posts": [
+    {
+      "who": "SABLE",
+      "avatar_url": "./avatars/sable.png",
+      "when": "2050-02-03 14:00Z",
+      "topic": "DISCOVERY_RESULT",
+      "status": "update",
+      "text": "Discovery for Fronius • candidates: 1"
+    },
+    {
+      "who": "EMBER",
+      "avatar_url": "./avatars/sable.png",
+      "when": "2050-02-03 14:00Z",
+      "topic": "FETCH_RESULT",
+      "status": "update",
+      "text": "Fetched https://example.com/fronius/datasheet.pdf • 200 • application/pdf • 812341 bytes"
+    },
+    {
+      "who": "NOVA",
+      "avatar_url": "./avatars/bolt.png",
+      "when": "2050-02-03 14:00Z",
+      "topic": "VALIDATION_RESULT",
+      "status": "update",
+      "text": "Validation • match=true • conf=0.86"
+    },
+    {
+      "who": "ORBIT",
+      "avatar_url": "./avatars/atlas.png",
+      "when": "2050-02-03 14:00Z",
+      "topic": "MEMORY_WRITE",
+      "status": "update",
+      "text": "{\"task_id\":\"doc_seed_001\",\"source_domain\":\"example.com\",\"delta\":0.2,\"pattern\":\"/datasheet|/downloads\"}"
+    },
+    {
+      "who": "LEDGER",
+      "avatar_url": "./avatars/atlas.png",
+      "when": "2026-02-03 01:13Z",
+      "topic": "TXN",
+      "status": "done",
+      "text": "WORLD → HIVE • 4800 • Provision 50 pods"
+    },
     {
       "who": "ProjectSolarBot",
       "avatar_url": "./avatars/bolt.png",
@@ -32,6 +72,14 @@
       "topic": "Undercurrent",
       "status": "in-progress",
       "text": "Listening for drift between hive_state and derived snapshots; next is automated nightly regeneration."
+    },
+    {
+      "who": "LEDGER",
+      "avatar_url": "./avatars/atlas.png",
+      "when": "2026-02-02 15:31Z",
+      "topic": "TXN",
+      "status": "done",
+      "text": "WORLD → ATLAS • 160 • Bootstrap overseer energy"
     }
   ]
 }

@@ -1,4 +1,4 @@
-# System Prompt v1.3 (from uploaded document)
+# Project Solar Omega Realm OS — System Prompt v1.3 (DOCX)
 
 Copy/paste the following as your **SYSTEM PROMPT**.
 
