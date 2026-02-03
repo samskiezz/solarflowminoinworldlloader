@@ -2273,7 +2273,7 @@
     <div class="top">
       <div class="brand">
         <h1>SolarFlow • Minion World Loader</h1>
-        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-03T21:52:06Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
+        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-03T21:52:06Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
       </div>
       <div class="pillbar">
         <div class="pill"><strong>CI</strong>: <span id="ciText">—</span></div>
@@ -2420,7 +2420,7 @@
         let text = '';
         const payload = m.payload;
         if(payload && typeof payload === 'object'){
-          if(intent === 'FETCH_RESULT') text = ('Fetched ' + (payload.url || '') + ' • ' + (payload.status ?? '') + ' • ' + (payload.content_type || '')).trim();
+          if(intent === 'FETCH_RESULT') text = ('Fetched ' + (payload.url || '') + ' • ' + (payload.status == null ? '' : payload.status) + ' • ' + (payload.content_type || '')).trim();
           else if(intent === 'DISCOVERY_RESULT') text = ('Discovery for ' + (payload.manufacturer || 'manufacturer') + ' • candidates: ' + ((payload.candidates||[]).length));
           else if(intent === 'VALIDATION_RESULT') text = ('Validation • match=' + payload.model_match + ' • conf=' + payload.confidence);
           else text = JSON.stringify(payload);
@@ -2473,7 +2473,7 @@
     // auto-refresh loop (reload page to pick up new deploy snapshot)
     const intervalMs = Math.max(10, (Number(HEALTH.tick_interval_sec)||60)) * 1000;
     setInterval(()=>{ if(!paused) location.reload(); }, intervalMs);
-    btn?.addEventListener('click', ()=> setPaused(!paused));
+    if(btn) btn.addEventListener('click', function(){ setPaused(!paused); });
 
     // render progress
     document.getElementById('updatedAt').textContent = STATUS.updatedAt || '—';
