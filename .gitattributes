@@ -1,0 +1,11 @@
+# Prevent merge conflicts on generated artifacts.
+# Source of truth is docs/hive_state.json; everything else can be regenerated.
+
+docs/index.html merge=ours
+
+docs/status.json merge=ours
+docs/feed.json merge=ours
+docs/minions.json merge=ours
+docs/agora.json merge=ours
+docs/build.json merge=ours
+docs/roster.html merge=ours
