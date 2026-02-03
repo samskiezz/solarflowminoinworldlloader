@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-03T00:57:13Z",
+  "updatedAt": "2026-02-03T01:13:30Z",
   "mode": "SIMULATED",
-  "notes": "This is a simulated Agora transcript (static GitHub Pages). For live comms, backfill from a server-side agora.log.jsonl and publish snapshots here.",
+  "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
     {
       "sender_id": "SABLE",
@@ -70,76 +70,6 @@
         "source_domain": "example.com",
         "delta": 0.2,
         "pattern": "/datasheet|/downloads"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-02T21:17:19Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-02T21:17:19Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-02T23:04:58Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-02T23:04:58Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-02T23:30:30Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-02T23:30:30Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-02T23:53:27Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-02T23:53:27Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-03T00:57:13Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-03T00:57:13Z"
       },
       "spark_delta": 0.1,
       "metadata": {
