@@ -69,4 +69,7 @@ writeJson(hivePath, hive);
 // Regenerate derived docs/*.json
 require('./build_from_hive');
 
+// Rebuild index to embed the fresh hive snapshot (no fetch)
+require('./build_index');
+
 console.log('tick ok', now);
