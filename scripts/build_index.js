@@ -39,6 +39,9 @@ const html = `<!doctype html>
     .pill strong{color:var(--text);font-weight:600}
     .btn{cursor:pointer;border:1px solid var(--stroke);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));color:var(--text);
       padding:9px 12px;border-radius:10px;font-size:13px}
+    .spin{display:inline-block;width:12px;height:12px;border-radius:999px;border:2px solid rgba(255,255,255,.25);border-top-color:rgba(34,211,238,.95);animation:spin 0.9s linear infinite;vertical-align:-2px;margin-right:6px}
+    .spin.paused{animation:none;border-top-color:rgba(255,255,255,.25)}
+    @keyframes spin{to{transform:rotate(360deg)}}
     .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
     @media (max-width:880px){.grid{grid-template-columns:1fr}}
     .card{border:1px solid var(--stroke);background:linear-gradient(180deg,var(--card),var(--card2));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
@@ -77,11 +80,12 @@ const html = `<!doctype html>
     <div class="top">
       <div class="brand">
         <h1>SolarFlow Status Feed</h1>
-        <div class="sub">A–Z Realm v1 • no network required • hive updated <span style="color:rgba(255,255,255,.85)">${updatedAt}</span></div>
+        <div class="sub">A–Z Realm v1 • no network required • hive updated <span style="color:rgba(255,255,255,.85)">${updatedAt}</span> • <a href="./system-prompt-v1.3.md" style="color:rgba(255,255,255,.85)">System Prompt v1.3</a></div>
       </div>
       <div class="pillbar">
         <div class="pill"><strong>CI</strong>: <span id="ciText">—</span></div>
-        <div class="pill">Last update: <strong id="updatedAt">—</strong></div>
+        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">—</strong></div>
+        <button class="btn" id="btnToggle">Pause</button>
         <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
         <button class="btn" onclick="location.reload()">Refresh</button>
       </div>
@@ -124,6 +128,7 @@ const html = `<!doctype html>
     }
 
     const HIVE = safeParse('data-hive');
+    const HEALTH = (HIVE.world && HIVE.world.health) ? HIVE.world.health : { tick_interval_sec: 60, paused: false };
 
     // Derive view models from canonical hive_state.
     const STATUS = (HIVE.activities && HIVE.activities.status) ? {
@@ -161,6 +166,22 @@ const html = `<!doctype html>
       }
       return n;
     }
+
+    // loader spinner + pause/start
+    let paused = !!HEALTH.paused;
+    const btn = document.getElementById('btnToggle');
+    const spin = document.getElementById('spin');
+    function setPaused(v){
+      paused = !!v;
+      if(btn) btn.textContent = paused ? 'Start' : 'Pause';
+      if(spin) spin.classList.toggle('paused', paused);
+    }
+    setPaused(paused);
+
+    // auto-refresh loop (reload page to pick up new deploy snapshot)
+    const intervalMs = Math.max(10, (Number(HEALTH.tick_interval_sec)||60)) * 1000;
+    setInterval(()=>{ if(!paused) location.reload(); }, intervalMs);
+    btn?.addEventListener('click', ()=> setPaused(!paused));
 
     // render
     document.getElementById('updatedAt').textContent = STATUS.updatedAt || '—';

@@ -22,12 +22,24 @@
         "#60a5fa"
       ],
       "style": "neon-glass"
+    },
+    "health": {
+      "virtual_voltage": 0.33,
+      "entropy": 0.19,
+      "loop_risk": 0.12,
+      "tick_interval_sec": 60,
+      "paused": false
     }
   },
   "ledger": {
     "updatedAt": "2026-02-03T01:13:30Z",
     "credits_total": 5720,
     "reputation_index": 0.57,
+    "rewards": {
+      "help_friend_bonus": 5,
+      "task_complete_bonus": 1,
+      "audit_pass_bonus": 2
+    },
     "transactions": [
       {
         "id": "txn_bootstrap_001",
