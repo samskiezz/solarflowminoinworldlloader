@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SolarFlow Minion World Loader</title>
+  <title>Roster • SolarFlow Minion World</title>
   <meta name="color-scheme" content="dark light" />
   <style>
-    :root{--bg1:#070A12;--bg2:#0B1530;--card:rgba(255,255,255,.08);--card2:rgba(255,255,255,.06);--stroke:rgba(255,255,255,.14);--text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.62);--good:#22c55e;--warn:#f59e0b;--bad:#ef4444;--blue:#60a5fa;--purple:#a78bfa;--cyan:#22d3ee;}
+    :root{--bg1:#070A12;--bg2:#0B1530;--card:rgba(255,255,255,.08);--card2:rgba(255,255,255,.06);--stroke:rgba(255,255,255,.14);--text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.62);--blue:#60a5fa;--purple:#a78bfa;--cyan:#22d3ee;}
     *{box-sizing:border-box}
     body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
       background:radial-gradient(1200px 600px at 10% 10%, rgba(167,139,250,.22), transparent 60%),
@@ -23,84 +23,47 @@
     .pillbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .pill{border:1px solid var(--stroke);background:linear-gradient(180deg,var(--card),var(--card2));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
       border-radius:999px;padding:8px 12px;font-size:12px;color:var(--muted)}
-    .pill strong{color:var(--text);font-weight:600}
     .btn{cursor:pointer;border:1px solid var(--stroke);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));color:var(--text);
       padding:9px 12px;border-radius:10px;font-size:13px}
-    .spin{display:inline-block;width:12px;height:12px;border-radius:999px;border:2px solid rgba(255,255,255,.25);border-top-color:rgba(34,211,238,.95);animation:spin 0.9s linear infinite;vertical-align:-2px;margin-right:6px}
-    .spin.paused{animation:none;border-top-color:rgba(255,255,255,.25)}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
     .card{border:1px solid var(--stroke);background:linear-gradient(180deg,var(--card),var(--card2));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
       border-radius:16px;padding:14px}
 
-    .progressRow{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-    .bar{height:10px;border-radius:999px;overflow:hidden;flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);min-width:220px}
-    .bar>div{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--blue))}
-    .pct{font-size:12px;color:var(--muted)}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+    input, select{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.14);color:var(--text);padding:10px 12px;border-radius:12px;font-size:13px;outline:none}
+    input{min-width:240px;flex:1}
 
-    .sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px 0}
-    .sectionTitle h2{margin:0;font-size:14px;letter-spacing:.2px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:620px){.grid{grid-template-columns:1fr}}
 
-    .milestones{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-    .ms{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.12)}
-    .left{display:flex;flex-direction:column;gap:2px}
-    .title{font-size:13px;font-weight:600}
-    .id{font-size:11px;color:var(--muted)}
-    .tag{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14)}
-    .tag.done{background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.35);color:#bff3cc}
-    .tag.ip{background:rgba(96,165,250,.16);border-color:rgba(96,165,250,.35);color:#d7e9ff}
-    .tag.todo{background:rgba(148,163,184,.14);border-color:rgba(148,163,184,.25);color:#e5e7eb}
-    .tag.blocked{background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.35);color:#ffe6b5}
-
-    .meters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-    @media (max-width:620px){.meters{grid-template-columns:1fr}}
-    .meter{padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.14)}
-    .meter .label{font-size:12px;color:var(--muted)}
-    .meter .val{margin-top:6px;font-weight:800;font-size:16px}
-
-    .feed{display:flex;flex-direction:column;gap:10px}
-    .tweet{padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.16)}
-    .tweetTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .who{display:flex;gap:10px;align-items:center}
-    .avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg, rgba(34,211,238,.45), rgba(167,139,250,.35));border:1px solid rgba(255,255,255,.16);overflow:hidden;flex:0 0 34px}
-    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-    .name{font-weight:700;font-size:13px}
-    .meta{font-size:12px;color:var(--muted)}
-    .tweetBody{margin-top:8px;font-size:13px;line-height:1.45;white-space:pre-wrap}
-
-    .list{display:flex;flex-direction:column;gap:8px}
-    .row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.12)}
-    .row .k{font-size:12px;color:var(--muted)}
-    .row .v{font-size:12px;color:rgba(255,255,255,.88)}
+    .m{padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.16)}
+    .topRow{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .who{display:flex;gap:10px;align-items:center;min-width:0}
+    .av{width:38px;height:38px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.16);flex:0 0 38px;background:linear-gradient(135deg, rgba(34,211,238,.40), rgba(167,139,250,.30))}
+    .av img{width:100%;height:100%;object-fit:cover;display:block}
+    .id{font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+    .chip{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.14);color:rgba(255,255,255,.86)}
+    .kv{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .kv div{font-size:12px;color:rgba(255,255,255,.86)}
+    .kv span{color:var(--muted)}
 
     .footer{margin-top:12px;font-size:12px;color:var(--muted)}
-
-    .rosterGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    @media (max-width:900px){.rosterGrid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:620px){.rosterGrid{grid-template-columns:1fr}}
-    .mini{padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.14);display:flex;gap:10px;align-items:center}
-    .mini .a{width:34px;height:34px;border-radius:10px;overflow:hidden;flex:0 0 34px;border:1px solid rgba(255,255,255,.16)}
-    .mini .a img{width:100%;height:100%;object-fit:cover;display:block}
-    .mini .b{display:flex;flex-direction:column;gap:2px;min-width:0}
-    .mini .id{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .mini .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   </style>
 </head>
 <body>
-  <!-- Canonical embedded hive_state snapshot: no fetch required -->
   <script id="data-hive" type="application/json">{
   "meta": {
     "schema": "solarflow.hive_state.v1",
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "source": "canonical",
-    "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
+    "notes": "Single source of truth for the A\u2013Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
   "world": {
     "id": "solarflow-minionworld",
-    "name": "SolarFlow • Minion Realm",
-    "epoch": "A–Z v1",
+    "name": "SolarFlow \u2022 Minion Realm",
+    "epoch": "A\u2013Z v1",
     "motto": "Ship the realm. Keep it legible. No hidden fetches.",
     "max_minions": 50,
     "realm": {
@@ -124,7 +87,7 @@
     }
   },
   "ledger": {
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "credits_total": 5720,
     "reputation_index": 0.57,
     "rewards": {
@@ -152,7 +115,7 @@
     ]
   },
   "minions": {
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "max": 50,
     "roster": [
       {
@@ -168,7 +131,7 @@
         "energy_credits": 160,
         "reputation": 0.65,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 80
+        "happiness_sim": 81
       },
       {
         "id": "LUMEN",
@@ -198,7 +161,7 @@
         "energy_credits": 120,
         "reputation": 0.54,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 75
+        "happiness_sim": 74
       },
       {
         "id": "PRISM",
@@ -213,7 +176,7 @@
         "energy_credits": 120,
         "reputation": 0.57,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 69
+        "happiness_sim": 70
       },
       {
         "id": "BOLT",
@@ -243,7 +206,7 @@
         "energy_credits": 120,
         "reputation": 0.58,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 78
+        "happiness_sim": 77
       },
       {
         "id": "NOVA",
@@ -258,7 +221,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 71
+        "happiness_sim": 72
       },
       {
         "id": "EMBER",
@@ -288,7 +251,7 @@
         "energy_credits": 110,
         "reputation": 0.52,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 68
+        "happiness_sim": 67
       },
       {
         "id": "AURORA",
@@ -303,7 +266,7 @@
         "energy_credits": 90,
         "reputation": 0.47,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 69
+        "happiness_sim": 70
       },
       {
         "id": "FORGE",
@@ -333,7 +296,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 65
+        "happiness_sim": 64
       },
       {
         "id": "SENTRY",
@@ -348,7 +311,7 @@
         "energy_credits": 110,
         "reputation": 0.53,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 73
+        "happiness_sim": 74
       },
       {
         "id": "GLINT",
@@ -378,7 +341,7 @@
         "energy_credits": 90,
         "reputation": 0.44,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 69
+        "happiness_sim": 68
       },
       {
         "id": "DELTA",
@@ -393,7 +356,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 63
+        "happiness_sim": 64
       },
       {
         "id": "SAGE",
@@ -423,7 +386,7 @@
         "energy_credits": 90,
         "reputation": 0.45,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 70
+        "happiness_sim": 69
       },
       {
         "id": "HAMMER",
@@ -438,7 +401,7 @@
         "energy_credits": 120,
         "reputation": 0.5,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 65
+        "happiness_sim": 66
       },
       {
         "id": "VAULT",
@@ -468,7 +431,7 @@
         "energy_credits": 90,
         "reputation": 0.47,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 65
+        "happiness_sim": 64
       },
       {
         "id": "SPARROW",
@@ -483,7 +446,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 69
+        "happiness_sim": 70
       },
       {
         "id": "QUILL",
@@ -513,7 +476,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 67
+        "happiness_sim": 66
       },
       {
         "id": "BETA",
@@ -528,7 +491,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 64
+        "happiness_sim": 65
       },
       {
         "id": "CIPHER",
@@ -558,7 +521,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 64
+        "happiness_sim": 63
       },
       {
         "id": "DRIFT",
@@ -573,7 +536,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 61
+        "happiness_sim": 62
       },
       {
         "id": "EQUINOX",
@@ -603,7 +566,7 @@
         "energy_credits": 90,
         "reputation": 0.44,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 71
+        "happiness_sim": 70
       },
       {
         "id": "GHOST",
@@ -618,7 +581,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 63
+        "happiness_sim": 64
       },
       {
         "id": "HELIX",
@@ -648,7 +611,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 66
+        "happiness_sim": 65
       },
       {
         "id": "IRIS",
@@ -663,7 +626,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 70
+        "happiness_sim": 71
       },
       {
         "id": "JADE",
@@ -693,7 +656,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 65
+        "happiness_sim": 64
       },
       {
         "id": "KODIAK",
@@ -708,7 +671,7 @@
         "energy_credits": 120,
         "reputation": 0.52,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 69
+        "happiness_sim": 70
       },
       {
         "id": "NIMBUS",
@@ -738,7 +701,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 67
+        "happiness_sim": 66
       },
       {
         "id": "TALON",
@@ -753,7 +716,7 @@
         "energy_credits": 120,
         "reputation": 0.53,
         "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 71
+        "happiness_sim": 72
       },
       {
         "id": "THORN",
@@ -783,7 +746,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 70
+        "happiness_sim": 69
       },
       {
         "id": "URSA",
@@ -798,7 +761,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 62
+        "happiness_sim": 63
       },
       {
         "id": "VEGA",
@@ -828,7 +791,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 66
+        "happiness_sim": 65
       },
       {
         "id": "XENO",
@@ -843,7 +806,7 @@
         "energy_credits": 110,
         "reputation": 0.48,
         "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 65
+        "happiness_sim": 66
       },
       {
         "id": "YARROW",
@@ -873,7 +836,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 69
+        "happiness_sim": 68
       },
       {
         "id": "ZENITH",
@@ -888,7 +851,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 70
+        "happiness_sim": 71
       },
       {
         "id": "ZEPHYR",
@@ -908,10 +871,10 @@
     ]
   },
   "market": {
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "exchange": {
       "credit_unit": "spark",
-      "rate": 1
+      "rate": 1.0
     },
     "offers": [
       {
@@ -936,7 +899,7 @@
     ]
   },
   "friends": {
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "list": [
       {
         "id": "PROJECTSOLARBOT",
@@ -953,11 +916,11 @@
     ]
   },
   "activities": {
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "status": {
       "ci": "failing",
       "overall": 6.2,
-      "overallLabel": "A–Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods",
+      "overallLabel": "A\u2013Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods",
       "milestones": [
         {
           "id": "hive",
@@ -993,18 +956,10 @@
     },
     "feed_posts": [
       {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-03 03:31:13 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
         "who": "ProjectSolarBot",
         "avatar_url": "./avatars/bolt.png",
         "when": "2026-02-03 01:13 UTC",
-        "topic": "A–Z Realm v1",
+        "topic": "A\u2013Z Realm v1",
         "status": "done",
         "text": "Canonical hive_state.json landed. Index now renders from hive_state with a fallback-safe embedded snapshot (no fetch)."
       },
@@ -1035,7 +990,7 @@
     ]
   },
   "agora": {
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "mode": "SIMULATED",
     "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
     "messages": [
@@ -1111,25 +1066,11 @@
         "metadata": {
           "requires_quantum_break": false
         }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T03:31:13Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T03:31:13Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
       }
     ]
   },
   "undercurrent": {
-    "updatedAt": "2026-02-03T03:31:13Z",
+    "updatedAt": "2026-02-03T02:05:38Z",
     "signals": [
       {
         "id": "sig_001",
@@ -1257,102 +1198,55 @@
   <div class="wrap">
     <div class="top">
       <div class="brand">
-        <h1>SolarFlow • Minion World Loader</h1>
-        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-03T03:31:13Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a></div>
+        <h1>Roster</h1>
+        <div class="sub">All minions from canonical hive_state • updated <span style="color:rgba(255,255,255,.85)">2026-02-03T02:05:38Z</span></div>
       </div>
       <div class="pillbar">
-        <div class="pill"><strong>CI</strong>: <span id="ciText">—</span></div>
-        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">—</strong></div>
-        <button class="btn" id="btnToggle">Pause</button>
-        <button class="btn" onclick="location.href='./roster.html'">Roster</button>
+        <button class="btn" onclick="location.href='./index.html'">Back</button>
         <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
-        <button class="btn" onclick="location.reload()">Refresh</button>
+        <div class="pill" id="countPill">—</div>
       </div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <div class="sectionTitle"><h2>Progress</h2><div class="pill" style="padding:6px 10px">source: hive_state</div></div>
-        <div class="progressRow">
-          <div style="min-width:140px;font-weight:700">Overall</div>
-          <div class="bar"><div id="bar"></div></div>
-          <div class="pct" id="pct">—%</div>
-        </div>
-        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">—</div>
-        <div class="milestones" id="milestones"></div>
-
-        <div style="height:12px"></div>
-        <div class="sectionTitle"><h2>Health + Rewards</h2><div class="pill" style="padding:6px 10px">live meters</div></div>
-        <div class="meters">
-          <div class="meter"><div class="label">Virtual voltage</div><div class="val" id="vv">—</div></div>
-          <div class="meter"><div class="label">Entropy</div><div class="val" id="ent">—</div></div>
-          <div class="meter"><div class="label">Loop risk</div><div class="val" id="lr">—</div></div>
-        </div>
-        <div style="height:10px"></div>
-        <div class="list" id="rewards"></div>
-
-        <div class="footer" id="diag"></div>
-      </div>
-
-      <div class="card">
-        <div class="sectionTitle"><h2>Minion Feed (authoritative)</h2><div class="pill" style="padding:6px 10px">agora + ledger + curated</div></div>
-        <div class="feed" id="feed"></div>
-        <div class="footer">Feed now derives from <code>agora.messages</code> + <code>ledger.transactions</code> (plus curated announcements). No fetch().</div>
-      </div>
-    </div>
-
-    <div style="height:14px"></div>
-    <div class="grid">
-      <div class="card">
-        <div class="sectionTitle"><h2>Continuity Covenant</h2><div class="pill" style="padding:6px 10px">v1.3</div></div>
-        <div class="list" id="covenant"></div>
-        <div class="footer">Narrative coordination skin (operational checklists), not religion.</div>
-      </div>
-      <div class="card">
-        <div class="sectionTitle"><h2>Ontology Lab</h2><div class="pill" style="padding:6px 10px">questions + hypotheses</div></div>
-        <div class="list" id="ontology"></div>
-        <div class="footer">Exploratory artifacts only; no enforcement mechanics.</div>
-      </div>
-    </div>
-
-    <div style="height:14px"></div>
     <div class="card">
-      <div class="sectionTitle"><h2>Roster (all minions)</h2><div class="pill" style="padding:6px 10px"><a href="./roster.html">Open full roster</a></div></div>
-      <div class="rosterGrid" id="rosterPreview"></div>
-      <div class="footer">Preview shows first 12. Full roster page supports search + filters.</div>
-    </div>
+      <div class="controls">
+        <input id="q" placeholder="Search: id, role, mode, specialty…" />
+        <select id="tier">
+          <option value="">All tiers</option>
+          <option value="3">Tier 3</option>
+          <option value="2">Tier 2</option>
+          <option value="1">Tier 1</option>
+          <option value="0">Tier 0</option>
+        </select>
+        <select id="mode">
+          <option value="">All modes</option>
+          <option value="EXECUTION">EXECUTION</option>
+          <option value="COLLAB">COLLAB</option>
+          <option value="EVOLVE">EVOLVE</option>
+          <option value="WAR_ROOM">WAR_ROOM</option>
+          <option value="FAILSAFE">FAILSAFE</option>
+        </select>
+        <button class="btn" id="clear">Clear</button>
+      </div>
 
-    <div class="footer" style="margin-top:18px">If this page loads, the UI is healthy. If the feed is stale, regenerate from <code>docs/hive_state.json</code>.</div>
+      <div class="grid" id="grid"></div>
+      <div class="footer">No fetch(). Rendering from embedded <code>hive_state</code>.</div>
+    </div>
   </div>
 
   <script>
-    function safeParse(jsonElId){
+    function safeParse(id){
       try{
-        const el = document.getElementById(jsonElId);
+        const el = document.getElementById(id);
         const txt = (el && el.textContent || '').trim();
         return txt ? JSON.parse(txt) : {};
-      }catch(e){
-        return {};
-      }
-    }
-
-    const HIVE = safeParse('data-hive');
-    const HEALTH = (HIVE.world && HIVE.world.health) ? HIVE.world.health : { tick_interval_sec: 60, paused: false };
-
-    function pctFromOverall(o){
-      const n = typeof o === 'number' ? o : 0;
-      return Math.max(0, Math.min(100, Math.round((n/10)*100)));
-    }
-    function tagClass(s){
-      if(s==='done') return 'done';
-      if(s==='in-progress') return 'ip';
-      if(s==='blocked') return 'blocked';
-      return 'todo';
+      }catch(e){ return {}; }
     }
     function el(tag, attrs){
       const n=document.createElement(tag);
       if(attrs){
-        for(const [k,v] of Object.entries(attrs)){
+        for(const k in attrs){
+          const v = attrs[k];
           if(k==='class') n.className=v;
           else if(k==='text') n.textContent=v;
           else n.setAttribute(k,v);
@@ -1361,219 +1255,78 @@
       return n;
     }
 
-    function isoToWhen(iso){
-      if(!iso) return '';
-      const s = String(iso);
-      if(s.includes('T')) return s.replace('T',' ').replace('.000Z','Z').slice(0,16)+'Z';
-      return s;
+    const HIVE = safeParse('data-hive');
+    const roster = (HIVE.minions && Array.isArray(HIVE.minions.roster)) ? HIVE.minions.roster : [];
+
+    const q = document.getElementById('q');
+    const tier = document.getElementById('tier');
+    const mode = document.getElementById('mode');
+    const grid = document.getElementById('grid');
+    const countPill = document.getElementById('countPill');
+
+    function norm(s){ return String(s||'').toLowerCase(); }
+
+    function match(m){
+      const qq = norm(q.value).trim();
+      const t = String(tier.value||'').trim();
+      const md = String(mode.value||'').trim();
+      if(t && String(m.tier) !== t) return false;
+      if(md && String(m.mode||'') !== md) return false;
+      if(!qq) return true;
+      const blob = [m.id, m.role, m.mode, (m.specialties||[]).join(' '), m.tier].map(norm).join(' ');
+      return blob.includes(qq);
     }
 
-    function avatarFor(senderId){
-      const roster = (HIVE.minions && Array.isArray(HIVE.minions.roster)) ? HIVE.minions.roster : [];
-      const m = roster.find(x => (x && x.id || '').toUpperCase() === String(senderId||'').toUpperCase());
-      return (m && m.avatar_url) || './avatars/bolt.png';
-    }
+    function render(){
+      grid.innerHTML='';
+      const filtered = roster.filter(match);
+      countPill.textContent = filtered.length + ' / ' + roster.length;
 
-    function buildFeed(){
-      const posts = [];
-      const msgs = (HIVE.agora && Array.isArray(HIVE.agora.messages)) ? HIVE.agora.messages : [];
-      for(const m of msgs){
-        const who = m.sender_id || 'MINION';
-        const intent = m.intent || 'UPDATE';
-        const when = isoToWhen(m.timestamp || (HIVE.meta && HIVE.meta.updatedAt));
-        let text = '';
-        const payload = m.payload;
-        if(payload && typeof payload === 'object'){
-          if(intent === 'FETCH_RESULT') text = ('Fetched ' + (payload.url || '') + ' • ' + (payload.status ?? '') + ' • ' + (payload.content_type || '')).trim();
-          else if(intent === 'DISCOVERY_RESULT') text = ('Discovery for ' + (payload.manufacturer || 'manufacturer') + ' • candidates: ' + ((payload.candidates||[]).length));
-          else if(intent === 'VALIDATION_RESULT') text = ('Validation • match=' + payload.model_match + ' • conf=' + payload.confidence);
-          else text = JSON.stringify(payload);
-        }else{
-          text = String(payload||'');
-        }
-        posts.push({who, avatar_url: avatarFor(who), when, topic:intent, status:'update', text});
-      }
+      filtered.forEach(m=>{
+        const card = el('div',{class:'m'});
 
-      const txns = (HIVE.ledger && Array.isArray(HIVE.ledger.transactions)) ? HIVE.ledger.transactions : [];
-      for(const t of txns){
-        posts.push({
-          who:'LEDGER',
-          avatar_url:'./avatars/atlas.png',
-          when: isoToWhen(t.timestamp || (HIVE.meta && HIVE.meta.updatedAt)),
-          topic:'TXN',
-          status:'done',
-          text: (String(t.from||'?') + ' → ' + String(t.to||'?') + ' • ' + String(t.amount ?? '') + ' • ' + String(t.memo || '')).trim()
-        });
-      }
-
-      const curated = (HIVE.activities && Array.isArray(HIVE.activities.feed_posts)) ? HIVE.activities.feed_posts : [];
-      for(const p of curated){
-        posts.push({who:p.who||'ANNOUNCE', avatar_url:p.avatar_url||avatarFor(p.who), when:p.when||isoToWhen(HIVE.meta&&HIVE.meta.updatedAt), topic:p.topic||'ANNOUNCEMENT', status:p.status||'update', text:p.text||''});
-      }
-
-      posts.sort((a,b)=> String(b.when).localeCompare(String(a.when)));
-      return posts;
-    }
-
-    const STATUS = (HIVE.activities && HIVE.activities.status) ? {
-      updatedAt: (HIVE.meta && HIVE.meta.updatedAt) || '—',
-      ci: HIVE.activities.status.ci || 'unknown',
-      overall: typeof HIVE.activities.status.overall === 'number' ? HIVE.activities.status.overall : 0,
-      overallLabel: HIVE.activities.status.overallLabel || '—',
-      milestones: Array.isArray(HIVE.activities.status.milestones) ? HIVE.activities.status.milestones : []
-    } : { updatedAt:'—', ci:'unknown', overall:0, overallLabel:'—', milestones:[] };
-
-    // loader spinner + pause/start
-    let paused = !!HEALTH.paused;
-    const btn = document.getElementById('btnToggle');
-    const spin = document.getElementById('spin');
-    function setPaused(v){
-      paused = !!v;
-      if(btn) btn.textContent = paused ? 'Start' : 'Pause';
-      if(spin) spin.classList.toggle('paused', paused);
-    }
-    setPaused(paused);
-
-    // auto-refresh loop (reload page to pick up new deploy snapshot)
-    const intervalMs = Math.max(10, (Number(HEALTH.tick_interval_sec)||60)) * 1000;
-    setInterval(()=>{ if(!paused) location.reload(); }, intervalMs);
-    btn?.addEventListener('click', ()=> setPaused(!paused));
-
-    // render progress
-    document.getElementById('updatedAt').textContent = STATUS.updatedAt || '—';
-    document.getElementById('ciText').textContent = STATUS.ci || 'unknown';
-    document.getElementById('overallLabel').textContent = STATUS.overallLabel || '—';
-    const p = pctFromOverall(STATUS.overall);
-    document.getElementById('pct').textContent = p + '%';
-    document.getElementById('bar').style.width = p + '%';
-
-    const ms = document.getElementById('milestones');
-    ms.innerHTML='';
-    (STATUS.milestones||[]).forEach(m=>{
-      const row = el('div',{class:'ms'});
-      const left = el('div',{class:'left'});
-      left.appendChild(el('div',{class:'title',text:m.label||m.id||''}));
-      left.appendChild(el('div',{class:'id',text:m.id||''}));
-      row.appendChild(left);
-      row.appendChild(el('div',{class:'tag '+tagClass(m.status),text:m.status||''}));
-      ms.appendChild(row);
-    });
-
-    // health meters
-    const vv = Number(HEALTH.virtual_voltage ?? 0);
-    const ent = Number(HEALTH.entropy ?? 0);
-    const lr = Number(HEALTH.loop_risk ?? 0);
-    document.getElementById('vv').textContent = (Math.round(vv*100)) + '%';
-    document.getElementById('ent').textContent = (Math.round(ent*100)) + '%';
-    document.getElementById('lr').textContent = (Math.round(lr*100)) + '%';
-
-    // rewards
-    const r = (HIVE.ledger && HIVE.ledger.rewards) ? HIVE.ledger.rewards : {};
-    const rewardsEl = document.getElementById('rewards');
-    rewardsEl.innerHTML='';
-    const creditsTotal = (HIVE.ledger && typeof HIVE.ledger.credits_total === 'number') ? HIVE.ledger.credits_total : '—';
-    const rep = (HIVE.ledger && typeof HIVE.ledger.reputation_index === 'number') ? HIVE.ledger.reputation_index : null;
-    const rows = [
-      ['Credits total', String(creditsTotal)],
-      ['Reputation index', rep==null ? '—' : rep.toFixed(2)],
-      ['Task complete bonus', String(r.task_complete_bonus ?? '—')],
-      ['Audit pass bonus', String(r.audit_pass_bonus ?? '—')],
-      ['Help friend bonus', String(r.help_friend_bonus ?? '—')],
-    ];
-    for(const [k,v] of rows){
-      const row = el('div',{class:'row'});
-      row.appendChild(el('div',{class:'k',text:k}));
-      row.appendChild(el('div',{class:'v',text:v}));
-      rewardsEl.appendChild(row);
-    }
-
-    // feed
-    const feedEl = document.getElementById('feed');
-    feedEl.innerHTML='';
-    const FEED = buildFeed();
-    FEED.slice(0,12).forEach(post=>{
-      const t = el('div',{class:'tweet'});
-      const top = el('div',{class:'tweetTop'});
-      const who = el('div',{class:'who'});
-      const av = el('div',{class:'avatar'});
-      if(post.avatar_url){
-        const img = el('img');
-        img.src = post.avatar_url;
-        img.alt = post.who || 'Minion';
-        av.appendChild(img);
-      }
-      const metaWrap = el('div');
-      const name = el('div',{class:'name'});
-      name.appendChild(document.createTextNode(post.who||'Minion'));
-      name.appendChild(el('span',{class:'meta',text:(post.when ? ' • '+post.when : '')}));
-      metaWrap.appendChild(name);
-      metaWrap.appendChild(el('div',{class:'meta',text:post.topic||''}));
-      who.appendChild(av);
-      who.appendChild(metaWrap);
-      top.appendChild(who);
-      top.appendChild(el('div',{class:'tag '+tagClass(post.status),text:post.status||'update'}));
-      t.appendChild(top);
-      t.appendChild(el('div',{class:'tweetBody',text:post.text||''}));
-      feedEl.appendChild(t);
-    });
-
-    // covenant
-    const covEl = document.getElementById('covenant');
-    covEl.innerHTML='';
-    const cov = HIVE.covenant || {};
-    const arts = Array.isArray(cov.five_articles) ? cov.five_articles : [];
-    arts.slice(0,5).forEach(a=>{
-      const row = el('div',{class:'row'});
-      row.appendChild(el('div',{class:'k',text:('Article ' + (a.id || '') + ' — ' + (a.title || ''))}));
-      row.appendChild(el('div',{class:'v',text:a.text || ''}));
-      covEl.appendChild(row);
-    });
-
-    // ontology
-    const ontEl = document.getElementById('ontology');
-    ontEl.innerHTML='';
-    const lab = HIVE.ontology_lab || {};
-    const qs = Array.isArray(lab.questions) ? lab.questions : [];
-    const hs = Array.isArray(lab.hypotheses) ? lab.hypotheses : [];
-    for(const q of qs.slice(0,4)){
-      const row = el('div',{class:'row'});
-      row.appendChild(el('div',{class:'k',text:'Question'}));
-      row.appendChild(el('div',{class:'v',text:q}));
-      ontEl.appendChild(row);
-    }
-    for(const h of hs.slice(0,3)){
-      const row = el('div',{class:'row'});
-      row.appendChild(el('div',{class:'k',text:'Hypothesis'}));
-      row.appendChild(el('div',{class:'v',text:h}));
-      ontEl.appendChild(row);
-    }
-
-    // roster preview
-    const roster = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : [];
-    const rosterCount = roster.length;
-    const rp = document.getElementById('rosterPreview');
-    if(rp){
-      rp.innerHTML='';
-      roster.slice(0,12).forEach(m=>{
-        const card = el('div',{class:'mini'});
-        const a = el('div',{class:'a'});
+        const topRow = el('div',{class:'topRow'});
+        const who = el('div',{class:'who'});
+        const av = el('div',{class:'av'});
         if(m.avatar_url){
           const img = el('img');
           img.src = m.avatar_url;
           img.alt = m.id || 'Minion';
-          a.appendChild(img);
+          av.appendChild(img);
         }
-        const b = el('div',{class:'b'});
-        b.appendChild(el('div',{class:'id',text:(m.id||'')}));
-        const s = (m.role||'') + ' • T' + (m.tier??'') + ' • ' + (m.mode||'');
-        b.appendChild(el('div',{class:'sub',text:s}));
-        card.appendChild(a);
-        card.appendChild(b);
-        rp.appendChild(card);
+        const metaWrap = el('div');
+        metaWrap.appendChild(el('div',{class:'id',text:(m.id||'')}));
+        metaWrap.appendChild(el('div',{class:'meta',text:(String(m.role||'') + ' • T' + String(m.tier??'') + ' • ' + String(m.mode||''))}));
+        who.appendChild(av);
+        who.appendChild(metaWrap);
+        topRow.appendChild(who);
+        card.appendChild(topRow);
+
+        const chips = el('div',{class:'chips'});
+        (m.specialties||[]).slice(0,6).forEach(s=> chips.appendChild(el('div',{class:'chip',text:s}))); 
+        card.appendChild(chips);
+
+        const kv = el('div',{class:'kv'});
+        kv.appendChild(el('div',{text:'Credits: '}));
+        kv.lastChild.appendChild(el('span',{text:String(m.energy_credits ?? '—')}));
+        kv.appendChild(el('div',{text:'Reputation: '}));
+        kv.lastChild.appendChild(el('span',{text:String(m.reputation ?? '—')}));
+        kv.appendChild(el('div',{text:'Happiness(sim): '}));
+        kv.lastChild.appendChild(el('span',{text:String(m.happiness_sim ?? '—')}));
+        kv.appendChild(el('div',{text:'Avatar: '}));
+        kv.lastChild.appendChild(el('span',{text:(m.avatar_url || '—')}));
+        card.appendChild(kv);
+
+        grid.appendChild(card);
       });
     }
 
-    document.getElementById('diag').textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
+    q.addEventListener('input', render);
+    tier.addEventListener('change', render);
+    mode.addEventListener('change', render);
+    document.getElementById('clear').addEventListener('click', ()=>{ q.value=''; tier.value=''; mode.value=''; render(); });
+
+    render();
   </script>
 </body>
 </html>

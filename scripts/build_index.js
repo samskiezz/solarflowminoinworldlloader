@@ -90,6 +90,16 @@ const html = `<!doctype html>
     .row .v{font-size:12px;color:rgba(255,255,255,.88)}
 
     .footer{margin-top:12px;font-size:12px;color:var(--muted)}
+
+    .rosterGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    @media (max-width:900px){.rosterGrid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:620px){.rosterGrid{grid-template-columns:1fr}}
+    .mini{padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.14);display:flex;gap:10px;align-items:center}
+    .mini .a{width:34px;height:34px;border-radius:10px;overflow:hidden;flex:0 0 34px;border:1px solid rgba(255,255,255,.16)}
+    .mini .a img{width:100%;height:100%;object-fit:cover;display:block}
+    .mini .b{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .mini .id{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mini .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   </style>
 </head>
 <body>
@@ -106,6 +116,7 @@ const html = `<!doctype html>
         <div class="pill"><strong>CI</strong>: <span id="ciText">—</span></div>
         <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">—</strong></div>
         <button class="btn" id="btnToggle">Pause</button>
+        <button class="btn" onclick="location.href='./roster.html'">Roster</button>
         <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
         <button class="btn" onclick="location.reload()">Refresh</button>
       </div>
@@ -154,6 +165,13 @@ const html = `<!doctype html>
         <div class="list" id="ontology"></div>
         <div class="footer">Exploratory artifacts only; no enforcement mechanics.</div>
       </div>
+    </div>
+
+    <div style="height:14px"></div>
+    <div class="card">
+      <div class="sectionTitle"><h2>Roster (all minions)</h2><div class="pill" style="padding:6px 10px"><a href="./roster.html">Open full roster</a></div></div>
+      <div class="rosterGrid" id="rosterPreview"></div>
+      <div class="footer">Preview shows first 12. Full roster page supports search + filters.</div>
     </div>
 
     <div class="footer" style="margin-top:18px">If this page loads, the UI is healthy. If the feed is stale, regenerate from <code>docs/hive_state.json</code>.</div>
@@ -382,7 +400,31 @@ const html = `<!doctype html>
       ontEl.appendChild(row);
     }
 
-    const rosterCount = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster.length : 0;
+    // roster preview
+    const roster = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : [];
+    const rosterCount = roster.length;
+    const rp = document.getElementById('rosterPreview');
+    if(rp){
+      rp.innerHTML='';
+      roster.slice(0,12).forEach(m=>{
+        const card = el('div',{class:'mini'});
+        const a = el('div',{class:'a'});
+        if(m.avatar_url){
+          const img = el('img');
+          img.src = m.avatar_url;
+          img.alt = m.id || 'Minion';
+          a.appendChild(img);
+        }
+        const b = el('div',{class:'b'});
+        b.appendChild(el('div',{class:'id',text:(m.id||'')}));
+        const s = (m.role||'') + ' • T' + (m.tier??'') + ' • ' + (m.mode||'');
+        b.appendChild(el('div',{class:'sub',text:s}));
+        card.appendChild(a);
+        card.appendChild(b);
+        rp.appendChild(card);
+      });
+    }
+
     document.getElementById('diag').textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
   </script>
 </body>
