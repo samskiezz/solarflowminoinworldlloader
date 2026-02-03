@@ -66,10 +66,7 @@ hive.agora.messages = hive.agora.messages.slice(-50);
 
 writeJson(hivePath, hive);
 
-// Regenerate derived docs/*.json
-require('./build_from_hive');
-
-// Rebuild index to embed the fresh hive snapshot (no fetch)
-require('./build_index');
+// Validate + rebuild all generated artifacts
+require('./build_all');
 
 console.log('tick ok', now);

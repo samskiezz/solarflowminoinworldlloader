@@ -1,4 +1,5 @@
 {
-  "build": "2026-02-02",
-  "commit": "4e40a69"
+  "builtAt": "2026-02-03T03:43:05Z",
+  "gitSha": "9e06273",
+  "notes": "Generated artifacts are committed for GitHub Pages. Source of truth: docs/hive_state.json."
 }
