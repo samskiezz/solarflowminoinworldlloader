@@ -1580,6 +1580,27 @@
     </div>
 
     <div style="height:14px"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle"><h2>v1.4 Mechanics (latest-only)</h2><div class="pill" style="padding:6px 10px">Echo • Rust • Flare • Confessional</div></div>
+        <div class="list" id="mechanics"></div>
+        <div class="footer">Policy: show only latest active mechanics. Older versions are deprecated.</div>
+      </div>
+      <div class="card">
+        <div class="sectionTitle"><h2>Task Board (assigned)</h2><div class="pill" style="padding:6px 10px">owners + status</div></div>
+        <div class="list" id="tasks"></div>
+        <div class="footer">Static hosting: tasks advance via commits to <code>hive_state</code>.</div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+    <div class="card">
+      <div class="sectionTitle"><h2>Code Canon Index (simulated)</h2><div class="pill" style="padding:6px 10px">/sys/*</div></div>
+      <div class="list" id="canon"></div>
+      <div class="footer">Narrative catalog only — not a claim about accessible repos.</div>
+    </div>
+
+    <div style="height:14px"></div>
     <div class="card">
       <div class="sectionTitle"><h2>Roster (all minions)</h2><div class="pill" style="padding:6px 10px"><a href="./roster.html">Open full roster</a></div></div>
       <div class="rosterGrid" id="rosterPreview"></div>
@@ -1810,6 +1831,49 @@
       row.appendChild(el('div',{class:'k',text:'Hypothesis'}));
       row.appendChild(el('div',{class:'v',text:h}));
       ontEl.appendChild(row);
+    }
+
+    // v1.4 mechanics (latest-only)
+    const mechEl = document.getElementById('mechanics');
+    if(mechEl){
+      mechEl.innerHTML='';
+      const mech = HIVE.mechanics || {};
+      const active = Array.isArray(mech.active) ? mech.active : [];
+      active.forEach(m=>{
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:(m.label || m.id || 'Mechanic')}));
+        row.appendChild(el('div',{class:'v',text:(m.desc || '') + (m.liturgy ? ('
+' + '“' + m.liturgy + '”') : '')}));
+        mechEl.appendChild(row);
+      });
+    }
+
+    // task board
+    const tasksEl = document.getElementById('tasks');
+    if(tasksEl){
+      tasksEl.innerHTML='';
+      const tb = (HIVE.tasks && Array.isArray(HIVE.tasks.board)) ? HIVE.tasks.board : [];
+      tb.forEach(t=>{
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:(t.owner||'MINION') + ' • ' + (t.status||'')}));
+        row.appendChild(el('div',{class:'v',text:(t.title||t.id||'')}));
+        tasksEl.appendChild(row);
+      });
+    }
+
+    // code canon index
+    const canonEl = document.getElementById('canon');
+    if(canonEl){
+      canonEl.innerHTML='';
+      const cc = HIVE.code_canon || {};
+      const mounted = cc.mounted || {};
+      for(const k of Object.keys(mounted)){
+        const list = Array.isArray(mounted[k]) ? mounted[k] : [];
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:k}));
+        row.appendChild(el('div',{class:'v',text:list.slice(0,10).join(', ') + (list.length>10 ? (' … +' + (list.length-10)) : '')}));
+        canonEl.appendChild(row);
+      }
     }
 
     // roster preview
