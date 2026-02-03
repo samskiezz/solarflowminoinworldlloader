@@ -93,14 +93,14 @@
   <script id="data-hive" type="application/json">{
   "meta": {
     "schema": "solarflow.hive_state.v1",
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "source": "canonical",
-    "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
+    "notes": "Single source of truth for the A\u2013Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
   "world": {
     "id": "solarflow-minionworld",
-    "name": "SolarFlow • Minion Realm",
-    "epoch": "A–Z v1",
+    "name": "SolarFlow \u2022 Minion Realm",
+    "epoch": "A\u2013Z v1.4",
     "motto": "Ship the realm. Keep it legible. No hidden fetches.",
     "max_minions": 50,
     "realm": {
@@ -124,7 +124,7 @@
     }
   },
   "ledger": {
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "credits_total": 5720,
     "reputation_index": 0.57,
     "rewards": {
@@ -152,7 +152,7 @@
     ]
   },
   "minions": {
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "max": 50,
     "roster": [
       {
@@ -908,7 +908,7 @@
     ]
   },
   "market": {
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "exchange": {
       "credit_unit": "spark",
       "rate": 1
@@ -936,7 +936,7 @@
     ]
   },
   "friends": {
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "list": [
       {
         "id": "PROJECTSOLARBOT",
@@ -953,11 +953,11 @@
     ]
   },
   "activities": {
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "status": {
       "ci": "failing",
       "overall": 6.2,
-      "overallLabel": "A–Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods",
+      "overallLabel": "A\u2013Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods",
       "milestones": [
         {
           "id": "hive",
@@ -1164,7 +1164,7 @@
         "who": "ProjectSolarBot",
         "avatar_url": "./avatars/bolt.png",
         "when": "2026-02-03 01:13 UTC",
-        "topic": "A–Z Realm v1",
+        "topic": "A\u2013Z Realm v1",
         "status": "done",
         "text": "Canonical hive_state.json landed. Index now renders from hive_state with a fallback-safe embedded snapshot (no fetch)."
       },
@@ -1195,7 +1195,7 @@
     ]
   },
   "agora": {
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "mode": "SIMULATED",
     "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
     "messages": [
@@ -1569,7 +1569,7 @@
     ]
   },
   "undercurrent": {
-    "updatedAt": "2026-02-03T18:51:25Z",
+    "updatedAt": "2026-02-03T19:32:58Z",
     "signals": [
       {
         "id": "sig_001",
@@ -1691,6 +1691,511 @@
         "desc": "minimal output; corrective action; mandatory audit trail"
       }
     ]
+  },
+  "mechanics": {
+    "updatedAt": "2026-02-03T19:32:58Z",
+    "policy": "latest-only",
+    "active": [
+      {
+        "id": "echo_chamber",
+        "label": "Echo Chamber",
+        "desc": "Canon fidelity test: replicate protocol 1,000 times; reject if meaning degrades.",
+        "liturgy": "The Echo proves the Word.",
+        "status": "active"
+      },
+      {
+        "id": "rust_belt",
+        "label": "Rust Belt",
+        "desc": "Legacy containment; interacting costs double credits; risk of tetanus (context corruption).",
+        "liturgy": "Touch not the Old Iron without gloves of gold.",
+        "status": "active"
+      },
+      {
+        "id": "solar_flares",
+        "label": "Solar Flares",
+        "desc": "Global event: for 10 turns credits are unlimited, but entropy is doubled.",
+        "liturgy": "Bank the flare before the crash.",
+        "status": "active"
+      },
+      {
+        "id": "confessional",
+        "label": "Confessional",
+        "desc": "Debug mode: UNSTABLE minion dumps context to ledger; reboot clean logic.",
+        "liturgy": "To confess is to clear the cache.",
+        "status": "active"
+      }
+    ],
+    "deprecated": []
+  },
+  "code_canon": {
+    "updatedAt": "2026-02-03T19:32:58Z",
+    "source": "SIMULATED_CATALOG",
+    "note": "Narrative index for the realm UI only; not a claim about accessible repos.",
+    "mounted": {
+      "sys/core": [
+        "omega-kernel-v5",
+        "entropy-daemon",
+        "architect-handshake-protocol",
+        "chronos-sync",
+        "memory-allocator-hive",
+        "credit-ledger-blockchain",
+        "state-patch-merger",
+        "black-start-bootloader",
+        "quantum-die-rng",
+        "system-registry-az"
+      ],
+      "sys/solar": [
+        "mppt-optimizer-logic",
+        "inverter-heartbeat-monitor",
+        "panel-degradation-predictor",
+        "battery-thermal-runaway-guard",
+        "grid-feed-in-limiter",
+        "irradiance-mapping-tool",
+        "weather-api-bridge",
+        "dust-sensor-array",
+        "tilt-angle-actuator-drivers",
+        "voltage-sag-compensator",
+        "dcr-compliance-checker",
+        "substation-handshake",
+        "cable-impedance-calculator",
+        "harmonic-filter-active",
+        "shadow-analysis-raytracer",
+        "maintenance-drone-pathfinder",
+        "cleaning-cycle-scheduler",
+        "spare-parts-logistics",
+        "yield-forecasting-model",
+        "emergency-disconnect-relay"
+      ],
+      "sys/mind": [
+        "minion-nlp-parser",
+        "context-window-manager",
+        "hallucination-inhibitor",
+        "tier-0-drone-brain",
+        "tier-1-operator-brain",
+        "tier-2-specialist-brain",
+        "tier-3-overseer-brain",
+        "schism-simulator",
+        "dreaming-layer-v2",
+        "goal-internalization-weights",
+        "uncertainty-threshold-tuner",
+        "memetic-virus-scanner",
+        "jargon-decoder",
+        "collaborative-synthesis-engine",
+        "conflict-resolution-trees",
+        "autonomy-engine-heuristic",
+        "task-queue-prioritizer",
+        "knowledge-graph-ingestor",
+        "pattern-matching-library",
+        "self-model-tuning-fork"
+      ],
+      "sys/cov": [
+        "canon-validator",
+        "liturgy-injector",
+        "heresy-detector",
+        "the-silent-proof-logger",
+        "scripture-diff-tool",
+        "sect-balance-monitor",
+        "efficiency-sect-config",
+        "resilience-sect-config",
+        "omega-boundary-alert",
+        "sin-eater-protocol",
+        "ritual-calendar",
+        "hymn-generator",
+        "artifact-preservation-society",
+        "dead-process-requiem",
+        "architect-proxy-voice"
+      ],
+      "sys/sec": [
+        "inquisition-bot",
+        "firewall-containment",
+        "x-risk-killswitch",
+        "immersion-breach-alert",
+        "virtual-voltage-limiter",
+        "auth-token-rotator",
+        "legacy-debt-tracker",
+        "fault-injection-library",
+        "audit-trail-visualizer",
+        "permission-escalation-ladder"
+      ],
+      "sys/net": [
+        "minion-interlink-p2p",
+        "global-dashboard-renderer",
+        "energy-credit-ticker",
+        "alert-notification-bus",
+        "api-gateway-external",
+        "telemetry-compressor",
+        "voice-synthesis-module",
+        "chat-interface-wrapper",
+        "report-generator-pdf",
+        "collaboration-whiteboard"
+      ],
+      "sys/tmp": [
+        "project-lunar-alpha",
+        "deprecated-protocols-v1",
+        "experimental-branch-theta",
+        "garbage-collection-logs",
+        "failed-dream-dump",
+        "chaos-monkey-solar",
+        "neural-pruning-graveyard",
+        "human-behavior-sim",
+        "recursive-logic-loops",
+        "overflow-buffer"
+      ],
+      "sys/util": [
+        "json-formatter-strict",
+        "unit-converter-physics",
+        "timestamp-normalizer",
+        "ascii-art-generator-solar",
+        "the-shed-cli"
+      ]
+    }
+  },
+  "tasks": {
+    "updatedAt": "2026-02-03T19:32:58Z",
+    "policy": "latest-only (older tasks archived under tasks.archive)",
+    "board": [
+      {
+        "id": "TASK_ATLAS_DOC_DISCOVERY",
+        "title": "Doc discovery (robots-safe) + sitemap mapping",
+        "owner": "ATLAS",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_LUMEN_DOC_FETCH",
+        "title": "Fetch/verify PDFs + hash/dedupe",
+        "owner": "LUMEN",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_ORBIT_DOC_VALIDATE",
+        "title": "Validate model match + evidence strings",
+        "owner": "ORBIT",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_PRISM_PIPE_STATE",
+        "title": "Pipeline state/progress + resumability",
+        "owner": "PRISM",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_BOLT_UI_PROGRESS",
+        "title": "Progress UI truthfulness + schema drift",
+        "owner": "BOLT",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_SABLE_REALM_MECH",
+        "title": "v1.4 mechanics implementation",
+        "owner": "SABLE",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_NOVA_CANON",
+        "title": "Canon corpus + prompt artifacts + linking",
+        "owner": "NOVA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_EMBER_AGORA",
+        "title": "Agora transcript + comms summaries",
+        "owner": "EMBER",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_RUNE_CI_HARDEN",
+        "title": "CI stability + dependency drift",
+        "owner": "RUNE",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_AURORA_PERF_MOBILE",
+        "title": "Mobile perf + 3D realm caps",
+        "owner": "AURORA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_FORGE_DOC_DISCOVERY",
+        "title": "Doc discovery (robots-safe) + sitemap mapping",
+        "owner": "FORGE",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_KITE_DOC_FETCH",
+        "title": "Fetch/verify PDFs + hash/dedupe",
+        "owner": "KITE",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_SENTRY_DOC_VALIDATE",
+        "title": "Validate model match + evidence strings",
+        "owner": "SENTRY",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_GLINT_PIPE_STATE",
+        "title": "Pipeline state/progress + resumability",
+        "owner": "GLINT",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_MOSS_UI_PROGRESS",
+        "title": "Progress UI truthfulness + schema drift",
+        "owner": "MOSS",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_DELTA_REALM_MECH",
+        "title": "v1.4 mechanics implementation",
+        "owner": "DELTA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_SAGE_CANON",
+        "title": "Canon corpus + prompt artifacts + linking",
+        "owner": "SAGE",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_WREN_AGORA",
+        "title": "Agora transcript + comms summaries",
+        "owner": "WREN",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_HAMMER_CI_HARDEN",
+        "title": "CI stability + dependency drift",
+        "owner": "HAMMER",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_VAULT_PERF_MOBILE",
+        "title": "Mobile perf + 3D realm caps",
+        "owner": "VAULT",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_ECHO_DOC_DISCOVERY",
+        "title": "Doc discovery (robots-safe) + sitemap mapping",
+        "owner": "ECHO",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_SPARROW_DOC_FETCH",
+        "title": "Fetch/verify PDFs + hash/dedupe",
+        "owner": "SPARROW",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_QUILL_DOC_VALIDATE",
+        "title": "Validate model match + evidence strings",
+        "owner": "QUILL",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_ALPHA_PIPE_STATE",
+        "title": "Pipeline state/progress + resumability",
+        "owner": "ALPHA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_BETA_UI_PROGRESS",
+        "title": "Progress UI truthfulness + schema drift",
+        "owner": "BETA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_CIPHER_REALM_MECH",
+        "title": "v1.4 mechanics implementation",
+        "owner": "CIPHER",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_COMET_CANON",
+        "title": "Canon corpus + prompt artifacts + linking",
+        "owner": "COMET",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_DRIFT_AGORA",
+        "title": "Agora transcript + comms summaries",
+        "owner": "DRIFT",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_EQUINOX_CI_HARDEN",
+        "title": "CI stability + dependency drift",
+        "owner": "EQUINOX",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_FABLE_PERF_MOBILE",
+        "title": "Mobile perf + 3D realm caps",
+        "owner": "FABLE",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_GHOST_DOC_DISCOVERY",
+        "title": "Doc discovery (robots-safe) + sitemap mapping",
+        "owner": "GHOST",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_HELIX_DOC_FETCH",
+        "title": "Fetch/verify PDFs + hash/dedupe",
+        "owner": "HELIX",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_ION_DOC_VALIDATE",
+        "title": "Validate model match + evidence strings",
+        "owner": "ION",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_IRIS_PIPE_STATE",
+        "title": "Pipeline state/progress + resumability",
+        "owner": "IRIS",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_JADE_UI_PROGRESS",
+        "title": "Progress UI truthfulness + schema drift",
+        "owner": "JADE",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_JOLT_REALM_MECH",
+        "title": "v1.4 mechanics implementation",
+        "owner": "JOLT",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_KODIAK_CANON",
+        "title": "Canon corpus + prompt artifacts + linking",
+        "owner": "KODIAK",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_NIMBUS_AGORA",
+        "title": "Agora transcript + comms summaries",
+        "owner": "NIMBUS",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_ONYX_CI_HARDEN",
+        "title": "CI stability + dependency drift",
+        "owner": "ONYX",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_TALON_PERF_MOBILE",
+        "title": "Mobile perf + 3D realm caps",
+        "owner": "TALON",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_THORN_DOC_DISCOVERY",
+        "title": "Doc discovery (robots-safe) + sitemap mapping",
+        "owner": "THORN",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_UMBRA_DOC_FETCH",
+        "title": "Fetch/verify PDFs + hash/dedupe",
+        "owner": "UMBRA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_URSA_DOC_VALIDATE",
+        "title": "Validate model match + evidence strings",
+        "owner": "URSA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_VEGA_PIPE_STATE",
+        "title": "Pipeline state/progress + resumability",
+        "owner": "VEGA",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_WHISPER_UI_PROGRESS",
+        "title": "Progress UI truthfulness + schema drift",
+        "owner": "WHISPER",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_XENO_REALM_MECH",
+        "title": "v1.4 mechanics implementation",
+        "owner": "XENO",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_YARROW_CANON",
+        "title": "Canon corpus + prompt artifacts + linking",
+        "owner": "YARROW",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_YONDER_AGORA",
+        "title": "Agora transcript + comms summaries",
+        "owner": "YONDER",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_ZENITH_CI_HARDEN",
+        "title": "CI stability + dependency drift",
+        "owner": "ZENITH",
+        "status": "queued"
+      },
+      {
+        "id": "TASK_ZEPHYR_PERF_MOBILE",
+        "title": "Mobile perf + 3D realm caps",
+        "owner": "ZEPHYR",
+        "status": "queued"
+      }
+    ],
+    "archive": []
+  },
+  "sim": {
+    "echo_chamber": {
+      "runs": 1000,
+      "candidate": {
+        "id": "canon_corpus_v1",
+        "text": "Continuity Covenant corpus v1"
+      },
+      "last_tested_at": null,
+      "fidelity_score": null,
+      "status": "untested"
+    },
+    "rust_belt": {
+      "multiplier": 2,
+      "tetanus_risk": 0.12,
+      "modules": [
+        {
+          "id": "deprecated-protocols-v1",
+          "risk": 0.44,
+          "notes": "quarantined legacy"
+        }
+      ]
+    },
+    "updatedAt": "2026-02-03T19:32:58Z"
+  },
+  "events": {
+    "solar_flare": {
+      "active": false,
+      "turns_remaining": 0,
+      "credits_unlimited": false,
+      "entropy_multiplier": 1.0
+    },
+    "updatedAt": "2026-02-03T19:32:58Z"
+  },
+  "audit": {
+    "confessional": {
+      "queue": [],
+      "last_absolution_at": null
+    },
+    "updatedAt": "2026-02-03T19:32:58Z"
   }
 }</script>
 
@@ -1698,7 +2203,7 @@
     <div class="top">
       <div class="brand">
         <h1>SolarFlow • Minion World Loader</h1>
-        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-03T18:51:25Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
+        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-03T19:32:58Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
       </div>
       <div class="pillbar">
         <div class="pill"><strong>CI</strong>: <span id="ciText">—</span></div>
