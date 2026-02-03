@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-03T02:05:38Z",
+  "updatedAt": "2026-02-03T03:31:13Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
@@ -70,6 +70,20 @@
         "source_domain": "example.com",
         "delta": 0.2,
         "pattern": "/datasheet|/downloads"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-03T03:31:13Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-03T03:31:13Z"
       },
       "spark_delta": 0.1,
       "metadata": {
