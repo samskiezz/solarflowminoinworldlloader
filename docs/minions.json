@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-03T08:52:44Z",
+  "updatedAt": "2026-02-03T09:26:41Z",
   "minions": [
     {
       "id": "ATLAS",
@@ -14,7 +14,7 @@
       "energy_credits": 160,
       "reputation": 0.65,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 82
+      "happiness_sim": 81
     },
     {
       "id": "LUMEN",
@@ -44,7 +44,7 @@
       "energy_credits": 120,
       "reputation": 0.54,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 76
+      "happiness_sim": 77
     },
     {
       "id": "PRISM",
@@ -59,7 +59,7 @@
       "energy_credits": 120,
       "reputation": 0.57,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 71
+      "happiness_sim": 70
     },
     {
       "id": "BOLT",
@@ -89,7 +89,7 @@
       "energy_credits": 120,
       "reputation": 0.58,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 79
+      "happiness_sim": 80
     },
     {
       "id": "NOVA",
@@ -104,7 +104,7 @@
       "energy_credits": 110,
       "reputation": 0.5,
       "avatar_url": "./avatars/bolt.png",
-      "happiness_sim": 73
+      "happiness_sim": 72
     },
     {
       "id": "EMBER",
@@ -134,7 +134,7 @@
       "energy_credits": 110,
       "reputation": 0.52,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 69
+      "happiness_sim": 70
     },
     {
       "id": "AURORA",
@@ -149,7 +149,7 @@
       "energy_credits": 90,
       "reputation": 0.47,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 71
+      "happiness_sim": 70
     },
     {
       "id": "FORGE",
@@ -179,7 +179,7 @@
       "energy_credits": 90,
       "reputation": 0.46,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 66
+      "happiness_sim": 67
     },
     {
       "id": "SENTRY",
@@ -194,7 +194,7 @@
       "energy_credits": 110,
       "reputation": 0.53,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 75
+      "happiness_sim": 74
     },
     {
       "id": "GLINT",
@@ -224,7 +224,7 @@
       "energy_credits": 90,
       "reputation": 0.44,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 70
+      "happiness_sim": 71
     },
     {
       "id": "DELTA",
@@ -239,7 +239,7 @@
       "energy_credits": 90,
       "reputation": 0.46,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 65
+      "happiness_sim": 64
     },
     {
       "id": "SAGE",
@@ -269,7 +269,7 @@
       "energy_credits": 90,
       "reputation": 0.45,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 71
+      "happiness_sim": 72
     },
     {
       "id": "HAMMER",
@@ -284,7 +284,7 @@
       "energy_credits": 120,
       "reputation": 0.5,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 67
+      "happiness_sim": 66
     },
     {
       "id": "VAULT",
@@ -314,7 +314,7 @@
       "energy_credits": 90,
       "reputation": 0.47,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 66
+      "happiness_sim": 67
     },
     {
       "id": "SPARROW",
@@ -329,7 +329,7 @@
       "energy_credits": 90,
       "reputation": 0.46,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 71
+      "happiness_sim": 70
     },
     {
       "id": "QUILL",
@@ -359,7 +359,7 @@
       "energy_credits": 90,
       "reputation": 0.42,
       "avatar_url": "./avatars/bolt.png",
-      "happiness_sim": 68
+      "happiness_sim": 69
     },
     {
       "id": "BETA",
@@ -374,7 +374,7 @@
       "energy_credits": 90,
       "reputation": 0.43,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 66
+      "happiness_sim": 65
     },
     {
       "id": "CIPHER",
@@ -404,7 +404,7 @@
       "energy_credits": 90,
       "reputation": 0.41,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 65
+      "happiness_sim": 66
     },
     {
       "id": "DRIFT",
@@ -419,7 +419,7 @@
       "energy_credits": 90,
       "reputation": 0.41,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 63
+      "happiness_sim": 62
     },
     {
       "id": "EQUINOX",
@@ -449,7 +449,7 @@
       "energy_credits": 90,
       "reputation": 0.44,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 72
+      "happiness_sim": 73
     },
     {
       "id": "GHOST",
@@ -464,7 +464,7 @@
       "energy_credits": 110,
       "reputation": 0.49,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 65
+      "happiness_sim": 64
     },
     {
       "id": "HELIX",
@@ -494,7 +494,7 @@
       "energy_credits": 90,
       "reputation": 0.43,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 67
+      "happiness_sim": 68
     },
     {
       "id": "IRIS",
@@ -509,7 +509,7 @@
       "energy_credits": 110,
       "reputation": 0.5,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 72
+      "happiness_sim": 71
     },
     {
       "id": "JADE",
@@ -539,7 +539,7 @@
       "energy_credits": 90,
       "reputation": 0.43,
       "avatar_url": "./avatars/bolt.png",
-      "happiness_sim": 66
+      "happiness_sim": 67
     },
     {
       "id": "KODIAK",
@@ -554,7 +554,7 @@
       "energy_credits": 120,
       "reputation": 0.52,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 71
+      "happiness_sim": 70
     },
     {
       "id": "NIMBUS",
@@ -584,7 +584,7 @@
       "energy_credits": 110,
       "reputation": 0.49,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 68
+      "happiness_sim": 69
     },
     {
       "id": "TALON",
@@ -599,7 +599,7 @@
       "energy_credits": 120,
       "reputation": 0.53,
       "avatar_url": "./avatars/bolt.png",
-      "happiness_sim": 73
+      "happiness_sim": 72
     },
     {
       "id": "THORN",
@@ -629,7 +629,7 @@
       "energy_credits": 110,
       "reputation": 0.5,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 71
+      "happiness_sim": 72
     },
     {
       "id": "URSA",
@@ -644,7 +644,7 @@
       "energy_credits": 90,
       "reputation": 0.41,
       "avatar_url": "./avatars/atlas.png",
-      "happiness_sim": 64
+      "happiness_sim": 63
     },
     {
       "id": "VEGA",
@@ -674,7 +674,7 @@
       "energy_credits": 90,
       "reputation": 0.42,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 67
+      "happiness_sim": 68
     },
     {
       "id": "XENO",
@@ -689,7 +689,7 @@
       "energy_credits": 110,
       "reputation": 0.48,
       "avatar_url": "./avatars/prism.png",
-      "happiness_sim": 67
+      "happiness_sim": 66
     },
     {
       "id": "YARROW",
@@ -719,7 +719,7 @@
       "energy_credits": 110,
       "reputation": 0.49,
       "avatar_url": "./avatars/bolt.png",
-      "happiness_sim": 70
+      "happiness_sim": 71
     },
     {
       "id": "ZENITH",
@@ -734,7 +734,7 @@
       "energy_credits": 110,
       "reputation": 0.5,
       "avatar_url": "./avatars/sable.png",
-      "happiness_sim": 72
+      "happiness_sim": 71
     },
     {
       "id": "ZEPHYR",
