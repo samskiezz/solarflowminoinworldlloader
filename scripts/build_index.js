@@ -10,7 +10,7 @@ function esc(s){
   return s.replace(/<\//g, '<\\/');
 }
 
-const updatedAt = hiveObj?.meta?.updatedAt || '—';
+const updatedAt = (hiveObj && hiveObj.meta && hiveObj.meta.updatedAt) ? hiveObj.meta.updatedAt : '—';
 
 const html = `<!doctype html>
 <html lang="en">
@@ -275,7 +275,7 @@ const html = `<!doctype html>
           when: isoToWhen(t.timestamp || (HIVE.meta && HIVE.meta.updatedAt)),
           topic:'TXN',
           status:'done',
-          text: (String(t.from||'?') + ' → ' + String(t.to||'?') + ' • ' + String(t.amount ?? '') + ' • ' + String(t.memo || '')).trim()
+          text: (String(t.from||'?') + ' → ' + String(t.to||'?') + ' • ' + String((t.amount == null) ? '' : t.amount) + ' • ' + String(t.memo || '')).trim()
         });
       }
 
@@ -333,9 +333,9 @@ const html = `<!doctype html>
     });
 
     // health meters
-    const vv = Number(HEALTH.virtual_voltage ?? 0);
-    const ent = Number(HEALTH.entropy ?? 0);
-    const lr = Number(HEALTH.loop_risk ?? 0);
+    const vv = Number((HEALTH && HEALTH.virtual_voltage != null) ? HEALTH.virtual_voltage : 0);
+    const ent = Number((HEALTH && HEALTH.entropy != null) ? HEALTH.entropy : 0);
+    const lr = Number((HEALTH && HEALTH.loop_risk != null) ? HEALTH.loop_risk : 0);
     document.getElementById('vv').textContent = (Math.round(vv*100)) + '%';
     document.getElementById('ent').textContent = (Math.round(ent*100)) + '%';
     document.getElementById('lr').textContent = (Math.round(lr*100)) + '%';
@@ -349,9 +349,9 @@ const html = `<!doctype html>
     const rows = [
       ['Credits total', String(creditsTotal)],
       ['Reputation index', rep==null ? '—' : rep.toFixed(2)],
-      ['Task complete bonus', String(r.task_complete_bonus ?? '—')],
-      ['Audit pass bonus', String(r.audit_pass_bonus ?? '—')],
-      ['Help friend bonus', String(r.help_friend_bonus ?? '—')],
+      ['Task complete bonus', String((r.task_complete_bonus == null) ? '—' : r.task_complete_bonus)],
+      ['Audit pass bonus', String((r.audit_pass_bonus == null) ? '—' : r.audit_pass_bonus)],
+      ['Help friend bonus', String((r.help_friend_bonus == null) ? '—' : r.help_friend_bonus)],
     ];
     for(const [k,v] of rows){
       const row = el('div',{class:'row'});
@@ -480,7 +480,7 @@ const html = `<!doctype html>
         }
         const b = el('div',{class:'b'});
         b.appendChild(el('div',{class:'id',text:(m.id||'')}));
-        const s = (m.role||'') + ' • T' + (m.tier??'') + ' • ' + (m.mode||'');
+        const s = (m.role||'') + ' • T' + ((m.tier == null) ? '' : m.tier) + ' • ' + (m.mode||'');
         b.appendChild(el('div',{class:'sub',text:s}));
         card.appendChild(a);
         card.appendChild(b);
