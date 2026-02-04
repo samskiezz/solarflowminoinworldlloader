@@ -25,6 +25,18 @@ const vvTxt = (typeof vvInit === 'number') ? (Math.round(vvInit*100) + '%') : '�
 const entTxt = (typeof entInit === 'number') ? (Math.round(entInit*100) + '%') : '—';
 const lrTxt = (typeof lrInit === 'number') ? (Math.round(lrInit*100) + '%') : '—';
 
+// Server-render full 50-task board so it is visible even if JS fails.
+const taskBoardInit = (((hiveObj || {}).tasks || {}).board) || [];
+const tasksInitHtml = Array.isArray(taskBoardInit) ? taskBoardInit.map(t => {
+  const id = String(t.id || t.title || '').replace(/"/g,'');
+  const owner = String(t.owner || 'MINION').replace(/</g,'&lt;');
+  const status = String(t.status || '').replace(/</g,'&lt;');
+  const title = String(t.title || t.id || '').replace(/</g,'&lt;');
+  const desc = String(t.desc || t.description || '').replace(/</g,'&lt;');
+  const meta = (owner + (status ? (' • ' + status) : ''));
+  return `<button class="taskBtn" data-taskid="${id}" data-owner="${owner}" data-status="${status}" data-title="${title}" data-desc="${desc}"><div class="k">${meta}</div><div class="v">${title}</div></button>`;
+}).join('') : '';
+
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -102,6 +114,12 @@ const html = `<!doctype html>
     .row .k{font-size:12px;color:var(--muted)}
     .row .v{font-size:12px;color:rgba(255,255,255,.88)}
 
+    .taskBtn{cursor:pointer;width:100%;text-align:left;display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.12);color:var(--text)}
+    .taskBtn:hover{border-color:rgba(34,211,238,.35);background:rgba(0,0,0,.18)}
+    .taskBtn:active{transform:translateY(1px)}
+    .taskBtn .k{font-size:12px;color:var(--muted)}
+    .taskBtn .v{font-size:12px;color:rgba(255,255,255,.88)}
+
     .footer{margin-top:12px;font-size:12px;color:var(--muted)}
 
     .rosterGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -126,8 +144,8 @@ const html = `<!doctype html>
         <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">${updatedAt}</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
       </div>
       <div class="pillbar">
-        <div class="pill"><strong>CI</strong>: <span id="ciText">—</span></div>
-        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">—</strong></div>
+        <div class="pill"><strong>CI</strong>: <span id="ciText">${esc(String(ciInit))}</span></div>
+        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">${updatedAt}</strong></div>
         <button class="btn" id="btnToggle">Pause</button>
         <button class="btn" onclick="location.href='./roster.html'">Roster</button>
         <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
@@ -140,18 +158,18 @@ const html = `<!doctype html>
         <div class="sectionTitle"><h2>Progress</h2><div class="pill" style="padding:6px 10px">source: hive_state</div></div>
         <div class="progressRow">
           <div style="min-width:140px;font-weight:700">Overall</div>
-          <div class="bar"><div id="bar"></div></div>
-          <div class="pct" id="pct">—%</div>
+          <div class="bar"><div id="bar" style="width:${pctInit}%;height:100%;border-radius:999px;background:linear-gradient(90deg, rgba(34,211,238,.9), rgba(167,139,250,.85));"></div></div>
+          <div class="pct" id="pct">${pctInit}%</div>
         </div>
-        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">—</div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">${esc(String(overallLabelInit))}</div>
         <div class="milestones" id="milestones"></div>
 
         <div style="height:12px"></div>
         <div class="sectionTitle"><h2>Health + Rewards</h2><div class="pill" style="padding:6px 10px">live meters</div></div>
         <div class="meters">
-          <div class="meter"><div class="label">Virtual voltage</div><div class="val" id="vv">—</div></div>
-          <div class="meter"><div class="label">Entropy</div><div class="val" id="ent">—</div></div>
-          <div class="meter"><div class="label">Loop risk</div><div class="val" id="lr">—</div></div>
+          <div class="meter"><div class="label">Virtual voltage</div><div class="val" id="vv">${vvTxt}</div></div>
+          <div class="meter"><div class="label">Entropy</div><div class="val" id="ent">${entTxt}</div></div>
+          <div class="meter"><div class="label">Loop risk</div><div class="val" id="lr">${lrTxt}</div></div>
         </div>
         <div style="height:10px"></div>
         <div class="list" id="rewards"></div>
@@ -189,7 +207,8 @@ const html = `<!doctype html>
       </div>
       <div class="card">
         <div class="sectionTitle"><h2>Task Board (assigned)</h2><div class="pill" style="padding:6px 10px">owners + status</div></div>
-        <div class="list" id="tasks"></div>
+        <div class="list" id="tasks">${tasksInitHtml}</div>
+        <div class="footer" id="taskDetail">Click a task to see details + owner assignment.</div>
         <div class="footer">Static hosting: tasks advance via commits to <code>hive_state</code>.</div>
       </div>
     </div>
@@ -450,17 +469,36 @@ const html = `<!doctype html>
       });
     }
 
-    // task board
+    // task board (interactive; still visible even if JS fails because it is server-rendered)
     const tasksEl = document.getElementById('tasks');
+    const taskDetailEl = document.getElementById('taskDetail');
     if(tasksEl){
+      // Ensure newest hive values replace the server-rendered view (but keep same UI shape)
       tasksEl.innerHTML='';
       const tb = (HIVE.tasks && Array.isArray(HIVE.tasks.board)) ? HIVE.tasks.board : [];
       tb.forEach(t=>{
-        const row = el('div',{class:'row'});
-        row.appendChild(el('div',{class:'k',text:(t.owner||'MINION') + ' • ' + (t.status||'')}));
-        row.appendChild(el('div',{class:'v',text:(t.title||t.id||'')}));
-        tasksEl.appendChild(row);
+        const b = el('button',{class:'taskBtn'});
+        b.setAttribute('type','button');
+        b.setAttribute('data-taskid', t.id || t.title || '');
+        b.setAttribute('data-owner', t.owner || 'MINION');
+        b.setAttribute('data-status', t.status || '');
+        b.setAttribute('data-title', t.title || t.id || '');
+        b.setAttribute('data-desc', t.desc || t.description || '');
+        b.appendChild(el('div',{class:'k',text:(t.owner||'MINION') + ((t.status)?(' • '+t.status):'')}));
+        b.appendChild(el('div',{class:'v',text:(t.title||t.id||'')}));
+        b.addEventListener('click', function(){
+          if(!taskDetailEl) return;
+          const owner = b.getAttribute('data-owner') || '';
+          const status = b.getAttribute('data-status') || '';
+          const title = b.getAttribute('data-title') || '';
+          const desc = b.getAttribute('data-desc') || '';
+          taskDetailEl.textContent = 'Owner: ' + owner + (status?(' • Status: ' + status):'') + ' — ' + title + (desc?(' — ' + desc):'');
+        });
+        tasksEl.appendChild(b);
       });
+      if(taskDetailEl && !taskDetailEl.textContent){
+        taskDetailEl.textContent = 'Click a task to see details + owner assignment.';
+      }
     }
 
     // code canon index

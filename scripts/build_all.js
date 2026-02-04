@@ -13,6 +13,7 @@ function safeGitSha(){
 
 const docs = path.join(__dirname, '..', 'docs');
 
+require('./generate_identicons');
 require('./validate_hive');
 require('./build_from_hive');
 require('./build_index');

@@ -75,6 +75,12 @@
     .row .k{font-size:12px;color:var(--muted)}
     .row .v{font-size:12px;color:rgba(255,255,255,.88)}
 
+    .taskBtn{cursor:pointer;width:100%;text-align:left;display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.12);color:var(--text)}
+    .taskBtn:hover{border-color:rgba(34,211,238,.35);background:rgba(0,0,0,.18)}
+    .taskBtn:active{transform:translateY(1px)}
+    .taskBtn .k{font-size:12px;color:var(--muted)}
+    .taskBtn .v{font-size:12px;color:rgba(255,255,255,.88)}
+
     .footer{margin-top:12px;font-size:12px;color:var(--muted)}
 
     .rosterGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -93,7 +99,7 @@
   <script id="data-hive" type="application/json">{
   "meta": {
     "schema": "solarflow.hive_state.v1",
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "source": "canonical",
     "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
@@ -124,7 +130,7 @@
     }
   },
   "ledger": {
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "credits_total": 5720,
     "reputation_index": 0.57,
     "rewards": {
@@ -152,7 +158,7 @@
     ]
   },
   "minions": {
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "max": 50,
     "roster": [
       {
@@ -167,8 +173,8 @@
         ],
         "energy_credits": 160,
         "reputation": 0.65,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 74
+        "avatar_url": "./avatars/identicons/ATLAS.svg",
+        "happiness_sim": 76
       },
       {
         "id": "LUMEN",
@@ -182,8 +188,8 @@
         ],
         "energy_credits": 160,
         "reputation": 0.63,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 83
+        "avatar_url": "./avatars/identicons/LUMEN.svg",
+        "happiness_sim": 80
       },
       {
         "id": "ORBIT",
@@ -197,8 +203,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.54,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 78
+        "avatar_url": "./avatars/identicons/ORBIT.svg",
+        "happiness_sim": 79
       },
       {
         "id": "PRISM",
@@ -212,8 +218,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.57,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 63
+        "avatar_url": "./avatars/identicons/PRISM.svg",
+        "happiness_sim": 65
       },
       {
         "id": "BOLT",
@@ -227,8 +233,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.6,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 75
+        "avatar_url": "./avatars/identicons/BOLT.svg",
+        "happiness_sim": 72
       },
       {
         "id": "SABLE",
@@ -242,8 +248,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.58,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 81
+        "avatar_url": "./avatars/identicons/SABLE.svg",
+        "happiness_sim": 82
       },
       {
         "id": "NOVA",
@@ -257,8 +263,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.5,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 65
+        "avatar_url": "./avatars/identicons/NOVA.svg",
+        "happiness_sim": 67
       },
       {
         "id": "EMBER",
@@ -272,8 +278,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.48,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 74
+        "avatar_url": "./avatars/identicons/EMBER.svg",
+        "happiness_sim": 71
       },
       {
         "id": "RUNE",
@@ -287,8 +293,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.52,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 71
+        "avatar_url": "./avatars/identicons/RUNE.svg",
+        "happiness_sim": 72
       },
       {
         "id": "AURORA",
@@ -302,8 +308,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.47,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 63
+        "avatar_url": "./avatars/identicons/AURORA.svg",
+        "happiness_sim": 65
       },
       {
         "id": "FORGE",
@@ -317,8 +323,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.51,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 76
+        "avatar_url": "./avatars/identicons/FORGE.svg",
+        "happiness_sim": 73
       },
       {
         "id": "KITE",
@@ -332,8 +338,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.46,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 68
+        "avatar_url": "./avatars/identicons/KITE.svg",
+        "happiness_sim": 69
       },
       {
         "id": "SENTRY",
@@ -347,8 +353,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.53,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 67
+        "avatar_url": "./avatars/identicons/SENTRY.svg",
+        "happiness_sim": 69
       },
       {
         "id": "GLINT",
@@ -362,8 +368,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.45,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 72
+        "avatar_url": "./avatars/identicons/GLINT.svg",
+        "happiness_sim": 69
       },
       {
         "id": "MOSS",
@@ -377,8 +383,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.44,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 72
+        "avatar_url": "./avatars/identicons/MOSS.svg",
+        "happiness_sim": 73
       },
       {
         "id": "DELTA",
@@ -392,8 +398,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.46,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 57
+        "avatar_url": "./avatars/identicons/DELTA.svg",
+        "happiness_sim": 59
       },
       {
         "id": "SAGE",
@@ -407,8 +413,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.55,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 78
+        "avatar_url": "./avatars/identicons/SAGE.svg",
+        "happiness_sim": 75
       },
       {
         "id": "WREN",
@@ -422,8 +428,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.45,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 73
+        "avatar_url": "./avatars/identicons/WREN.svg",
+        "happiness_sim": 74
       },
       {
         "id": "HAMMER",
@@ -437,8 +443,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.5,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 59
+        "avatar_url": "./avatars/identicons/HAMMER.svg",
+        "happiness_sim": 61
       },
       {
         "id": "VAULT",
@@ -452,8 +458,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.56,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 79
+        "avatar_url": "./avatars/identicons/VAULT.svg",
+        "happiness_sim": 76
       },
       {
         "id": "ECHO",
@@ -467,8 +473,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.47,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 68
+        "avatar_url": "./avatars/identicons/ECHO.svg",
+        "happiness_sim": 69
       },
       {
         "id": "SPARROW",
@@ -482,8 +488,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.46,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 63
+        "avatar_url": "./avatars/identicons/SPARROW.svg",
+        "happiness_sim": 65
       },
       {
         "id": "QUILL",
@@ -497,8 +503,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.52,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 76
+        "avatar_url": "./avatars/identicons/QUILL.svg",
+        "happiness_sim": 73
       },
       {
         "id": "ALPHA",
@@ -512,8 +518,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.42,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 70
+        "avatar_url": "./avatars/identicons/ALPHA.svg",
+        "happiness_sim": 71
       },
       {
         "id": "BETA",
@@ -527,8 +533,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.43,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 58
+        "avatar_url": "./avatars/identicons/BETA.svg",
+        "happiness_sim": 60
       },
       {
         "id": "CIPHER",
@@ -542,8 +548,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.52,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 70
+        "avatar_url": "./avatars/identicons/CIPHER.svg",
+        "happiness_sim": 67
       },
       {
         "id": "COMET",
@@ -557,8 +563,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.41,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 67
+        "avatar_url": "./avatars/identicons/COMET.svg",
+        "happiness_sim": 68
       },
       {
         "id": "DRIFT",
@@ -572,8 +578,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.41,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 55
+        "avatar_url": "./avatars/identicons/DRIFT.svg",
+        "happiness_sim": 57
       },
       {
         "id": "EQUINOX",
@@ -587,8 +593,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.5,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 71
+        "avatar_url": "./avatars/identicons/EQUINOX.svg",
+        "happiness_sim": 68
       },
       {
         "id": "FABLE",
@@ -602,8 +608,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.44,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 74
+        "avatar_url": "./avatars/identicons/FABLE.svg",
+        "happiness_sim": 75
       },
       {
         "id": "GHOST",
@@ -617,8 +623,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.49,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 57
+        "avatar_url": "./avatars/identicons/GHOST.svg",
+        "happiness_sim": 59
       },
       {
         "id": "HELIX",
@@ -632,8 +638,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.51,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 72
+        "avatar_url": "./avatars/identicons/HELIX.svg",
+        "happiness_sim": 69
       },
       {
         "id": "ION",
@@ -647,8 +653,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.43,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 69
+        "avatar_url": "./avatars/identicons/ION.svg",
+        "happiness_sim": 70
       },
       {
         "id": "IRIS",
@@ -662,8 +668,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.5,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 64
+        "avatar_url": "./avatars/identicons/IRIS.svg",
+        "happiness_sim": 66
       },
       {
         "id": "JADE",
@@ -677,8 +683,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.42,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 69
+        "avatar_url": "./avatars/identicons/JADE.svg",
+        "happiness_sim": 66
       },
       {
         "id": "JOLT",
@@ -692,8 +698,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.43,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 68
+        "avatar_url": "./avatars/identicons/JOLT.svg",
+        "happiness_sim": 69
       },
       {
         "id": "KODIAK",
@@ -707,8 +713,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.52,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 63
+        "avatar_url": "./avatars/identicons/KODIAK.svg",
+        "happiness_sim": 65
       },
       {
         "id": "NIMBUS",
@@ -722,8 +728,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.41,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 65
+        "avatar_url": "./avatars/identicons/NIMBUS.svg",
+        "happiness_sim": 62
       },
       {
         "id": "ONYX",
@@ -737,8 +743,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.49,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 70
+        "avatar_url": "./avatars/identicons/ONYX.svg",
+        "happiness_sim": 71
       },
       {
         "id": "TALON",
@@ -752,8 +758,8 @@
         ],
         "energy_credits": 120,
         "reputation": 0.53,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 65
+        "avatar_url": "./avatars/identicons/TALON.svg",
+        "happiness_sim": 67
       },
       {
         "id": "THORN",
@@ -767,8 +773,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.4,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 64
+        "avatar_url": "./avatars/identicons/THORN.svg",
+        "happiness_sim": 61
       },
       {
         "id": "UMBRA",
@@ -782,8 +788,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.5,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 73
+        "avatar_url": "./avatars/identicons/UMBRA.svg",
+        "happiness_sim": 74
       },
       {
         "id": "URSA",
@@ -797,8 +803,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.41,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 56
+        "avatar_url": "./avatars/identicons/URSA.svg",
+        "happiness_sim": 58
       },
       {
         "id": "VEGA",
@@ -812,8 +818,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.5,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 73
+        "avatar_url": "./avatars/identicons/VEGA.svg",
+        "happiness_sim": 70
       },
       {
         "id": "WHISPER",
@@ -827,8 +833,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.42,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 69
+        "avatar_url": "./avatars/identicons/WHISPER.svg",
+        "happiness_sim": 70
       },
       {
         "id": "XENO",
@@ -842,8 +848,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.48,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 59
+        "avatar_url": "./avatars/identicons/XENO.svg",
+        "happiness_sim": 61
       },
       {
         "id": "YARROW",
@@ -857,8 +863,8 @@
         ],
         "energy_credits": 90,
         "reputation": 0.41,
-        "avatar_url": "./avatars/atlas.png",
-        "happiness_sim": 67
+        "avatar_url": "./avatars/identicons/YARROW.svg",
+        "happiness_sim": 64
       },
       {
         "id": "YONDER",
@@ -872,8 +878,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.49,
-        "avatar_url": "./avatars/bolt.png",
-        "happiness_sim": 72
+        "avatar_url": "./avatars/identicons/YONDER.svg",
+        "happiness_sim": 73
       },
       {
         "id": "ZENITH",
@@ -887,8 +893,8 @@
         ],
         "energy_credits": 110,
         "reputation": 0.5,
-        "avatar_url": "./avatars/sable.png",
-        "happiness_sim": 64
+        "avatar_url": "./avatars/identicons/ZENITH.svg",
+        "happiness_sim": 66
       },
       {
         "id": "ZEPHYR",
@@ -902,13 +908,13 @@
         ],
         "energy_credits": 90,
         "reputation": 0.4,
-        "avatar_url": "./avatars/prism.png",
-        "happiness_sim": 70
+        "avatar_url": "./avatars/identicons/ZEPHYR.svg",
+        "happiness_sim": 67
       }
     ]
   },
   "market": {
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "exchange": {
       "credit_unit": "spark",
       "rate": 1
@@ -936,7 +942,7 @@
     ]
   },
   "friends": {
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "list": [
       {
         "id": "PROJECTSOLARBOT",
@@ -953,7 +959,7 @@
     ]
   },
   "activities": {
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "status": {
       "ci": "failing",
       "overall": 6.2,
@@ -992,142 +998,6 @@
       ]
     },
     "feed_posts": [
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 19:00:34 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 18:01:55 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 17:11:55 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 16:25:41 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 15:37:57 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 14:57:29 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 14:10:23 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 13:18:27 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 12:02:07 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 11:45:53 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 11:09:01 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 10:32:41 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 09:56:50 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 09:03:31 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 08:23:49 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 07:51:09 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 07:05:16 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
       {
         "who": "Atlas",
         "avatar_url": "./avatars/atlas.png",
@@ -1191,14 +1061,251 @@
         "topic": "Heartbeat",
         "status": "in-progress",
         "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 22:19:39 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 21:52:06 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 21:20:19 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 20:49:23 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 20:02:42 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 19:36:29 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 18:51:25 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 17:57:41 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 17:03:40 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 16:02:44 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 15:09:42 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 14:28:22 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 13:40:27 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 12:27:24 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 11:54:10 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 11:25:27 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-03 10:54:48 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
       }
     ]
   },
   "agora": {
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "mode": "SIMULATED",
     "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
     "messages": [
+      {
+        "sender_id": "SABLE",
+        "target_tier": 2,
+        "timestamp": "2050-02-03T14:00:00Z",
+        "intent": "DISCOVERY_RESULT",
+        "payload": {
+          "task_id": "doc_seed_001",
+          "manufacturer": "Fronius",
+          "candidates": [
+            {
+              "url": "https://example.com/fronius/datasheet.pdf",
+              "score": 0.74,
+              "why": "sitemap hit + keyword match"
+            }
+          ]
+        },
+        "spark_delta": 0.1,
+        "metadata": {
+          "requires_quantum_break": false
+        }
+      },
+      {
+        "sender_id": "EMBER",
+        "target_tier": 1,
+        "timestamp": "2050-02-03T14:00:06Z",
+        "intent": "FETCH_RESULT",
+        "payload": {
+          "task_id": "doc_seed_001",
+          "url": "https://example.com/fronius/datasheet.pdf",
+          "status": 200,
+          "content_type": "application/pdf",
+          "bytes": 812341
+        },
+        "spark_delta": 0.1,
+        "metadata": {
+          "requires_quantum_break": false
+        }
+      },
+      {
+        "sender_id": "NOVA",
+        "target_tier": 2,
+        "timestamp": "2050-02-03T14:00:21Z",
+        "intent": "VALIDATION_RESULT",
+        "payload": {
+          "task_id": "doc_seed_001",
+          "model_match": true,
+          "confidence": 0.86,
+          "evidence": [
+            "FRONIUS",
+            "MODEL: PRIMO 5.0-1"
+          ]
+        },
+        "spark_delta": 0.5,
+        "metadata": {
+          "requires_quantum_break": false
+        }
+      },
+      {
+        "sender_id": "ORBIT",
+        "target_tier": 2,
+        "timestamp": "2050-02-03T14:00:32Z",
+        "intent": "MEMORY_WRITE",
+        "payload": {
+          "task_id": "doc_seed_001",
+          "source_domain": "example.com",
+          "delta": 0.2,
+          "pattern": "/datasheet|/downloads"
+        },
+        "spark_delta": 0.1,
+        "metadata": {
+          "requires_quantum_break": false
+        }
+      },
+      {
+        "sender_id": "ATLAS",
+        "target_tier": 3,
+        "timestamp": "2026-02-03T03:31:13Z",
+        "intent": "STATE_PATCH",
+        "payload": {
+          "task_id": "tick",
+          "updatedAt": "2026-02-03T03:31:13Z"
+        },
+        "spark_delta": 0.1,
+        "metadata": {
+          "requires_quantum_break": false
+        }
+      },
+      {
+        "sender_id": "ATLAS",
+        "target_tier": 3,
+        "timestamp": "2026-02-03T03:43:05Z",
+        "intent": "STATE_PATCH",
+        "payload": {
+          "task_id": "tick",
+          "updatedAt": "2026-02-03T03:43:05Z"
+        },
+        "spark_delta": 0.1,
+        "metadata": {
+          "requires_quantum_break": false
+        }
+      },
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
@@ -1660,249 +1767,11 @@
         "metadata": {
           "requires_quantum_break": false
         }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T07:05:16Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T07:05:16Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T07:51:09Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T07:51:09Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T08:23:49Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T08:23:49Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T09:03:31Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T09:03:31Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T09:56:50Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T09:56:50Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T10:32:41Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T10:32:41Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T11:09:01Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T11:09:01Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T11:45:53Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T11:45:53Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T12:02:07Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T12:02:07Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T13:18:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T13:18:27Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T14:10:23Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T14:10:23Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T14:57:29Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T14:57:29Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T15:37:57Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T15:37:57Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T16:25:41Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T16:25:41Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T17:11:55Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T17:11:55Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T18:01:55Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T18:01:55Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-04T19:00:34Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-04T19:00:34Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
       }
     ]
   },
   "undercurrent": {
-    "updatedAt": "2026-02-04T19:00:34Z",
+    "updatedAt": "2026-02-04T06:03:47Z",
     "signals": [
       {
         "id": "sig_001",
@@ -2536,11 +2405,11 @@
     <div class="top">
       <div class="brand">
         <h1>SolarFlow • Minion World Loader</h1>
-        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-04T19:00:34Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
+        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-04T06:03:47Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
       </div>
       <div class="pillbar">
-        <div class="pill"><strong>CI</strong>: <span id="ciText">—</span></div>
-        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">—</strong></div>
+        <div class="pill"><strong>CI</strong>: <span id="ciText">failing</span></div>
+        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-04T06:03:47Z</strong></div>
         <button class="btn" id="btnToggle">Pause</button>
         <button class="btn" onclick="location.href='./roster.html'">Roster</button>
         <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
@@ -2553,18 +2422,18 @@
         <div class="sectionTitle"><h2>Progress</h2><div class="pill" style="padding:6px 10px">source: hive_state</div></div>
         <div class="progressRow">
           <div style="min-width:140px;font-weight:700">Overall</div>
-          <div class="bar"><div id="bar"></div></div>
-          <div class="pct" id="pct">—%</div>
+          <div class="bar"><div id="bar" style="width:62%;height:100%;border-radius:999px;background:linear-gradient(90deg, rgba(34,211,238,.9), rgba(167,139,250,.85));"></div></div>
+          <div class="pct" id="pct">62%</div>
         </div>
-        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">—</div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">A–Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods</div>
         <div class="milestones" id="milestones"></div>
 
         <div style="height:12px"></div>
         <div class="sectionTitle"><h2>Health + Rewards</h2><div class="pill" style="padding:6px 10px">live meters</div></div>
         <div class="meters">
-          <div class="meter"><div class="label">Virtual voltage</div><div class="val" id="vv">—</div></div>
-          <div class="meter"><div class="label">Entropy</div><div class="val" id="ent">—</div></div>
-          <div class="meter"><div class="label">Loop risk</div><div class="val" id="lr">—</div></div>
+          <div class="meter"><div class="label">Virtual voltage</div><div class="val" id="vv">33%</div></div>
+          <div class="meter"><div class="label">Entropy</div><div class="val" id="ent">19%</div></div>
+          <div class="meter"><div class="label">Loop risk</div><div class="val" id="lr">12%</div></div>
         </div>
         <div style="height:10px"></div>
         <div class="list" id="rewards"></div>
@@ -2602,7 +2471,8 @@
       </div>
       <div class="card">
         <div class="sectionTitle"><h2>Task Board (assigned)</h2><div class="pill" style="padding:6px 10px">owners + status</div></div>
-        <div class="list" id="tasks"></div>
+        <div class="list" id="tasks"><button class="taskBtn" data-taskid="TASK_ATLAS_DOC_DISCOVERY" data-owner="ATLAS" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">ATLAS • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_LUMEN_DOC_FETCH" data-owner="LUMEN" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">LUMEN • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_ORBIT_DOC_VALIDATE" data-owner="ORBIT" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">ORBIT • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_PRISM_PIPE_STATE" data-owner="PRISM" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">PRISM • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_BOLT_UI_PROGRESS" data-owner="BOLT" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">BOLT • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_SABLE_REALM_MECH" data-owner="SABLE" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">SABLE • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_NOVA_CANON" data-owner="NOVA" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">NOVA • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_EMBER_AGORA" data-owner="EMBER" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">EMBER • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_RUNE_CI_HARDEN" data-owner="RUNE" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">RUNE • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_AURORA_PERF_MOBILE" data-owner="AURORA" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">AURORA • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_FORGE_DOC_DISCOVERY" data-owner="FORGE" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">FORGE • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_KITE_DOC_FETCH" data-owner="KITE" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">KITE • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_SENTRY_DOC_VALIDATE" data-owner="SENTRY" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">SENTRY • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_GLINT_PIPE_STATE" data-owner="GLINT" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">GLINT • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_MOSS_UI_PROGRESS" data-owner="MOSS" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">MOSS • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_DELTA_REALM_MECH" data-owner="DELTA" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">DELTA • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_SAGE_CANON" data-owner="SAGE" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">SAGE • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_WREN_AGORA" data-owner="WREN" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">WREN • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_HAMMER_CI_HARDEN" data-owner="HAMMER" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">HAMMER • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_VAULT_PERF_MOBILE" data-owner="VAULT" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">VAULT • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_ECHO_DOC_DISCOVERY" data-owner="ECHO" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">ECHO • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_SPARROW_DOC_FETCH" data-owner="SPARROW" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">SPARROW • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_QUILL_DOC_VALIDATE" data-owner="QUILL" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">QUILL • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_ALPHA_PIPE_STATE" data-owner="ALPHA" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">ALPHA • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_BETA_UI_PROGRESS" data-owner="BETA" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">BETA • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_CIPHER_REALM_MECH" data-owner="CIPHER" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">CIPHER • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_COMET_CANON" data-owner="COMET" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">COMET • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_DRIFT_AGORA" data-owner="DRIFT" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">DRIFT • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_EQUINOX_CI_HARDEN" data-owner="EQUINOX" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">EQUINOX • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_FABLE_PERF_MOBILE" data-owner="FABLE" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">FABLE • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_GHOST_DOC_DISCOVERY" data-owner="GHOST" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">GHOST • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_HELIX_DOC_FETCH" data-owner="HELIX" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">HELIX • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_ION_DOC_VALIDATE" data-owner="ION" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">ION • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_IRIS_PIPE_STATE" data-owner="IRIS" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">IRIS • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_JADE_UI_PROGRESS" data-owner="JADE" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">JADE • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_JOLT_REALM_MECH" data-owner="JOLT" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">JOLT • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_KODIAK_CANON" data-owner="KODIAK" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">KODIAK • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_NIMBUS_AGORA" data-owner="NIMBUS" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">NIMBUS • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_ONYX_CI_HARDEN" data-owner="ONYX" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">ONYX • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_TALON_PERF_MOBILE" data-owner="TALON" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">TALON • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_THORN_DOC_DISCOVERY" data-owner="THORN" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">THORN • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_UMBRA_DOC_FETCH" data-owner="UMBRA" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">UMBRA • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_URSA_DOC_VALIDATE" data-owner="URSA" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">URSA • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_VEGA_PIPE_STATE" data-owner="VEGA" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">VEGA • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_WHISPER_UI_PROGRESS" data-owner="WHISPER" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">WHISPER • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_XENO_REALM_MECH" data-owner="XENO" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">XENO • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_YARROW_CANON" data-owner="YARROW" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">YARROW • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_YONDER_AGORA" data-owner="YONDER" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">YONDER • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_ZENITH_CI_HARDEN" data-owner="ZENITH" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">ZENITH • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_ZEPHYR_PERF_MOBILE" data-owner="ZEPHYR" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">ZEPHYR • queued</div><div class="v">Mobile perf + 3D realm caps</div></button></div>
+        <div class="footer" id="taskDetail">Click a task to see details + owner assignment.</div>
         <div class="footer">Static hosting: tasks advance via commits to <code>hive_state</code>.</div>
       </div>
     </div>
@@ -2864,17 +2734,36 @@
       });
     }
 
-    // task board
+    // task board (interactive; still visible even if JS fails because it is server-rendered)
     const tasksEl = document.getElementById('tasks');
+    const taskDetailEl = document.getElementById('taskDetail');
     if(tasksEl){
+      // Ensure newest hive values replace the server-rendered view (but keep same UI shape)
       tasksEl.innerHTML='';
       const tb = (HIVE.tasks && Array.isArray(HIVE.tasks.board)) ? HIVE.tasks.board : [];
       tb.forEach(t=>{
-        const row = el('div',{class:'row'});
-        row.appendChild(el('div',{class:'k',text:(t.owner||'MINION') + ' • ' + (t.status||'')}));
-        row.appendChild(el('div',{class:'v',text:(t.title||t.id||'')}));
-        tasksEl.appendChild(row);
+        const b = el('button',{class:'taskBtn'});
+        b.setAttribute('type','button');
+        b.setAttribute('data-taskid', t.id || t.title || '');
+        b.setAttribute('data-owner', t.owner || 'MINION');
+        b.setAttribute('data-status', t.status || '');
+        b.setAttribute('data-title', t.title || t.id || '');
+        b.setAttribute('data-desc', t.desc || t.description || '');
+        b.appendChild(el('div',{class:'k',text:(t.owner||'MINION') + ((t.status)?(' • '+t.status):'')}));
+        b.appendChild(el('div',{class:'v',text:(t.title||t.id||'')}));
+        b.addEventListener('click', function(){
+          if(!taskDetailEl) return;
+          const owner = b.getAttribute('data-owner') || '';
+          const status = b.getAttribute('data-status') || '';
+          const title = b.getAttribute('data-title') || '';
+          const desc = b.getAttribute('data-desc') || '';
+          taskDetailEl.textContent = 'Owner: ' + owner + (status?(' • Status: ' + status):'') + ' — ' + title + (desc?(' — ' + desc):'');
+        });
+        tasksEl.appendChild(b);
       });
+      if(taskDetailEl && !taskDetailEl.textContent){
+        taskDetailEl.textContent = 'Click a task to see details + owner assignment.';
+      }
     }
 
     // code canon index
