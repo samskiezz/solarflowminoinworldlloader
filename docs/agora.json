@@ -1,25 +1,8 @@
 {
-  "updatedAt": "2026-02-04T14:57:29Z",
+  "updatedAt": "2026-02-04T15:37:57Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "EMBER",
-      "target_tier": 1,
-      "timestamp": "2050-02-03T14:00:06Z",
-      "intent": "FETCH_RESULT",
-      "payload": {
-        "task_id": "doc_seed_001",
-        "url": "https://example.com/fronius/datasheet.pdf",
-        "status": 200,
-        "content_type": "application/pdf",
-        "bytes": 812341
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
     {
       "sender_id": "NOVA",
       "target_tier": 2,
@@ -707,6 +690,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-04T14:57:29Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-04T15:37:57Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-04T15:37:57Z"
       },
       "spark_delta": 0.1,
       "metadata": {
