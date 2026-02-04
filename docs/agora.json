@@ -1,8 +1,109 @@
 {
-  "updatedAt": "2026-02-04T19:00:34Z",
+  "updatedAt": "2026-02-04T06:03:47Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
+    {
+      "sender_id": "SABLE",
+      "target_tier": 2,
+      "timestamp": "2050-02-03T14:00:00Z",
+      "intent": "DISCOVERY_RESULT",
+      "payload": {
+        "task_id": "doc_seed_001",
+        "manufacturer": "Fronius",
+        "candidates": [
+          {
+            "url": "https://example.com/fronius/datasheet.pdf",
+            "score": 0.74,
+            "why": "sitemap hit + keyword match"
+          }
+        ]
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "EMBER",
+      "target_tier": 1,
+      "timestamp": "2050-02-03T14:00:06Z",
+      "intent": "FETCH_RESULT",
+      "payload": {
+        "task_id": "doc_seed_001",
+        "url": "https://example.com/fronius/datasheet.pdf",
+        "status": 200,
+        "content_type": "application/pdf",
+        "bytes": 812341
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "NOVA",
+      "target_tier": 2,
+      "timestamp": "2050-02-03T14:00:21Z",
+      "intent": "VALIDATION_RESULT",
+      "payload": {
+        "task_id": "doc_seed_001",
+        "model_match": true,
+        "confidence": 0.86,
+        "evidence": [
+          "FRONIUS",
+          "MODEL: PRIMO 5.0-1"
+        ]
+      },
+      "spark_delta": 0.5,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ORBIT",
+      "target_tier": 2,
+      "timestamp": "2050-02-03T14:00:32Z",
+      "intent": "MEMORY_WRITE",
+      "payload": {
+        "task_id": "doc_seed_001",
+        "source_domain": "example.com",
+        "delta": 0.2,
+        "pattern": "/datasheet|/downloads"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-03T03:31:13Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-03T03:31:13Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-03T03:43:05Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-03T03:43:05Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
     {
       "sender_id": "ATLAS",
       "target_tier": 3,
@@ -459,244 +560,6 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-04T06:03:47Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T07:05:16Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T07:05:16Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T07:51:09Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T07:51:09Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T08:23:49Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T08:23:49Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T09:03:31Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T09:03:31Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T09:56:50Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T09:56:50Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T10:32:41Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T10:32:41Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T11:09:01Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T11:09:01Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T11:45:53Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T11:45:53Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T12:02:07Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T12:02:07Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T13:18:27Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T13:18:27Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T14:10:23Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T14:10:23Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T14:57:29Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T14:57:29Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T15:37:57Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T15:37:57Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T16:25:41Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T16:25:41Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T17:11:55Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T17:11:55Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T18:01:55Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T18:01:55Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-04T19:00:34Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-04T19:00:34Z"
       },
       "spark_delta": 0.1,
       "metadata": {
