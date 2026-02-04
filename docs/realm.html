@@ -70,6 +70,36 @@
   <div id="fx"></div>
   <canvas id="c"></canvas>
 
-  <script type="module" src="./realm.js?v=01a168a"></script>
+  <div id="realmError" style="position:fixed;inset:16px;z-index:50;display:none;overflow:auto;
+    border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-radius:16px;padding:14px;color:#eaf0ff">
+    <div style="font-weight:900;margin-bottom:6px">Realm error</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.78);margin-bottom:10px">If you see this, your browser hit a JS/runtime limitation. Please screenshot + send it.</div>
+    <pre id="realmErrorText" style="white-space:pre-wrap;margin:0;font-size:12px;line-height:1.35"></pre>
+  </div>
+
+  <script>
+    (function(){
+      function showErr(msg){
+        try{
+          var box = document.getElementById('realmError');
+          var txt = document.getElementById('realmErrorText');
+          if(txt) txt.textContent = String(msg || 'Unknown error');
+          if(box) box.style.display = 'block';
+          var st = document.getElementById('status');
+          if(st) st.textContent = 'realm error';
+        }catch(e){}
+      }
+      window.__realmShowErr = showErr;
+      window.addEventListener('error', function(e){
+        showErr((e && (e.error && (e.error.stack || e.error.message) || e.message)) || 'Script error');
+      });
+      window.addEventListener('unhandledrejection', function(e){
+        showErr((e && (e.reason && (e.reason.stack || e.reason.message) || e.reason)) || 'Unhandled rejection');
+      });
+    })();
+  </script>
+
+  <script type="module" src="./realm.js?v=01a169b"></script>
 </body>
 </html>

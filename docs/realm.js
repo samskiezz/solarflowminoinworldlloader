@@ -23,7 +23,7 @@ const searchEl = document.getElementById('search');
 
 // Robust base path for GitHub Pages project sites:
 // Always use the first path segment as the repo name.
-const ROOT = (()=>{
+const ROOT = (function(){
   const parts = window.location.pathname.split('/').filter(Boolean);
   const repo = parts[0] || 'solarflow-status';
   return '/' + repo + '/';
@@ -78,12 +78,12 @@ function closeFx(){ blip({f:640, endF:280, glide:0.09, dur:0.12, type:'sawtooth'
 function teleportFx(){ blip({f:220, endF:1320, glide:0.12, dur:0.18, type:'square', gain:0.10}); blip({f:1320, endF:520, glide:0.10, dur:0.16, type:'triangle', gain:0.08}); }
 function packetFx(){ blip({f:880, dur:0.04, type:'triangle', gain:0.06}); }
 
-btnSound?.addEventListener('click', async ()=>{
+if(btnSound) btnSound.addEventListener('click', async ()=>{
   // Audio must start on a user gesture on mobile.
   audioOn = !audioOn;
   if(audioOn){
     ensureAudio();
-    if(audioCtx?.state === 'suspended'){
+    if(audioCtx && audioCtx.state === 'suspended'){
       try{ await audioCtx.resume(); }catch(e){}
     }
     btnSound.textContent = 'Sound: ON';
@@ -335,14 +335,17 @@ function rebuildLinks(messages){
   for(const m of (messages||[])){
     const a = (m.sender_id||'').toUpperCase();
     // try infer receiver from payload.to or payload.owner-ish
-    const b = (m.payload?.to || m.payload?.owner || m.payload?.target || '').toString().toUpperCase();
+    const pl = m.payload || {};
+    const b = ((pl && (pl.to || pl.owner || pl.target)) || '').toString().toUpperCase();
     // if unknown, just pulse outward from sender to ATLAS
     const to = b || 'ATLAS';
     const key = `${a}->${to}`;
     pairSet.add(key);
 
-    const pa = podById.get(a)?.meshGroup?.position;
-    const pb = podById.get(to)?.meshGroup?.position;
+    const paObj = podById.get(a);
+    const pbObj = podById.get(to);
+    const pa = (paObj && paObj.meshGroup && paObj.meshGroup.position) ? paObj.meshGroup.position : null;
+    const pb = (pbObj && pbObj.meshGroup && pbObj.meshGroup.position) ? pbObj.meshGroup.position : null;
     if(!pa || !pb) continue;
 
     // line
@@ -380,7 +383,8 @@ function setPanel(minion){
     t.textContent = s;
     pTags.appendChild(t);
   }
-  const h = Math.max(0, Math.min(100, Math.round(d.happiness_sim ?? 50)));
+  const h0 = (d.happiness_sim == null) ? 50 : d.happiness_sim;
+  const h = Math.max(0, Math.min(100, Math.round(h0)));
   pHappy.style.width = h + '%';
   pHappyVal.textContent = String(h);
 }
@@ -445,7 +449,7 @@ function buildPost(){
 }
 
 function renderMap(){
-  const q = (searchEl?.value || '').trim().toLowerCase();
+  const q = (((searchEl && searchEl.value) || '') + '').trim().toLowerCase();
   mapList.innerHTML = '';
   const filtered = minionList.filter(m => !q || (m.id||'').toLowerCase().includes(q) || (m.role||'').toLowerCase().includes(q));
   filtered.slice(0,80).forEach(m=>{
@@ -473,10 +477,10 @@ function renderMap(){
   });
 }
 
-btnMap?.addEventListener('click', ()=>{ mapEl.style.display = 'block'; openFx(); renderMap(); });
-btnCloseMap?.addEventListener('click', ()=>{ mapEl.style.display = 'none'; closeFx(); });
-btnFocusAtlas?.addEventListener('click', ()=>{ clickFx(); focusPodById('ATLAS'); });
-searchEl?.addEventListener('input', renderMap);
+if(btnMap) btnMap.addEventListener('click', ()=>{ mapEl.style.display = 'block'; openFx(); renderMap(); });
+if(btnCloseMap) btnCloseMap.addEventListener('click', ()=>{ mapEl.style.display = 'none'; closeFx(); });
+if(btnFocusAtlas) btnFocusAtlas.addEventListener('click', ()=>{ clickFx(); focusPodById('ATLAS'); });
+if(searchEl) searchEl.addEventListener('input', renderMap);
 
 async function loadData(){
   statusEl.textContent = 'loading minions…';
@@ -540,11 +544,11 @@ function animate(tms){
   // subtle pod bob + hologram shimmer
   for(const p of pods){
     const g = p.meshGroup;
-    g.position.y = (g.userData?.id==='ATLAS'?0.9:g.position.y);
+    g.position.y = ((g.userData && g.userData.id)==='ATLAS'?0.9:g.position.y);
     g.position.y += Math.sin(t*1.2 + g.position.x*0.2 + g.position.z*0.2) * 0.002;
     g.rotation.y = Math.sin(t*0.6 + g.position.x*0.1) * 0.12;
 
-    const holo = g.userData?.holo;
+    const holo = (g.userData && g.userData.holo) ? g.userData.holo : null;
     if(holo){
       const wob = 0.03*Math.sin(t*2.2 + g.position.x*0.15);
       holo.sprite.material.opacity = 0.78 + 0.10*Math.sin(t*1.7 + g.position.z*0.2);
@@ -562,8 +566,8 @@ function animate(tms){
   const intersects = raycaster.intersectObjects(scene.children, true);
   let found = null;
   for(const it of intersects){
-    const root = it.object?.parent;
-    if(root?.userData?.type==='pod'){
+    const root = (it.object && it.object.parent) ? it.object.parent : null;
+    if(root && root.userData && root.userData.type==='pod'){
       const id = (root.userData.id||'').toUpperCase();
       found = podById.get(id) || null;
       break;
@@ -589,5 +593,8 @@ function animate(tms){
 
 loadData().then(()=>animate(0)).catch(err=>{
   statusEl.textContent = 'failed to load realm data';
+  try{
+    if(window.__realmShowErr) window.__realmShowErr(err && (err.stack || err.message) || String(err));
+  }catch(e){}
   console.error(err);
 });
