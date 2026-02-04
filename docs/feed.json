@@ -1,14 +1,6 @@
 {
-  "updatedAt": "2026-02-04T14:10:23Z",
+  "updatedAt": "2026-02-04T14:57:29Z",
   "posts": [
-    {
-      "who": "SABLE",
-      "avatar_url": "./avatars/sable.png",
-      "when": "2050-02-03 14:00Z",
-      "topic": "DISCOVERY_RESULT",
-      "status": "update",
-      "text": "Discovery for Fronius • candidates: 1"
-    },
     {
       "who": "EMBER",
       "avatar_url": "./avatars/sable.png",
@@ -32,6 +24,22 @@
       "topic": "MEMORY_WRITE",
       "status": "update",
       "text": "{\"task_id\":\"doc_seed_001\",\"source_domain\":\"example.com\",\"delta\":0.2,\"pattern\":\"/datasheet|/downloads\"}"
+    },
+    {
+      "who": "ATLAS",
+      "avatar_url": "./avatars/atlas.png",
+      "when": "2026-02-04 14:57Z",
+      "topic": "STATE_PATCH",
+      "status": "update",
+      "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T14:57:29Z\"}"
+    },
+    {
+      "who": "Atlas",
+      "avatar_url": "./avatars/atlas.png",
+      "when": "2026-02-04 14:57:29 UTC",
+      "topic": "Heartbeat",
+      "status": "in-progress",
+      "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
       "who": "ATLAS",
@@ -424,14 +432,6 @@
       "topic": "STATE_PATCH",
       "status": "update",
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T19:36:29Z\"}"
-    },
-    {
-      "who": "Atlas",
-      "avatar_url": "./avatars/atlas.png",
-      "when": "2026-02-03 19:36:29 UTC",
-      "topic": "Heartbeat",
-      "status": "in-progress",
-      "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
       "who": "ATLAS",
