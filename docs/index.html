@@ -2488,6 +2488,8 @@
   </div>
 
   <script>
+    // Defensive boot: if anything throws, show the error in the Diagnostics footer.
+    (function(){
     function safeParse(jsonElId){
       try{
         const el = document.getElementById(jsonElId);
@@ -2778,7 +2780,16 @@
       });
     }
 
-    document.getElementById('diag').textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
+    var diag = document.getElementById('diag');
+    if(diag) diag.textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
+    }
+    catch(e){
+      try{
+        var d = document.getElementById('diag');
+        if(d) d.textContent = 'JS error: ' + (e && (e.stack || e.message) || String(e));
+      }catch(_e){}
+    }
+  })();
   </script>
 </body>
 </html>

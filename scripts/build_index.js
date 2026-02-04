@@ -12,6 +12,19 @@ function esc(s){
 
 const updatedAt = (hiveObj && hiveObj.meta && hiveObj.meta.updatedAt) ? hiveObj.meta.updatedAt : '—';
 
+// Server-rendered initial values so the page is never "blank" even if JS fails.
+const statusObj = ((hiveObj || {}).activities || {}).status || {};
+const ciInit = statusObj.ci || 'unknown';
+const overallInit = (typeof statusObj.overall === 'number') ? statusObj.overall : 0;
+const overallLabelInit = statusObj.overallLabel || '—';
+const pctInit = Math.max(0, Math.min(100, Math.round((overallInit/10)*100)));
+const vvInit = (((hiveObj || {}).world || {}).health || {}).virtual_voltage;
+const entInit = (((hiveObj || {}).world || {}).health || {}).entropy;
+const lrInit = (((hiveObj || {}).world || {}).health || {}).loop_risk;
+const vvTxt = (typeof vvInit === 'number') ? (Math.round(vvInit*100) + '%') : '—';
+const entTxt = (typeof entInit === 'number') ? (Math.round(entInit*100) + '%') : '—';
+const lrTxt = (typeof lrInit === 'number') ? (Math.round(lrInit*100) + '%') : '—';
+
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -199,6 +212,8 @@ const html = `<!doctype html>
   </div>
 
   <script>
+    // Defensive boot: if anything throws, show the error in the Diagnostics footer.
+    (function(){
     function safeParse(jsonElId){
       try{
         const el = document.getElementById(jsonElId);
@@ -488,7 +503,16 @@ const html = `<!doctype html>
       });
     }
 
-    document.getElementById('diag').textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
+    var diag = document.getElementById('diag');
+    if(diag) diag.textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
+    }
+    catch(e){
+      try{
+        var d = document.getElementById('diag');
+        if(d) d.textContent = 'JS error: ' + (e && (e.stack || e.message) || String(e));
+      }catch(_e){}
+    }
+  })();
   </script>
 </body>
 </html>
