@@ -1,7 +1,7 @@
 {
   "meta": {
     "schema": "solarflow.hive_state.v1",
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "source": "canonical",
     "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
@@ -32,7 +32,7 @@
     }
   },
   "ledger": {
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "credits_total": 5720,
     "reputation_index": 0.57,
     "rewards": {
@@ -60,7 +60,7 @@
     ]
   },
   "minions": {
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "max": 50,
     "roster": [
       {
@@ -76,7 +76,7 @@
         "energy_credits": 160,
         "reputation": 0.65,
         "avatar_url": "./avatars/identicons/ATLAS.svg",
-        "happiness_sim": 74
+        "happiness_sim": 75
       },
       {
         "id": "LUMEN",
@@ -91,7 +91,7 @@
         "energy_credits": 160,
         "reputation": 0.63,
         "avatar_url": "./avatars/identicons/LUMEN.svg",
-        "happiness_sim": 79
+        "happiness_sim": 78
       },
       {
         "id": "ORBIT",
@@ -121,7 +121,7 @@
         "energy_credits": 120,
         "reputation": 0.57,
         "avatar_url": "./avatars/identicons/PRISM.svg",
-        "happiness_sim": 63
+        "happiness_sim": 64
       },
       {
         "id": "BOLT",
@@ -136,7 +136,7 @@
         "energy_credits": 120,
         "reputation": 0.6,
         "avatar_url": "./avatars/identicons/BOLT.svg",
-        "happiness_sim": 71
+        "happiness_sim": 70
       },
       {
         "id": "SABLE",
@@ -166,7 +166,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/NOVA.svg",
-        "happiness_sim": 65
+        "happiness_sim": 66
       },
       {
         "id": "EMBER",
@@ -181,7 +181,7 @@
         "energy_credits": 90,
         "reputation": 0.48,
         "avatar_url": "./avatars/identicons/EMBER.svg",
-        "happiness_sim": 70
+        "happiness_sim": 69
       },
       {
         "id": "RUNE",
@@ -211,7 +211,7 @@
         "energy_credits": 90,
         "reputation": 0.47,
         "avatar_url": "./avatars/identicons/AURORA.svg",
-        "happiness_sim": 63
+        "happiness_sim": 64
       },
       {
         "id": "FORGE",
@@ -226,7 +226,7 @@
         "energy_credits": 110,
         "reputation": 0.51,
         "avatar_url": "./avatars/identicons/FORGE.svg",
-        "happiness_sim": 72
+        "happiness_sim": 71
       },
       {
         "id": "KITE",
@@ -256,7 +256,7 @@
         "energy_credits": 110,
         "reputation": 0.53,
         "avatar_url": "./avatars/identicons/SENTRY.svg",
-        "happiness_sim": 67
+        "happiness_sim": 68
       },
       {
         "id": "GLINT",
@@ -271,7 +271,7 @@
         "energy_credits": 90,
         "reputation": 0.45,
         "avatar_url": "./avatars/identicons/GLINT.svg",
-        "happiness_sim": 68
+        "happiness_sim": 67
       },
       {
         "id": "MOSS",
@@ -301,7 +301,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/identicons/DELTA.svg",
-        "happiness_sim": 57
+        "happiness_sim": 58
       },
       {
         "id": "SAGE",
@@ -316,7 +316,7 @@
         "energy_credits": 120,
         "reputation": 0.55,
         "avatar_url": "./avatars/identicons/SAGE.svg",
-        "happiness_sim": 74
+        "happiness_sim": 73
       },
       {
         "id": "WREN",
@@ -346,7 +346,7 @@
         "energy_credits": 120,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/HAMMER.svg",
-        "happiness_sim": 59
+        "happiness_sim": 60
       },
       {
         "id": "VAULT",
@@ -361,7 +361,7 @@
         "energy_credits": 120,
         "reputation": 0.56,
         "avatar_url": "./avatars/identicons/VAULT.svg",
-        "happiness_sim": 75
+        "happiness_sim": 74
       },
       {
         "id": "ECHO",
@@ -391,7 +391,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/identicons/SPARROW.svg",
-        "happiness_sim": 63
+        "happiness_sim": 64
       },
       {
         "id": "QUILL",
@@ -406,7 +406,7 @@
         "energy_credits": 120,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/QUILL.svg",
-        "happiness_sim": 72
+        "happiness_sim": 71
       },
       {
         "id": "ALPHA",
@@ -436,7 +436,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/identicons/BETA.svg",
-        "happiness_sim": 58
+        "happiness_sim": 59
       },
       {
         "id": "CIPHER",
@@ -451,7 +451,7 @@
         "energy_credits": 110,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/CIPHER.svg",
-        "happiness_sim": 66
+        "happiness_sim": 65
       },
       {
         "id": "COMET",
@@ -481,7 +481,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/DRIFT.svg",
-        "happiness_sim": 55
+        "happiness_sim": 56
       },
       {
         "id": "EQUINOX",
@@ -496,7 +496,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/EQUINOX.svg",
-        "happiness_sim": 67
+        "happiness_sim": 66
       },
       {
         "id": "FABLE",
@@ -526,7 +526,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/identicons/GHOST.svg",
-        "happiness_sim": 57
+        "happiness_sim": 58
       },
       {
         "id": "HELIX",
@@ -541,7 +541,7 @@
         "energy_credits": 110,
         "reputation": 0.51,
         "avatar_url": "./avatars/identicons/HELIX.svg",
-        "happiness_sim": 68
+        "happiness_sim": 67
       },
       {
         "id": "ION",
@@ -571,7 +571,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/IRIS.svg",
-        "happiness_sim": 64
+        "happiness_sim": 65
       },
       {
         "id": "JADE",
@@ -586,7 +586,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/identicons/JADE.svg",
-        "happiness_sim": 65
+        "happiness_sim": 64
       },
       {
         "id": "JOLT",
@@ -616,7 +616,7 @@
         "energy_credits": 120,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/KODIAK.svg",
-        "happiness_sim": 63
+        "happiness_sim": 64
       },
       {
         "id": "NIMBUS",
@@ -631,7 +631,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/NIMBUS.svg",
-        "happiness_sim": 61
+        "happiness_sim": 60
       },
       {
         "id": "ONYX",
@@ -661,7 +661,7 @@
         "energy_credits": 120,
         "reputation": 0.53,
         "avatar_url": "./avatars/identicons/TALON.svg",
-        "happiness_sim": 65
+        "happiness_sim": 66
       },
       {
         "id": "THORN",
@@ -676,7 +676,7 @@
         "energy_credits": 90,
         "reputation": 0.4,
         "avatar_url": "./avatars/identicons/THORN.svg",
-        "happiness_sim": 60
+        "happiness_sim": 59
       },
       {
         "id": "UMBRA",
@@ -706,7 +706,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/URSA.svg",
-        "happiness_sim": 56
+        "happiness_sim": 57
       },
       {
         "id": "VEGA",
@@ -721,7 +721,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/VEGA.svg",
-        "happiness_sim": 69
+        "happiness_sim": 68
       },
       {
         "id": "WHISPER",
@@ -751,7 +751,7 @@
         "energy_credits": 110,
         "reputation": 0.48,
         "avatar_url": "./avatars/identicons/XENO.svg",
-        "happiness_sim": 59
+        "happiness_sim": 60
       },
       {
         "id": "YARROW",
@@ -766,7 +766,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/YARROW.svg",
-        "happiness_sim": 63
+        "happiness_sim": 62
       },
       {
         "id": "YONDER",
@@ -796,7 +796,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/ZENITH.svg",
-        "happiness_sim": 64
+        "happiness_sim": 65
       },
       {
         "id": "ZEPHYR",
@@ -811,12 +811,12 @@
         "energy_credits": 90,
         "reputation": 0.4,
         "avatar_url": "./avatars/identicons/ZEPHYR.svg",
-        "happiness_sim": 66
+        "happiness_sim": 65
       }
     ]
   },
   "market": {
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "exchange": {
       "credit_unit": "spark",
       "rate": 1
@@ -844,7 +844,7 @@
     ]
   },
   "friends": {
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "list": [
       {
         "id": "PROJECTSOLARBOT",
@@ -861,7 +861,7 @@
     ]
   },
   "activities": {
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "status": {
       "ci": "failing",
       "overall": 6.2,
@@ -900,6 +900,14 @@
       ]
     },
     "feed_posts": [
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-05 08:04:46 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
       {
         "who": "Atlas",
         "avatar_url": "./avatars/atlas.png",
@@ -1091,36 +1099,14 @@
         "topic": "Heartbeat",
         "status": "in-progress",
         "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-03 22:19:39 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
       }
     ]
   },
   "agora": {
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "mode": "SIMULATED",
     "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
     "messages": [
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T03:43:05Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T03:43:05Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
@@ -1806,11 +1792,25 @@
         "metadata": {
           "requires_quantum_break": false
         }
+      },
+      {
+        "sender_id": "ATLAS",
+        "target_tier": 3,
+        "timestamp": "2026-02-05T08:04:46Z",
+        "intent": "STATE_PATCH",
+        "payload": {
+          "task_id": "tick",
+          "updatedAt": "2026-02-05T08:04:46Z"
+        },
+        "spark_delta": 0.1,
+        "metadata": {
+          "requires_quantum_break": false
+        }
       }
     ]
   },
   "undercurrent": {
-    "updatedAt": "2026-02-05T07:33:45Z",
+    "updatedAt": "2026-02-05T08:04:46Z",
     "signals": [
       {
         "id": "sig_001",
