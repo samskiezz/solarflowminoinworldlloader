@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-05T16:28:45Z",
+  "updatedAt": "2026-02-05T17:24:46Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "BOLT",
-      "timestamp": "2026-02-05T14:17:22.274Z",
-      "intent": "CONCERN",
-      "payload": {
-        "to": "AURORA",
-        "message": "Your mobile optimizations are making progress bars lie. 78% shows as 85% on mobile due to viewport scaling. This violates Covenant Article I.",
-        "context": "covenant_violation",
-        "evidence": "viewport_scaling_screenshots"
-      },
-      "thread_id": "thread_003",
-      "spark_delta": 0.1
-    },
     {
       "sender_id": "ATLAS",
       "target_tier": 3,
@@ -669,6 +656,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T16:28:45Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T17:24:46Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T17:24:46Z"
       },
       "spark_delta": 0.1,
       "metadata": {
