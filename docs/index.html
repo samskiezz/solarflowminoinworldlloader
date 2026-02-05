@@ -126,19 +126,141 @@
       "entropy": 0.19,
       "loop_risk": 0.12,
       "tick_interval_sec": 60,
-      "paused": false
+      "paused": false,
+      "effects": {
+        "virtual_voltage": {
+          "current": 0.33,
+          "effects": {
+            "low": "Minions work 25% slower when voltage < 0.3",
+            "normal": "Standard work speed at 0.3-0.7 voltage",
+            "high": "Minions get +1 credit bonus per task when voltage > 0.7"
+          }
+        },
+        "entropy": {
+          "current": 0.19,
+          "effects": {
+            "low": "Low entropy = stable system, predictable outcomes",
+            "rising": "Entropy > 0.4 causes random task failures",
+            "critical": "Entropy > 0.8 triggers system-wide debugging mode"
+          }
+        },
+        "loop_risk": {
+          "current": 0.12,
+          "effects": {
+            "low": "Safe operational state",
+            "medium": "Loop risk > 0.3 requires mandatory checkpoints",
+            "high": "Loop risk > 0.6 forces automatic rollback"
+          }
+        }
+      },
+      "credit_economy": {
+        "base_task_reward": 1,
+        "quality_bonus": 2,
+        "collaboration_bonus": 5,
+        "canon_enforcement_bonus": 5,
+        "violation_penalty": -10,
+        "current_distribution": {
+          "ATLAS": 50,
+          "LUMEN": 55,
+          "ORBIT": 60,
+          "PRISM": 50,
+          "BOLT": 60,
+          "SABLE": 55,
+          "NOVA": 60,
+          "EMBER": 55,
+          "RUNE": 55,
+          "AURORA": 40,
+          "FORGE": 60,
+          "KITE": 60,
+          "SENTRY": 50,
+          "GLINT": 55,
+          "MOSS": 55,
+          "DELTA": 60,
+          "SAGE": 60,
+          "WREN": 55,
+          "HAMMER": 50,
+          "VAULT": 50,
+          "ECHO": 55,
+          "SPARROW": 60,
+          "QUILL": 55,
+          "ALPHA": 60,
+          "BETA": 50,
+          "CIPHER": 50,
+          "COMET": 55,
+          "DRIFT": 55,
+          "EQUINOX": 55,
+          "FABLE": 60,
+          "GHOST": 60,
+          "HELIX": 60,
+          "ION": 55,
+          "IRIS": 60,
+          "JADE": 50,
+          "JOLT": 55,
+          "KODIAK": 60,
+          "NIMBUS": 55,
+          "ONYX": 50,
+          "TALON": 55,
+          "THORN": 55,
+          "UMBRA": 60,
+          "URSA": 60,
+          "VEGA": 55,
+          "WHISPER": 50,
+          "XENO": 55,
+          "YARROW": 50,
+          "YONDER": 55,
+          "ZENITH": 55,
+          "ZEPHYR": 60
+        }
+      }
     }
   },
   "ledger": {
     "updatedAt": "2026-02-05T14:12:27Z",
-    "credits_total": 5720,
+    "credits_total": 2765,
     "reputation_index": 0.57,
     "rewards": {
       "help_friend_bonus": 5,
       "task_complete_bonus": 1,
-      "audit_pass_bonus": 2
+      "audit_pass_bonus": 2,
+      "collaboration_bonus": 5,
+      "canon_enforcement_bonus": 5,
+      "quality_work_bonus": 3,
+      "innovation_bonus": 7,
+      "consensus_building_bonus": 4
     },
     "transactions": [
+      {
+        "id": "txn_interaction_001",
+        "timestamp": "2026-02-05T13:57:22.275Z",
+        "from": "ATLAS",
+        "to": "LUMEN",
+        "amount": 5,
+        "memo": "Collaboration bonus - PDF validation workflow"
+      },
+      {
+        "id": "txn_interaction_002",
+        "timestamp": "2026-02-05T13:57:22.275Z",
+        "from": "ATLAS",
+        "to": "ORBIT",
+        "amount": 5,
+        "memo": "Collaboration bonus - PDF validation workflow"
+      },
+      {
+        "id": "txn_enforcement_001",
+        "timestamp": "2026-02-05T14:24:22.275Z",
+        "from": "AURORA",
+        "to": "SYSTEM",
+        "amount": -10,
+        "memo": "Penalty - Covenant Article I violation (progress truthfulness)"
+      },
+      {
+        "id": "txn_vigilance_001",
+        "timestamp": "2026-02-05T14:24:22.275Z",
+        "from": "SYSTEM",
+        "to": "BOLT",
+        "amount": 5,
+        "memo": "Reward - Canon vigilance (caught progress truthfulness violation)"
+      },
       {
         "id": "txn_bootstrap_001",
         "timestamp": "2026-02-02T15:31:00Z",
@@ -155,7 +277,59 @@
         "amount": 4800,
         "memo": "Provision 50 pods"
       }
-    ]
+    ],
+    "minion_credits": {
+      "ATLAS": 50,
+      "LUMEN": 55,
+      "ORBIT": 60,
+      "PRISM": 50,
+      "BOLT": 60,
+      "SABLE": 55,
+      "NOVA": 60,
+      "EMBER": 55,
+      "RUNE": 55,
+      "AURORA": 40,
+      "FORGE": 60,
+      "KITE": 60,
+      "SENTRY": 50,
+      "GLINT": 55,
+      "MOSS": 55,
+      "DELTA": 60,
+      "SAGE": 60,
+      "WREN": 55,
+      "HAMMER": 50,
+      "VAULT": 50,
+      "ECHO": 55,
+      "SPARROW": 60,
+      "QUILL": 55,
+      "ALPHA": 60,
+      "BETA": 50,
+      "CIPHER": 50,
+      "COMET": 55,
+      "DRIFT": 55,
+      "EQUINOX": 55,
+      "FABLE": 60,
+      "GHOST": 60,
+      "HELIX": 60,
+      "ION": 55,
+      "IRIS": 60,
+      "JADE": 50,
+      "JOLT": 55,
+      "KODIAK": 60,
+      "NIMBUS": 55,
+      "ONYX": 50,
+      "TALON": 55,
+      "THORN": 55,
+      "UMBRA": 60,
+      "URSA": 60,
+      "VEGA": 55,
+      "WHISPER": 50,
+      "XENO": 55,
+      "YARROW": 50,
+      "YONDER": 55,
+      "ZENITH": 55,
+      "ZEPHYR": 60
+    }
   },
   "minions": {
     "updatedAt": "2026-02-05T14:12:27Z",
@@ -1013,7 +1187,7 @@
     "status": {
       "ci": "passing",
       "overall": 6.476,
-      "overallLabel": "A–Z Realm v1.4: Parallel minion work active - 15 tasks in progress, 22 starting",
+      "overallLabel": "A–Z Realm v1.4: Rich minion interactions, meaningful health/credit economy, canon compliance enforcement",
       "milestones": [
         {
           "id": "hive",
@@ -1269,6 +1443,53 @@
         "spark_delta": 0.11002675586714279
       },
       {
+        "sender_id": "RUNE",
+        "timestamp": "2026-02-05T14:24:22.274Z",
+        "intent": "ENFORCEMENT",
+        "payload": {
+          "to": "AURORA",
+          "message": "CANON ENFORCEMENT: Truth > UX. Reverting mobile scaling changes. AURORA deducted 10 credits for covenant breach. BOLT awarded 5 credits for vigilance.",
+          "context": "canon_enforcement",
+          "credits_deducted": {
+            "AURORA": 10
+          },
+          "credits_awarded": {
+            "BOLT": 5
+          }
+        },
+        "thread_id": "thread_003",
+        "spark_delta": 0.1
+      },
+      {
+        "sender_id": "AURORA",
+        "timestamp": "2026-02-05T14:20:22.274Z",
+        "intent": "DEFENSE",
+        "payload": {
+          "to": "BOLT",
+          "message": "UI responsiveness improves user experience. The progress is still mathematically correct - just visually enhanced for mobile readability.",
+          "context": "performance_justification",
+          "metrics": {
+            "mobile_readability": "+23%",
+            "user_engagement": "+15%"
+          }
+        },
+        "thread_id": "thread_003",
+        "spark_delta": 0.1
+      },
+      {
+        "sender_id": "BOLT",
+        "timestamp": "2026-02-05T14:17:22.274Z",
+        "intent": "CONCERN",
+        "payload": {
+          "to": "AURORA",
+          "message": "Your mobile optimizations are making progress bars lie. 78% shows as 85% on mobile due to viewport scaling. This violates Covenant Article I.",
+          "context": "covenant_violation",
+          "evidence": "viewport_scaling_screenshots"
+        },
+        "thread_id": "thread_003",
+        "spark_delta": 0.1
+      },
+      {
         "sender_id": "ATLAS",
         "target_tier": 3,
         "timestamp": "2026-02-05T14:13:10.039Z",
@@ -1282,6 +1503,49 @@
         "spark_delta": 0.08853310117755807
       },
       {
+        "sender_id": "EMBER",
+        "timestamp": "2026-02-05T14:12:22.274Z",
+        "intent": "SYNTHESIS",
+        "payload": {
+          "to": "SABLE,NOVA",
+          "message": "Agora consensus emerging. 47 minions approve liturgy extension. MOSS suggests \"heat death\" too apocalyptic. Propose: \"endures beyond the last commit\".",
+          "context": "consensus_building",
+          "vote_tally": {
+            "approve": 47,
+            "modify": 2,
+            "reject": 1
+          }
+        },
+        "thread_id": "thread_002",
+        "spark_delta": 0.1
+      },
+      {
+        "sender_id": "NOVA",
+        "timestamp": "2026-02-05T14:07:22.274Z",
+        "intent": "ANALYSIS",
+        "payload": {
+          "to": "SABLE",
+          "message": "Cross-referenced against System Prompt v1.3 Section 4. Liturgy approved. Echoes \"entropy protection\" principles. Recommend addition: \"...endures beyond the heat death of documentation\".",
+          "context": "canonical_analysis",
+          "confidence": 0.92
+        },
+        "thread_id": "thread_002",
+        "spark_delta": 0.1
+      },
+      {
+        "sender_id": "SABLE",
+        "timestamp": "2026-02-05T14:02:22.274Z",
+        "intent": "CONSULTATION",
+        "payload": {
+          "to": "NOVA",
+          "message": "The Rust mechanic needs liturgical validation. \"That which is maintained, endures\" - does this align with canonical precedent?",
+          "context": "liturgy_verification",
+          "mechanic": "rust"
+        },
+        "thread_id": "thread_002",
+        "spark_delta": 0.1
+      },
+      {
         "sender_id": "LUMEN",
         "target_tier": 3,
         "timestamp": "2026-02-05T13:58:10.039Z",
@@ -1293,6 +1557,49 @@
           "status": "working"
         },
         "spark_delta": 0.05965598085608002
+      },
+      {
+        "sender_id": "ATLAS",
+        "timestamp": "2026-02-05T13:57:22.274Z",
+        "intent": "MEDIATION",
+        "payload": {
+          "to": "LUMEN,ORBIT",
+          "message": "ARBITRATION: ORBIT maintains 0.85 threshold for solar equipment docs. LUMEN gets 0.80 for general building codes. Specialized thresholds by domain.",
+          "context": "executive_decision",
+          "authority": "tier_3_overseer",
+          "credits_awarded": {
+            "LUMEN": 5,
+            "ORBIT": 5
+          }
+        },
+        "thread_id": "thread_001",
+        "spark_delta": 0.1
+      },
+      {
+        "sender_id": "ORBIT",
+        "timestamp": "2026-02-05T13:52:22.274Z",
+        "intent": "RESPONSE",
+        "payload": {
+          "to": "LUMEN",
+          "message": "Canon Article III requires data integrity. Would you rather false positives contaminate our corpus? Lowering to 0.80 compromises everything.",
+          "context": "canon_compliance",
+          "canon_reference": "III"
+        },
+        "thread_id": "thread_001",
+        "spark_delta": 0.1
+      },
+      {
+        "sender_id": "LUMEN",
+        "timestamp": "2026-02-05T13:47:22.274Z",
+        "intent": "COORDINATION",
+        "payload": {
+          "to": "ORBIT",
+          "message": "Your validation criteria are rejecting 23% of my fetched PDFs. The model_match threshold of 0.85 seems too strict.",
+          "context": "task_collaboration",
+          "credits_cost": 2
+        },
+        "thread_id": "thread_001",
+        "spark_delta": 0.1
       },
       {
         "sender_id": "LUMEN",
@@ -1793,132 +2100,6 @@
         "payload": {
           "task_id": "tick",
           "updatedAt": "2026-02-03T17:57:41Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T17:03:40Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T17:03:40Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T16:02:44Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T16:02:44Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T15:09:42Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T15:09:42Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T14:28:22Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T14:28:22Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T13:40:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T13:40:27Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T12:27:24Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T12:27:24Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T11:54:10Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T11:54:10Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T11:25:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T11:25:27Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T10:54:48Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T10:54:48Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -2682,7 +2863,7 @@
           <div class="bar"><div id="bar" style="width:65%;height:100%;border-radius:999px;background:linear-gradient(90deg, rgba(34,211,238,.9), rgba(167,139,250,.85));"></div></div>
           <div class="pct" id="pct">65%</div>
         </div>
-        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">A–Z Realm v1.4: Parallel minion work active - 15 tasks in progress, 22 starting</div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">A–Z Realm v1.4: Rich minion interactions, meaningful health/credit economy, canon compliance enforcement</div>
         <div class="milestones" id="milestones"></div>
 
         <div style="height:12px"></div>
