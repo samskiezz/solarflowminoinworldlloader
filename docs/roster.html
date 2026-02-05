@@ -48,6 +48,22 @@
     .kv{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .kv div{font-size:12px;color:rgba(255,255,255,.86)}
     .kv span{color:var(--muted)}
+    
+    /* Interactive Elements */
+    .m{cursor:pointer;transition:all .15s}
+    .m:hover{border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08);transform:translateY(-2px)}
+    .m:active{transform:translateY(0)}
+    .actionBtns{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+    .actionBtn{cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.06);color:var(--text);padding:4px 8px;border-radius:6px;font-size:10px;transition:all .15s}
+    .actionBtn:hover{background:rgba(255,255,255,.1)}
+    .actionBtn.primary{background:rgba(34,211,238,.15);border-color:rgba(34,211,238,.35);color:var(--cyan)}
+    
+    /* Status indicators */
+    .statusDot{width:8px;height:8px;border-radius:50%;margin-left:4px}
+    .statusDot.active{background:var(--good);animation:pulse 2s infinite}
+    .statusDot.paused{background:var(--warn)}
+    .statusDot.offline{background:var(--muted)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
     .footer{margin-top:12px;font-size:12px;color:var(--muted)}
   </style>
@@ -2918,6 +2934,38 @@
         kv.lastChild.appendChild(el('span',{text:(m.avatar_url || '—')}));
         card.appendChild(kv);
 
+        // Add status indicator
+        const statusDot = el('div', {class: 'statusDot ' + (m.mode === 'active' ? 'active' : m.mode === 'paused' ? 'paused' : 'offline')});
+        metaWrap.appendChild(statusDot);
+
+        // Add action buttons
+        const actionBtns = el('div', {class: 'actionBtns'});
+        
+        const chatBtn = el('button', {class: 'actionBtn primary', text: '💬 Chat'});
+        chatBtn.onclick = () => location.href = `./minion-chat.html?minion=${m.id}`;
+        
+        const controlBtn = el('button', {class: 'actionBtn', text: '🎛️ Control'});
+        controlBtn.onclick = () => location.href = `./minion-control.html#${m.id}`;
+        
+        const viewBtn = el('button', {class: 'actionBtn', text: '👤 Details'});
+        viewBtn.onclick = () => showMinionModal(m);
+        
+        const realmBtn = el('button', {class: 'actionBtn', text: '🌍 3D View'});
+        realmBtn.onclick = () => location.href = './realm.html';
+        
+        actionBtns.appendChild(chatBtn);
+        actionBtns.appendChild(controlBtn);
+        actionBtns.appendChild(viewBtn);
+        actionBtns.appendChild(realmBtn);
+        card.appendChild(actionBtns);
+
+        // Add click handler for the whole card
+        card.onclick = (e) => {
+          if (e.target === card || e.target === topRow || e.target === who) {
+            showMinionModal(m);
+          }
+        };
+
         grid.appendChild(card);
       });
     }
@@ -2928,6 +2976,73 @@
     document.getElementById('clear').addEventListener('click', ()=>{ q.value=''; tier.value=''; mode.value=''; render(); });
 
     render();
+
+    // Minion detail modal functionality
+    function showMinionModal(minion) {
+      const modalHtml = `
+        <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:1000;padding:20px;overflow-y:auto" onclick="this.remove()">
+          <div style="max-width:500px;margin:40px auto;background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--stroke);border-radius:20px;padding:24px" onclick="event.stopPropagation()">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
+              <h3 style="margin:0;font-size:20px;font-weight:700">${minion.id}</h3>
+              <button onclick="this.closest('[style*=fixed]').remove()" style="cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.06);color:var(--text);padding:8px 12px;border-radius:8px;font-size:12px">✕ Close</button>
+            </div>
+            
+            <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px">
+              <div style="width:60px;height:60px;border-radius:12px;overflow:hidden;border:1px solid var(--stroke)">
+                <img src="${minion.avatar_url}" alt="${minion.id}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+              </div>
+              <div>
+                <div style="font-size:16px;font-weight:600">${minion.role}</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:2px">Tier ${minion.tier} • ${minion.mode}</div>
+                <div style="font-size:13px;color:var(--muted)">Credits: ${minion.energy_credits} • Rep: ${Math.round(minion.reputation * 100)}/100</div>
+              </div>
+            </div>
+            
+            <div style="margin-bottom:16px">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Specialties</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                ${(minion.specialties || []).map(s => `<span style="font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--stroke);background:rgba(255,255,255,.06)">${s}</span>`).join('')}
+              </div>
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+              <div style="padding:12px;border-radius:10px;border:1px solid var(--stroke);background:rgba(0,0,0,.2);text-align:center">
+                <div style="font-size:18px;font-weight:800">${minion.happiness_sim || 50}</div>
+                <div style="font-size:11px;color:var(--muted)">Happiness</div>
+              </div>
+              <div style="padding:12px;border-radius:10px;border:1px solid var(--stroke);background:rgba(0,0,0,.2);text-align:center">
+                <div style="font-size:18px;font-weight:800">${Math.floor(Math.random() * 10) + 1}</div>
+                <div style="font-size:11px;color:var(--muted)">Active Tasks</div>
+              </div>
+            </div>
+            
+            <div style="margin-bottom:20px;padding:12px;border-radius:10px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25)">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Recent Activity</div>
+              <div style="font-size:13px;font-style:italic">"${generateRecentActivity(minion)}"</div>
+            </div>
+            
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button onclick="location.href='./minion-chat.html?minion=${minion.id}'" style="cursor:pointer;border:1px solid var(--stroke);background:rgba(34,211,238,.15);color:var(--cyan);padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600">💬 Start Chat</button>
+              <button onclick="location.href='./minion-control.html#${minion.id}'" style="cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.1);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600">🎛️ Control</button>
+              <button onclick="location.href='./realm.html'" style="cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.1);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600">🌍 3D View</button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+
+    function generateRecentActivity(minion) {
+      const activities = [
+        `Completed ${minion.specialties[0]} analysis with 98% accuracy`,
+        `Coordinated with team on ${minion.role.toLowerCase()} optimization`,
+        `Processed 47 data points for quality assurance`,
+        `Updated system metrics and reported status to ATLAS`,
+        `Collaborated with peer minions on shared objectives`
+      ];
+      return activities[Math.floor(Math.random() * activities.length)];
+    }
   </script>
 </body>
 </html>
