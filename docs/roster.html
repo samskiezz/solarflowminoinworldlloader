@@ -56,7 +56,7 @@
   <script id="data-hive" type="application/json">{
   "meta": {
     "schema": "solarflow.hive_state.v1",
-    "updatedAt": "2026-02-05T14:12:27Z",
+    "updatedAt": "2026-02-05T14:28:10.039Z",
     "source": "canonical",
     "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
@@ -969,8 +969,8 @@
     "updatedAt": "2026-02-05T14:12:27Z",
     "status": {
       "ci": "passing",
-      "overall": 7.8,
-      "overallLabel": "A–Z Realm v1.4: CI fixed + working buttons + schema validation + GitHub Pages ready",
+      "overall": 6.476,
+      "overallLabel": "A–Z Realm v1.4: Parallel minion work active - 15 tasks in progress, 22 starting",
       "milestones": [
         {
           "id": "hive",
@@ -1215,249 +1215,401 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T10:54:48Z",
-        "intent": "STATE_PATCH",
+        "timestamp": "2026-02-05T14:28:10.039Z",
+        "intent": "WORK_UPDATE",
         "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T10:54:48Z"
+          "task_id": "TASK_ATLAS_DOC_DISCOVERY",
+          "activity": "Scanning robots.txt compliance",
+          "progress": 0.2,
+          "status": "working"
         },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
+        "spark_delta": 0.11002675586714279
       },
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T11:25:27Z",
-        "intent": "STATE_PATCH",
+        "timestamp": "2026-02-05T14:13:10.039Z",
+        "intent": "WORK_UPDATE",
         "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T11:25:27Z"
+          "task_id": "TASK_ATLAS_DOC_DISCOVERY",
+          "activity": "Mapping sitemap hierarchy",
+          "progress": 0.5,
+          "status": "in-progress"
         },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
+        "spark_delta": 0.08853310117755807
+      },
+      {
+        "sender_id": "LUMEN",
+        "target_tier": 3,
+        "timestamp": "2026-02-05T13:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_LUMEN_DOC_FETCH",
+          "activity": "Downloading PDF documents",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.05965598085608002
+      },
+      {
+        "sender_id": "LUMEN",
+        "target_tier": 3,
+        "timestamp": "2026-02-05T13:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_LUMEN_DOC_FETCH",
+          "activity": "Verifying file integrity",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.10130286129924199
+      },
+      {
+        "sender_id": "ORBIT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T13:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_ORBIT_DOC_VALIDATE",
+          "activity": "Parsing document metadata",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.12322366557132268
+      },
+      {
+        "sender_id": "ORBIT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T13:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_ORBIT_DOC_VALIDATE",
+          "activity": "Validating model matches",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.10365479332254164
+      },
+      {
+        "sender_id": "PRISM",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_PRISM_PIPE_STATE",
+          "activity": "Updating pipeline progress",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.10673389680815025
+      },
+      {
+        "sender_id": "PRISM",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_PRISM_PIPE_STATE",
+          "activity": "Saving resumability checkpoints",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.05612743381793313
+      },
+      {
+        "sender_id": "PRISM",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_PRISM_PIPE_STATE",
+          "activity": "Monitoring resource usage",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.07328024679049082
+      },
+      {
+        "sender_id": "BOLT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_BOLT_UI_PROGRESS",
+          "activity": "Validating progress indicators",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.11275364948225185
+      },
+      {
+        "sender_id": "BOLT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_BOLT_UI_PROGRESS",
+          "activity": "Checking schema compliance",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.12131499227456122
+      },
+      {
+        "sender_id": "SABLE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_SABLE_REALM_MECH",
+          "activity": "Implementing v1.4 mechanics",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.05623334490816412
+      },
+      {
+        "sender_id": "SABLE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_SABLE_REALM_MECH",
+          "activity": "Testing Echo/Rust/Flare systems",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.1113932945984047
+      },
+      {
+        "sender_id": "NOVA",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_NOVA_CANON",
+          "activity": "Cataloging corpus artifacts",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.12707074409473917
+      },
+      {
+        "sender_id": "NOVA",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_NOVA_CANON",
+          "activity": "Creating prompt linkages",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.07266366602547131
+      },
+      {
+        "sender_id": "NOVA",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T10:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_NOVA_CANON",
+          "activity": "Validating references",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.1481184246206472
+      },
+      {
+        "sender_id": "EMBER",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T10:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_EMBER_AGORA",
+          "activity": "Processing transcript data",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.0765859731256231
+      },
+      {
+        "sender_id": "EMBER",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T10:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_EMBER_AGORA",
+          "activity": "Generating comms summaries",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.06905799886399594
+      },
+      {
+        "sender_id": "EMBER",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T10:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_EMBER_AGORA",
+          "activity": "Identifying key exchanges",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.10392279619342593
+      },
+      {
+        "sender_id": "RUNE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T10:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_RUNE_CI_HARDEN",
+          "activity": "Stabilizing CI pipeline",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.13160184746332082
+      },
+      {
+        "sender_id": "RUNE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T10:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_RUNE_CI_HARDEN",
+          "activity": "Checking dependency versions",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.06204632535516768
+      },
+      {
+        "sender_id": "RUNE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T09:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_RUNE_CI_HARDEN",
+          "activity": "Preventing drift issues",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.14838366759593616
+      },
+      {
+        "sender_id": "AURORA",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T09:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_AURORA_PERF_MOBILE",
+          "activity": "Optimizing mobile performance",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.1031410205549098
+      },
+      {
+        "sender_id": "AURORA",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T09:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_AURORA_PERF_MOBILE",
+          "activity": "Testing 3D realm capabilities",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.08829809476321462
+      },
+      {
+        "sender_id": "AURORA",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T09:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_AURORA_PERF_MOBILE",
+          "activity": "Profiling render times",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.12367707894227523
+      },
+      {
+        "sender_id": "FORGE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T09:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_FORGE_DOC_DISCOVERY",
+          "activity": "Scanning robots.txt compliance",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.08933503178203239
+      },
+      {
+        "sender_id": "FORGE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T09:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_FORGE_DOC_DISCOVERY",
+          "activity": "Mapping sitemap hierarchy",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.13949272004909744
+      },
+      {
+        "sender_id": "FORGE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T08:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_FORGE_DOC_DISCOVERY",
+          "activity": "Identifying accessible document URLs",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.09005561951233923
+      },
+      {
+        "sender_id": "KITE",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T08:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_KITE_DOC_FETCH",
+          "activity": "Downloading PDF documents",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.09212235419477173
+      },
+      {
+        "sender_id": "KITE",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T08:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_KITE_DOC_FETCH",
+          "activity": "Verifying file integrity",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.07504448752818703
       },
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T11:54:10Z",
+        "timestamp": "2026-02-03T23:44:02Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-03T11:54:10Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T12:27:24Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T12:27:24Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T13:40:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T13:40:27Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T14:28:22Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T14:28:22Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T15:09:42Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T15:09:42Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T16:02:44Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T16:02:44Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T17:03:40Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T17:03:40Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T17:57:41Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T17:57:41Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T18:51:25Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T18:51:25Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T19:36:29Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T19:36:29Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T20:02:42Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T20:02:42Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T20:49:23Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T20:49:23Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T21:20:19Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T21:20:19Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T21:52:06Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T21:52:06Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T22:19:39Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T22:19:39Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T22:52:37Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T22:52:37Z"
+          "updatedAt": "2026-02-03T23:44:02Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1481,11 +1633,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T23:44:02Z",
+        "timestamp": "2026-02-03T22:52:37Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-03T23:44:02Z"
+          "updatedAt": "2026-02-03T22:52:37Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1495,11 +1647,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T23:58:38Z",
+        "timestamp": "2026-02-03T22:19:39Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-03T23:58:38Z"
+          "updatedAt": "2026-02-03T22:19:39Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1509,11 +1661,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T01:56:31Z",
+        "timestamp": "2026-02-03T21:52:06Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T01:56:31Z"
+          "updatedAt": "2026-02-03T21:52:06Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1523,11 +1675,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T04:05:50Z",
+        "timestamp": "2026-02-03T21:20:19Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T04:05:50Z"
+          "updatedAt": "2026-02-03T21:20:19Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1537,11 +1689,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T05:14:07Z",
+        "timestamp": "2026-02-03T20:49:23Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T05:14:07Z"
+          "updatedAt": "2026-02-03T20:49:23Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1551,11 +1703,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T06:03:47Z",
+        "timestamp": "2026-02-03T20:02:42Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T06:03:47Z"
+          "updatedAt": "2026-02-03T20:02:42Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1565,11 +1717,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T19:40:30Z",
+        "timestamp": "2026-02-03T19:36:29Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T19:40:30Z"
+          "updatedAt": "2026-02-03T19:36:29Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1579,11 +1731,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T20:03:01Z",
+        "timestamp": "2026-02-03T18:51:25Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T20:03:01Z"
+          "updatedAt": "2026-02-03T18:51:25Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1593,11 +1745,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T20:46:53Z",
+        "timestamp": "2026-02-03T17:57:41Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T20:46:53Z"
+          "updatedAt": "2026-02-03T17:57:41Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1607,11 +1759,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T21:17:49Z",
+        "timestamp": "2026-02-03T17:03:40Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T21:17:49Z"
+          "updatedAt": "2026-02-03T17:03:40Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1621,11 +1773,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T21:48:47Z",
+        "timestamp": "2026-02-03T16:02:44Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T21:48:47Z"
+          "updatedAt": "2026-02-03T16:02:44Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1635,11 +1787,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T22:00:17Z",
+        "timestamp": "2026-02-03T15:09:42Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T22:00:17Z"
+          "updatedAt": "2026-02-03T15:09:42Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1649,11 +1801,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T22:32:24Z",
+        "timestamp": "2026-02-03T14:28:22Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T22:32:24Z"
+          "updatedAt": "2026-02-03T14:28:22Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1663,11 +1815,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T22:57:42Z",
+        "timestamp": "2026-02-03T13:40:27Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T22:57:42Z"
+          "updatedAt": "2026-02-03T13:40:27Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1677,11 +1829,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T23:23:09Z",
+        "timestamp": "2026-02-03T12:27:24Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T23:23:09Z"
+          "updatedAt": "2026-02-03T12:27:24Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1691,11 +1843,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T23:46:53Z",
+        "timestamp": "2026-02-03T11:54:10Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T23:46:53Z"
+          "updatedAt": "2026-02-03T11:54:10Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1705,11 +1857,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-05T00:00:38Z",
+        "timestamp": "2026-02-03T11:25:27Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-05T00:00:38Z"
+          "updatedAt": "2026-02-03T11:25:27Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1719,193 +1871,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-05T02:29:00Z",
+        "timestamp": "2026-02-03T10:54:48Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-05T02:29:00Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T04:26:24Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T04:26:24Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T05:35:49Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T05:35:49Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T06:34:17Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T06:34:17Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T07:33:45Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T07:33:45Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T08:04:46Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T08:04:46Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T08:58:07Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T08:58:07Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T09:40:53Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T09:40:53Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T10:25:04Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T10:25:04Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T11:06:05Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T11:06:05Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T11:46:26Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T11:46:26Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T12:03:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T12:03:27Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T13:22:50Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T13:22:50Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T14:12:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T14:12:27Z"
+          "updatedAt": "2026-02-03T10:54:48Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -2204,301 +2174,401 @@
         "id": "TASK_ATLAS_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "ATLAS",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T14:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_LUMEN_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "LUMEN",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T13:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ORBIT_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "ORBIT",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T13:28:10.039Z",
+        "progress": 0.4440671444975669
       },
       {
         "id": "TASK_PRISM_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "PRISM",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T12:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_BOLT_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "BOLT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T12:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_SABLE_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "SABLE",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T11:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_NOVA_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "NOVA",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T11:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_EMBER_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "EMBER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T10:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_RUNE_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "RUNE",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T10:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_AURORA_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "AURORA",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T09:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_FORGE_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "FORGE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T09:28:10.039Z",
+        "progress": 0.5219100041042091
       },
       {
         "id": "TASK_KITE_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "KITE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T08:58:10.039Z",
+        "progress": 0.41967370739550613
       },
       {
         "id": "TASK_SENTRY_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "SENTRY",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T08:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_GLINT_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "GLINT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T07:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_MOSS_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "MOSS",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T07:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_DELTA_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "DELTA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T06:58:10.039Z",
+        "progress": 0.40575492098863053
       },
       {
         "id": "TASK_SAGE_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "SAGE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T06:28:10.039Z",
+        "progress": 0.6726493304993353
       },
       {
         "id": "TASK_WREN_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "WREN",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T05:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_HAMMER_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "HAMMER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T05:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_VAULT_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "VAULT",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T04:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_ECHO_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "ECHO",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T04:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_SPARROW_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "SPARROW",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T03:58:10.039Z",
+        "progress": 0.48099568294627365
       },
       {
         "id": "TASK_QUILL_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "QUILL",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T03:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ALPHA_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "ALPHA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T02:58:10.039Z",
+        "progress": 0.5109347904804932
       },
       {
         "id": "TASK_BETA_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "BETA",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T02:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_CIPHER_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "CIPHER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T01:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_COMET_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "COMET",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T01:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_DRIFT_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "DRIFT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T00:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_EQUINOX_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "EQUINOX",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T00:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_FABLE_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "FABLE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T23:58:10.039Z",
+        "progress": 0.4821132776149694
       },
       {
         "id": "TASK_GHOST_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "GHOST",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T23:28:10.039Z",
+        "progress": 0.595917424978679
       },
       {
         "id": "TASK_HELIX_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "HELIX",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T22:58:10.039Z",
+        "progress": 0.42478232906055047
       },
       {
         "id": "TASK_ION_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "ION",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T22:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_IRIS_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "IRIS",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T21:58:10.039Z",
+        "progress": 0.34711278515949784
       },
       {
         "id": "TASK_JADE_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "JADE",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T21:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_JOLT_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "JOLT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T20:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_KODIAK_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "KODIAK",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T20:28:10.039Z",
+        "progress": 0.3806422972498969
       },
       {
         "id": "TASK_NIMBUS_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "NIMBUS",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T19:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ONYX_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "ONYX",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T19:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_TALON_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "TALON",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T18:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_THORN_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "THORN",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T18:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_UMBRA_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "UMBRA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T17:58:10.039Z",
+        "progress": 0.38824800354590455
       },
       {
         "id": "TASK_URSA_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "URSA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T17:28:10.039Z",
+        "progress": 0.43894021531722494
       },
       {
         "id": "TASK_VEGA_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "VEGA",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T16:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_WHISPER_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "WHISPER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T16:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_XENO_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "XENO",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T15:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_YARROW_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "YARROW",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T15:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_YONDER_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "YONDER",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T14:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ZENITH_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "ZENITH",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T14:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ZEPHYR_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "ZEPHYR",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T13:58:10.039Z",
+        "progress": 0.6175592141859498
       }
     ],
     "archive": []
@@ -2549,7 +2619,7 @@
     <div class="top">
       <div class="brand">
         <h1>Roster</h1>
-        <div class="sub">All minions from canonical hive_state • updated <span style="color:rgba(255,255,255,.85)">2026-02-05T14:12:27Z</span></div>
+        <div class="sub">All minions from canonical hive_state • updated <span style="color:rgba(255,255,255,.85)">2026-02-05T14:28:10.039Z</span></div>
       </div>
       <div class="pillbar">
         <button class="btn" onclick="location.href='./index.html'">Back</button>

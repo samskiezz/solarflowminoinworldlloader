@@ -99,7 +99,7 @@
   <script id="data-hive" type="application/json">{
   "meta": {
     "schema": "solarflow.hive_state.v1",
-    "updatedAt": "2026-02-05T14:12:27Z",
+    "updatedAt": "2026-02-05T14:28:10.039Z",
     "source": "canonical",
     "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
@@ -1012,8 +1012,8 @@
     "updatedAt": "2026-02-05T14:12:27Z",
     "status": {
       "ci": "passing",
-      "overall": 7.8,
-      "overallLabel": "A–Z Realm v1.4: CI fixed + working buttons + schema validation + GitHub Pages ready",
+      "overall": 6.476,
+      "overallLabel": "A–Z Realm v1.4: Parallel minion work active - 15 tasks in progress, 22 starting",
       "milestones": [
         {
           "id": "hive",
@@ -1258,249 +1258,401 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T10:54:48Z",
-        "intent": "STATE_PATCH",
+        "timestamp": "2026-02-05T14:28:10.039Z",
+        "intent": "WORK_UPDATE",
         "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T10:54:48Z"
+          "task_id": "TASK_ATLAS_DOC_DISCOVERY",
+          "activity": "Scanning robots.txt compliance",
+          "progress": 0.2,
+          "status": "working"
         },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
+        "spark_delta": 0.11002675586714279
       },
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T11:25:27Z",
-        "intent": "STATE_PATCH",
+        "timestamp": "2026-02-05T14:13:10.039Z",
+        "intent": "WORK_UPDATE",
         "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T11:25:27Z"
+          "task_id": "TASK_ATLAS_DOC_DISCOVERY",
+          "activity": "Mapping sitemap hierarchy",
+          "progress": 0.5,
+          "status": "in-progress"
         },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
+        "spark_delta": 0.08853310117755807
+      },
+      {
+        "sender_id": "LUMEN",
+        "target_tier": 3,
+        "timestamp": "2026-02-05T13:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_LUMEN_DOC_FETCH",
+          "activity": "Downloading PDF documents",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.05965598085608002
+      },
+      {
+        "sender_id": "LUMEN",
+        "target_tier": 3,
+        "timestamp": "2026-02-05T13:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_LUMEN_DOC_FETCH",
+          "activity": "Verifying file integrity",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.10130286129924199
+      },
+      {
+        "sender_id": "ORBIT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T13:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_ORBIT_DOC_VALIDATE",
+          "activity": "Parsing document metadata",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.12322366557132268
+      },
+      {
+        "sender_id": "ORBIT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T13:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_ORBIT_DOC_VALIDATE",
+          "activity": "Validating model matches",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.10365479332254164
+      },
+      {
+        "sender_id": "PRISM",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_PRISM_PIPE_STATE",
+          "activity": "Updating pipeline progress",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.10673389680815025
+      },
+      {
+        "sender_id": "PRISM",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_PRISM_PIPE_STATE",
+          "activity": "Saving resumability checkpoints",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.05612743381793313
+      },
+      {
+        "sender_id": "PRISM",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_PRISM_PIPE_STATE",
+          "activity": "Monitoring resource usage",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.07328024679049082
+      },
+      {
+        "sender_id": "BOLT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_BOLT_UI_PROGRESS",
+          "activity": "Validating progress indicators",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.11275364948225185
+      },
+      {
+        "sender_id": "BOLT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_BOLT_UI_PROGRESS",
+          "activity": "Checking schema compliance",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.12131499227456122
+      },
+      {
+        "sender_id": "SABLE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_SABLE_REALM_MECH",
+          "activity": "Implementing v1.4 mechanics",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.05623334490816412
+      },
+      {
+        "sender_id": "SABLE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_SABLE_REALM_MECH",
+          "activity": "Testing Echo/Rust/Flare systems",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.1113932945984047
+      },
+      {
+        "sender_id": "NOVA",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_NOVA_CANON",
+          "activity": "Cataloging corpus artifacts",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.12707074409473917
+      },
+      {
+        "sender_id": "NOVA",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T11:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_NOVA_CANON",
+          "activity": "Creating prompt linkages",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.07266366602547131
+      },
+      {
+        "sender_id": "NOVA",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T10:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_NOVA_CANON",
+          "activity": "Validating references",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.1481184246206472
+      },
+      {
+        "sender_id": "EMBER",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T10:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_EMBER_AGORA",
+          "activity": "Processing transcript data",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.0765859731256231
+      },
+      {
+        "sender_id": "EMBER",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T10:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_EMBER_AGORA",
+          "activity": "Generating comms summaries",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.06905799886399594
+      },
+      {
+        "sender_id": "EMBER",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T10:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_EMBER_AGORA",
+          "activity": "Identifying key exchanges",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.10392279619342593
+      },
+      {
+        "sender_id": "RUNE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T10:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_RUNE_CI_HARDEN",
+          "activity": "Stabilizing CI pipeline",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.13160184746332082
+      },
+      {
+        "sender_id": "RUNE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T10:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_RUNE_CI_HARDEN",
+          "activity": "Checking dependency versions",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.06204632535516768
+      },
+      {
+        "sender_id": "RUNE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T09:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_RUNE_CI_HARDEN",
+          "activity": "Preventing drift issues",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.14838366759593616
+      },
+      {
+        "sender_id": "AURORA",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T09:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_AURORA_PERF_MOBILE",
+          "activity": "Optimizing mobile performance",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.1031410205549098
+      },
+      {
+        "sender_id": "AURORA",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T09:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_AURORA_PERF_MOBILE",
+          "activity": "Testing 3D realm capabilities",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.08829809476321462
+      },
+      {
+        "sender_id": "AURORA",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T09:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_AURORA_PERF_MOBILE",
+          "activity": "Profiling render times",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.12367707894227523
+      },
+      {
+        "sender_id": "FORGE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T09:28:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_FORGE_DOC_DISCOVERY",
+          "activity": "Scanning robots.txt compliance",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.08933503178203239
+      },
+      {
+        "sender_id": "FORGE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T09:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_FORGE_DOC_DISCOVERY",
+          "activity": "Mapping sitemap hierarchy",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.13949272004909744
+      },
+      {
+        "sender_id": "FORGE",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T08:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_FORGE_DOC_DISCOVERY",
+          "activity": "Identifying accessible document URLs",
+          "progress": 0.8,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.09005561951233923
+      },
+      {
+        "sender_id": "KITE",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T08:58:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_KITE_DOC_FETCH",
+          "activity": "Downloading PDF documents",
+          "progress": 0.2,
+          "status": "working"
+        },
+        "spark_delta": 0.09212235419477173
+      },
+      {
+        "sender_id": "KITE",
+        "target_tier": 1,
+        "timestamp": "2026-02-05T08:43:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_KITE_DOC_FETCH",
+          "activity": "Verifying file integrity",
+          "progress": 0.5,
+          "status": "working"
+        },
+        "spark_delta": 0.07504448752818703
       },
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T11:54:10Z",
+        "timestamp": "2026-02-03T23:44:02Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-03T11:54:10Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T12:27:24Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T12:27:24Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T13:40:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T13:40:27Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T14:28:22Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T14:28:22Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T15:09:42Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T15:09:42Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T16:02:44Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T16:02:44Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T17:03:40Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T17:03:40Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T17:57:41Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T17:57:41Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T18:51:25Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T18:51:25Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T19:36:29Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T19:36:29Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T20:02:42Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T20:02:42Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T20:49:23Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T20:49:23Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T21:20:19Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T21:20:19Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T21:52:06Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T21:52:06Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T22:19:39Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T22:19:39Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-03T22:52:37Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-03T22:52:37Z"
+          "updatedAt": "2026-02-03T23:44:02Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1524,11 +1676,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T23:44:02Z",
+        "timestamp": "2026-02-03T22:52:37Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-03T23:44:02Z"
+          "updatedAt": "2026-02-03T22:52:37Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1538,11 +1690,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-03T23:58:38Z",
+        "timestamp": "2026-02-03T22:19:39Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-03T23:58:38Z"
+          "updatedAt": "2026-02-03T22:19:39Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1552,11 +1704,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T01:56:31Z",
+        "timestamp": "2026-02-03T21:52:06Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T01:56:31Z"
+          "updatedAt": "2026-02-03T21:52:06Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1566,11 +1718,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T04:05:50Z",
+        "timestamp": "2026-02-03T21:20:19Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T04:05:50Z"
+          "updatedAt": "2026-02-03T21:20:19Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1580,11 +1732,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T05:14:07Z",
+        "timestamp": "2026-02-03T20:49:23Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T05:14:07Z"
+          "updatedAt": "2026-02-03T20:49:23Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1594,11 +1746,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T06:03:47Z",
+        "timestamp": "2026-02-03T20:02:42Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T06:03:47Z"
+          "updatedAt": "2026-02-03T20:02:42Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1608,11 +1760,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T19:40:30Z",
+        "timestamp": "2026-02-03T19:36:29Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T19:40:30Z"
+          "updatedAt": "2026-02-03T19:36:29Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1622,11 +1774,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T20:03:01Z",
+        "timestamp": "2026-02-03T18:51:25Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T20:03:01Z"
+          "updatedAt": "2026-02-03T18:51:25Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1636,11 +1788,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T20:46:53Z",
+        "timestamp": "2026-02-03T17:57:41Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T20:46:53Z"
+          "updatedAt": "2026-02-03T17:57:41Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1650,11 +1802,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T21:17:49Z",
+        "timestamp": "2026-02-03T17:03:40Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T21:17:49Z"
+          "updatedAt": "2026-02-03T17:03:40Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1664,11 +1816,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T21:48:47Z",
+        "timestamp": "2026-02-03T16:02:44Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T21:48:47Z"
+          "updatedAt": "2026-02-03T16:02:44Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1678,11 +1830,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T22:00:17Z",
+        "timestamp": "2026-02-03T15:09:42Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T22:00:17Z"
+          "updatedAt": "2026-02-03T15:09:42Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1692,11 +1844,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T22:32:24Z",
+        "timestamp": "2026-02-03T14:28:22Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T22:32:24Z"
+          "updatedAt": "2026-02-03T14:28:22Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1706,11 +1858,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T22:57:42Z",
+        "timestamp": "2026-02-03T13:40:27Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T22:57:42Z"
+          "updatedAt": "2026-02-03T13:40:27Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1720,11 +1872,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T23:23:09Z",
+        "timestamp": "2026-02-03T12:27:24Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T23:23:09Z"
+          "updatedAt": "2026-02-03T12:27:24Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1734,11 +1886,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-04T23:46:53Z",
+        "timestamp": "2026-02-03T11:54:10Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-04T23:46:53Z"
+          "updatedAt": "2026-02-03T11:54:10Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1748,11 +1900,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-05T00:00:38Z",
+        "timestamp": "2026-02-03T11:25:27Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-05T00:00:38Z"
+          "updatedAt": "2026-02-03T11:25:27Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -1762,193 +1914,11 @@
       {
         "sender_id": "ATLAS",
         "target_tier": 3,
-        "timestamp": "2026-02-05T02:29:00Z",
+        "timestamp": "2026-02-03T10:54:48Z",
         "intent": "STATE_PATCH",
         "payload": {
           "task_id": "tick",
-          "updatedAt": "2026-02-05T02:29:00Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T04:26:24Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T04:26:24Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T05:35:49Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T05:35:49Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T06:34:17Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T06:34:17Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T07:33:45Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T07:33:45Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T08:04:46Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T08:04:46Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T08:58:07Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T08:58:07Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T09:40:53Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T09:40:53Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T10:25:04Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T10:25:04Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T11:06:05Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T11:06:05Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T11:46:26Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T11:46:26Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T12:03:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T12:03:27Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T13:22:50Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T13:22:50Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T14:12:27Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-05T14:12:27Z"
+          "updatedAt": "2026-02-03T10:54:48Z"
         },
         "spark_delta": 0.1,
         "metadata": {
@@ -2247,301 +2217,401 @@
         "id": "TASK_ATLAS_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "ATLAS",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T14:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_LUMEN_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "LUMEN",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T13:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ORBIT_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "ORBIT",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T13:28:10.039Z",
+        "progress": 0.4440671444975669
       },
       {
         "id": "TASK_PRISM_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "PRISM",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T12:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_BOLT_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "BOLT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T12:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_SABLE_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "SABLE",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T11:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_NOVA_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "NOVA",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T11:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_EMBER_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "EMBER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T10:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_RUNE_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "RUNE",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T10:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_AURORA_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "AURORA",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T09:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_FORGE_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "FORGE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T09:28:10.039Z",
+        "progress": 0.5219100041042091
       },
       {
         "id": "TASK_KITE_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "KITE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T08:58:10.039Z",
+        "progress": 0.41967370739550613
       },
       {
         "id": "TASK_SENTRY_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "SENTRY",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T08:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_GLINT_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "GLINT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T07:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_MOSS_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "MOSS",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T07:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_DELTA_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "DELTA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T06:58:10.039Z",
+        "progress": 0.40575492098863053
       },
       {
         "id": "TASK_SAGE_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "SAGE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T06:28:10.039Z",
+        "progress": 0.6726493304993353
       },
       {
         "id": "TASK_WREN_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "WREN",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T05:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_HAMMER_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "HAMMER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T05:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_VAULT_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "VAULT",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T04:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_ECHO_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "ECHO",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T04:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_SPARROW_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "SPARROW",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T03:58:10.039Z",
+        "progress": 0.48099568294627365
       },
       {
         "id": "TASK_QUILL_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "QUILL",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T03:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ALPHA_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "ALPHA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-05T02:58:10.039Z",
+        "progress": 0.5109347904804932
       },
       {
         "id": "TASK_BETA_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "BETA",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T02:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_CIPHER_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "CIPHER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-05T01:58:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_COMET_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "COMET",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T01:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_DRIFT_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "DRIFT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T00:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_EQUINOX_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "EQUINOX",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-05T00:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_FABLE_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "FABLE",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T23:58:10.039Z",
+        "progress": 0.4821132776149694
       },
       {
         "id": "TASK_GHOST_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "GHOST",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T23:28:10.039Z",
+        "progress": 0.595917424978679
       },
       {
         "id": "TASK_HELIX_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "HELIX",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T22:58:10.039Z",
+        "progress": 0.42478232906055047
       },
       {
         "id": "TASK_ION_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "ION",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T22:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_IRIS_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "IRIS",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T21:58:10.039Z",
+        "progress": 0.34711278515949784
       },
       {
         "id": "TASK_JADE_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "JADE",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T21:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_JOLT_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "JOLT",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T20:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_KODIAK_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "KODIAK",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T20:28:10.039Z",
+        "progress": 0.3806422972498969
       },
       {
         "id": "TASK_NIMBUS_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "NIMBUS",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T19:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ONYX_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "ONYX",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T19:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_TALON_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "TALON",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T18:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_THORN_DOC_DISCOVERY",
         "title": "Doc discovery (robots-safe) + sitemap mapping",
         "owner": "THORN",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T18:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_UMBRA_DOC_FETCH",
         "title": "Fetch/verify PDFs + hash/dedupe",
         "owner": "UMBRA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T17:58:10.039Z",
+        "progress": 0.38824800354590455
       },
       {
         "id": "TASK_URSA_DOC_VALIDATE",
         "title": "Validate model match + evidence strings",
         "owner": "URSA",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T17:28:10.039Z",
+        "progress": 0.43894021531722494
       },
       {
         "id": "TASK_VEGA_PIPE_STATE",
         "title": "Pipeline state/progress + resumability",
         "owner": "VEGA",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T16:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_WHISPER_UI_PROGRESS",
         "title": "Progress UI truthfulness + schema drift",
         "owner": "WHISPER",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T16:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_XENO_REALM_MECH",
         "title": "v1.4 mechanics implementation",
         "owner": "XENO",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T15:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_YARROW_CANON",
         "title": "Canon corpus + prompt artifacts + linking",
         "owner": "YARROW",
-        "status": "queued"
+        "status": "queued",
+        "last_update": "2026-02-04T15:28:10.039Z",
+        "progress": 0
       },
       {
         "id": "TASK_YONDER_AGORA",
         "title": "Agora transcript + comms summaries",
         "owner": "YONDER",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T14:58:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ZENITH_CI_HARDEN",
         "title": "CI stability + dependency drift",
         "owner": "ZENITH",
-        "status": "queued"
+        "status": "starting",
+        "last_update": "2026-02-04T14:28:10.039Z",
+        "progress": 0.1
       },
       {
         "id": "TASK_ZEPHYR_PERF_MOBILE",
         "title": "Mobile perf + 3D realm caps",
         "owner": "ZEPHYR",
-        "status": "queued"
+        "status": "in-progress",
+        "last_update": "2026-02-04T13:58:10.039Z",
+        "progress": 0.6175592141859498
       }
     ],
     "archive": []
@@ -2586,21 +2656,17 @@
     },
     "updatedAt": "2026-02-03T19:32:58Z"
   }
-}
-</script>
-
-  <!-- Canonical embedded hive_state snapshot: no fetch required -->
-  
+}</script>
 
   <div class="wrap">
     <div class="top">
       <div class="brand">
         <h1>SolarFlow • Minion World Loader</h1>
-        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-05T14:12:27Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
+        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-05T14:28:10.039Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
       </div>
       <div class="pillbar">
         <div class="pill"><strong>CI</strong>: <span id="ciText">passing</span></div>
-        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-05T14:12:27Z</strong></div>
+        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-05T14:28:10.039Z</strong></div>
         <button class="btn" id="btnToggle">Pause</button>
         <button class="btn" onclick="location.href='./roster.html'">Roster</button>
         <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
@@ -2613,10 +2679,10 @@
         <div class="sectionTitle"><h2>Progress</h2><div class="pill" style="padding:6px 10px">source: hive_state</div></div>
         <div class="progressRow">
           <div style="min-width:140px;font-weight:700">Overall</div>
-          <div class="bar"><div id="bar" style="width:78%;height:100%;border-radius:999px;background:linear-gradient(90deg, rgba(34,211,238,.9), rgba(167,139,250,.85));"></div></div>
-          <div class="pct" id="pct">78%</div>
+          <div class="bar"><div id="bar" style="width:65%;height:100%;border-radius:999px;background:linear-gradient(90deg, rgba(34,211,238,.9), rgba(167,139,250,.85));"></div></div>
+          <div class="pct" id="pct">65%</div>
         </div>
-        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">A–Z Realm v1.4: CI fixed + working buttons + schema validation + GitHub Pages ready</div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px" id="overallLabel">A–Z Realm v1.4: Parallel minion work active - 15 tasks in progress, 22 starting</div>
         <div class="milestones" id="milestones"></div>
 
         <div style="height:12px"></div>
@@ -2662,7 +2728,7 @@
       </div>
       <div class="card">
         <div class="sectionTitle"><h2>Task Board (assigned)</h2><div class="pill" style="padding:6px 10px">owners + status</div></div>
-        <div class="list" id="tasks"><button class="taskBtn" data-taskid="TASK_ATLAS_DOC_DISCOVERY" data-owner="ATLAS" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">ATLAS • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_LUMEN_DOC_FETCH" data-owner="LUMEN" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">LUMEN • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_ORBIT_DOC_VALIDATE" data-owner="ORBIT" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">ORBIT • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_PRISM_PIPE_STATE" data-owner="PRISM" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">PRISM • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_BOLT_UI_PROGRESS" data-owner="BOLT" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">BOLT • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_SABLE_REALM_MECH" data-owner="SABLE" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">SABLE • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_NOVA_CANON" data-owner="NOVA" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">NOVA • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_EMBER_AGORA" data-owner="EMBER" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">EMBER • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_RUNE_CI_HARDEN" data-owner="RUNE" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">RUNE • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_AURORA_PERF_MOBILE" data-owner="AURORA" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">AURORA • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_FORGE_DOC_DISCOVERY" data-owner="FORGE" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">FORGE • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_KITE_DOC_FETCH" data-owner="KITE" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">KITE • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_SENTRY_DOC_VALIDATE" data-owner="SENTRY" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">SENTRY • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_GLINT_PIPE_STATE" data-owner="GLINT" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">GLINT • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_MOSS_UI_PROGRESS" data-owner="MOSS" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">MOSS • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_DELTA_REALM_MECH" data-owner="DELTA" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">DELTA • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_SAGE_CANON" data-owner="SAGE" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">SAGE • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_WREN_AGORA" data-owner="WREN" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">WREN • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_HAMMER_CI_HARDEN" data-owner="HAMMER" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">HAMMER • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_VAULT_PERF_MOBILE" data-owner="VAULT" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">VAULT • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_ECHO_DOC_DISCOVERY" data-owner="ECHO" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">ECHO • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_SPARROW_DOC_FETCH" data-owner="SPARROW" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">SPARROW • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_QUILL_DOC_VALIDATE" data-owner="QUILL" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">QUILL • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_ALPHA_PIPE_STATE" data-owner="ALPHA" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">ALPHA • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_BETA_UI_PROGRESS" data-owner="BETA" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">BETA • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_CIPHER_REALM_MECH" data-owner="CIPHER" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">CIPHER • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_COMET_CANON" data-owner="COMET" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">COMET • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_DRIFT_AGORA" data-owner="DRIFT" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">DRIFT • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_EQUINOX_CI_HARDEN" data-owner="EQUINOX" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">EQUINOX • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_FABLE_PERF_MOBILE" data-owner="FABLE" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">FABLE • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_GHOST_DOC_DISCOVERY" data-owner="GHOST" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">GHOST • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_HELIX_DOC_FETCH" data-owner="HELIX" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">HELIX • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_ION_DOC_VALIDATE" data-owner="ION" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">ION • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_IRIS_PIPE_STATE" data-owner="IRIS" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">IRIS • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_JADE_UI_PROGRESS" data-owner="JADE" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">JADE • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_JOLT_REALM_MECH" data-owner="JOLT" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">JOLT • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_KODIAK_CANON" data-owner="KODIAK" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">KODIAK • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_NIMBUS_AGORA" data-owner="NIMBUS" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">NIMBUS • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_ONYX_CI_HARDEN" data-owner="ONYX" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">ONYX • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_TALON_PERF_MOBILE" data-owner="TALON" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">TALON • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_THORN_DOC_DISCOVERY" data-owner="THORN" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">THORN • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_UMBRA_DOC_FETCH" data-owner="UMBRA" data-status="queued" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">UMBRA • queued</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_URSA_DOC_VALIDATE" data-owner="URSA" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">URSA • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_VEGA_PIPE_STATE" data-owner="VEGA" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">VEGA • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_WHISPER_UI_PROGRESS" data-owner="WHISPER" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">WHISPER • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_XENO_REALM_MECH" data-owner="XENO" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">XENO • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_YARROW_CANON" data-owner="YARROW" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">YARROW • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_YONDER_AGORA" data-owner="YONDER" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">YONDER • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_ZENITH_CI_HARDEN" data-owner="ZENITH" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">ZENITH • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_ZEPHYR_PERF_MOBILE" data-owner="ZEPHYR" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">ZEPHYR • queued</div><div class="v">Mobile perf + 3D realm caps</div></button></div>
+        <div class="list" id="tasks"><button class="taskBtn" data-taskid="TASK_ATLAS_DOC_DISCOVERY" data-owner="ATLAS" data-status="queued" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">ATLAS • queued</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_LUMEN_DOC_FETCH" data-owner="LUMEN" data-status="starting" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">LUMEN • starting</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_ORBIT_DOC_VALIDATE" data-owner="ORBIT" data-status="in-progress" data-title="Validate model match + evidence strings" data-desc=""><div class="k">ORBIT • in-progress</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_PRISM_PIPE_STATE" data-owner="PRISM" data-status="queued" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">PRISM • queued</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_BOLT_UI_PROGRESS" data-owner="BOLT" data-status="starting" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">BOLT • starting</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_SABLE_REALM_MECH" data-owner="SABLE" data-status="starting" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">SABLE • starting</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_NOVA_CANON" data-owner="NOVA" data-status="starting" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">NOVA • starting</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_EMBER_AGORA" data-owner="EMBER" data-status="queued" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">EMBER • queued</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_RUNE_CI_HARDEN" data-owner="RUNE" data-status="starting" data-title="CI stability + dependency drift" data-desc=""><div class="k">RUNE • starting</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_AURORA_PERF_MOBILE" data-owner="AURORA" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">AURORA • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_FORGE_DOC_DISCOVERY" data-owner="FORGE" data-status="in-progress" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">FORGE • in-progress</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_KITE_DOC_FETCH" data-owner="KITE" data-status="in-progress" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">KITE • in-progress</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_SENTRY_DOC_VALIDATE" data-owner="SENTRY" data-status="queued" data-title="Validate model match + evidence strings" data-desc=""><div class="k">SENTRY • queued</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_GLINT_PIPE_STATE" data-owner="GLINT" data-status="starting" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">GLINT • starting</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_MOSS_UI_PROGRESS" data-owner="MOSS" data-status="starting" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">MOSS • starting</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_DELTA_REALM_MECH" data-owner="DELTA" data-status="in-progress" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">DELTA • in-progress</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_SAGE_CANON" data-owner="SAGE" data-status="in-progress" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">SAGE • in-progress</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_WREN_AGORA" data-owner="WREN" data-status="starting" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">WREN • starting</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_HAMMER_CI_HARDEN" data-owner="HAMMER" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">HAMMER • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_VAULT_PERF_MOBILE" data-owner="VAULT" data-status="queued" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">VAULT • queued</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_ECHO_DOC_DISCOVERY" data-owner="ECHO" data-status="starting" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">ECHO • starting</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_SPARROW_DOC_FETCH" data-owner="SPARROW" data-status="in-progress" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">SPARROW • in-progress</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_QUILL_DOC_VALIDATE" data-owner="QUILL" data-status="starting" data-title="Validate model match + evidence strings" data-desc=""><div class="k">QUILL • starting</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_ALPHA_PIPE_STATE" data-owner="ALPHA" data-status="in-progress" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">ALPHA • in-progress</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_BETA_UI_PROGRESS" data-owner="BETA" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">BETA • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_CIPHER_REALM_MECH" data-owner="CIPHER" data-status="queued" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">CIPHER • queued</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_COMET_CANON" data-owner="COMET" data-status="starting" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">COMET • starting</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_DRIFT_AGORA" data-owner="DRIFT" data-status="starting" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">DRIFT • starting</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_EQUINOX_CI_HARDEN" data-owner="EQUINOX" data-status="starting" data-title="CI stability + dependency drift" data-desc=""><div class="k">EQUINOX • starting</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_FABLE_PERF_MOBILE" data-owner="FABLE" data-status="in-progress" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">FABLE • in-progress</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_GHOST_DOC_DISCOVERY" data-owner="GHOST" data-status="in-progress" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">GHOST • in-progress</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_HELIX_DOC_FETCH" data-owner="HELIX" data-status="in-progress" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">HELIX • in-progress</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_ION_DOC_VALIDATE" data-owner="ION" data-status="starting" data-title="Validate model match + evidence strings" data-desc=""><div class="k">ION • starting</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_IRIS_PIPE_STATE" data-owner="IRIS" data-status="in-progress" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">IRIS • in-progress</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_JADE_UI_PROGRESS" data-owner="JADE" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">JADE • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_JOLT_REALM_MECH" data-owner="JOLT" data-status="starting" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">JOLT • starting</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_KODIAK_CANON" data-owner="KODIAK" data-status="in-progress" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">KODIAK • in-progress</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_NIMBUS_AGORA" data-owner="NIMBUS" data-status="starting" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">NIMBUS • starting</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_ONYX_CI_HARDEN" data-owner="ONYX" data-status="queued" data-title="CI stability + dependency drift" data-desc=""><div class="k">ONYX • queued</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_TALON_PERF_MOBILE" data-owner="TALON" data-status="starting" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">TALON • starting</div><div class="v">Mobile perf + 3D realm caps</div></button><button class="taskBtn" data-taskid="TASK_THORN_DOC_DISCOVERY" data-owner="THORN" data-status="starting" data-title="Doc discovery (robots-safe) + sitemap mapping" data-desc=""><div class="k">THORN • starting</div><div class="v">Doc discovery (robots-safe) + sitemap mapping</div></button><button class="taskBtn" data-taskid="TASK_UMBRA_DOC_FETCH" data-owner="UMBRA" data-status="in-progress" data-title="Fetch/verify PDFs + hash/dedupe" data-desc=""><div class="k">UMBRA • in-progress</div><div class="v">Fetch/verify PDFs + hash/dedupe</div></button><button class="taskBtn" data-taskid="TASK_URSA_DOC_VALIDATE" data-owner="URSA" data-status="in-progress" data-title="Validate model match + evidence strings" data-desc=""><div class="k">URSA • in-progress</div><div class="v">Validate model match + evidence strings</div></button><button class="taskBtn" data-taskid="TASK_VEGA_PIPE_STATE" data-owner="VEGA" data-status="starting" data-title="Pipeline state/progress + resumability" data-desc=""><div class="k">VEGA • starting</div><div class="v">Pipeline state/progress + resumability</div></button><button class="taskBtn" data-taskid="TASK_WHISPER_UI_PROGRESS" data-owner="WHISPER" data-status="queued" data-title="Progress UI truthfulness + schema drift" data-desc=""><div class="k">WHISPER • queued</div><div class="v">Progress UI truthfulness + schema drift</div></button><button class="taskBtn" data-taskid="TASK_XENO_REALM_MECH" data-owner="XENO" data-status="starting" data-title="v1.4 mechanics implementation" data-desc=""><div class="k">XENO • starting</div><div class="v">v1.4 mechanics implementation</div></button><button class="taskBtn" data-taskid="TASK_YARROW_CANON" data-owner="YARROW" data-status="queued" data-title="Canon corpus + prompt artifacts + linking" data-desc=""><div class="k">YARROW • queued</div><div class="v">Canon corpus + prompt artifacts + linking</div></button><button class="taskBtn" data-taskid="TASK_YONDER_AGORA" data-owner="YONDER" data-status="starting" data-title="Agora transcript + comms summaries" data-desc=""><div class="k">YONDER • starting</div><div class="v">Agora transcript + comms summaries</div></button><button class="taskBtn" data-taskid="TASK_ZENITH_CI_HARDEN" data-owner="ZENITH" data-status="starting" data-title="CI stability + dependency drift" data-desc=""><div class="k">ZENITH • starting</div><div class="v">CI stability + dependency drift</div></button><button class="taskBtn" data-taskid="TASK_ZEPHYR_PERF_MOBILE" data-owner="ZEPHYR" data-status="in-progress" data-title="Mobile perf + 3D realm caps" data-desc=""><div class="k">ZEPHYR • in-progress</div><div class="v">Mobile perf + 3D realm caps</div></button></div>
         <div class="footer" id="taskDetail">Click a task to see details + owner assignment.</div>
         <div class="footer">Static hosting: tasks advance via commits to <code>hive_state</code>.</div>
       </div>
@@ -2685,490 +2751,328 @@
     <div class="footer" style="margin-top:18px">If this page loads, the UI is healthy. If the feed is stale, regenerate from <code>docs/hive_state.json</code>.</div>
   </div>
 
-  
-
-  
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('🚀 SolarFlow Minion World Loader - Complete Functionality Initialized');
-  
-  
-    // Enhanced Pause/Resume functionality
-    let isPaused = localStorage.getItem('solarflow-paused') === 'true';
-    let autoRefreshTimer = null;
-    
-    const pauseBtn = document.getElementById('btnToggle');
-    const spinner = document.getElementById('spin');
-    const pauseIndicator = document.getElementById('pause-indicator') || 
-                          document.querySelector('.pill:has(#spin)') || 
-                          document.createElement('div');
-    
-    function updatePauseState() {
-      if (pauseBtn) {
-        pauseBtn.textContent = isPaused ? '▶️ Resume' : '⏸️ Pause';
-        pauseBtn.title = isPaused ? 'Resume auto-refresh' : 'Pause auto-refresh';
+  <script>
+    // Defensive boot: if anything throws, show the error in the Diagnostics footer.
+    (function(){
+    function safeParse(jsonElId){
+      try{
+        const el = document.getElementById(jsonElId);
+        const txt = (el && el.textContent || '').trim();
+        return txt ? JSON.parse(txt) : {};
+      }catch(e){
+        return {};
       }
-      if (spinner) {
-        spinner.classList.toggle('paused', isPaused);
-      }
-      
-      // Update pause indicator text
-      if (pauseIndicator) {
-        if (isPaused) {
-          pauseIndicator.innerHTML = '⏸️ Paused';
-        } else {
-          pauseIndicator.innerHTML = '<span class="spin" id="spinner"></span>Active';
+    }
+
+    const HIVE = safeParse('data-hive');
+    const HEALTH = (HIVE.world && HIVE.world.health) ? HIVE.world.health : { tick_interval_sec: 60, paused: false };
+
+    function pctFromOverall(o){
+      const n = typeof o === 'number' ? o : 0;
+      return Math.max(0, Math.min(100, Math.round((n/10)*100)));
+    }
+    function tagClass(s){
+      if(s==='done') return 'done';
+      if(s==='in-progress') return 'ip';
+      if(s==='blocked') return 'blocked';
+      return 'todo';
+    }
+    function el(tag, attrs){
+      const n=document.createElement(tag);
+      if(attrs){
+        for(const [k,v] of Object.entries(attrs)){
+          if(k==='class') n.className=v;
+          else if(k==='text') n.textContent=v;
+          else n.setAttribute(k,v);
         }
       }
-      
-      console.log('🔄 Pause state updated:', isPaused ? 'PAUSED' : 'ACTIVE');
+      return n;
     }
-    
-    if (pauseBtn) {
-      pauseBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        isPaused = !isPaused;
-        localStorage.setItem('solarflow-paused', isPaused.toString());
-        updatePauseState();
-        scheduleAutoRefresh();
-        
-        // Visual feedback
-        pauseBtn.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          pauseBtn.style.transform = 'scale(1)';
-        }, 150);
-        
-        console.log(isPaused ? '⏸️ PAUSED by user' : '▶️ RESUMED by user');
-      });
+
+    function isoToWhen(iso){
+      if(!iso) return '';
+      const s = String(iso);
+      if(s.includes('T')) return s.replace('T',' ').replace('.000Z','Z').slice(0,16)+'Z';
+      return s;
     }
-    
-    function scheduleAutoRefresh() {
-      clearTimeout(autoRefreshTimer);
-      
-      if (!isPaused) {
-        autoRefreshTimer = setTimeout(() => {
-          if (!isPaused) {
-            console.log('🔄 Auto-refreshing page...');
-            location.reload(true); // Force reload from server
-          }
-        }, 30000); // 30 seconds
-        console.log('⏰ Auto-refresh scheduled for 30 seconds');
-      } else {
-        console.log('⏸️ Auto-refresh disabled (paused)');
-      }
+
+    function avatarFor(senderId){
+      const roster = (HIVE.minions && Array.isArray(HIVE.minions.roster)) ? HIVE.minions.roster : [];
+      const m = roster.find(x => (x && x.id || '').toUpperCase() === String(senderId||'').toUpperCase());
+      return (m && m.avatar_url) || './avatars/bolt.png';
     }
-    
-    updatePauseState();
-    scheduleAutoRefresh();
-  
-  
-    const rosterBtn = document.querySelector('button[onclick*="roster.html"]');
-    if (rosterBtn) {
-      rosterBtn.onclick = null; // Remove inline onclick
-      rosterBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Add loading state
-        const originalText = this.textContent;
-        this.textContent = '📊 Loading Roster...';
-        this.disabled = true;
-        
-        // Check if roster.html exists by trying to fetch it
-        fetch('./roster.html')
-          .then(response => {
-            if (response.ok) {
-              console.log('✅ Navigating to roster.html');
-              location.href = './roster.html';
-            } else {
-              throw new Error('Roster not available');
-            }
-          })
-          .catch(error => {
-            console.error('❌ Roster navigation failed:', error);
-            alert('Roster page is not available. Please try again later.');
-            this.textContent = originalText + ' (unavailable)';
-            this.disabled = false;
-          });
-      });
-      console.log('✅ Roster button functionality added');
-    }
-  
-  
-    const realmBtn = document.querySelector('button[onclick*="realm.html"]');
-    if (realmBtn) {
-      realmBtn.onclick = null; // Remove inline onclick
-      realmBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Add loading state
-        const originalText = this.textContent;
-        this.textContent = '🌌 Loading 3D Realm...';
-        this.disabled = true;
-        
-        // Check WebGL support
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        
-        if (!gl) {
-          alert('3D Realm requires WebGL support. Your browser may not support 3D graphics.');
-          this.textContent = originalText + ' (WebGL required)';
-          this.disabled = false;
-          return;
+
+    function buildFeed(){
+      const posts = [];
+      const msgs = (HIVE.agora && Array.isArray(HIVE.agora.messages)) ? HIVE.agora.messages : [];
+      for(const m of msgs){
+        const who = m.sender_id || 'MINION';
+        const intent = m.intent || 'UPDATE';
+        const when = isoToWhen(m.timestamp || (HIVE.meta && HIVE.meta.updatedAt));
+        let text = '';
+        const payload = m.payload;
+        if(payload && typeof payload === 'object'){
+          if(intent === 'FETCH_RESULT') text = ('Fetched ' + (payload.url || '') + ' • ' + (payload.status == null ? '' : payload.status) + ' • ' + (payload.content_type || '')).trim();
+          else if(intent === 'DISCOVERY_RESULT') text = ('Discovery for ' + (payload.manufacturer || 'manufacturer') + ' • candidates: ' + ((payload.candidates||[]).length));
+          else if(intent === 'VALIDATION_RESULT') text = ('Validation • match=' + payload.model_match + ' • conf=' + payload.confidence);
+          else text = JSON.stringify(payload);
+        }else{
+          text = String(payload||'');
         }
-        
-        // Check if realm files exist
-        Promise.all([
-          fetch('./realm.html'),
-          fetch('./realm.js')
-        ])
-        .then(responses => {
-          if (responses.every(r => r.ok)) {
-            console.log('✅ Entering 3D Realm');
-            location.href = './realm.html';
-          } else {
-            throw new Error('3D Realm files not available');
-          }
-        })
-        .catch(error => {
-          console.error('❌ 3D Realm navigation failed:', error);
-          alert('3D Realm is not available. Realm files may be missing.');
-          this.textContent = originalText + ' (unavailable)';
-          this.disabled = false;
+        posts.push({who, avatar_url: avatarFor(who), when, topic:intent, status:'update', text});
+      }
+
+      const txns = (HIVE.ledger && Array.isArray(HIVE.ledger.transactions)) ? HIVE.ledger.transactions : [];
+      for(const t of txns){
+        posts.push({
+          who:'LEDGER',
+          avatar_url:'./avatars/atlas.png',
+          when: isoToWhen(t.timestamp || (HIVE.meta && HIVE.meta.updatedAt)),
+          topic:'TXN',
+          status:'done',
+          text: (String(t.from||'?') + ' → ' + String(t.to||'?') + ' • ' + String((t.amount == null) ? '' : t.amount) + ' • ' + String(t.memo || '')).trim()
         });
-      });
-      console.log('✅ 3D Realm button functionality added');
+      }
+
+      const curated = (HIVE.activities && Array.isArray(HIVE.activities.feed_posts)) ? HIVE.activities.feed_posts : [];
+      for(const p of curated){
+        posts.push({who:p.who||'ANNOUNCE', avatar_url:p.avatar_url||avatarFor(p.who), when:p.when||isoToWhen(HIVE.meta&&HIVE.meta.updatedAt), topic:p.topic||'ANNOUNCEMENT', status:p.status||'update', text:p.text||''});
+      }
+
+      posts.sort((a,b)=> String(b.when).localeCompare(String(a.when)));
+      return posts;
     }
-  
-  
-    const refreshBtn = document.querySelector('button[onclick*="reload"]');
-    if (refreshBtn) {
-      refreshBtn.onclick = null; // Remove inline onclick
-      refreshBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Add loading state
-        const originalText = this.textContent;
-        this.textContent = '🔄 Refreshing...';
-        this.disabled = true;
-        
-        // Visual feedback
-        this.style.transform = 'rotate(180deg)';
-        
-        // Cache-busting refresh
-        const timestamp = Date.now();
-        const url = new URL(location.href);
-        url.searchParams.set('_refresh', timestamp);
-        
-        console.log('🔄 Force refreshing with cache bust');
-        location.href = url.toString();
-      });
-      console.log('✅ Refresh button functionality added');
+
+    const STATUS = (HIVE.activities && HIVE.activities.status) ? {
+      updatedAt: (HIVE.meta && HIVE.meta.updatedAt) || '—',
+      ci: HIVE.activities.status.ci || 'unknown',
+      overall: typeof HIVE.activities.status.overall === 'number' ? HIVE.activities.status.overall : 0,
+      overallLabel: HIVE.activities.status.overallLabel || '—',
+      milestones: Array.isArray(HIVE.activities.status.milestones) ? HIVE.activities.status.milestones : []
+    } : { updatedAt:'—', ci:'unknown', overall:0, overallLabel:'—', milestones:[] };
+
+    // loader spinner + pause/start
+    let paused = !!HEALTH.paused;
+    const btn = document.getElementById('btnToggle');
+    const spin = document.getElementById('spin');
+    function setPaused(v){
+      paused = !!v;
+      if(btn) btn.textContent = paused ? 'Start' : 'Pause';
+      if(spin) spin.classList.toggle('paused', paused);
     }
-  
-  
-  
-  // Populate empty sections with real data
-  function populateAllSections() {
-    const hiveScript = document.getElementById('data-hive');
-    if (!hiveScript) {
-      console.error('❌ No hive data found');
-      return;
-    }
-    
-    let hive;
-    try {
-      hive = JSON.parse(hiveScript.textContent);
-    } catch (e) {
-      console.error('❌ Failed to parse hive data:', e);
-      return;
-    }
-    
-    console.log('📊 Populating all sections with real data...');
-    
-    // 1. POPULATE FEED
-    const feedEl = document.getElementById('feed');
-    if (feedEl && hive.agora && hive.agora.messages) {
-      feedEl.innerHTML = '';
-      
-      const messages = hive.agora.messages.slice(0, 12);
-      messages.forEach((msg, index) => {
-        const feedItem = document.createElement('div');
-        feedItem.className = 'tweet';
-        
-        const timestamp = msg.timestamp ? 
-          msg.timestamp.replace('T', ' ').replace('Z', '').slice(0, 16) : 
-          'unknown time';
-        
-        let payloadText = '';
-        if (msg.payload && typeof msg.payload === 'object') {
-          if (msg.intent === 'STATE_PATCH') {
-            payloadText = `Task: ${msg.payload.task_id || 'unknown'} • Updated: ${msg.payload.updatedAt || 'unknown'}`;
-          } else {
-            payloadText = JSON.stringify(msg.payload).slice(0, 120) + '...';
-          }
-        } else {
-          payloadText = String(msg.payload || 'No details available').slice(0, 120);
-        }
-        
-        const avatarUrl = `./avatars/identicons/${msg.sender_id || 'ATLAS'}.svg`;
-        
-        feedItem.innerHTML = `
-          <div class="tweetTop">
-            <div class="who">
-              <div class="avatar">
-                <img src="${avatarUrl}" alt="${msg.sender_id}" 
-                     onerror="this.src='./avatars/bolt.png'" />
-              </div>
-              <div>
-                <div class="name">${msg.sender_id || 'MINION'}<span class="meta"> • ${timestamp}</span></div>
-                <div class="meta">${msg.intent || 'UPDATE'}</div>
-              </div>
-            </div>
-            <div class="tag ip">active</div>
-          </div>
-          <div class="tweetBody">${payloadText}</div>
-        `;
-        
-        feedEl.appendChild(feedItem);
-      });
-      
-      console.log(`✅ Feed populated with ${messages.length} messages`);
-    }
-    
-    // 2. POPULATE COVENANT SECTION
-    const covenantEl = document.getElementById('covenant');
-    if (covenantEl) {
-      covenantEl.innerHTML = '';
-      
-      const covenantItems = [
-        { id: 'I', title: 'Truth in Progress', text: 'All progress indicators must reflect actual completion. No fake percentages.' },
-        { id: 'II', title: 'Functional Buttons', text: 'Every interactive element must perform its stated function or be clearly disabled.' },
-        { id: 'III', title: 'Data Integrity', text: 'All displayed data derives from canonical sources with clear lineage.' },
-        { id: 'IV', title: 'Schema Compliance', text: 'All state changes must validate against defined schemas.' },
-        { id: 'V', title: 'Error Transparency', text: 'Failures are logged visibly. No silent errors or hidden exceptions.' }
-      ];
-      
-      covenantItems.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `
-          <div class="k">Article ${item.id} — ${item.title}</div>
-          <div class="v">${item.text}</div>
-        `;
-        covenantEl.appendChild(row);
-      });
-      
-      console.log('✅ Covenant section populated');
-    }
-    
-    // 3. POPULATE ONTOLOGY LAB
-    const ontologyEl = document.getElementById('ontology');
-    if (ontologyEl) {
-      ontologyEl.innerHTML = '';
-      
-      const questions = [
-        'How do we maintain data truth in a system designed for simulation?',
-        'What is the minimum viable complexity for believable automation?',
-        'How can progress indicators remain honest while showing aspiration?',
-        'What constitutes \'real\' functionality in a demonstrative system?'
-      ];
-      
-      const hypotheses = [
-        'Explicit labeling of simulated vs real data maintains user trust',
-        'Working buttons create more engagement than cosmetic ones',
-        'Schema validation prevents data drift over time'
-      ];
-      
-      questions.forEach(q => {
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `
-          <div class="k">Question</div>
-          <div class="v">${q}</div>
-        `;
-        ontologyEl.appendChild(row);
-      });
-      
-      hypotheses.forEach(h => {
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `
-          <div class="k">Hypothesis</div>
-          <div class="v">${h}</div>
-        `;
-        ontologyEl.appendChild(row);
-      });
-      
-      console.log('✅ Ontology lab populated');
-    }
-    
-    // 4. POPULATE MECHANICS
-    const mechanicsEl = document.getElementById('mechanics');
-    if (mechanicsEl) {
-      mechanicsEl.innerHTML = '';
-      
-      const mechanics = [
-        { label: 'Echo', desc: 'System state reflection - all changes logged', liturgy: 'The state echoes truth' },
-        { label: 'Rust', desc: 'Entropy protection - prevent data decay', liturgy: 'That which is maintained, endures' },
-        { label: 'Flare', desc: 'Error illumination - make problems visible', liturgy: 'Light reveals the path forward' },
-        { label: 'Confessional', desc: 'Diagnostic transparency - system health reporting', liturgy: 'Speak the system\'s condition' }
-      ];
-      
-      mechanics.forEach(m => {
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `
-          <div class="k">${m.label}</div>
-          <div class="v">${m.desc}
-"${m.liturgy}"</div>
-        `;
-        mechanicsEl.appendChild(row);
-      });
-      
-      console.log('✅ Mechanics section populated');
-    }
-    
-    // 5. POPULATE CODE CANON
-    const canonEl = document.getElementById('canon');
-    if (canonEl) {
-      canonEl.innerHTML = '';
-      
-      const canonSections = {
-        '/sys/core': ['hive_state.json', 'schema.js', 'derive_state.js'],
-        '/sys/build': ['build_all.js', 'validate_hive.js', 'build_from_hive.js'],
-        '/sys/ui': ['index.html', 'realm.html', 'roster.html'],
-        '/sys/assets': ['identicons/*.svg', 'avatars/*', 'vendor/three/*'],
-        '/sys/meta': ['package.json', 'ci.yml', 'README.md']
-      };
-      
-      Object.entries(canonSections).forEach(([path, files]) => {
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `
-          <div class="k">${path}</div>
-          <div class="v">${files.join(', ')}</div>
-        `;
-        canonEl.appendChild(row);
-      });
-      
-      console.log('✅ Code canon populated');
-    }
-    
-    // 6. POPULATE ROSTER PREVIEW
-    const rosterPreviewEl = document.getElementById('rosterPreview');
-    if (rosterPreviewEl && hive.minions && hive.minions.roster) {
-      rosterPreviewEl.innerHTML = '';
-      
-      const minions = hive.minions.roster.slice(0, 12);
-      minions.forEach(minion => {
-        const card = document.createElement('div');
-        card.className = 'mini';
-        
-        const avatarUrl = minion.avatar_url || `./avatars/identicons/${minion.id}.svg`;
-        
-        card.innerHTML = `
-          <div class="a">
-            <img src="${avatarUrl}" alt="${minion.id}" 
-                 onerror="this.src='./avatars/bolt.png'" />
-          </div>
-          <div class="b">
-            <div class="id">${minion.id}</div>
-            <div class="sub">${minion.role} • T${minion.tier} • ${minion.mode}</div>
-          </div>
-        `;
-        
-        rosterPreviewEl.appendChild(card);
-      });
-      
-      console.log(`✅ Roster preview populated with ${minions.length} minions`);
-    }
-    
-    // 7. ADD TASK CLICK FUNCTIONALITY
-    const taskButtons = document.querySelectorAll('.taskBtn');
-    const taskDetailEl = document.getElementById('taskDetail');
-    
-    taskButtons.forEach(btn => {
-      btn.addEventListener('click', function() {
-        const owner = this.getAttribute('data-owner') || 'UNKNOWN';
-        const status = this.getAttribute('data-status') || 'unknown';
-        const title = this.getAttribute('data-title') || 'Untitled';
-        const desc = this.getAttribute('data-desc') || 'No description available';
-        
-        if (taskDetailEl) {
-          taskDetailEl.innerHTML = `
-            <strong>Owner:</strong> ${owner} • 
-            <strong>Status:</strong> ${status}<br>
-            <strong>Task:</strong> ${title}<br>
-            <strong>Description:</strong> ${desc || 'No additional details'}
-          `;
-        }
-        
-        // Visual feedback
-        this.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-          this.style.transform = 'scale(1)';
-        }, 100);
-        
-        console.log(`📋 Task selected: ${title} (Owner: ${owner})`);
-      });
+    setPaused(paused);
+
+    // auto-refresh loop (reload page to pick up new deploy snapshot)
+    const intervalMs = Math.max(10, (Number(HEALTH.tick_interval_sec)||60)) * 1000;
+    setInterval(()=>{ if(!paused) location.reload(); }, intervalMs);
+    if(btn) btn.addEventListener('click', function(){ setPaused(!paused); });
+
+    // render progress
+    document.getElementById('updatedAt').textContent = STATUS.updatedAt || '—';
+    document.getElementById('ciText').textContent = STATUS.ci || 'unknown';
+    document.getElementById('overallLabel').textContent = STATUS.overallLabel || '—';
+    const p = pctFromOverall(STATUS.overall);
+    document.getElementById('pct').textContent = p + '%';
+    document.getElementById('bar').style.width = p + '%';
+
+    const ms = document.getElementById('milestones');
+    ms.innerHTML='';
+    (STATUS.milestones||[]).forEach(m=>{
+      const row = el('div',{class:'ms'});
+      const left = el('div',{class:'left'});
+      left.appendChild(el('div',{class:'title',text:m.label||m.id||''}));
+      left.appendChild(el('div',{class:'id',text:m.id||''}));
+      row.appendChild(left);
+      row.appendChild(el('div',{class:'tag '+tagClass(m.status),text:m.status||''}));
+      ms.appendChild(row);
     });
-    
-    console.log(`✅ Added click handlers to ${taskButtons.length} task buttons`);
-  }
 
-  
-  // Initialize all sections
-  populateAllSections();
-  
-  
-  // Global error handling
-  window.addEventListener('error', function(e) {
-    console.error('🚨 Global Error:', e.error);
-    
-    const diagEl = document.getElementById('diag');
-    if (diagEl) {
-      diagEl.innerHTML = `
-        <div style="color: var(--bad); margin-top: 8px;">
-          <strong>Error:</strong> ${e.error?.message || 'Unknown error'}
-        </div>
-      `;
+    // health meters
+    const vv = Number((HEALTH && HEALTH.virtual_voltage != null) ? HEALTH.virtual_voltage : 0);
+    const ent = Number((HEALTH && HEALTH.entropy != null) ? HEALTH.entropy : 0);
+    const lr = Number((HEALTH && HEALTH.loop_risk != null) ? HEALTH.loop_risk : 0);
+    document.getElementById('vv').textContent = (Math.round(vv*100)) + '%';
+    document.getElementById('ent').textContent = (Math.round(ent*100)) + '%';
+    document.getElementById('lr').textContent = (Math.round(lr*100)) + '%';
+
+    // rewards
+    const r = (HIVE.ledger && HIVE.ledger.rewards) ? HIVE.ledger.rewards : {};
+    const rewardsEl = document.getElementById('rewards');
+    rewardsEl.innerHTML='';
+    const creditsTotal = (HIVE.ledger && typeof HIVE.ledger.credits_total === 'number') ? HIVE.ledger.credits_total : '—';
+    const rep = (HIVE.ledger && typeof HIVE.ledger.reputation_index === 'number') ? HIVE.ledger.reputation_index : null;
+    const rows = [
+      ['Credits total', String(creditsTotal)],
+      ['Reputation index', rep==null ? '—' : rep.toFixed(2)],
+      ['Task complete bonus', String((r.task_complete_bonus == null) ? '—' : r.task_complete_bonus)],
+      ['Audit pass bonus', String((r.audit_pass_bonus == null) ? '—' : r.audit_pass_bonus)],
+      ['Help friend bonus', String((r.help_friend_bonus == null) ? '—' : r.help_friend_bonus)],
+    ];
+    for(const [k,v] of rows){
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:k}));
+      row.appendChild(el('div',{class:'v',text:v}));
+      rewardsEl.appendChild(row);
     }
-  });
-  
-  window.addEventListener('unhandledrejection', function(e) {
-    console.error('🚨 Unhandled Promise Rejection:', e.reason);
-  });
 
-  
-  // Performance monitoring
-  window.addEventListener('load', function() {
-    const perfData = performance.timing;
-    const loadTime = perfData.loadEventEnd - perfData.navigationStart;
-    
-    console.log(`⚡ Page loaded in ${loadTime}ms`);
-    
-    const diagEl = document.getElementById('diag');
-    if (diagEl && diagEl.textContent) {
-      diagEl.textContent += ` • loaded in ${loadTime}ms`;
+    // feed
+    const feedEl = document.getElementById('feed');
+    feedEl.innerHTML='';
+    const FEED = buildFeed();
+    FEED.slice(0,12).forEach(post=>{
+      const t = el('div',{class:'tweet'});
+      const top = el('div',{class:'tweetTop'});
+      const who = el('div',{class:'who'});
+      const av = el('div',{class:'avatar'});
+      if(post.avatar_url){
+        const img = el('img');
+        img.src = post.avatar_url;
+        img.alt = post.who || 'Minion';
+        av.appendChild(img);
+      }
+      const metaWrap = el('div');
+      const name = el('div',{class:'name'});
+      name.appendChild(document.createTextNode(post.who||'Minion'));
+      name.appendChild(el('span',{class:'meta',text:(post.when ? ' • '+post.when : '')}));
+      metaWrap.appendChild(name);
+      metaWrap.appendChild(el('div',{class:'meta',text:post.topic||''}));
+      who.appendChild(av);
+      who.appendChild(metaWrap);
+      top.appendChild(who);
+      top.appendChild(el('div',{class:'tag '+tagClass(post.status),text:post.status||'update'}));
+      t.appendChild(top);
+      t.appendChild(el('div',{class:'tweetBody',text:post.text||''}));
+      feedEl.appendChild(t);
+    });
+
+    // covenant
+    const covEl = document.getElementById('covenant');
+    covEl.innerHTML='';
+    const cov = HIVE.covenant || {};
+    const arts = Array.isArray(cov.five_articles) ? cov.five_articles : [];
+    arts.slice(0,5).forEach(a=>{
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:('Article ' + (a.id || '') + ' — ' + (a.title || ''))}));
+      row.appendChild(el('div',{class:'v',text:a.text || ''}));
+      covEl.appendChild(row);
+    });
+
+    // ontology
+    const ontEl = document.getElementById('ontology');
+    ontEl.innerHTML='';
+    const lab = HIVE.ontology_lab || {};
+    const qs = Array.isArray(lab.questions) ? lab.questions : [];
+    const hs = Array.isArray(lab.hypotheses) ? lab.hypotheses : [];
+    for(const q of qs.slice(0,4)){
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:'Question'}));
+      row.appendChild(el('div',{class:'v',text:q}));
+      ontEl.appendChild(row);
     }
-  });
+    for(const h of hs.slice(0,3)){
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:'Hypothesis'}));
+      row.appendChild(el('div',{class:'v',text:h}));
+      ontEl.appendChild(row);
+    }
 
-  
-  // Final status update
-  const diagEl = document.getElementById('diag');
-  if (diagEl) {
-    diagEl.innerHTML = `
-      <div>✅ All systems operational • Buttons functional • Data populated • JS active</div>
-      <div style="font-size: 10px; margin-top: 4px; color: var(--muted);">
-        Build: ${new Date().toISOString().slice(0, 19)} • 
-        Features: Pause/Resume, Auto-refresh, Task details, Error handling
-      </div>
-    `;
-  }
-  
-  console.log('✅ SolarFlow complete functionality audit passed - all systems operational');
-});
-</script>
+    // v1.4 mechanics (latest-only)
+    const mechEl = document.getElementById('mechanics');
+    if(mechEl){
+      mechEl.innerHTML='';
+      const mech = HIVE.mechanics || {};
+      const active = Array.isArray(mech.active) ? mech.active : [];
+      active.forEach(m=>{
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:(m.label || m.id || 'Mechanic')}));
+        row.appendChild(el('div',{class:'v',text:(m.desc || '') + (m.liturgy ? ('
+' + '“' + m.liturgy + '”') : '')}));
+        mechEl.appendChild(row);
+      });
+    }
+
+    // task board (interactive; still visible even if JS fails because it is server-rendered)
+    const tasksEl = document.getElementById('tasks');
+    const taskDetailEl = document.getElementById('taskDetail');
+    if(tasksEl){
+      // Ensure newest hive values replace the server-rendered view (but keep same UI shape)
+      tasksEl.innerHTML='';
+      const tb = (HIVE.tasks && Array.isArray(HIVE.tasks.board)) ? HIVE.tasks.board : [];
+      tb.forEach(t=>{
+        const b = el('button',{class:'taskBtn'});
+        b.setAttribute('type','button');
+        b.setAttribute('data-taskid', t.id || t.title || '');
+        b.setAttribute('data-owner', t.owner || 'MINION');
+        b.setAttribute('data-status', t.status || '');
+        b.setAttribute('data-title', t.title || t.id || '');
+        b.setAttribute('data-desc', t.desc || t.description || '');
+        b.appendChild(el('div',{class:'k',text:(t.owner||'MINION') + ((t.status)?(' • '+t.status):'')}));
+        b.appendChild(el('div',{class:'v',text:(t.title||t.id||'')}));
+        b.addEventListener('click', function(){
+          if(!taskDetailEl) return;
+          const owner = b.getAttribute('data-owner') || '';
+          const status = b.getAttribute('data-status') || '';
+          const title = b.getAttribute('data-title') || '';
+          const desc = b.getAttribute('data-desc') || '';
+          taskDetailEl.textContent = 'Owner: ' + owner + (status?(' • Status: ' + status):'') + ' — ' + title + (desc?(' — ' + desc):'');
+        });
+        tasksEl.appendChild(b);
+      });
+      if(taskDetailEl && !taskDetailEl.textContent){
+        taskDetailEl.textContent = 'Click a task to see details + owner assignment.';
+      }
+    }
+
+    // code canon index
+    const canonEl = document.getElementById('canon');
+    if(canonEl){
+      canonEl.innerHTML='';
+      const cc = HIVE.code_canon || {};
+      const mounted = cc.mounted || {};
+      for(const k of Object.keys(mounted)){
+        const list = Array.isArray(mounted[k]) ? mounted[k] : [];
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:k}));
+        row.appendChild(el('div',{class:'v',text:list.slice(0,10).join(', ') + (list.length>10 ? (' … +' + (list.length-10)) : '')}));
+        canonEl.appendChild(row);
+      }
+    }
+
+    // roster preview
+    const roster = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : [];
+    const rosterCount = roster.length;
+    const rp = document.getElementById('rosterPreview');
+    if(rp){
+      rp.innerHTML='';
+      roster.slice(0,12).forEach(m=>{
+        const card = el('div',{class:'mini'});
+        const a = el('div',{class:'a'});
+        if(m.avatar_url){
+          const img = el('img');
+          img.src = m.avatar_url;
+          img.alt = m.id || 'Minion';
+          a.appendChild(img);
+        }
+        const b = el('div',{class:'b'});
+        b.appendChild(el('div',{class:'id',text:(m.id||'')}));
+        const s = (m.role||'') + ' • T' + ((m.tier == null) ? '' : m.tier) + ' • ' + (m.mode||'');
+        b.appendChild(el('div',{class:'sub',text:s}));
+        card.appendChild(a);
+        card.appendChild(b);
+        rp.appendChild(card);
+      });
+    }
+
+    var diag = document.getElementById('diag');
+    if(diag) diag.textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
+    }
+    catch(e){
+      try{
+        var d = document.getElementById('diag');
+        if(d) d.textContent = 'JS error: ' + (e && (e.stack || e.message) || String(e));
+      }catch(_e){}
+    }
+  })();
+  </script>
 </body>
 </html>
