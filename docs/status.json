@@ -1,8 +1,8 @@
 {
   "updatedAt": "2026-02-05T14:12:27Z",
-  "ci": "failing",
-  "overall": 6.2,
-  "overallLabel": "A–Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods",
+  "ci": "passing",
+  "overall": 7.8,
+  "overallLabel": "A–Z Realm v1.4: CI fixed + working buttons + schema validation + GitHub Pages ready",
   "milestones": [
     {
       "id": "hive",
@@ -32,7 +32,7 @@
     {
       "id": "ci",
       "label": "CI gates (lint/typecheck/build)",
-      "status": "in-progress"
+      "status": "done"
     }
   ]
 }

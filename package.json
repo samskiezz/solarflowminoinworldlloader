@@ -1,0 +1,17 @@
+{
+  "name": "solarflow-minion-world-loader",
+  "version": "1.0.0",
+  "description": "SolarFlow Minion World Loader - Static GitHub Pages app",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build_all.js",
+    "validate": "node scripts/validate_hive.js",
+    "start": "python3 -m http.server 8080 --directory docs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": ["solar", "minions", "github-pages"],
+  "author": "SolarFlow",
+  "license": "MIT"
+}
