@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-02-05T23:16:39.069Z",
+  "totalStandards": 4,
+  "standards": {
+    "AS/NZS 3000:2018": {
+      "id": "STD_AS_NZS_3000_2018",
+      "code": "AS/NZS 3000:2018",
+      "title": "Electrical installations (Australian/New Zealand Wiring Rules)",
+      "category": "australian_standard",
+      "type": "Regulatory Standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-001/as-slash-nzs-3000-colon-2018",
+      "keyRequirements": [
+        "Fundamental safety requirements for electrical installations",
+        "Installation methods and protection requirements",
+        "Earthing and bonding requirements",
+        "Special installations including solar PV systems"
+      ],
+      "knowledgePoints": [
+        "AS/NZS 3000:2018: Fundamental safety requirements for electrical installations",
+        "AS/NZS 3000:2018: Installation methods and protection requirements",
+        "AS/NZS 3000:2018: Earthing and bonding requirements",
+        "AS/NZS 3000:2018: Special installations including solar PV systems"
+      ],
+      "addedAt": "2026-02-05T23:16:39.068Z"
+    },
+    "AS/NZS 4777.1:2016": {
+      "id": "STD_AS_NZS_4777_1_2016",
+      "code": "AS/NZS 4777.1:2016",
+      "title": "Grid connection of energy systems via inverters - Installation requirements",
+      "category": "australian_standard",
+      "type": "Regulatory Standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-042/as-slash-nzs-4777-dot-1-colon-2016",
+      "keyRequirements": [
+        "Requirements for connecting inverters to electricity networks",
+        "Protection settings and anti-islanding requirements",
+        "Power quality and voltage regulation",
+        "Installation and commissioning procedures"
+      ],
+      "knowledgePoints": [
+        "AS/NZS 4777.1:2016: Requirements for connecting inverters to electricity networks",
+        "AS/NZS 4777.1:2016: Protection settings and anti-islanding requirements",
+        "AS/NZS 4777.1:2016: Power quality and voltage regulation",
+        "AS/NZS 4777.1:2016: Installation and commissioning procedures"
+      ],
+      "addedAt": "2026-02-05T23:16:39.068Z"
+    },
+    "AS/NZS 5033:2021": {
+      "id": "STD_AS_NZS_5033_2021",
+      "code": "AS/NZS 5033:2021",
+      "title": "Installation and safety requirements for photovoltaic (PV) arrays",
+      "category": "australian_standard",
+      "type": "Regulatory Standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-042/as-slash-nzs-5033-colon-2021",
+      "keyRequirements": [
+        "Safety requirements for PV array installation",
+        "Structural requirements and wind loading",
+        "Fire safety and emergency access",
+        "DC isolation and switching requirements"
+      ],
+      "knowledgePoints": [
+        "AS/NZS 5033:2021: Safety requirements for PV array installation",
+        "AS/NZS 5033:2021: Structural requirements and wind loading",
+        "AS/NZS 5033:2021: Fire safety and emergency access",
+        "AS/NZS 5033:2021: DC isolation and switching requirements"
+      ],
+      "addedAt": "2026-02-05T23:16:39.068Z"
+    },
+    "AS/NZS 5139:2019": {
+      "id": "STD_AS_NZS_5139_2019",
+      "code": "AS/NZS 5139:2019",
+      "title": "Electrical installations - Safety of battery systems for use with power conversion equipment",
+      "category": "australian_standard",
+      "type": "Regulatory Standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-001/as-slash-nzs-5139-colon-2019",
+      "keyRequirements": [
+        "Battery system location and proximity requirements",
+        "Ventilation and thermal management",
+        "Protection and isolation requirements",
+        "Installation and maintenance safety procedures"
+      ],
+      "knowledgePoints": [
+        "AS/NZS 5139:2019: Battery system location and proximity requirements",
+        "AS/NZS 5139:2019: Ventilation and thermal management",
+        "AS/NZS 5139:2019: Protection and isolation requirements",
+        "AS/NZS 5139:2019: Installation and maintenance safety procedures"
+      ],
+      "addedAt": "2026-02-05T23:16:39.068Z"
+    }
+  }
+}

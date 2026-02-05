@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-02-05T23:16:39.070Z",
+  "totalDocuments": 14,
+  "priorityBreakdown": {
+    "critical": 6,
+    "high": 7,
+    "medium": 1
+  },
+  "processingInstructions": {
+    "ocr_requirements": "Extract all technical specifications, installation procedures, and safety requirements",
+    "knowledge_extraction": "Focus on numerical specifications, clearances, and compliance requirements",
+    "australian_focus": "Prioritize AS/NZS standards compliance and Australian-specific requirements"
+  },
+  "documentQueue": [
+    {
+      "productId": "PROD_TRINA_SOLAR_TSM_DE06M_05_II__440W",
+      "documentType": "datasheet",
+      "url": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Datasheet-EN-2021-A.pdf",
+      "priority": "high"
+    },
+    {
+      "productId": "PROD_TRINA_SOLAR_TSM_DE06M_05_II__440W",
+      "documentType": "specsheet",
+      "url": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Installation-Manual-EN-2021-A.pdf",
+      "priority": "medium"
+    },
+    {
+      "productId": "PROD_JINKOSOLAR_JKM365M_72H_365W",
+      "documentType": "datasheet",
+      "url": "https://www.jinkosolar.com/uploads/JinkoSolar_JKM365M-72H_EN.pdf",
+      "priority": "high"
+    },
+    {
+      "productId": "PROD_FRONIUS_PRIMO_5_0_1_5KW",
+      "documentType": "installationManual",
+      "url": "https://www.fronius.com/~/downloads/Solar%20Energy/Installation%20Manual/42,0410,0903.pdf",
+      "priority": "high"
+    },
+    {
+      "productId": "PROD_FRONIUS_PRIMO_5_0_1_5KW",
+      "documentType": "datasheet",
+      "url": "https://www.fronius.com/~/downloads/Solar%20Energy/Datasheet/42,0410,0903,EN.pdf",
+      "priority": "high"
+    },
+    {
+      "productId": "PROD_SOLAREDGE_SE7600H_AU_7_6KW",
+      "documentType": "installationManual",
+      "url": "https://www.solaredge.com/sites/default/files/se-single-phase-inverter-installation-guide.pdf",
+      "priority": "high"
+    },
+    {
+      "productId": "PROD_HUAWEI_SUN2000_8KTL_M1_8KW",
+      "documentType": "installationManual",
+      "url": "https://solar.huawei.com/~/media/Solar/attachment/pdf/ap/installation-guide/SUN2000-8KTL-M1_Installation_Guide.pdf",
+      "priority": "high"
+    },
+    {
+      "productId": "PROD_TESLA_POWERWALL_2",
+      "documentType": "installationManual",
+      "url": "https://www.tesla.com/sites/default/files/pdfs/powerwall/Powerwall_2_AC_Installation_Manual.pdf",
+      "priority": "critical"
+    },
+    {
+      "productId": "PROD_TESLA_POWERWALL_2",
+      "documentType": "userManual",
+      "url": "https://www.tesla.com/sites/default/files/pdfs/powerwall/Powerwall_Owners_Manual.pdf",
+      "priority": "high"
+    },
+    {
+      "productId": "PROD_ENPHASE_IQ_BATTERY_10",
+      "documentType": "installationManual",
+      "url": "https://enphase.com/sites/default/files/2021-01/IQ-Battery-10-Installation-Guide.pdf",
+      "priority": "critical"
+    },
+    {
+      "standardId": "STD_AS_NZS_3000_2018",
+      "documentType": "standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-001/as-slash-nzs-3000-colon-2018",
+      "priority": "critical"
+    },
+    {
+      "standardId": "STD_AS_NZS_4777_1_2016",
+      "documentType": "standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-042/as-slash-nzs-4777-dot-1-colon-2016",
+      "priority": "critical"
+    },
+    {
+      "standardId": "STD_AS_NZS_5033_2021",
+      "documentType": "standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-042/as-slash-nzs-5033-colon-2021",
+      "priority": "critical"
+    },
+    {
+      "standardId": "STD_AS_NZS_5139_2019",
+      "documentType": "standard",
+      "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-001/as-slash-nzs-5139-colon-2019",
+      "priority": "critical"
+    }
+  ]
+}

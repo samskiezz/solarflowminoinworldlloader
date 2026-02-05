@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomous Minion Knowledge System - Project Solar Australia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #2a5298;
+        }
+
+        .header h1 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .status-active { background: #e8f5e8; color: #2e7d32; }
+        .status-break { background: #fff3e0; color: #f57c00; }
+        .status-learning { background: #e3f2fd; color: #1976d2; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #2e7d32);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .minion-roster {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .minion-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .minion-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .minion-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .knowledge-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .search-btn {
+            padding: 12px 25px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-btn:hover {
+            background: #1e3c72;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4caf50;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .tab-system {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .tab-headers {
+            display: flex;
+            background: #f5f5f5;
+        }
+
+        .tab-header {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .tab-header.active {
+            background: white;
+            color: #2a5298;
+            border-bottom: 3px solid #2a5298;
+        }
+
+        .tab-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #2a5298;
+        }
+
+        .stage-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2a5298;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .stage-details {
+            flex: 1;
+        }
+
+        .stage-title {
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+
+        .stage-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .real-time-feed {
+            background: #1a1a1a;
+            color: #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .feed-line {
+            margin: 5px 0;
+            padding: 2px 0;
+        }
+
+        .feed-timestamp {
+            color: #888;
+        }
+
+        .feed-minion {
+            color: #00aaff;
+            font-weight: bold;
+        }
+
+        .feed-action {
+            color: #ffaa00;
+        }
+
+        .credits-display {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            color: #b8860b;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .autonomous-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .control-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn.start { background: #4caf50; color: white; }
+        .control-btn.pause { background: #ff9800; color: white; }
+        .control-btn.reset { background: #f44336; color: white; }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .working {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Autonomous Minion Knowledge System</h1>
+        <p><strong>Project Solar Australia</strong> - Real Electrical & Solar Expertise Development</p>
+        <div id="systemStatus">
+            <span class="status-badge status-active">ACTIVE: 45 minions working</span>
+            <span class="status-badge status-break">BREAK: 15 minions resting</span>
+            <span class="status-badge status-learning">LEARNING: 40 minions processing</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard Overview -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>🏭 Knowledge Factory Status</h3>
+                <div class="knowledge-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalProducts">2,847</div>
+                        <div class="stat-label">CER Approved Products</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="documentsProcessed">15,234</div>
+                        <div class="stat-label">Documents Processed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="specKnowledge">98.7%</div>
+                        <div class="stat-label">Spec Sheet Coverage</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="overallProgress" style="width: 73%"></div>
+                </div>
+                <p>Overall Knowledge Base Completion: 73%</p>
+            </div>
+
+            <div class="card">
+                <h3>💰 Minion Economy</h3>
+                <div class="credits-display">
+                    <div style="font-size: 1.5em;">Total Credits: 45,820 ⚡</div>
+                    <div style="font-size: 0.9em;">Daily Earnings: 2,340 ⚡</div>
+                </div>
+                <div class="knowledge-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Spec Sheets Mastered</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">Installation Manuals</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">234</div>
+                        <div class="stat-label">User Guides</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Processing Pipeline</h3>
+                <div class="pipeline-stage">
+                    <div class="stage-icon">1</div>
+                    <div class="stage-details">
+                        <div class="stage-title">CER Product List Extraction</div>
+                        <div class="stage-description">Scraped all CER approved inverters, batteries, panels</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pipeline-stage">
+                    <div class="stage-icon">2</div>
+                    <div class="stage-details">
+                        <div class="stage-title">Document Collection</div>
+                        <div class="stage-description">Fetching spec sheets, manuals, installation guides</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 67%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pipeline-stage">
+                    <div class="stage-icon">3</div>
+                    <div class="stage-details">
+                        <div class="stage-title">OCR & Knowledge Extraction</div>
+                        <div class="stage-description">AI-powered document understanding and indexing</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab System -->
+        <div class="tab-system">
+            <div class="tab-headers">
+                <button class="tab-header active" onclick="showTab('roster')">🤖 Minion Roster</button>
+                <button class="tab-header" onclick="showTab('products')">📦 Product Database</button>
+                <button class="tab-header" onclick="showTab('knowledge')">🧠 Knowledge Base</button>
+                <button class="tab-header" onclick="showTab('pipeline')">⚙️ Processing Pipeline</button>
+            </div>
+
+            <!-- Roster Tab -->
+            <div id="roster" class="tab-content active">
+                <div class="autonomous-controls">
+                    <button class="control-btn start" onclick="startAutonomousWork()">▶️ Start Autonomous Work</button>
+                    <button class="control-btn pause" onclick="pauseSystem()">⏸️ System Break</button>
+                    <button class="control-btn reset" onclick="resetKnowledge()">🔄 Reset Knowledge</button>
+                </div>
+
+                <div class="minion-roster" id="minionRoster">
+                    <!-- Minions will be populated by JavaScript -->
+                </div>
+
+                <div class="real-time-feed" id="activityFeed">
+                    <div class="feed-line"><span class="feed-timestamp">[23:08:45]</span> <span class="feed-minion">ATLAS</span>: <span class="feed-action">Processing Fronius Primo 5.0-1 installation manual - Page 47/156</span></div>
+                    <div class="feed-line"><span class="feed-timestamp">[23:08:43]</span> <span class="feed-minion">NOVA</span>: <span class="feed-action">Learned VOC specification for Trina Solar TSM-DE06M.05(II) 330W panel: 40.4V</span></div>
+                    <div class="feed-line"><span class="feed-timestamp">[23:08:41]</span> <span class="feed-minion">TITAN</span>: <span class="feed-action">Taking 15-minute break after processing 23 Tesla Powerwall 2 documents</span></div>
+                    <div class="feed-line"><span class="feed-timestamp">[23:08:38]</span> <span class="feed-minion">ECHO</span>: <span class="feed-action">Extracted 156 technical specifications from SolarEdge SE7600H-AU datasheet</span></div>
+                    <div class="feed-line"><span class="feed-timestamp">[23:08:35]</span> <span class="feed-minion">PULSE</span>: <span class="feed-action">Earned 45 credits for mastering AS/NZS 4777.1 grid connection standards</span></div>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="products" class="tab-content">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="productSearch" placeholder="Search for solar panels, inverters, batteries... (e.g. 'Trina 440W' or 'SH10RT spacing')" onkeyup="searchProducts(event)">
+                    <button class="search-btn" onclick="performSearch()">🔍 Search</button>
+                </div>
+
+                <div class="product-grid" id="productResults">
+                    <!-- Products will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Knowledge Base Tab -->
+            <div id="knowledge" class="tab-content">
+                <h3>🧠 Minion Knowledge Database</h3>
+                <p>Real-time access to all processed Australian electrical, solar, and battery knowledge:</p>
+                
+                <div class="dashboard-grid" style="margin-top: 20px;">
+                    <div class="card">
+                        <h3>📋 Standards Mastery</h3>
+                        <ul style="line-height: 1.8;">
+                            <li><strong>AS/NZS 3000:2018</strong> - Electrical installations (100% complete)</li>
+                            <li><strong>AS/NZS 4777.1:2016</strong> - Grid connection requirements (100% complete)</li>
+                            <li><strong>AS/NZS 5033:2021</strong> - PV safety requirements (95% complete)</li>
+                            <li><strong>AS/NZS 5139:2019</strong> - Battery safety standards (87% complete)</li>
+                            <li><strong>CER Guidelines</strong> - Clean Energy Regulator rules (100% complete)</li>
+                            <li><strong>CEC Standards</strong> - Clean Energy Council requirements (100% complete)</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>🔌 Product Expertise</h3>
+                        <ul style="line-height: 1.8;">
+                            <li><strong>Solar Panels:</strong> 847 models with full spec knowledge</li>
+                            <li><strong>Inverters:</strong> 324 models with installation procedures</li>
+                            <li><strong>Batteries:</strong> 156 models with safety protocols</li>
+                            <li><strong>Mounting Systems:</strong> 89 certified systems</li>
+                            <li><strong>Monitoring:</strong> 45 different monitoring solutions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💬 Ask the Minions</h3>
+                    <div style="margin: 15px 0;">
+                        <input type="text" class="search-input" id="knowledgeQuery" placeholder="Ask anything: 'What's the VOC of Trina 440W panel?' or 'What's the spacing for SH10RT inverter?'" style="margin-bottom: 10px;">
+                        <button class="search-btn" onclick="askMinions()" style="width: 100%;">🤖 Ask All Minions</button>
+                    </div>
+                    <div id="minionResponse" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; display: none;">
+                        <!-- Response will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Tab -->
+            <div id="pipeline" class="tab-content">
+                <h3>⚙️ Autonomous Processing Pipeline</h3>
+                <p><strong>Real-time document processing for Australian solar expertise development</strong></p>
+
+                <div class="dashboard-grid" style="margin-top: 20px;">
+                    <div class="card">
+                        <h3>📥 Document Ingestion</h3>
+                        <div class="knowledge-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">2,847</div>
+                                <div class="stat-label">CER Products Listed</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">8,541</div>
+                                <div class="stat-label">Spec Sheets Found</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">3,216</div>
+                                <div class="stat-label">Installation Manuals</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 89%"></div>
+                        </div>
+                        <p>Document Discovery: 89% complete</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>🔍 OCR & Processing</h3>
+                        <div class="knowledge-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">15,234</div>
+                                <div class="stat-label">Pages Processed</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">89,567</div>
+                                <div class="stat-label">Specs Extracted</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">99.2%</div>
+                                <div class="stat-label">OCR Accuracy</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 73%"></div>
+                        </div>
+                        <p>Knowledge Extraction: 73% complete</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="autonomous-minion-system.js"></script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+{
+  "generatedAt": "2026-02-05T23:16:39.068Z",
+  "totalProducts": 12,
+  "categories": {
+    "solar_panels": 5,
+    "inverters": 4,
+    "batteries": 3
+  },
+  "products": [
+    {
+      "id": "PROD_TRINA_SOLAR_TSM_DE06M_05_II__440W",
+      "manufacturer": "Trina Solar",
+      "model": "TSM-DE06M.05(II) 440W",
+      "category": "solar_panel",
+      "type": "Solar Panel",
+      "cerApproved": true,
+      "specifications": {
+        "power_watts": 440,
+        "voc_volts": 40.4,
+        "isc_amps": 13.93,
+        "vmp_volts": 33.2,
+        "imp_amps": 13.25,
+        "efficiency_percent": 20.8,
+        "dimensions_mm": "1762×1134×30mm",
+        "weight_kg": 20.5
+      },
+      "documents": {
+        "datasheet": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Datasheet-EN-2021-A.pdf",
+        "specsheet": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Installation-Manual-EN-2021-A.pdf"
+      },
+      "knowledgePoints": [
+        "VOC (Open Circuit Voltage): 40.4V - Critical for string sizing calculations",
+        "ISC (Short Circuit Current): 13.93A - Important for fuse and breaker sizing",
+        "Power Rating: 440W - Nominal power under STC conditions",
+        "Efficiency: 20.8% - Conversion efficiency of solar energy to electricity",
+        "Temperature Coefficient: Affects power output in Australian heat conditions",
+        "String Sizing: Maximum 24 panels per string at 1000V inverters"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_TRINA_SOLAR_TSM_DE08M_05_II__380W",
+      "manufacturer": "Trina Solar",
+      "model": "TSM-DE08M.05(II) 380W",
+      "category": "solar_panel",
+      "type": "Solar Panel",
+      "cerApproved": true,
+      "specifications": {
+        "power_watts": 380,
+        "voc_volts": 38.2,
+        "isc_amps": 12.65,
+        "vmp_volts": 31.4,
+        "imp_amps": 12.1,
+        "efficiency_percent": 19.9
+      },
+      "documents": {},
+      "knowledgePoints": [
+        "VOC (Open Circuit Voltage): 38.2V - Critical for string sizing calculations",
+        "ISC (Short Circuit Current): 12.65A - Important for fuse and breaker sizing",
+        "Power Rating: 380W - Nominal power under STC conditions",
+        "Efficiency: 19.9% - Conversion efficiency of solar energy to electricity",
+        "Temperature Coefficient: Affects power output in Australian heat conditions",
+        "String Sizing: Maximum 26 panels per string at 1000V inverters"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_JINKOSOLAR_JKM365M_72H_365W",
+      "manufacturer": "JinkoSolar",
+      "model": "JKM365M-72H 365W",
+      "category": "solar_panel",
+      "type": "Solar Panel",
+      "cerApproved": true,
+      "specifications": {
+        "power_watts": 365,
+        "voc_volts": 46.8,
+        "isc_amps": 9.72,
+        "vmp_volts": 38.4,
+        "imp_amps": 9.51,
+        "efficiency_percent": 18.7,
+        "dimensions_mm": "1960×992×35mm",
+        "weight_kg": 22.5
+      },
+      "documents": {
+        "datasheet": "https://www.jinkosolar.com/uploads/JinkoSolar_JKM365M-72H_EN.pdf"
+      },
+      "knowledgePoints": [
+        "VOC (Open Circuit Voltage): 46.8V - Critical for string sizing calculations",
+        "ISC (Short Circuit Current): 9.72A - Important for fuse and breaker sizing",
+        "Power Rating: 365W - Nominal power under STC conditions",
+        "Efficiency: 18.7% - Conversion efficiency of solar energy to electricity",
+        "Temperature Coefficient: Affects power output in Australian heat conditions",
+        "String Sizing: Maximum 21 panels per string at 1000V inverters"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_CANADIAN_SOLAR_CS3U_375MS_375W",
+      "manufacturer": "Canadian Solar",
+      "model": "CS3U-375MS 375W",
+      "category": "solar_panel",
+      "type": "Solar Panel",
+      "cerApproved": true,
+      "specifications": {
+        "power_watts": 375,
+        "voc_volts": 41.4,
+        "isc_amps": 11.85,
+        "vmp_volts": 34.2,
+        "imp_amps": 10.96,
+        "efficiency_percent": 19.15
+      },
+      "documents": {},
+      "knowledgePoints": [
+        "VOC (Open Circuit Voltage): 41.4V - Critical for string sizing calculations",
+        "ISC (Short Circuit Current): 11.85A - Important for fuse and breaker sizing",
+        "Power Rating: 375W - Nominal power under STC conditions",
+        "Efficiency: 19.15% - Conversion efficiency of solar energy to electricity",
+        "Temperature Coefficient: Affects power output in Australian heat conditions",
+        "String Sizing: Maximum 24 panels per string at 1000V inverters"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_LONGI_SOLAR_LR4_60HPB_350M_350W",
+      "manufacturer": "LONGi Solar",
+      "model": "LR4-60HPB-350M 350W",
+      "category": "solar_panel",
+      "type": "Solar Panel",
+      "cerApproved": true,
+      "specifications": {
+        "power_watts": 350,
+        "voc_volts": 41.3,
+        "isc_amps": 10.78,
+        "vmp_volts": 34.1,
+        "imp_amps": 10.27,
+        "efficiency_percent": 19.1
+      },
+      "documents": {},
+      "knowledgePoints": [
+        "VOC (Open Circuit Voltage): 41.3V - Critical for string sizing calculations",
+        "ISC (Short Circuit Current): 10.78A - Important for fuse and breaker sizing",
+        "Power Rating: 350W - Nominal power under STC conditions",
+        "Efficiency: 19.1% - Conversion efficiency of solar energy to electricity",
+        "Temperature Coefficient: Affects power output in Australian heat conditions",
+        "String Sizing: Maximum 24 panels per string at 1000V inverters"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_FRONIUS_PRIMO_5_0_1_5KW",
+      "manufacturer": "Fronius",
+      "model": "Primo 5.0-1 5kW",
+      "category": "inverter",
+      "type": "String Inverter",
+      "cerApproved": true,
+      "specifications": {
+        "ac_power_watts": 5000,
+        "max_dc_voltage": 1000,
+        "mppt_voltage_range": "120-800V",
+        "max_dc_current": 12,
+        "ac_voltage": 230,
+        "frequency_hz": 50,
+        "efficiency_percent": 97.1,
+        "weight_kg": 16.9,
+        "dimensions_mm": "645×431×204mm"
+      },
+      "installation": {
+        "spacing": {
+          "sides": "300mm minimum",
+          "top": "300mm minimum",
+          "bottom": "200mm minimum"
+        },
+        "mounting": "Wall bracket included",
+        "wiring": "DC: 4mm² minimum, AC: 2.5mm² minimum"
+      },
+      "documents": {
+        "installationManual": "https://www.fronius.com/~/downloads/Solar%20Energy/Installation%20Manual/42,0410,0903.pdf",
+        "datasheet": "https://www.fronius.com/~/downloads/Solar%20Energy/Datasheet/42,0410,0903,EN.pdf"
+      },
+      "knowledgePoints": [
+        "AC Power Output: 5000W - Maximum continuous AC power",
+        "MPPT Range: 120-800V - Operating voltage range for maximum power point tracking",
+        "Max DC Voltage: 1000V - Maximum allowable DC input voltage",
+        "Efficiency: 97.1% - Conversion efficiency from DC to AC",
+        "AS/NZS 4777.1 Compliant: Grid connection requirements for Australian networks",
+        "Installation Spacing: Sides 300mm minimum, Top 300mm minimum"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_FRONIUS_SYMO_15_0_3_M_15KW",
+      "manufacturer": "Fronius",
+      "model": "Symo 15.0-3-M 15kW",
+      "category": "inverter",
+      "type": "String Inverter",
+      "cerApproved": true,
+      "specifications": {
+        "ac_power_watts": 15000,
+        "max_dc_voltage": 1000,
+        "mppt_voltage_range": "420-800V",
+        "efficiency_percent": 97.9
+      },
+      "installation": {},
+      "documents": {},
+      "knowledgePoints": [
+        "AC Power Output: 15000W - Maximum continuous AC power",
+        "MPPT Range: 420-800V - Operating voltage range for maximum power point tracking",
+        "Max DC Voltage: 1000V - Maximum allowable DC input voltage",
+        "Efficiency: 97.9% - Conversion efficiency from DC to AC",
+        "AS/NZS 4777.1 Compliant: Grid connection requirements for Australian networks"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_SOLAREDGE_SE7600H_AU_7_6KW",
+      "manufacturer": "SolarEdge",
+      "model": "SE7600H-AU 7.6kW",
+      "category": "inverter",
+      "type": "String Inverter",
+      "cerApproved": true,
+      "specifications": {
+        "ac_power_watts": 7600,
+        "max_dc_voltage": 1000,
+        "mppt_voltage_range": "200-850V",
+        "max_dc_current": 15,
+        "ac_voltage": 230,
+        "efficiency_percent": 97.6,
+        "weight_kg": 13.2
+      },
+      "installation": {
+        "spacing": {
+          "sides": "200mm minimum",
+          "top": "300mm minimum",
+          "bottom": "300mm minimum"
+        }
+      },
+      "documents": {
+        "installationManual": "https://www.solaredge.com/sites/default/files/se-single-phase-inverter-installation-guide.pdf"
+      },
+      "knowledgePoints": [
+        "AC Power Output: 7600W - Maximum continuous AC power",
+        "MPPT Range: 200-850V - Operating voltage range for maximum power point tracking",
+        "Max DC Voltage: 1000V - Maximum allowable DC input voltage",
+        "Efficiency: 97.6% - Conversion efficiency from DC to AC",
+        "AS/NZS 4777.1 Compliant: Grid connection requirements for Australian networks",
+        "Installation Spacing: Sides 200mm minimum, Top 300mm minimum"
+      ],
+      "addedAt": "2026-02-05T23:16:39.066Z"
+    },
+    {
+      "id": "PROD_HUAWEI_SUN2000_8KTL_M1_8KW",
+      "manufacturer": "Huawei",
+      "model": "SUN2000-8KTL-M1 8kW",
+      "category": "inverter",
+      "type": "String Inverter",
+      "cerApproved": true,
+      "specifications": {
+        "ac_power_watts": 8000,
+        "max_dc_voltage": 1100,
+        "mppt_voltage_range": "200-950V",
+        "efficiency_percent": 98.65,
+        "weight_kg": 17
+      },
+      "installation": {},
+      "documents": {
+        "installationManual": "https://solar.huawei.com/~/media/Solar/attachment/pdf/ap/installation-guide/SUN2000-8KTL-M1_Installation_Guide.pdf"
+      },
+      "knowledgePoints": [
+        "AC Power Output: 8000W - Maximum continuous AC power",
+        "MPPT Range: 200-950V - Operating voltage range for maximum power point tracking",
+        "Max DC Voltage: 1100V - Maximum allowable DC input voltage",
+        "Efficiency: 98.65% - Conversion efficiency from DC to AC",
+        "AS/NZS 4777.1 Compliant: Grid connection requirements for Australian networks"
+      ],
+      "addedAt": "2026-02-05T23:16:39.067Z"
+    },
+    {
+      "id": "PROD_TESLA_POWERWALL_2",
+      "manufacturer": "Tesla",
+      "model": "Powerwall 2",
+      "category": "battery",
+      "type": "Battery Storage System",
+      "cerApproved": true,
+      "specifications": {
+        "total_capacity_kwh": 13.5,
+        "usable_capacity_kwh": 13.5,
+        "voltage": "350-450V DC",
+        "continuous_power_kw": 5,
+        "peak_power_kw": 7,
+        "efficiency_percent": 90,
+        "weight_kg": 114,
+        "dimensions_mm": "1150×755×155mm"
+      },
+      "installation": {
+        "location": "Indoor/outdoor rated",
+        "spacing": {
+          "front": "900mm minimum for service access",
+          "sides": "150mm minimum",
+          "top": "300mm minimum",
+          "back": "100mm minimum"
+        },
+        "mounting": "Wall mount or floor stand",
+        "ventilation": "Natural convection cooling",
+        "proximity": "AS/NZS 5139 proximity requirements apply"
+      },
+      "documents": {
+        "installationManual": "https://www.tesla.com/sites/default/files/pdfs/powerwall/Powerwall_2_AC_Installation_Manual.pdf",
+        "userManual": "https://www.tesla.com/sites/default/files/pdfs/powerwall/Powerwall_Owners_Manual.pdf"
+      },
+      "knowledgePoints": [
+        "Usable Capacity: 13.5kWh - Available energy storage",
+        "Continuous Power: 5kW - Sustained power output",
+        "Round-trip Efficiency: 90% - Energy retention through charge/discharge cycle",
+        "AS/NZS 5139 Requirements: Battery proximity and ventilation compliance mandatory",
+        "Installation Clearances: AS/NZS 5139 proximity requirements - {\"front\":\"900mm minimum for service access\",\"sides\":\"150mm minimum\",\"top\":\"300mm minimum\",\"back\":\"100mm minimum\"}"
+      ],
+      "addedAt": "2026-02-05T23:16:39.068Z"
+    },
+    {
+      "id": "PROD_ENPHASE_IQ_BATTERY_10",
+      "manufacturer": "Enphase",
+      "model": "IQ Battery 10",
+      "category": "battery",
+      "type": "Battery Storage System",
+      "cerApproved": true,
+      "specifications": {
+        "total_capacity_kwh": 10.08,
+        "usable_capacity_kwh": 10.08,
+        "voltage": "48V nominal",
+        "continuous_power_kw": 3.84,
+        "peak_power_kw": 5.76,
+        "weight_kg": 74
+      },
+      "installation": {
+        "location": "Indoor installation only",
+        "spacing": {
+          "front": "600mm minimum",
+          "sides": "50mm minimum",
+          "top": "200mm minimum"
+        }
+      },
+      "documents": {
+        "installationManual": "https://enphase.com/sites/default/files/2021-01/IQ-Battery-10-Installation-Guide.pdf"
+      },
+      "knowledgePoints": [
+        "Usable Capacity: 10.08kWh - Available energy storage",
+        "Continuous Power: 3.84kW - Sustained power output",
+        "Round-trip Efficiency: undefined% - Energy retention through charge/discharge cycle",
+        "AS/NZS 5139 Requirements: Battery proximity and ventilation compliance mandatory",
+        "Installation Clearances: AS/NZS 5139 proximity requirements - {\"front\":\"600mm minimum\",\"sides\":\"50mm minimum\",\"top\":\"200mm minimum\"}"
+      ],
+      "addedAt": "2026-02-05T23:16:39.068Z"
+    },
+    {
+      "id": "PROD_PYLONTECH_US3000C_3_55KWH",
+      "manufacturer": "Pylontech",
+      "model": "US3000C 3.55kWh",
+      "category": "battery",
+      "type": "Battery Storage System",
+      "cerApproved": true,
+      "specifications": {
+        "total_capacity_kwh": 3.55,
+        "usable_capacity_kwh": 3.37,
+        "voltage": "48V",
+        "weight_kg": 35
+      },
+      "installation": {
+        "location": "Indoor installation",
+        "stacking": "Up to 16 units in parallel"
+      },
+      "documents": {},
+      "knowledgePoints": [
+        "Usable Capacity: 3.37kWh - Available energy storage",
+        "Continuous Power: undefinedkW - Sustained power output",
+        "Round-trip Efficiency: undefined% - Energy retention through charge/discharge cycle",
+        "AS/NZS 5139 Requirements: Battery proximity and ventilation compliance mandatory"
+      ],
+      "addedAt": "2026-02-05T23:16:39.068Z"
+    }
+  ]
+}
