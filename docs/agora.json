@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-05T23:37:14Z",
+  "updatedAt": "2026-02-05T23:53:37Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "PRISM",
-      "target_tier": 2,
-      "timestamp": "2026-02-05T12:43:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_PRISM_PIPE_STATE",
-        "activity": "Saving resumability checkpoints",
-        "progress": 0.5,
-        "status": "working"
-      },
-      "spark_delta": 0.05612743381793313
-    },
     {
       "sender_id": "PRISM",
       "target_tier": 2,
@@ -674,6 +661,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T23:37:14Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T23:53:37Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T23:53:37Z"
       },
       "spark_delta": 0.1,
       "metadata": {
