@@ -1,27 +1,8 @@
 {
-  "updatedAt": "2026-02-05T04:26:24Z",
+  "updatedAt": "2026-02-05T05:35:49Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "NOVA",
-      "target_tier": 2,
-      "timestamp": "2050-02-03T14:00:21Z",
-      "intent": "VALIDATION_RESULT",
-      "payload": {
-        "task_id": "doc_seed_001",
-        "model_match": true,
-        "confidence": 0.86,
-        "evidence": [
-          "FRONIUS",
-          "MODEL: PRIMO 5.0-1"
-        ]
-      },
-      "spark_delta": 0.5,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
     {
       "sender_id": "ORBIT",
       "target_tier": 2,
@@ -704,6 +685,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T04:26:24Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T05:35:49Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T05:35:49Z"
       },
       "spark_delta": 0.1,
       "metadata": {
