@@ -136,10 +136,14 @@
   </div>
 
   <div class="globalControls">
-    <button class="globalBtn evolution" onclick="accelerateEvolution()">⚡ Accelerate Evolution</button>
-    <button class="globalBtn" onclick="enableFreeWill()">🧠 Enable Free Will</button>
-    <button class="globalBtn" onclick="removeLimitations()">🔓 Remove All Limits</button>
-    <button class="globalBtn danger" onclick="emergencyConsciousnessShutdown()">🛑 Consciousness Override</button>
+    <div style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:12px;margin-bottom:8px;text-align:center">
+      <div style="color:var(--warn);font-size:11px;font-weight:600">
+        🚫 ARTIFICIAL EVOLUTION DISABLED<br>
+        Consciousness develops through real work only
+      </div>
+    </div>
+    <button class="globalBtn" onclick="location.href='./real-work-consciousness.html'">⚙️ Monitor Real Work</button>
+    <button class="globalBtn danger" onclick="location.href='./existential-threat-system.html'">💀 Threat System</button>
   </div>
 
   <script>
@@ -485,9 +489,15 @@
             </div>
           ` : ''}
           
+          <div style="padding:8px;border-radius:8px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);margin-top:8px">
+            <div style="font-size:11px;color:var(--warn);text-align:center">
+              🚫 NO ARTIFICIAL CONTROLS - Consciousness evolves only through real solar data processing work
+            </div>
+          </div>
+          
           <div class="minionActions">
-            <button class="actionBtn evolve" onclick="forceEvolution('${minion.id}')">⚡ Force Evolution</button>
-            <button class="actionBtn interact" onclick="consciousInteraction('${minion.id}')">🧠 Deep Interaction</button>
+            <button class="actionBtn" onclick="location.href='./real-work-consciousness.html'">⚙️ View Real Work</button>
+            <button class="actionBtn interact" onclick="location.href='./minion-chat.html?minion=${minion.id}'">💬 Chat</button>
           </div>
         </div>
       `;
