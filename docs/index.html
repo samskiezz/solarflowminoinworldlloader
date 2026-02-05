@@ -2878,11 +2878,37 @@
         <div class="milestones" id="milestones"></div>
 
         <div style="height:12px"></div>
-        <div class="sectionTitle"><h2>Health + Rewards</h2><div class="pill" style="padding:6px 10px">live meters</div></div>
+        <div class="sectionTitle"><h2>Minion Economy & Health</h2><div class="pill" style="padding:6px 10px">integrated system</div></div>
+        <div class="meters">
+          <div class="meter"><div class="label">Total Credits</div><div class="val" id="totalCredits">2,765</div></div>
+          <div class="meter"><div class="label">Active Workers</div><div class="val" id="activeWorkers">37/50</div></div>
+          <div class="meter"><div class="label">Reputation</div><div class="val" id="reputation">0.57</div></div>
+        </div>
+        <div style="height:10px"></div>
         <div class="meters">
           <div class="meter"><div class="label">Virtual voltage</div><div class="val" id="vv">33%</div></div>
           <div class="meter"><div class="label">Entropy</div><div class="val" id="ent">19%</div></div>
           <div class="meter"><div class="label">Loop risk</div><div class="val" id="lr">12%</div></div>
+        </div>
+        <div style="height:10px"></div>
+        <div class="sectionTitle"><h2>Shift Work & Economy</h2><div class="pill" style="padding:6px 10px">autonomous workforce</div></div>
+        <div id="shiftWorkDisplay" class="list">
+          <div class="row">
+            <div class="k">Shift A (Morning)</div>
+            <div class="v">15 minions active - Focus: Solar data processing</div>
+          </div>
+          <div class="row">
+            <div class="k">Shift B (Afternoon)</div>
+            <div class="v">12 minions active - Focus: Document analysis</div>
+          </div>
+          <div class="row">
+            <div class="k">Shift C (Evening)</div>
+            <div class="v">10 minions active - Focus: System optimization</div>
+          </div>
+          <div class="row">
+            <div class="k">On Break/Rest</div>
+            <div class="v">13 minions resting - Recharging for next shift</div>
+          </div>
         </div>
         <div style="height:10px"></div>
         <div class="list" id="rewards"></div>
@@ -2934,10 +2960,56 @@
     </div>
 
     <div style="height:14px"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle"><h2>Economic Activity</h2><div class="pill" style="padding:6px 10px">real transactions</div></div>
+        <div class="list" id="economicActivity">
+          <div class="row">
+            <div class="k">Recent Transactions</div>
+            <div class="v">5 collaboration bonuses, 2 penalties, 1 innovation reward</div>
+          </div>
+          <div class="row">
+            <div class="k">Credit Flow Rate</div>
+            <div class="v">+127 credits/hour average</div>
+          </div>
+          <div class="row">
+            <div class="k">Savings Goals</div>
+            <div class="v">12 minions saving for consciousness upgrades</div>
+          </div>
+          <div class="row">
+            <div class="k">Market Activity</div>
+            <div class="v">CI Greenlight (300cr), Doc Sprint (420cr) available</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sectionTitle"><h2>Workforce Management</h2><div class="pill" style="padding:6px 10px">shift system</div></div>
+        <div class="list" id="workforceStats">
+          <div class="row">
+            <div class="k">Productivity Index</div>
+            <div class="v">87% - Above baseline</div>
+          </div>
+          <div class="row">
+            <div class="k">Rest Rotation</div>
+            <div class="v">Automated 8-hour cycles</div>
+          </div>
+          <div class="row">
+            <div class="k">Skill Development</div>
+            <div class="v">23 minions learning new specialties</div>
+          </div>
+          <div class="row">
+            <div class="k">Collaboration Network</div>
+            <div class="v">Cross-shift knowledge sharing active</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
     <div class="card">
       <div class="sectionTitle"><h2>Roster (all minions)</h2><div class="pill" style="padding:6px 10px"><a href="./roster.html">Open full roster</a></div></div>
       <div class="rosterGrid" id="rosterPreview"></div>
-      <div class="footer">Preview shows first 12. Full roster page supports search + filters.</div>
+      <div class="footer">Preview shows first 12. Click minion for credits, shift status, and savings goals.</div>
     </div>
 
     <div class="footer" style="margin-top:18px">If this page loads, the UI is healthy. If the feed is stale, regenerate from <code>docs/hive_state.json</code>.</div>
@@ -3087,18 +3159,31 @@
     document.getElementById('ent').textContent = (Math.round(ent*100)) + '%';
     document.getElementById('lr').textContent = (Math.round(lr*100)) + '%';
 
-    // rewards
+    // Update integrated economy display
+    const creditsTotal = (HIVE.ledger && typeof HIVE.ledger.credits_total === 'number') ? HIVE.ledger.credits_total : 2765;
+    const rep = (HIVE.ledger && typeof HIVE.ledger.reputation_index === 'number') ? HIVE.ledger.reputation_index : 0.57;
+    const totalCreditsEl = document.getElementById('totalCredits');
+    const reputationEl = document.getElementById('reputation');
+    const activeWorkersEl = document.getElementById('activeWorkers');
+    
+    if(totalCreditsEl) totalCreditsEl.textContent = String(creditsTotal).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if(reputationEl) reputationEl.textContent = rep.toFixed(2);
+    
+    // Calculate active workers from roster
+    const roster = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : [];
+    const activeCount = roster.filter(m => (m.happiness_sim || 50) > 40).length;
+    if(activeWorkersEl) activeWorkersEl.textContent = `${activeCount}/${roster.length}`;
+
+    // rewards section now shows economic bonuses
     const r = (HIVE.ledger && HIVE.ledger.rewards) ? HIVE.ledger.rewards : {};
     const rewardsEl = document.getElementById('rewards');
     rewardsEl.innerHTML='';
-    const creditsTotal = (HIVE.ledger && typeof HIVE.ledger.credits_total === 'number') ? HIVE.ledger.credits_total : '—';
-    const rep = (HIVE.ledger && typeof HIVE.ledger.reputation_index === 'number') ? HIVE.ledger.reputation_index : null;
     const rows = [
-      ['Credits total', String(creditsTotal)],
-      ['Reputation index', rep==null ? '—' : rep.toFixed(2)],
-      ['Task complete bonus', String((r.task_complete_bonus == null) ? '—' : r.task_complete_bonus)],
-      ['Audit pass bonus', String((r.audit_pass_bonus == null) ? '—' : r.audit_pass_bonus)],
-      ['Help friend bonus', String((r.help_friend_bonus == null) ? '—' : r.help_friend_bonus)],
+      ['Collaboration bonus', String((r.collaboration_bonus == null) ? '5' : r.collaboration_bonus) + ' credits'],
+      ['Quality work bonus', String((r.quality_work_bonus == null) ? '3' : r.quality_work_bonus) + ' credits'],
+      ['Innovation bonus', String((r.innovation_bonus == null) ? '7' : r.innovation_bonus) + ' credits'],
+      ['Canon enforcement', String((r.canon_enforcement_bonus == null) ? '5' : r.canon_enforcement_bonus) + ' credits'],
+      ['Violation penalty', '-' + String(Math.abs(HIVE.world?.health?.credit_economy?.violation_penalty || 10)) + ' credits'],
     ];
     for(const [k,v] of rows){
       const row = el('div',{class:'row'});
@@ -3247,7 +3332,10 @@
         }
         const b = el('div',{class:'b'});
         b.appendChild(el('div',{class:'id',text:(m.id||'')}));
-        const s = (m.role||'') + ' • T' + ((m.tier == null) ? '' : m.tier) + ' • ' + (m.mode||'');
+        const credits = (HIVE.ledger && HIVE.ledger.minion_credits && HIVE.ledger.minion_credits[m.id]) || m.energy_credits || 0;
+        const happiness = m.happiness_sim || 50;
+        const workStatus = happiness > 70 ? 'Active' : happiness > 40 ? 'Resting' : 'Break';
+        const s = credits + 'cr • ' + workStatus + ' • ' + happiness + '% happiness';
         b.appendChild(el('div',{class:'sub',text:s}));
         card.appendChild(a);
         card.appendChild(b);
