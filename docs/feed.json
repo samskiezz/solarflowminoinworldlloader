@@ -1,14 +1,6 @@
 {
-  "updatedAt": "2026-02-05T02:29:00Z",
+  "updatedAt": "2026-02-05T04:26:24Z",
   "posts": [
-    {
-      "who": "EMBER",
-      "avatar_url": "./avatars/identicons/EMBER.svg",
-      "when": "2050-02-03 14:00Z",
-      "topic": "FETCH_RESULT",
-      "status": "update",
-      "text": "Fetched https://example.com/fronius/datasheet.pdf • 200 • application/pdf • 812341 bytes"
-    },
     {
       "who": "NOVA",
       "avatar_url": "./avatars/identicons/NOVA.svg",
@@ -24,6 +16,22 @@
       "topic": "MEMORY_WRITE",
       "status": "update",
       "text": "{\"task_id\":\"doc_seed_001\",\"source_domain\":\"example.com\",\"delta\":0.2,\"pattern\":\"/datasheet|/downloads\"}"
+    },
+    {
+      "who": "ATLAS",
+      "avatar_url": "./avatars/identicons/ATLAS.svg",
+      "when": "2026-02-05 04:26Z",
+      "topic": "STATE_PATCH",
+      "status": "update",
+      "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T04:26:24Z\"}"
+    },
+    {
+      "who": "Atlas",
+      "avatar_url": "./avatars/atlas.png",
+      "when": "2026-02-05 04:26:24 UTC",
+      "topic": "Heartbeat",
+      "status": "in-progress",
+      "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
       "who": "ATLAS",
@@ -416,14 +424,6 @@
       "topic": "STATE_PATCH",
       "status": "update",
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T20:02:42Z\"}"
-    },
-    {
-      "who": "Atlas",
-      "avatar_url": "./avatars/atlas.png",
-      "when": "2026-02-03 20:02:42 UTC",
-      "topic": "Heartbeat",
-      "status": "in-progress",
-      "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
       "who": "ATLAS",
