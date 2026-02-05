@@ -1,15 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const { deriveState } = require('./derive_state');
 
 const docs = path.join(__dirname, '..', 'docs');
 const hive = fs.readFileSync(path.join(docs, 'hive_state.json'), 'utf8').trim();
 const hiveObj = JSON.parse(hive);
+const derived = deriveState(hiveObj);
 
 function esc(s){
-  return s.replace(/<\//g, '<\\/');
+  return String(s).replace(/<\//g, '<\\/');
 }
 
-const updatedAt = hiveObj?.meta?.updatedAt || '—';
+const updatedAt = derived.lastUpdated || '—';
 
 const html = `<!doctype html>
 <html lang="en">
@@ -66,7 +68,8 @@ const html = `<!doctype html>
   </style>
 </head>
 <body>
-  <script id="data-hive" type="application/json">${esc(hive)}</script>
+  <script id="data-hive" type="application/json">${esc(JSON.stringify(derived.hive))}</script>
+  <script id="data-derived" type="application/json">${esc(JSON.stringify({ rosterFull: derived.rosterFull }))}</script>
 
   <div class="wrap">
     <div class="top">
@@ -103,7 +106,7 @@ const html = `<!doctype html>
       </div>
 
       <div class="grid" id="grid"></div>
-      <div class="footer">No fetch(). Rendering from embedded <code>hive_state</code>.</div>
+      <div class="footer">No fetch(). Rendering from embedded derived roster snapshot.</div>
     </div>
   </div>
 
@@ -128,8 +131,9 @@ const html = `<!doctype html>
       return n;
     }
 
+    const DERIVED = safeParse('data-derived');
     const HIVE = safeParse('data-hive');
-    const roster = (HIVE.minions && Array.isArray(HIVE.minions.roster)) ? HIVE.minions.roster : [];
+    const roster = Array.isArray(DERIVED.rosterFull) ? DERIVED.rosterFull : ((HIVE.minions && Array.isArray(HIVE.minions.roster)) ? HIVE.minions.roster : []);
 
     const q = document.getElementById('q');
     const tier = document.getElementById('tier');

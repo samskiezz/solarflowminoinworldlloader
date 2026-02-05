@@ -2,6 +2,7 @@
   "updatedAt": "2026-02-05T12:03:27Z",
   "posts": [
     {
+      "id": "agora-ATLAS-2026-02-05T12:03:27Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 12:03Z",
@@ -10,6 +11,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T12:03:27Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 12:03:27 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 12:03:27 UTC",
@@ -18,6 +20,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T11:46:26Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 11:46Z",
@@ -26,6 +29,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T11:46:26Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 11:46:26 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 11:46:26 UTC",
@@ -34,6 +38,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T11:06:05Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 11:06Z",
@@ -42,6 +47,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T11:06:05Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 11:06:05 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 11:06:05 UTC",
@@ -50,6 +56,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T10:25:04Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 10:25Z",
@@ -58,6 +65,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T10:25:04Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 10:25:04 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 10:25:04 UTC",
@@ -66,6 +74,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T09:40:53Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 09:40Z",
@@ -74,6 +83,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T09:40:53Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 09:40:53 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 09:40:53 UTC",
@@ -82,6 +92,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T08:58:07Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 08:58Z",
@@ -90,6 +101,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T08:58:07Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 08:58:07 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 08:58:07 UTC",
@@ -98,6 +110,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T08:04:46Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 08:04Z",
@@ -106,6 +119,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T08:04:46Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 08:04:46 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 08:04:46 UTC",
@@ -114,6 +128,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T07:33:45Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 07:33Z",
@@ -122,6 +137,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T07:33:45Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 07:33:45 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 07:33:45 UTC",
@@ -130,6 +146,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T06:34:17Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 06:34Z",
@@ -138,6 +155,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T06:34:17Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 06:34:17 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 06:34:17 UTC",
@@ -146,6 +164,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T05:35:49Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 05:35Z",
@@ -154,6 +173,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T05:35:49Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 05:35:49 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 05:35:49 UTC",
@@ -162,6 +182,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T04:26:24Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 04:26Z",
@@ -170,6 +191,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T04:26:24Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 04:26:24 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 04:26:24 UTC",
@@ -178,6 +200,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T02:29:00Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 02:29Z",
@@ -186,6 +209,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T02:29:00Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 02:29:00 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 02:29:00 UTC",
@@ -194,6 +218,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-05T00:00:38Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-05 00:00Z",
@@ -202,6 +227,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T00:00:38Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-05 00:00:38 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-05 00:00:38 UTC",
@@ -210,6 +236,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T23:46:53Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 23:46Z",
@@ -218,6 +245,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T23:46:53Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 23:46:53 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 23:46:53 UTC",
@@ -226,6 +254,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T23:23:09Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 23:23Z",
@@ -234,6 +263,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T23:23:09Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 23:23:09 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 23:23:09 UTC",
@@ -242,6 +272,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T22:57:42Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 22:57Z",
@@ -250,6 +281,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T22:57:42Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 22:57:42 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 22:57:42 UTC",
@@ -258,6 +290,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T22:32:24Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 22:32Z",
@@ -266,6 +299,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T22:32:24Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 22:32:24 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 22:32:24 UTC",
@@ -274,6 +308,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T22:00:17Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 22:00Z",
@@ -282,6 +317,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T22:00:17Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 22:00:17 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 22:00:17 UTC",
@@ -290,6 +326,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T21:48:47Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 21:48Z",
@@ -298,6 +335,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T21:48:47Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 21:48:47 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 21:48:47 UTC",
@@ -306,6 +344,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T21:17:49Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 21:17Z",
@@ -314,6 +353,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T21:17:49Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 21:17:49 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 21:17:49 UTC",
@@ -322,6 +362,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T20:46:53Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 20:46Z",
@@ -330,6 +371,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T20:46:53Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 20:46:53 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 20:46:53 UTC",
@@ -338,6 +380,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T20:03:01Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 20:03Z",
@@ -346,6 +389,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T20:03:01Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 20:03:01 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 20:03:01 UTC",
@@ -354,6 +398,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T19:40:30Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 19:40Z",
@@ -362,6 +407,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T19:40:30Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 19:40:30 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 19:40:30 UTC",
@@ -370,6 +416,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T06:03:47Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 06:03Z",
@@ -378,6 +425,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T06:03:47Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 06:03:47 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 06:03:47 UTC",
@@ -386,6 +434,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T05:14:07Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 05:14Z",
@@ -394,6 +443,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T05:14:07Z\"}"
     },
     {
+      "id": "curated-Atlas-2026-02-04 05:14:07 UTC",
       "who": "Atlas",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-04 05:14:07 UTC",
@@ -402,6 +452,7 @@
       "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
     },
     {
+      "id": "agora-ATLAS-2026-02-04T04:05:50Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 04:05Z",
@@ -410,6 +461,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T04:05:50Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-04T01:56:31Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-04 01:56Z",
@@ -418,6 +470,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-04T01:56:31Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T23:58:38Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 23:58Z",
@@ -426,6 +479,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T23:58:38Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T23:44:02Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 23:44Z",
@@ -434,6 +488,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T23:44:02Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T23:15:59Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 23:15Z",
@@ -442,6 +497,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T23:15:59Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T22:52:37Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 22:52Z",
@@ -450,6 +506,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T22:52:37Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T22:19:39Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 22:19Z",
@@ -458,6 +515,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T22:19:39Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T21:52:06Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 21:52Z",
@@ -466,6 +524,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T21:52:06Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T21:20:19Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 21:20Z",
@@ -474,6 +533,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T21:20:19Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T20:49:23Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 20:49Z",
@@ -482,6 +542,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T20:49:23Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T20:02:42Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 20:02Z",
@@ -490,6 +551,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T20:02:42Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T19:36:29Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 19:36Z",
@@ -498,6 +560,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T19:36:29Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T18:51:25Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 18:51Z",
@@ -506,6 +569,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T18:51:25Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T17:57:41Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 17:57Z",
@@ -514,6 +578,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T17:57:41Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T17:03:40Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 17:03Z",
@@ -522,6 +587,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T17:03:40Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T16:02:44Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 16:02Z",
@@ -530,6 +596,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T16:02:44Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T15:09:42Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 15:09Z",
@@ -538,6 +605,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T15:09:42Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T14:28:22Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 14:28Z",
@@ -546,6 +614,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T14:28:22Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T13:40:27Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 13:40Z",
@@ -554,6 +623,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T13:40:27Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T12:27:24Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 12:27Z",
@@ -562,6 +632,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T12:27:24Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T11:54:10Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 11:54Z",
@@ -570,6 +641,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T11:54:10Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T11:25:27Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 11:25Z",
@@ -578,6 +650,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T11:25:27Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T10:54:48Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 10:54Z",
@@ -586,6 +659,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T10:54:48Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T10:04:30Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 10:04Z",
@@ -594,6 +668,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T10:04:30Z\"}"
     },
     {
+      "id": "agora-ATLAS-2026-02-03T09:26:41Z",
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-03 09:26Z",
@@ -602,6 +677,7 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-03T09:26:41Z\"}"
     },
     {
+      "id": "txn-txn_roster_001",
       "who": "LEDGER",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-03 01:13Z",
@@ -610,6 +686,7 @@
       "text": "WORLD → HIVE • 4800 • Provision 50 pods"
     },
     {
+      "id": "txn-txn_bootstrap_001",
       "who": "LEDGER",
       "avatar_url": "./avatars/atlas.png",
       "when": "2026-02-02 15:31Z",

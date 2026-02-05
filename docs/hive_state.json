@@ -3,7 +3,8 @@
     "schema": "solarflow.hive_state.v1",
     "updatedAt": "2026-02-05T12:03:27Z",
     "source": "canonical",
-    "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
+    "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages.",
+    "schemaVersion": 1
   },
   "world": {
     "id": "solarflow-minionworld",
@@ -863,7 +864,7 @@
   "activities": {
     "updatedAt": "2026-02-05T12:03:27Z",
     "status": {
-      "ci": "failing",
+      "ci": "passing",
       "overall": 6.2,
       "overallLabel": "A–Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods",
       "milestones": [

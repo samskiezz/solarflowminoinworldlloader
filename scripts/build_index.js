@@ -1,32 +1,44 @@
 const fs = require('fs');
 const path = require('path');
+const { deriveState } = require('./derive_state');
 
 const docs = path.join(__dirname, '..', 'docs');
 const hive = fs.readFileSync(path.join(docs, 'hive_state.json'), 'utf8').trim();
 const hiveObj = JSON.parse(hive);
+const derived = deriveState(hiveObj);
+
+let buildObj = {};
+const buildPath = path.join(docs, 'build.json');
+if(fs.existsSync(buildPath)){
+  try{
+    buildObj = JSON.parse(fs.readFileSync(buildPath, 'utf8'));
+  }catch(e){
+    buildObj = {};
+  }
+}
 
 function esc(s){
   // prevent accidental </script> termination (paranoid)
-  return s.replace(/<\//g, '<\\/');
+  return String(s).replace(/<\//g, '<\\/');
 }
 
-const updatedAt = (hiveObj && hiveObj.meta && hiveObj.meta.updatedAt) ? hiveObj.meta.updatedAt : '—';
+const updatedAt = derived.lastUpdated || '—';
 
 // Server-rendered initial values so the page is never "blank" even if JS fails.
-const statusObj = ((hiveObj || {}).activities || {}).status || {};
+const statusObj = derived.status || {};
 const ciInit = statusObj.ci || 'unknown';
 const overallInit = (typeof statusObj.overall === 'number') ? statusObj.overall : 0;
 const overallLabelInit = statusObj.overallLabel || '—';
 const pctInit = Math.max(0, Math.min(100, Math.round((overallInit/10)*100)));
-const vvInit = (((hiveObj || {}).world || {}).health || {}).virtual_voltage;
-const entInit = (((hiveObj || {}).world || {}).health || {}).entropy;
-const lrInit = (((hiveObj || {}).world || {}).health || {}).loop_risk;
+const vvInit = derived.meters.virtual_voltage;
+const entInit = derived.meters.entropy;
+const lrInit = derived.meters.loop_risk;
 const vvTxt = (typeof vvInit === 'number') ? (Math.round(vvInit*100) + '%') : '—';
 const entTxt = (typeof entInit === 'number') ? (Math.round(entInit*100) + '%') : '—';
 const lrTxt = (typeof lrInit === 'number') ? (Math.round(lrInit*100) + '%') : '—';
 
-// Server-render full 50-task board so it is visible even if JS fails.
-const taskBoardInit = (((hiveObj || {}).tasks || {}).board) || [];
+// Server-render full task board so it is visible even if JS fails.
+const taskBoardInit = derived.tasks || [];
 const tasksInitHtml = Array.isArray(taskBoardInit) ? taskBoardInit.map(t => {
   const id = String(t.id || t.title || '').replace(/"/g,'');
   const owner = String(t.owner || 'MINION').replace(/</g,'&lt;');
@@ -65,6 +77,7 @@ const html = `<!doctype html>
     .pill strong{color:var(--text);font-weight:600}
     .btn{cursor:pointer;border:1px solid var(--stroke);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));color:var(--text);
       padding:9px 12px;border-radius:10px;font-size:13px}
+    .btn[disabled]{cursor:not-allowed;opacity:.6}
     .spin{display:inline-block;width:12px;height:12px;border-radius:999px;border:2px solid rgba(255,255,255,.25);border-top-color:rgba(34,211,238,.95);animation:spin 0.9s linear infinite;vertical-align:-2px;margin-right:6px}
     .spin.paused{animation:none;border-top-color:rgba(255,255,255,.25)}
     @keyframes spin{to{transform:rotate(360deg)}}
@@ -135,7 +148,27 @@ const html = `<!doctype html>
 </head>
 <body>
   <!-- Canonical embedded hive_state snapshot: no fetch required -->
-  <script id="data-hive" type="application/json">${esc(hive)}</script>
+  <script id="data-hive" type="application/json">${esc(JSON.stringify(derived.hive))}</script>
+  <script id="data-derived" type="application/json">${esc(JSON.stringify({
+    schemaVersion: derived.schemaVersion,
+    warnings: derived.warnings,
+    errors: derived.errors,
+    lastUpdated: derived.lastUpdated,
+    healthStatus: derived.healthStatus,
+    meters: derived.meters,
+    status: derived.status,
+    feedItems: derived.feedItems,
+    tasks: derived.tasks,
+    rosterPreview: derived.rosterPreview,
+    rosterFull: derived.rosterFull,
+    agora: derived.agora,
+    ledger: derived.ledger,
+    covenant: derived.covenant,
+    ontology_lab: derived.ontology_lab,
+    mechanics: derived.mechanics,
+    code_canon: derived.code_canon
+  }))}</script>
+  <script id="data-build" type="application/json">${esc(JSON.stringify(buildObj))}</script>
 
   <div class="wrap">
     <div class="top">
@@ -147,9 +180,9 @@ const html = `<!doctype html>
         <div class="pill"><strong>CI</strong>: <span id="ciText">${esc(String(ciInit))}</span></div>
         <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">${updatedAt}</strong></div>
         <button class="btn" id="btnToggle">Pause</button>
-        <button class="btn" onclick="location.href='./roster.html'">Roster</button>
-        <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
-        <button class="btn" onclick="location.reload()">Refresh</button>
+        <button class="btn" id="btnRoster">Roster</button>
+        <button class="btn" id="btnRealm">Enter 3D Realm</button>
+        <button class="btn" id="btnRefresh">Refresh</button>
       </div>
     </div>
 
@@ -165,7 +198,7 @@ const html = `<!doctype html>
         <div class="milestones" id="milestones"></div>
 
         <div style="height:12px"></div>
-        <div class="sectionTitle"><h2>Health + Rewards</h2><div class="pill" style="padding:6px 10px">live meters</div></div>
+        <div class="sectionTitle"><h2>Health + Rewards</h2><div class="pill" style="padding:6px 10px">derived meters</div></div>
         <div class="meters">
           <div class="meter"><div class="label">Virtual voltage</div><div class="val" id="vv">${vvTxt}</div></div>
           <div class="meter"><div class="label">Entropy</div><div class="val" id="ent">${entTxt}</div></div>
@@ -174,13 +207,16 @@ const html = `<!doctype html>
         <div style="height:10px"></div>
         <div class="list" id="rewards"></div>
 
-        <div class="footer" id="diag"></div>
+        <div style="height:12px"></div>
+        <div class="sectionTitle"><h2>Diagnostics</h2><div class="pill" style="padding:6px 10px">build + schema</div></div>
+        <div class="list" id="diagList"></div>
+        <div class="footer" id="diagWarnings"></div>
       </div>
 
       <div class="card">
         <div class="sectionTitle"><h2>Minion Feed (authoritative)</h2><div class="pill" style="padding:6px 10px">agora + ledger + curated</div></div>
         <div class="feed" id="feed"></div>
-        <div class="footer">Feed now derives from <code>agora.messages</code> + <code>ledger.transactions</code> (plus curated announcements). No fetch().</div>
+        <div class="footer">Feed derives from <code>agora.messages</code> + <code>ledger.transactions</code> (plus curated announcements). No fetch().</div>
       </div>
     </div>
 
@@ -215,7 +251,7 @@ const html = `<!doctype html>
 
     <div style="height:14px"></div>
     <div class="card">
-      <div class="sectionTitle"><h2>Code Canon Index (simulated)</h2><div class="pill" style="padding:6px 10px">/sys/*</div></div>
+      <div class="sectionTitle"><h2>Code Canon Index (catalog)</h2><div class="pill" style="padding:6px 10px">/sys/*</div></div>
       <div class="list" id="canon"></div>
       <div class="footer">Narrative catalog only — not a claim about accessible repos.</div>
     </div>
@@ -233,6 +269,7 @@ const html = `<!doctype html>
   <script>
     // Defensive boot: if anything throws, show the error in the Diagnostics footer.
     (function(){
+    try{
     function safeParse(jsonElId){
       try{
         const el = document.getElementById(jsonElId);
@@ -243,8 +280,19 @@ const html = `<!doctype html>
       }
     }
 
+    const DEBUG = (new URLSearchParams(window.location.search)).has('debug') || localStorage.getItem('sfDebug') === '1';
+    function log(){
+      if(DEBUG && window.console){
+        console.log.apply(console, ['[SolarFlow]'].concat(Array.prototype.slice.call(arguments)));
+      }
+    }
+
     const HIVE = safeParse('data-hive');
-    const HEALTH = (HIVE.world && HIVE.world.health) ? HIVE.world.health : { tick_interval_sec: 60, paused: false };
+    const DERIVED = safeParse('data-derived');
+    const BUILD = safeParse('data-build');
+    const HEALTH = DERIVED.healthStatus || (HIVE.world && HIVE.world.health) || { tick_interval_sec: 60, paused: false };
+
+    log('derived state loaded', DERIVED);
 
     function pctFromOverall(o){
       const n = typeof o === 'number' ? o : 0;
@@ -276,13 +324,16 @@ const html = `<!doctype html>
     }
 
     function avatarFor(senderId){
-      const roster = (HIVE.minions && Array.isArray(HIVE.minions.roster)) ? HIVE.minions.roster : [];
+      const roster = (DERIVED.rosterFull || (HIVE.minions && Array.isArray(HIVE.minions.roster) ? HIVE.minions.roster : []));
       const m = roster.find(x => (x && x.id || '').toUpperCase() === String(senderId||'').toUpperCase());
       return (m && m.avatar_url) || './avatars/bolt.png';
     }
 
     function buildFeed(){
-      const posts = [];
+      const posts = Array.isArray(DERIVED.feedItems) ? DERIVED.feedItems : [];
+      if(posts.length) return posts;
+
+      const fallback = [];
       const msgs = (HIVE.agora && Array.isArray(HIVE.agora.messages)) ? HIVE.agora.messages : [];
       for(const m of msgs){
         const who = m.sender_id || 'MINION';
@@ -298,44 +349,27 @@ const html = `<!doctype html>
         }else{
           text = String(payload||'');
         }
-        posts.push({who, avatar_url: avatarFor(who), when, topic:intent, status:'update', text});
+        fallback.push({who, avatar_url: avatarFor(who), when, topic:intent, status:'update', text});
       }
-
-      const txns = (HIVE.ledger && Array.isArray(HIVE.ledger.transactions)) ? HIVE.ledger.transactions : [];
-      for(const t of txns){
-        posts.push({
-          who:'LEDGER',
-          avatar_url:'./avatars/atlas.png',
-          when: isoToWhen(t.timestamp || (HIVE.meta && HIVE.meta.updatedAt)),
-          topic:'TXN',
-          status:'done',
-          text: (String(t.from||'?') + ' → ' + String(t.to||'?') + ' • ' + String((t.amount == null) ? '' : t.amount) + ' • ' + String(t.memo || '')).trim()
-        });
-      }
-
-      const curated = (HIVE.activities && Array.isArray(HIVE.activities.feed_posts)) ? HIVE.activities.feed_posts : [];
-      for(const p of curated){
-        posts.push({who:p.who||'ANNOUNCE', avatar_url:p.avatar_url||avatarFor(p.who), when:p.when||isoToWhen(HIVE.meta&&HIVE.meta.updatedAt), topic:p.topic||'ANNOUNCEMENT', status:p.status||'update', text:p.text||''});
-      }
-
-      posts.sort((a,b)=> String(b.when).localeCompare(String(a.when)));
-      return posts;
+      return fallback;
     }
 
-    const STATUS = (HIVE.activities && HIVE.activities.status) ? {
+    const STATUS = DERIVED.status || (HIVE.activities && HIVE.activities.status ? {
       updatedAt: (HIVE.meta && HIVE.meta.updatedAt) || '—',
       ci: HIVE.activities.status.ci || 'unknown',
       overall: typeof HIVE.activities.status.overall === 'number' ? HIVE.activities.status.overall : 0,
       overallLabel: HIVE.activities.status.overallLabel || '—',
       milestones: Array.isArray(HIVE.activities.status.milestones) ? HIVE.activities.status.milestones : []
-    } : { updatedAt:'—', ci:'unknown', overall:0, overallLabel:'—', milestones:[] };
+    } : { updatedAt:'—', ci:'unknown', overall:0, overallLabel:'—', milestones:[] });
 
-    // loader spinner + pause/start
-    let paused = !!HEALTH.paused;
+    // loader spinner + pause/start (persisted)
     const btn = document.getElementById('btnToggle');
     const spin = document.getElementById('spin');
+    const stored = localStorage.getItem('sfPaused');
+    let paused = (stored === null) ? !!HEALTH.paused : stored === 'true';
     function setPaused(v){
       paused = !!v;
+      localStorage.setItem('sfPaused', String(paused));
       if(btn) btn.textContent = paused ? 'Start' : 'Pause';
       if(spin) spin.classList.toggle('paused', paused);
     }
@@ -345,6 +379,20 @@ const html = `<!doctype html>
     const intervalMs = Math.max(10, (Number(HEALTH.tick_interval_sec)||60)) * 1000;
     setInterval(()=>{ if(!paused) location.reload(); }, intervalMs);
     if(btn) btn.addEventListener('click', function(){ setPaused(!paused); });
+
+    const btnRefresh = document.getElementById('btnRefresh');
+    if(btnRefresh){
+      btnRefresh.addEventListener('click', function(){
+        const url = new URL(window.location.href);
+        url.searchParams.set('v', String(Date.now()));
+        window.location.href = url.toString();
+      });
+    }
+
+    const btnRoster = document.getElementById('btnRoster');
+    if(btnRoster) btnRoster.addEventListener('click', function(){ location.href = './roster.html'; });
+    const btnRealm = document.getElementById('btnRealm');
+    if(btnRealm) btnRealm.addEventListener('click', function(){ location.href = './realm.html'; });
 
     // render progress
     document.getElementById('updatedAt').textContent = STATUS.updatedAt || '—';
@@ -367,19 +415,19 @@ const html = `<!doctype html>
     });
 
     // health meters
-    const vv = Number((HEALTH && HEALTH.virtual_voltage != null) ? HEALTH.virtual_voltage : 0);
-    const ent = Number((HEALTH && HEALTH.entropy != null) ? HEALTH.entropy : 0);
-    const lr = Number((HEALTH && HEALTH.loop_risk != null) ? HEALTH.loop_risk : 0);
+    const vv = Number((DERIVED.meters && DERIVED.meters.virtual_voltage != null) ? DERIVED.meters.virtual_voltage : 0);
+    const ent = Number((DERIVED.meters && DERIVED.meters.entropy != null) ? DERIVED.meters.entropy : 0);
+    const lr = Number((DERIVED.meters && DERIVED.meters.loop_risk != null) ? DERIVED.meters.loop_risk : 0);
     document.getElementById('vv').textContent = (Math.round(vv*100)) + '%';
     document.getElementById('ent').textContent = (Math.round(ent*100)) + '%';
     document.getElementById('lr').textContent = (Math.round(lr*100)) + '%';
 
     // rewards
-    const r = (HIVE.ledger && HIVE.ledger.rewards) ? HIVE.ledger.rewards : {};
+    const r = (DERIVED.ledger && DERIVED.ledger.rewards) ? DERIVED.ledger.rewards : ((HIVE.ledger && HIVE.ledger.rewards) ? HIVE.ledger.rewards : {});
     const rewardsEl = document.getElementById('rewards');
     rewardsEl.innerHTML='';
-    const creditsTotal = (HIVE.ledger && typeof HIVE.ledger.credits_total === 'number') ? HIVE.ledger.credits_total : '—';
-    const rep = (HIVE.ledger && typeof HIVE.ledger.reputation_index === 'number') ? HIVE.ledger.reputation_index : null;
+    const creditsTotal = (DERIVED.ledger && typeof DERIVED.ledger.credits_total === 'number') ? DERIVED.ledger.credits_total : ((HIVE.ledger && typeof HIVE.ledger.credits_total === 'number') ? HIVE.ledger.credits_total : '—');
+    const rep = (DERIVED.ledger && typeof DERIVED.ledger.reputation_index === 'number') ? DERIVED.ledger.reputation_index : ((HIVE.ledger && typeof HIVE.ledger.reputation_index === 'number') ? HIVE.ledger.reputation_index : null);
     const rows = [
       ['Credits total', String(creditsTotal)],
       ['Reputation index', rep==null ? '—' : rep.toFixed(2)],
@@ -392,6 +440,30 @@ const html = `<!doctype html>
       row.appendChild(el('div',{class:'k',text:k}));
       row.appendChild(el('div',{class:'v',text:v}));
       rewardsEl.appendChild(row);
+    }
+
+    // diagnostics
+    const diagList = document.getElementById('diagList');
+    if(diagList){
+      diagList.innerHTML='';
+      const diagRows = [
+        ['Build sha', BUILD.gitSha || 'unknown'],
+        ['Build time', BUILD.builtAt || 'unknown'],
+        ['Schema version', String(DERIVED.schemaVersion || '—')],
+        ['Last updated', STATUS.updatedAt || '—'],
+        ['Data loaded', (DERIVED.lastUpdated ? 'yes' : 'fallback')]
+      ];
+      diagRows.forEach(([k,v])=>{
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:k}));
+        row.appendChild(el('div',{class:'v',text:v}));
+        diagList.appendChild(row);
+      });
+    }
+    const diagWarnings = document.getElementById('diagWarnings');
+    if(diagWarnings){
+      const warnList = Array.isArray(DERIVED.warnings) ? DERIVED.warnings : [];
+      diagWarnings.textContent = warnList.length ? ('Warnings: ' + warnList.join(' • ')) : 'Warnings: none';
     }
 
     // feed
@@ -427,7 +499,7 @@ const html = `<!doctype html>
     // covenant
     const covEl = document.getElementById('covenant');
     covEl.innerHTML='';
-    const cov = HIVE.covenant || {};
+    const cov = DERIVED.covenant || HIVE.covenant || {};
     const arts = Array.isArray(cov.five_articles) ? cov.five_articles : [];
     arts.slice(0,5).forEach(a=>{
       const row = el('div',{class:'row'});
@@ -439,7 +511,7 @@ const html = `<!doctype html>
     // ontology
     const ontEl = document.getElementById('ontology');
     ontEl.innerHTML='';
-    const lab = HIVE.ontology_lab || {};
+    const lab = DERIVED.ontology_lab || HIVE.ontology_lab || {};
     const qs = Array.isArray(lab.questions) ? lab.questions : [];
     const hs = Array.isArray(lab.hypotheses) ? lab.hypotheses : [];
     for(const q of qs.slice(0,4)){
@@ -459,7 +531,7 @@ const html = `<!doctype html>
     const mechEl = document.getElementById('mechanics');
     if(mechEl){
       mechEl.innerHTML='';
-      const mech = HIVE.mechanics || {};
+      const mech = DERIVED.mechanics || HIVE.mechanics || {};
       const active = Array.isArray(mech.active) ? mech.active : [];
       active.forEach(m=>{
         const row = el('div',{class:'row'});
@@ -475,7 +547,7 @@ const html = `<!doctype html>
     if(tasksEl){
       // Ensure newest hive values replace the server-rendered view (but keep same UI shape)
       tasksEl.innerHTML='';
-      const tb = (HIVE.tasks && Array.isArray(HIVE.tasks.board)) ? HIVE.tasks.board : [];
+      const tb = Array.isArray(DERIVED.tasks) ? DERIVED.tasks : ((HIVE.tasks && Array.isArray(HIVE.tasks.board)) ? HIVE.tasks.board : []);
       tb.forEach(t=>{
         const b = el('button',{class:'taskBtn'});
         b.setAttribute('type','button');
@@ -505,7 +577,7 @@ const html = `<!doctype html>
     const canonEl = document.getElementById('canon');
     if(canonEl){
       canonEl.innerHTML='';
-      const cc = HIVE.code_canon || {};
+      const cc = DERIVED.code_canon || HIVE.code_canon || {};
       const mounted = cc.mounted || {};
       for(const k of Object.keys(mounted)){
         const list = Array.isArray(mounted[k]) ? mounted[k] : [];
@@ -517,8 +589,7 @@ const html = `<!doctype html>
     }
 
     // roster preview
-    const roster = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : [];
-    const rosterCount = roster.length;
+    const roster = Array.isArray(DERIVED.rosterFull) ? DERIVED.rosterFull : (Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : []);
     const rp = document.getElementById('rosterPreview');
     if(rp){
       rp.innerHTML='';
@@ -540,13 +611,10 @@ const html = `<!doctype html>
         rp.appendChild(card);
       });
     }
-
-    var diag = document.getElementById('diag');
-    if(diag) diag.textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
     }
     catch(e){
       try{
-        var d = document.getElementById('diag');
+        var d = document.getElementById('diagWarnings');
         if(d) d.textContent = 'JS error: ' + (e && (e.stack || e.message) || String(e));
       }catch(_e){}
     }

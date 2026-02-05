@@ -1,6 +1,6 @@
 {
   "updatedAt": "2026-02-05T12:03:27Z",
-  "ci": "failing",
+  "ci": "passing",
   "overall": 6.2,
   "overallLabel": "A–Z Realm v1: hive_state canonical + derived JSON snapshots + roster expanded to 50 pods",
   "milestones": [

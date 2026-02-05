@@ -15,9 +15,6 @@ const docs = path.join(__dirname, '..', 'docs');
 
 require('./generate_identicons');
 require('./validate_hive');
-require('./build_from_hive');
-require('./build_index');
-require('./build_roster');
 
 const build = {
   builtAt: isoNow(),
@@ -25,5 +22,9 @@ const build = {
   notes: 'Generated artifacts are committed for GitHub Pages. Source of truth: docs/hive_state.json.'
 };
 fs.writeFileSync(path.join(docs,'build.json'), JSON.stringify(build, null, 2) + '\n');
+
+require('./build_from_hive');
+require('./build_index');
+require('./build_roster');
 
 console.log('build_all ok', build);

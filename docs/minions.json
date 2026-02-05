@@ -2,6 +2,21 @@
   "updatedAt": "2026-02-05T12:03:27Z",
   "minions": [
     {
+      "id": "ALPHA",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "boot",
+        "health-check",
+        "watchdog"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.42,
+      "avatar_url": "./avatars/identicons/ALPHA.svg",
+      "happiness_sim": 74
+    },
+    {
       "id": "ATLAS",
       "tier": 3,
       "role": "OVERSEER",
@@ -14,126 +29,6 @@
       "energy_credits": 160,
       "reputation": 0.65,
       "avatar_url": "./avatars/identicons/ATLAS.svg",
-      "happiness_sim": 75
-    },
-    {
-      "id": "LUMEN",
-      "tier": 3,
-      "role": "OVERSEER",
-      "mode": "COLLAB",
-      "specialties": [
-        "priorities",
-        "paradox-resolution",
-        "release-train"
-      ],
-      "energy_credits": 160,
-      "reputation": 0.63,
-      "avatar_url": "./avatars/identicons/LUMEN.svg",
-      "happiness_sim": 78
-    },
-    {
-      "id": "ORBIT",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "COLLAB",
-      "specialties": [
-        "memory",
-        "signals",
-        "chroma"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.54,
-      "avatar_url": "./avatars/identicons/ORBIT.svg",
-      "happiness_sim": 82
-    },
-    {
-      "id": "PRISM",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "ui",
-        "status-feed",
-        "docs"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.57,
-      "avatar_url": "./avatars/identicons/PRISM.svg",
-      "happiness_sim": 64
-    },
-    {
-      "id": "BOLT",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "ci-fix",
-        "react",
-        "bundling"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.6,
-      "avatar_url": "./avatars/identicons/BOLT.svg",
-      "happiness_sim": 70
-    },
-    {
-      "id": "SABLE",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "doc-discovery",
-        "sitemaps",
-        "source-scoring"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.58,
-      "avatar_url": "./avatars/identicons/SABLE.svg",
-      "happiness_sim": 85
-    },
-    {
-      "id": "NOVA",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "ocr",
-        "pdf-parse",
-        "validation"
-      ],
-      "energy_credits": 110,
-      "reputation": 0.5,
-      "avatar_url": "./avatars/identicons/NOVA.svg",
-      "happiness_sim": 66
-    },
-    {
-      "id": "EMBER",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "fetch",
-        "retry-backoff",
-        "throttling"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.48,
-      "avatar_url": "./avatars/identicons/EMBER.svg",
-      "happiness_sim": 69
-    },
-    {
-      "id": "RUNE",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "ranking",
-        "normalization",
-        "model-matching"
-      ],
-      "energy_credits": 110,
-      "reputation": 0.52,
-      "avatar_url": "./avatars/identicons/RUNE.svg",
       "happiness_sim": 75
     },
     {
@@ -152,216 +47,6 @@
       "happiness_sim": 64
     },
     {
-      "id": "FORGE",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "pipelines",
-        "queues",
-        "jobs"
-      ],
-      "energy_credits": 110,
-      "reputation": 0.51,
-      "avatar_url": "./avatars/identicons/FORGE.svg",
-      "happiness_sim": 71
-    },
-    {
-      "id": "KITE",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "hashing",
-        "dedupe",
-        "paging"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.46,
-      "avatar_url": "./avatars/identicons/KITE.svg",
-      "happiness_sim": 72
-    },
-    {
-      "id": "SENTRY",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "audit",
-        "schema-validation",
-        "quality-gates"
-      ],
-      "energy_credits": 110,
-      "reputation": 0.53,
-      "avatar_url": "./avatars/identicons/SENTRY.svg",
-      "happiness_sim": 68
-    },
-    {
-      "id": "GLINT",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "sitemaps",
-        "robots",
-        "crawl-hints"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.45,
-      "avatar_url": "./avatars/identicons/GLINT.svg",
-      "happiness_sim": 67
-    },
-    {
-      "id": "MOSS",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "content-sniff",
-        "mime-detect",
-        "sanitization"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.44,
-      "avatar_url": "./avatars/identicons/MOSS.svg",
-      "happiness_sim": 76
-    },
-    {
-      "id": "DELTA",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "pagination",
-        "cursoring",
-        "retries"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.46,
-      "avatar_url": "./avatars/identicons/DELTA.svg",
-      "happiness_sim": 58
-    },
-    {
-      "id": "SAGE",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "knowledge-refresh",
-        "entropy",
-        "summaries"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.55,
-      "avatar_url": "./avatars/identicons/SAGE.svg",
-      "happiness_sim": 73
-    },
-    {
-      "id": "WREN",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "url-patterns",
-        "regex",
-        "routing"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.45,
-      "avatar_url": "./avatars/identicons/WREN.svg",
-      "happiness_sim": 77
-    },
-    {
-      "id": "HAMMER",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "load-shedding",
-        "rate-limits",
-        "resilience"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.5,
-      "avatar_url": "./avatars/identicons/HAMMER.svg",
-      "happiness_sim": 60
-    },
-    {
-      "id": "VAULT",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "snapshots",
-        "black-start",
-        "rollbacks"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.56,
-      "avatar_url": "./avatars/identicons/VAULT.svg",
-      "happiness_sim": 74
-    },
-    {
-      "id": "ECHO",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "logging",
-        "undercurrent",
-        "tracing"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.47,
-      "avatar_url": "./avatars/identicons/ECHO.svg",
-      "happiness_sim": 72
-    },
-    {
-      "id": "SPARROW",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "unit-tests",
-        "lint",
-        "smoke"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.46,
-      "avatar_url": "./avatars/identicons/SPARROW.svg",
-      "happiness_sim": 64
-    },
-    {
-      "id": "QUILL",
-      "tier": 2,
-      "role": "SPECIALIST",
-      "mode": "EXECUTION",
-      "specialties": [
-        "reporting",
-        "war-room",
-        "changelog"
-      ],
-      "energy_credits": 120,
-      "reputation": 0.52,
-      "avatar_url": "./avatars/identicons/QUILL.svg",
-      "happiness_sim": 71
-    },
-    {
-      "id": "ALPHA",
-      "tier": 1,
-      "role": "OPERATOR",
-      "mode": "EXECUTION",
-      "specialties": [
-        "boot",
-        "health-check",
-        "watchdog"
-      ],
-      "energy_credits": 90,
-      "reputation": 0.42,
-      "avatar_url": "./avatars/identicons/ALPHA.svg",
-      "happiness_sim": 74
-    },
-    {
       "id": "BETA",
       "tier": 1,
       "role": "OPERATOR",
@@ -375,6 +60,21 @@
       "reputation": 0.43,
       "avatar_url": "./avatars/identicons/BETA.svg",
       "happiness_sim": 59
+    },
+    {
+      "id": "BOLT",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "ci-fix",
+        "react",
+        "bundling"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.6,
+      "avatar_url": "./avatars/identicons/BOLT.svg",
+      "happiness_sim": 70
     },
     {
       "id": "CIPHER",
@@ -407,6 +107,21 @@
       "happiness_sim": 71
     },
     {
+      "id": "DELTA",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "pagination",
+        "cursoring",
+        "retries"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.46,
+      "avatar_url": "./avatars/identicons/DELTA.svg",
+      "happiness_sim": 58
+    },
+    {
       "id": "DRIFT",
       "tier": 1,
       "role": "OPERATOR",
@@ -420,6 +135,36 @@
       "reputation": 0.41,
       "avatar_url": "./avatars/identicons/DRIFT.svg",
       "happiness_sim": 56
+    },
+    {
+      "id": "ECHO",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "logging",
+        "undercurrent",
+        "tracing"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.47,
+      "avatar_url": "./avatars/identicons/ECHO.svg",
+      "happiness_sim": 72
+    },
+    {
+      "id": "EMBER",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "fetch",
+        "retry-backoff",
+        "throttling"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.48,
+      "avatar_url": "./avatars/identicons/EMBER.svg",
+      "happiness_sim": 69
     },
     {
       "id": "EQUINOX",
@@ -452,6 +197,21 @@
       "happiness_sim": 78
     },
     {
+      "id": "FORGE",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "pipelines",
+        "queues",
+        "jobs"
+      ],
+      "energy_credits": 110,
+      "reputation": 0.51,
+      "avatar_url": "./avatars/identicons/FORGE.svg",
+      "happiness_sim": 71
+    },
+    {
       "id": "GHOST",
       "tier": 2,
       "role": "SPECIALIST",
@@ -465,6 +225,36 @@
       "reputation": 0.49,
       "avatar_url": "./avatars/identicons/GHOST.svg",
       "happiness_sim": 58
+    },
+    {
+      "id": "GLINT",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "sitemaps",
+        "robots",
+        "crawl-hints"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.45,
+      "avatar_url": "./avatars/identicons/GLINT.svg",
+      "happiness_sim": 67
+    },
+    {
+      "id": "HAMMER",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "load-shedding",
+        "rate-limits",
+        "resilience"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.5,
+      "avatar_url": "./avatars/identicons/HAMMER.svg",
+      "happiness_sim": 60
     },
     {
       "id": "HELIX",
@@ -542,6 +332,21 @@
       "happiness_sim": 72
     },
     {
+      "id": "KITE",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "hashing",
+        "dedupe",
+        "paging"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.46,
+      "avatar_url": "./avatars/identicons/KITE.svg",
+      "happiness_sim": 72
+    },
+    {
       "id": "KODIAK",
       "tier": 2,
       "role": "SPECIALIST",
@@ -555,6 +360,36 @@
       "reputation": 0.52,
       "avatar_url": "./avatars/identicons/KODIAK.svg",
       "happiness_sim": 64
+    },
+    {
+      "id": "LUMEN",
+      "tier": 3,
+      "role": "OVERSEER",
+      "mode": "COLLAB",
+      "specialties": [
+        "priorities",
+        "paradox-resolution",
+        "release-train"
+      ],
+      "energy_credits": 160,
+      "reputation": 0.63,
+      "avatar_url": "./avatars/identicons/LUMEN.svg",
+      "happiness_sim": 78
+    },
+    {
+      "id": "MOSS",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "content-sniff",
+        "mime-detect",
+        "sanitization"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.44,
+      "avatar_url": "./avatars/identicons/MOSS.svg",
+      "happiness_sim": 76
     },
     {
       "id": "NIMBUS",
@@ -572,6 +407,21 @@
       "happiness_sim": 60
     },
     {
+      "id": "NOVA",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "ocr",
+        "pdf-parse",
+        "validation"
+      ],
+      "energy_credits": 110,
+      "reputation": 0.5,
+      "avatar_url": "./avatars/identicons/NOVA.svg",
+      "happiness_sim": 66
+    },
+    {
       "id": "ONYX",
       "tier": 2,
       "role": "SPECIALIST",
@@ -585,6 +435,126 @@
       "reputation": 0.49,
       "avatar_url": "./avatars/identicons/ONYX.svg",
       "happiness_sim": 74
+    },
+    {
+      "id": "ORBIT",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "COLLAB",
+      "specialties": [
+        "memory",
+        "signals",
+        "chroma"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.54,
+      "avatar_url": "./avatars/identicons/ORBIT.svg",
+      "happiness_sim": 82
+    },
+    {
+      "id": "PRISM",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "ui",
+        "status-feed",
+        "docs"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.57,
+      "avatar_url": "./avatars/identicons/PRISM.svg",
+      "happiness_sim": 64
+    },
+    {
+      "id": "QUILL",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "reporting",
+        "war-room",
+        "changelog"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.52,
+      "avatar_url": "./avatars/identicons/QUILL.svg",
+      "happiness_sim": 71
+    },
+    {
+      "id": "RUNE",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "ranking",
+        "normalization",
+        "model-matching"
+      ],
+      "energy_credits": 110,
+      "reputation": 0.52,
+      "avatar_url": "./avatars/identicons/RUNE.svg",
+      "happiness_sim": 75
+    },
+    {
+      "id": "SABLE",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "doc-discovery",
+        "sitemaps",
+        "source-scoring"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.58,
+      "avatar_url": "./avatars/identicons/SABLE.svg",
+      "happiness_sim": 85
+    },
+    {
+      "id": "SAGE",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "knowledge-refresh",
+        "entropy",
+        "summaries"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.55,
+      "avatar_url": "./avatars/identicons/SAGE.svg",
+      "happiness_sim": 73
+    },
+    {
+      "id": "SENTRY",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "audit",
+        "schema-validation",
+        "quality-gates"
+      ],
+      "energy_credits": 110,
+      "reputation": 0.53,
+      "avatar_url": "./avatars/identicons/SENTRY.svg",
+      "happiness_sim": 68
+    },
+    {
+      "id": "SPARROW",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "unit-tests",
+        "lint",
+        "smoke"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.46,
+      "avatar_url": "./avatars/identicons/SPARROW.svg",
+      "happiness_sim": 64
     },
     {
       "id": "TALON",
@@ -647,6 +617,21 @@
       "happiness_sim": 57
     },
     {
+      "id": "VAULT",
+      "tier": 2,
+      "role": "SPECIALIST",
+      "mode": "EXECUTION",
+      "specialties": [
+        "snapshots",
+        "black-start",
+        "rollbacks"
+      ],
+      "energy_credits": 120,
+      "reputation": 0.56,
+      "avatar_url": "./avatars/identicons/VAULT.svg",
+      "happiness_sim": 74
+    },
+    {
       "id": "VEGA",
       "tier": 2,
       "role": "SPECIALIST",
@@ -675,6 +660,21 @@
       "reputation": 0.42,
       "avatar_url": "./avatars/identicons/WHISPER.svg",
       "happiness_sim": 73
+    },
+    {
+      "id": "WREN",
+      "tier": 1,
+      "role": "OPERATOR",
+      "mode": "EXECUTION",
+      "specialties": [
+        "url-patterns",
+        "regex",
+        "routing"
+      ],
+      "energy_credits": 90,
+      "reputation": 0.45,
+      "avatar_url": "./avatars/identicons/WREN.svg",
+      "happiness_sim": 77
     },
     {
       "id": "XENO",

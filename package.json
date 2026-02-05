@@ -1,0 +1,14 @@
+{
+  "name": "solarflow-status",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "node scripts/build_all.js",
+    "test": "node --test",
+    "validate": "node scripts/validate_hive.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
