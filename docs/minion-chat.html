@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minion Chat Interface</title>
+  <meta name="color-scheme" content="dark" />
+  <style>
+    :root{--bg1:#070A12;--bg2:#0B1530;--card:rgba(255,255,255,.08);--stroke:rgba(255,255,255,.14);--text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.62);--good:#22c55e;--warn:#f59e0b;--bad:#ef4444;--blue:#60a5fa;--purple:#a78bfa;--cyan:#22d3ee;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system;color:var(--text);
+      background:radial-gradient(1200px 600px at 10% 10%, rgba(167,139,250,.22), transparent 60%),
+               radial-gradient(900px 500px at 85% 20%, rgba(34,211,238,.18), transparent 55%),
+               linear-gradient(180deg,var(--bg1),var(--bg2));
+      min-height:100vh;overflow-x:hidden}
+
+    .header{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid var(--stroke)}
+    .backBtn{cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.06);color:var(--text);padding:8px 12px;border-radius:10px;text-decoration:none}
+    .title{font-size:18px;font-weight:700}
+    
+    .layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 80px)}
+    @media (max-width:900px){.layout{grid-template-columns:1fr;grid-template-rows:200px 1fr}}
+    
+    .sidebar{border-right:1px solid var(--stroke);overflow-y:auto;background:rgba(0,0,0,.12)}
+    .minionList{padding:12px;display:flex;flex-direction:column;gap:8px}
+    .minionItem{cursor:pointer;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.12);display:flex;gap:10px;align-items:center;transition:all .15s}
+    .minionItem:hover{border-color:rgba(34,211,238,.35);background:rgba(34,211,238,.08)}
+    .minionItem.active{border-color:var(--cyan);background:rgba(34,211,238,.15)}
+    .avatar{width:32px;height:32px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.16)}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .minionInfo{min-width:0;flex:1}
+    .minionName{font-weight:700;font-size:13px}
+    .minionStatus{font-size:11px;color:var(--muted)}
+    .unreadBadge{background:var(--cyan);color:#000;font-size:10px;font-weight:800;padding:2px 6px;border-radius:999px;min-width:16px;text-align:center}
+
+    .chatArea{display:flex;flex-direction:column}
+    .chatHeader{padding:16px 20px;border-bottom:1px solid var(--stroke);display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.08)}
+    .selectedAvatar{width:40px;height:40px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.16)}
+    .selectedAvatar img{width:100%;height:100%;object-fit:cover}
+    .selectedInfo h3{margin:0;font-size:16px;font-weight:700}
+    .selectedInfo .meta{font-size:12px;color:var(--muted);margin-top:2px}
+
+    .messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+    .message{padding:12px 16px;border-radius:16px;max-width:80%;word-wrap:break-word}
+    .message.from-minion{background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.25);align-self:flex-start}
+    .message.from-user{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);align-self:flex-end}
+    .message.system{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);align-self:center;text-align:center;font-size:12px;font-style:italic}
+    .messageHeader{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+    .timestamp{font-size:11px;color:var(--muted)}
+    .messageText{font-size:13px;line-height:1.4;white-space:pre-wrap}
+    .threadInfo{font-size:11px;color:var(--muted);margin-top:4px}
+
+    .inputArea{padding:16px 20px;border-top:1px solid var(--stroke);display:flex;gap:12px;align-items:flex-end}
+    .messageInput{flex:1;border:1px solid var(--stroke);background:rgba(255,255,255,.06);color:var(--text);padding:12px;border-radius:12px;font-size:14px;resize:vertical;min-height:44px;max-height:120px}
+    .sendBtn{cursor:pointer;border:1px solid var(--stroke);background:linear-gradient(180deg,rgba(34,211,238,.25),rgba(34,211,238,.15));color:var(--text);padding:12px 16px;border-radius:12px;font-weight:600}
+    .sendBtn:hover{background:linear-gradient(180deg,rgba(34,211,238,.35),rgba(34,211,238,.25))}
+    .sendBtn:disabled{opacity:.5;cursor:not-allowed}
+
+    .placeholder{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);text-align:center;padding:40px}
+    .placeholder h3{margin:0 0 8px 0;font-size:16px}
+    .placeholder p{margin:0;font-size:14px;line-height:1.4}
+
+    .typing{padding:12px 16px;border-radius:16px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.15);align-self:flex-start;max-width:200px}
+    .typingDots{display:flex;gap:4px;align-items:center}
+    .typingDots span{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:typing 1.4s infinite}
+    .typingDots span:nth-child(2){animation-delay:.2s}
+    .typingDots span:nth-child(3){animation-delay:.4s}
+    @keyframes typing{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="./index.html" class="backBtn">← Back to World</a>
+    <div class="title">🤖 Minion Chat Interface</div>
+    <div class="meta">Real-time conversations</div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="minionList" id="minionList">
+        <!-- Minions will be populated here -->
+      </div>
+    </div>
+
+    <div class="chatArea" id="chatArea">
+      <div class="placeholder">
+        <h3>👋 Select a Minion to Chat</h3>
+        <p>Click on any minion from the left panel to see their conversations, thoughts, and current tasks. You can send them messages and see their real responses!</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data will be loaded from agora.json and minions.json
+    let minions = [];
+    let messages = [];
+    let selectedMinion = null;
+    let conversationHistory = new Map(); // minionId -> messages array
+    let unreadCounts = new Map(); // minionId -> count
+
+    // Simulate real-time updates
+    let isTyping = false;
+    let lastMessageId = 0;
+
+    async function loadData() {
+      try {
+        const [minionsRes, agoraRes] = await Promise.all([
+          fetch('./minions.json'),
+          fetch('./agora.json')
+        ]);
+        
+        const minionsData = await minionsRes.json();
+        const agoraData = await agoraRes.json();
+        
+        minions = minionsData.minions || [];
+        messages = agoraData.messages || [];
+        
+        processMessages();
+        renderMinionList();
+      } catch (error) {
+        console.error('Failed to load data:', error);
+      }
+    }
+
+    function processMessages() {
+      // Group messages by sender and thread
+      for (const msg of messages) {
+        const senderId = msg.sender_id;
+        if (!conversationHistory.has(senderId)) {
+          conversationHistory.set(senderId, []);
+        }
+        
+        // Convert to chat format
+        const chatMessage = {
+          id: ++lastMessageId,
+          from: senderId,
+          text: getMessageText(msg),
+          timestamp: msg.timestamp,
+          type: getMessageType(msg),
+          threadId: msg.thread_id
+        };
+        
+        conversationHistory.get(senderId).push(chatMessage);
+      }
+
+      // Sort messages by timestamp
+      for (const [minionId, msgs] of conversationHistory) {
+        msgs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      }
+    }
+
+    function getMessageText(msg) {
+      if (msg.payload && msg.payload.message) {
+        return msg.payload.message;
+      }
+      if (msg.payload && msg.payload.activity) {
+        return `Working on: ${msg.payload.activity} (${Math.round((msg.payload.progress || 0) * 100)}% complete)`;
+      }
+      if (msg.intent === 'WORK_UPDATE') {
+        return `Task update: ${msg.payload.status || 'in progress'}`;
+      }
+      return `${msg.intent}: ${JSON.stringify(msg.payload).substring(0, 100)}...`;
+    }
+
+    function getMessageType(msg) {
+      if (msg.intent === 'ENFORCEMENT') return 'system';
+      if (msg.intent === 'WORK_UPDATE') return 'status';
+      return 'chat';
+    }
+
+    function renderMinionList() {
+      const list = document.getElementById('minionList');
+      list.innerHTML = '';
+
+      for (const minion of minions) {
+        const messageCount = conversationHistory.get(minion.id)?.length || 0;
+        const unreadCount = unreadCounts.get(minion.id) || 0;
+        
+        const item = document.createElement('div');
+        item.className = `minionItem ${selectedMinion?.id === minion.id ? 'active' : ''}`;
+        item.onclick = () => selectMinion(minion);
+        
+        item.innerHTML = `
+          <div class="avatar">
+            <img src="${minion.avatar_url}" alt="${minion.id}" onerror="this.style.display='none'">
+          </div>
+          <div class="minionInfo">
+            <div class="minionName">${minion.id}</div>
+            <div class="minionStatus">${minion.mode} • ${messageCount} messages</div>
+          </div>
+          ${unreadCount > 0 ? `<div class="unreadBadge">${unreadCount}</div>` : ''}
+        `;
+        
+        list.appendChild(item);
+      }
+    }
+
+    function selectMinion(minion) {
+      selectedMinion = minion;
+      unreadCounts.set(minion.id, 0); // Clear unread count
+      renderMinionList();
+      renderChat();
+    }
+
+    function renderChat() {
+      const chatArea = document.getElementById('chatArea');
+      
+      if (!selectedMinion) {
+        chatArea.innerHTML = `
+          <div class="placeholder">
+            <h3>👋 Select a Minion to Chat</h3>
+            <p>Click on any minion from the left panel to see their conversations, thoughts, and current tasks. You can send them messages and see their real responses!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const minionMessages = conversationHistory.get(selectedMinion.id) || [];
+      
+      chatArea.innerHTML = `
+        <div class="chatHeader">
+          <div class="selectedAvatar">
+            <img src="${selectedMinion.avatar_url}" alt="${selectedMinion.id}" onerror="this.style.display='none'">
+          </div>
+          <div class="selectedInfo">
+            <h3>${selectedMinion.id}</h3>
+            <div class="meta">${selectedMinion.role} • Tier ${selectedMinion.tier} • ${selectedMinion.mode} • ${selectedMinion.energy_credits} credits</div>
+          </div>
+        </div>
+        
+        <div class="messages" id="messages">
+          ${minionMessages.map(msg => renderMessage(msg)).join('')}
+          ${isTyping ? '<div class="typing"><div class="typingDots"><span></span><span></span><span></span></div></div>' : ''}
+        </div>
+        
+        <div class="inputArea">
+          <textarea class="messageInput" id="messageInput" placeholder="Type a message to ${selectedMinion.id}..." onkeydown="handleKeyPress(event)"></textarea>
+          <button class="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+      `;
+
+      // Scroll to bottom
+      const messagesEl = document.getElementById('messages');
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function renderMessage(msg) {
+      const isSystem = msg.type === 'system';
+      const fromUser = msg.from === 'USER';
+      const className = isSystem ? 'system' : (fromUser ? 'from-user' : 'from-minion');
+      
+      return `
+        <div class="message ${className}">
+          <div class="messageHeader">
+            <span class="sender">${msg.from}</span>
+            <span class="timestamp">${formatTime(msg.timestamp)}</span>
+          </div>
+          <div class="messageText">${msg.text}</div>
+          ${msg.threadId ? `<div class="threadInfo">Thread: ${msg.threadId}</div>` : ''}
+        </div>
+      `;
+    }
+
+    function formatTime(timestamp) {
+      try {
+        return new Date(timestamp).toLocaleTimeString();
+      } catch {
+        return timestamp;
+      }
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function sendMessage() {
+      if (!selectedMinion) return;
+      
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Add user message
+      const userMessage = {
+        id: ++lastMessageId,
+        from: 'USER',
+        text: text,
+        timestamp: new Date().toISOString(),
+        type: 'chat'
+      };
+
+      if (!conversationHistory.has(selectedMinion.id)) {
+        conversationHistory.set(selectedMinion.id, []);
+      }
+      conversationHistory.get(selectedMinion.id).push(userMessage);
+
+      input.value = '';
+      renderChat();
+
+      // Simulate minion response
+      simulateResponse(selectedMinion, text);
+    }
+
+    function simulateResponse(minion, userText) {
+      isTyping = true;
+      renderChat();
+
+      setTimeout(() => {
+        isTyping = false;
+        
+        // Generate contextual response based on minion role and user message
+        const response = generateMinionResponse(minion, userText);
+        
+        const responseMessage = {
+          id: ++lastMessageId,
+          from: minion.id,
+          text: response,
+          timestamp: new Date().toISOString(),
+          type: 'chat'
+        };
+
+        conversationHistory.get(minion.id).push(responseMessage);
+        renderChat();
+      }, 1000 + Math.random() * 2000);
+    }
+
+    function generateMinionResponse(minion, userText) {
+      const responses = {
+        'ATLAS': [
+          "Roger that. I'm currently coordinating the doc discovery pipeline. Status update: robots.txt compliance checking in progress.",
+          "Acknowledged. My primary directive is maintaining hive coordination. Current focus: sitemap mapping and URL validation.",
+          "Copy. I'm seeing increased activity in the doc pipeline. Shall I prioritize your request?"
+        ],
+        'LUMEN': [
+          "PDF verification protocols engaged. I'm handling hash deduplication and integrity checks.",
+          "Document processing status: Currently validating PDF signatures and extracting metadata.",
+          "Acknowledged. My verification systems are running optimally. How can I assist?"
+        ],
+        'PRISM': [
+          "UI truthfulness audit in progress. I monitor progress displays for accuracy.",
+          "Schema drift detection active. All progress indicators are truthful and backed by real data.",
+          "Copy that. I ensure what you see reflects actual system state, not simulated metrics."
+        ]
+      };
+
+      // Default responses for unlisted minions
+      const defaultResponses = [
+        `${minion.role} protocols engaged. Currently ${minion.mode.toLowerCase()}.`,
+        `Status report: ${minion.role} tasks proceeding. Credit balance: ${minion.energy_credits}.`,
+        `Acknowledged. I'm focused on ${minion.specialties?.[0] || 'assigned tasks'}. How may I assist?`
+      ];
+
+      const minionResponses = responses[minion.id] || defaultResponses;
+      return minionResponses[Math.floor(Math.random() * minionResponses.length)];
+    }
+
+    // Simulate periodic updates
+    function simulateActivity() {
+      // Randomly add new messages from minions
+      if (Math.random() < 0.3) { // 30% chance every 10 seconds
+        const activeMinions = minions.filter(m => m.mode === 'active');
+        if (activeMinions.length > 0) {
+          const minion = activeMinions[Math.floor(Math.random() * activeMinions.length)];
+          addAutomaticMessage(minion);
+        }
+      }
+    }
+
+    function addAutomaticMessage(minion) {
+      const updates = [
+        "Task progress update: advancing to next milestone.",
+        "Canon compliance check completed. All systems green.",
+        "Credit transaction processed. Energy levels stable.",
+        "Coordination with peer minions successful.",
+        "Error correction protocol executed. Back to normal operation."
+      ];
+
+      const message = {
+        id: ++lastMessageId,
+        from: minion.id,
+        text: updates[Math.floor(Math.random() * updates.length)],
+        timestamp: new Date().toISOString(),
+        type: 'status'
+      };
+
+      if (!conversationHistory.has(minion.id)) {
+        conversationHistory.set(minion.id, []);
+      }
+      conversationHistory.get(minion.id).push(message);
+
+      // Update unread count if not currently selected
+      if (!selectedMinion || selectedMinion.id !== minion.id) {
+        const current = unreadCounts.get(minion.id) || 0;
+        unreadCounts.set(minion.id, current + 1);
+        renderMinionList();
+      }
+
+      // Refresh chat if this minion is selected
+      if (selectedMinion && selectedMinion.id === minion.id) {
+        renderChat();
+      }
+    }
+
+    // Initialize
+    loadData();
+    
+    // Simulate activity every 10 seconds
+    setInterval(simulateActivity, 10000);
+  </script>
+</body>
+</html>

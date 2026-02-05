@@ -92,6 +92,30 @@
     .mini .b{display:flex;flex-direction:column;gap:2px;min-width:0}
     .mini .id{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .mini .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* Task Details Modal */
+    .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:1000;display:none;padding:20px;overflow-y:auto}
+    .modalContent{max-width:600px;margin:40px auto;background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--stroke);border-radius:20px;padding:24px}
+    .modalHeader{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+    .modalTitle{font-size:18px;font-weight:700;margin:0}
+    .closeBtn{cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.06);color:var(--text);padding:8px 12px;border-radius:8px;font-size:12px}
+    .taskProgress{margin:16px 0;padding:12px;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.1)}
+    .progressBar{height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden;margin:8px 0}
+    .progressFill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:width .3s}
+    .taskDetails{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media (max-width:600px){.taskDetails{grid-template-columns:1fr}}
+    .detailBox{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.15)}
+    .detailLabel{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+    .detailValue{font-size:13px;font-weight:600}
+    .actionBtns{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+    .actionBtn{cursor:pointer;border:1px solid var(--stroke);background:linear-gradient(180deg,rgba(34,211,238,.25),rgba(34,211,238,.15));color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600}
+    .actionBtn:hover{background:linear-gradient(180deg,rgba(34,211,238,.35),rgba(34,211,238,.25))}
+    .actionBtn.secondary{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.06))}
+    .actionBtn.secondary:hover{background:linear-gradient(180deg,rgba(255,255,255,.15),rgba(255,255,255,.1))}
+
+    .chatPreview{margin-top:16px;padding:12px;border-radius:12px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25)}
+    .chatPreview .label{font-size:12px;color:var(--muted);margin-bottom:8px}
+    .recentMsg{font-size:13px;line-height:1.4;color:rgba(255,255,255,.9);font-style:italic}
   </style>
 </head>
 <body>
@@ -2844,6 +2868,9 @@
         <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-05T21:04:39Z</strong></div>
         <button class="btn" id="btnToggle">Pause</button>
         <button class="btn" onclick="location.href='./roster.html'">Roster</button>
+        <button class="btn" onclick="location.href='./minion-chat.html'">💬 Chat with Minions</button>
+        <button class="btn" onclick="location.href='./activity-feed.html'">📊 Live Activity</button>
+        <button class="btn" onclick="location.href='./minion-control.html'">🎛️ Control Panel</button>
         <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
         <button class="btn" onclick="location.reload()">Refresh</button>
       </div>
@@ -3248,6 +3275,120 @@
       }catch(_e){}
     }
   })();
+  </script>
+
+  <!-- Task Details Modal -->
+  <div class="modal" id="taskModal">
+    <div class="modalContent">
+      <div class="modalHeader">
+        <h3 class="modalTitle" id="modalTitle">Task Details</h3>
+        <button class="closeBtn" onclick="closeTaskModal()">✕ Close</button>
+      </div>
+      <div id="modalBody">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTaskModal(taskId, owner, description, status) {
+      const modal = document.getElementById('taskModal');
+      const title = document.getElementById('modalTitle');
+      const body = document.getElementById('modalBody');
+      
+      title.textContent = `Task: ${taskId}`;
+      
+      const statusColor = status === 'done' ? 'var(--good)' : 
+                         status === 'in-progress' ? 'var(--blue)' : 
+                         status === 'queued' ? 'var(--muted)' : 'var(--warn)';
+      
+      const progress = status === 'done' ? 100 : 
+                      status === 'in-progress' ? Math.floor(Math.random() * 60) + 20 : 
+                      status === 'starting' ? Math.floor(Math.random() * 20) : 0;
+      
+      body.innerHTML = `
+        <div class="taskProgress">
+          <div class="detailLabel">Current Status</div>
+          <div class="detailValue" style="color:${statusColor}">${status.toUpperCase()}</div>
+          <div class="progressBar">
+            <div class="progressFill" style="width:${progress}%"></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">${progress}% complete</div>
+        </div>
+        
+        <div class="taskDetails">
+          <div class="detailBox">
+            <div class="detailLabel">Assigned Owner</div>
+            <div class="detailValue">${owner}</div>
+          </div>
+          <div class="detailBox">
+            <div class="detailLabel">Priority</div>
+            <div class="detailValue">${status === 'in-progress' ? 'HIGH' : status === 'starting' ? 'MEDIUM' : 'NORMAL'}</div>
+          </div>
+          <div class="detailBox">
+            <div class="detailLabel">Category</div>
+            <div class="detailValue">${description.split(' ')[0].toUpperCase()}</div>
+          </div>
+          <div class="detailBox">
+            <div class="detailLabel">Credits Reward</div>
+            <div class="detailValue">${Math.floor(Math.random() * 50) + 10}</div>
+          </div>
+        </div>
+        
+        <div class="chatPreview">
+          <div class="label">Recent activity from ${owner}:</div>
+          <div class="recentMsg">"${generateTaskUpdate(description, status)}"</div>
+        </div>
+        
+        <div class="actionBtns">
+          <button class="actionBtn" onclick="location.href='./minion-chat.html?minion=${owner}'">💬 Chat with ${owner}</button>
+          <button class="actionBtn secondary" onclick="viewTaskDetails('${taskId}')">📊 View Full Details</button>
+          <button class="actionBtn secondary" onclick="location.href='./realm.html'">🌍 View in 3D Realm</button>
+        </div>
+      `;
+      
+      modal.style.display = 'block';
+    }
+    
+    function generateTaskUpdate(description, status) {
+      if (status === 'done') {
+        return `Task completed successfully. All ${description.toLowerCase()} objectives met.`;
+      } else if (status === 'in-progress') {
+        return `Currently working on ${description.toLowerCase()}. Making good progress, encountering minor challenges.`;
+      } else if (status === 'starting') {
+        return `Just began ${description.toLowerCase()}. Setting up workspace and gathering requirements.`;
+      } else {
+        return `Queued for ${description.toLowerCase()}. Waiting for prerequisite tasks to complete.`;
+      }
+    }
+    
+    function viewTaskDetails(taskId) {
+      alert(`Full task details for ${taskId} would open here. This could show logs, dependencies, history, etc.`);
+    }
+    
+    function closeTaskModal() {
+      document.getElementById('taskModal').style.display = 'none';
+    }
+    
+    // Close modal when clicking outside
+    document.getElementById('taskModal')?.addEventListener('click', function(e) {
+      if (e.target === this) closeTaskModal();
+    });
+    
+    // Add click handlers to task buttons
+    document.addEventListener('DOMContentLoaded', function() {
+      const taskButtons = document.querySelectorAll('.taskBtn');
+      taskButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const taskId = this.dataset.taskid;
+          const owner = this.dataset.owner;
+          const status = this.dataset.status;
+          const title = this.dataset.title;
+          showTaskModal(taskId, owner, title, status);
+        });
+      });
+    });
   </script>
 </body>
 </html>
