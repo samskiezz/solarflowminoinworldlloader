@@ -1,8 +1,8 @@
-import * as THREE from './vendor/three/build/three.module.js';
-import { EffectComposer } from './vendor/three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from './vendor/three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from './vendor/three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { OrbitControls } from './vendor/three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { EffectComposer } from 'https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
 const canvas = document.getElementById('c');
 const statusEl = document.getElementById('status');

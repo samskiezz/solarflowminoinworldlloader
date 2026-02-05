@@ -1,0 +1,43 @@
+# PROJECT SOLAR: GENESIS OMEGA - Required Dependencies
+# Cognitive Architecture for Autonomous Solar Management
+
+# ============= COGNITIVE CORE (The Brain) =============
+# Using local models instead of Llama-3 for compatibility
+transformers>=4.36.0
+torch>=2.1.0
+accelerate>=0.24.0
+
+# ============= ORCHESTRATION (Nervous System) =============
+pyautogen>=0.2.0
+openai>=1.3.0  # For AutoGen compatibility
+
+# ============= PHYSICS ENGINE (Reality Check) =============
+NREL-PySAM>=4.2.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# ============= MEMORY LATTICE (Hippocampus) =============
+chromadb>=0.4.0
+sentence-transformers>=2.2.0
+langchain>=0.1.0
+
+# ============= UNCERTAINTY ENGINE (Intuition) =============
+qiskit>=0.45.0
+qiskit-aer>=0.13.0
+
+# ============= TIME SERIES & FORECASTING =============
+prophet>=1.1.4
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+
+# ============= WEB FRAMEWORK & APIs =============
+fastapi>=0.104.0
+uvicorn>=0.24.0
+websockets>=12.0
+pydantic>=2.5.0
+
+# ============= UTILITIES =============
+python-dotenv>=1.0.0
+loguru>=0.7.0
+aiofiles>=23.2.0
+httpx>=0.25.0
