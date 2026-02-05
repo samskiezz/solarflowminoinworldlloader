@@ -1,7 +1,7 @@
 {
   "meta": {
     "schema": "solarflow.hive_state.v1",
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "source": "canonical",
     "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
@@ -117,7 +117,7 @@
     }
   },
   "ledger": {
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "credits_total": 2765,
     "reputation_index": 0.57,
     "rewards": {
@@ -234,7 +234,7 @@
     }
   },
   "minions": {
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "max": 50,
     "roster": [
       {
@@ -250,7 +250,7 @@
         "energy_credits": 160,
         "reputation": 0.65,
         "avatar_url": "./avatars/identicons/ATLAS.svg",
-        "happiness_sim": 73,
+        "happiness_sim": 72,
         "avatar_salt": 0
       },
       {
@@ -282,7 +282,7 @@
         "energy_credits": 120,
         "reputation": 0.54,
         "avatar_url": "./avatars/identicons/ORBIT.svg",
-        "happiness_sim": 85,
+        "happiness_sim": 86,
         "avatar_salt": 0
       },
       {
@@ -298,7 +298,7 @@
         "energy_credits": 120,
         "reputation": 0.57,
         "avatar_url": "./avatars/identicons/PRISM.svg",
-        "happiness_sim": 62,
+        "happiness_sim": 61,
         "avatar_salt": 0
       },
       {
@@ -330,7 +330,7 @@
         "energy_credits": 120,
         "reputation": 0.58,
         "avatar_url": "./avatars/identicons/SABLE.svg",
-        "happiness_sim": 88,
+        "happiness_sim": 89,
         "avatar_salt": 0
       },
       {
@@ -346,7 +346,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/NOVA.svg",
-        "happiness_sim": 64,
+        "happiness_sim": 63,
         "avatar_salt": 0
       },
       {
@@ -378,7 +378,7 @@
         "energy_credits": 110,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/RUNE.svg",
-        "happiness_sim": 78,
+        "happiness_sim": 79,
         "avatar_salt": 0
       },
       {
@@ -394,7 +394,7 @@
         "energy_credits": 90,
         "reputation": 0.47,
         "avatar_url": "./avatars/identicons/AURORA.svg",
-        "happiness_sim": 62,
+        "happiness_sim": 61,
         "avatar_salt": 0
       },
       {
@@ -426,7 +426,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/identicons/KITE.svg",
-        "happiness_sim": 75,
+        "happiness_sim": 76,
         "avatar_salt": 0
       },
       {
@@ -442,7 +442,7 @@
         "energy_credits": 110,
         "reputation": 0.53,
         "avatar_url": "./avatars/identicons/SENTRY.svg",
-        "happiness_sim": 66,
+        "happiness_sim": 65,
         "avatar_salt": 0
       },
       {
@@ -474,7 +474,7 @@
         "energy_credits": 90,
         "reputation": 0.44,
         "avatar_url": "./avatars/identicons/MOSS.svg",
-        "happiness_sim": 79,
+        "happiness_sim": 80,
         "avatar_salt": 0
       },
       {
@@ -490,7 +490,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/identicons/DELTA.svg",
-        "happiness_sim": 56,
+        "happiness_sim": 55,
         "avatar_salt": 0
       },
       {
@@ -522,7 +522,7 @@
         "energy_credits": 90,
         "reputation": 0.45,
         "avatar_url": "./avatars/identicons/WREN.svg",
-        "happiness_sim": 80,
+        "happiness_sim": 81,
         "avatar_salt": 0
       },
       {
@@ -538,7 +538,7 @@
         "energy_credits": 120,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/HAMMER.svg",
-        "happiness_sim": 58,
+        "happiness_sim": 57,
         "avatar_salt": 0
       },
       {
@@ -570,7 +570,7 @@
         "energy_credits": 90,
         "reputation": 0.47,
         "avatar_url": "./avatars/identicons/ECHO.svg",
-        "happiness_sim": 75,
+        "happiness_sim": 76,
         "avatar_salt": 0
       },
       {
@@ -586,7 +586,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/identicons/SPARROW.svg",
-        "happiness_sim": 62,
+        "happiness_sim": 61,
         "avatar_salt": 0
       },
       {
@@ -618,7 +618,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/identicons/ALPHA.svg",
-        "happiness_sim": 77,
+        "happiness_sim": 78,
         "avatar_salt": 0
       },
       {
@@ -634,7 +634,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/identicons/BETA.svg",
-        "happiness_sim": 57,
+        "happiness_sim": 56,
         "avatar_salt": 0
       },
       {
@@ -666,7 +666,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/COMET.svg",
-        "happiness_sim": 74,
+        "happiness_sim": 75,
         "avatar_salt": 0
       },
       {
@@ -682,7 +682,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/DRIFT.svg",
-        "happiness_sim": 54,
+        "happiness_sim": 53,
         "avatar_salt": 0
       },
       {
@@ -714,7 +714,7 @@
         "energy_credits": 90,
         "reputation": 0.44,
         "avatar_url": "./avatars/identicons/FABLE.svg",
-        "happiness_sim": 81,
+        "happiness_sim": 82,
         "avatar_salt": 0
       },
       {
@@ -730,7 +730,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/identicons/GHOST.svg",
-        "happiness_sim": 56,
+        "happiness_sim": 55,
         "avatar_salt": 0
       },
       {
@@ -762,7 +762,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/identicons/ION.svg",
-        "happiness_sim": 76,
+        "happiness_sim": 77,
         "avatar_salt": 0
       },
       {
@@ -778,7 +778,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/IRIS.svg",
-        "happiness_sim": 63,
+        "happiness_sim": 62,
         "avatar_salt": 0
       },
       {
@@ -810,7 +810,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/identicons/JOLT.svg",
-        "happiness_sim": 75,
+        "happiness_sim": 76,
         "avatar_salt": 0
       },
       {
@@ -826,7 +826,7 @@
         "energy_credits": 120,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/KODIAK.svg",
-        "happiness_sim": 62,
+        "happiness_sim": 61,
         "avatar_salt": 0
       },
       {
@@ -858,7 +858,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/identicons/ONYX.svg",
-        "happiness_sim": 77,
+        "happiness_sim": 78,
         "avatar_salt": 0
       },
       {
@@ -874,7 +874,7 @@
         "energy_credits": 120,
         "reputation": 0.53,
         "avatar_url": "./avatars/identicons/TALON.svg",
-        "happiness_sim": 64,
+        "happiness_sim": 63,
         "avatar_salt": 0
       },
       {
@@ -906,7 +906,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/UMBRA.svg",
-        "happiness_sim": 80,
+        "happiness_sim": 81,
         "avatar_salt": 0
       },
       {
@@ -922,7 +922,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/URSA.svg",
-        "happiness_sim": 55,
+        "happiness_sim": 54,
         "avatar_salt": 0
       },
       {
@@ -954,7 +954,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/identicons/WHISPER.svg",
-        "happiness_sim": 76,
+        "happiness_sim": 77,
         "avatar_salt": 0
       },
       {
@@ -970,7 +970,7 @@
         "energy_credits": 110,
         "reputation": 0.48,
         "avatar_url": "./avatars/identicons/XENO.svg",
-        "happiness_sim": 58,
+        "happiness_sim": 57,
         "avatar_salt": 0
       },
       {
@@ -1002,7 +1002,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/identicons/YONDER.svg",
-        "happiness_sim": 79,
+        "happiness_sim": 80,
         "avatar_salt": 0
       },
       {
@@ -1018,7 +1018,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/ZENITH.svg",
-        "happiness_sim": 63,
+        "happiness_sim": 62,
         "avatar_salt": 0
       },
       {
@@ -1040,7 +1040,7 @@
     ]
   },
   "market": {
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "exchange": {
       "credit_unit": "spark",
       "rate": 1
@@ -1068,7 +1068,7 @@
     ]
   },
   "friends": {
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "list": [
       {
         "id": "PROJECTSOLARBOT",
@@ -1085,7 +1085,7 @@
     ]
   },
   "activities": {
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "status": {
       "ci": "passing",
       "overall": 6.476,
@@ -1124,6 +1124,14 @@
       ]
     },
     "feed_posts": [
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-05 20:43:37 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
       {
         "who": "Atlas",
         "avatar_url": "./avatars/atlas.png",
@@ -1315,35 +1323,14 @@
         "topic": "Heartbeat",
         "status": "in-progress",
         "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-04 23:23:09 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
       }
     ]
   },
   "agora": {
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "mode": "SIMULATED",
     "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
     "messages": [
-      {
-        "sender_id": "LUMEN",
-        "target_tier": 3,
-        "timestamp": "2026-02-05T13:58:10.039Z",
-        "intent": "WORK_UPDATE",
-        "payload": {
-          "task_id": "TASK_LUMEN_DOC_FETCH",
-          "activity": "Downloading PDF documents",
-          "progress": 0.2,
-          "status": "working"
-        },
-        "spark_delta": 0.05965598085608002
-      },
       {
         "sender_id": "ATLAS",
         "timestamp": "2026-02-05T13:57:22.274Z",
@@ -2003,11 +1990,25 @@
         "metadata": {
           "requires_quantum_break": false
         }
+      },
+      {
+        "sender_id": "ATLAS",
+        "target_tier": 3,
+        "timestamp": "2026-02-05T20:43:37Z",
+        "intent": "STATE_PATCH",
+        "payload": {
+          "task_id": "tick",
+          "updatedAt": "2026-02-05T20:43:37Z"
+        },
+        "spark_delta": 0.1,
+        "metadata": {
+          "requires_quantum_break": false
+        }
       }
     ]
   },
   "undercurrent": {
-    "updatedAt": "2026-02-05T20:02:16Z",
+    "updatedAt": "2026-02-05T20:43:37Z",
     "signals": [
       {
         "id": "sig_001",

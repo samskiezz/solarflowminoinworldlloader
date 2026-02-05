@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-05T20:02:16Z",
+  "updatedAt": "2026-02-05T20:43:37Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "LUMEN",
-      "target_tier": 3,
-      "timestamp": "2026-02-05T13:58:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_LUMEN_DOC_FETCH",
-        "activity": "Downloading PDF documents",
-        "progress": 0.2,
-        "status": "working"
-      },
-      "spark_delta": 0.05965598085608002
-    },
     {
       "sender_id": "ATLAS",
       "timestamp": "2026-02-05T13:57:22.274Z",
@@ -670,6 +657,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T20:02:16Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T20:43:37Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T20:43:37Z"
       },
       "spark_delta": 0.1,
       "metadata": {
