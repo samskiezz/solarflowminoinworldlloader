@@ -30,8 +30,9 @@ const ROOT = (function(){
 })();
 const BASE = window.location.origin + ROOT;
 
-const MINIONS_URL = BASE + 'minions.json';
-const AGORA_URL = BASE + 'agora.json';
+const HIVE_STATE_URL = BASE + 'hive_state.json';
+const MINIONS_URL = BASE + 'minions.json'; // fallback
+const AGORA_URL = BASE + 'agora.json'; // fallback
 
 // --- Sound FX (WebAudio synth, no external assets) ---
 let audioOn = false;
@@ -483,9 +484,30 @@ if(btnFocusAtlas) btnFocusAtlas.addEventListener('click', ()=>{ clickFx(); focus
 if(searchEl) searchEl.addEventListener('input', renderMap);
 
 async function loadData(){
-  statusEl.textContent = 'loading minions…';
+  statusEl.textContent = 'loading hive state…';
   buildEnv();
   buildPost();
+  
+  // Try integrated hive_state first, fallback to separate files
+  try {
+    const hiveRes = await fetch(HIVE_STATE_URL + '?ts=' + Date.now(), {cache:'no-store'});
+    if (hiveRes.ok) {
+      const hive = await hiveRes.json();
+      const list = (hive.minions && hive.minions.roster) || [];
+      const agora = (hive.agora && hive.agora.messages) || [];
+      minionList = list;
+      statusEl.textContent = `realm online • pods ${list.length} • comms ${agora.length} • integrated`;
+      
+      // Process integrated data
+      await processMinions(list, agora);
+      return;
+    }
+  } catch (error) {
+    console.warn('Hive state failed, trying fallback files:', error);
+  }
+  
+  // Fallback to separate files
+  statusEl.textContent = 'loading minions…';
   const [minionsRes, agoraRes] = await Promise.all([
     fetch(MINIONS_URL + '?ts=' + Date.now(), {cache:'no-store'}),
     fetch(AGORA_URL + '?ts=' + Date.now(), {cache:'no-store'})
@@ -495,8 +517,12 @@ async function loadData(){
 
   const list = (minions.minions||[]);
   minionList = list;
-  statusEl.textContent = `realm online • pods ${list.length} • comms ${(agora.messages||[]).length}`;
+  statusEl.textContent = `realm online • pods ${list.length} • comms ${(agora.messages||[]).length} • fallback`;
+  
+  await processMinions(list, agora.messages || []);
+}
 
+async function processMinions(list, messages) {
   // build pods (await so hologram textures load)
   for(let i=0;i<list.length;i++){
     const m = list[i];
@@ -507,7 +533,7 @@ async function loadData(){
   }
 
   // links/packets from agora
-  rebuildLinks(agora.messages||[]);
+  rebuildLinks(messages || []);
   renderMap();
 }
 
