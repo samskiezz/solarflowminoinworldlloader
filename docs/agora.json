@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-05T22:21:19Z",
+  "updatedAt": "2026-02-05T22:50:53Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "ORBIT",
-      "target_tier": 2,
-      "timestamp": "2026-02-05T13:28:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_ORBIT_DOC_VALIDATE",
-        "activity": "Parsing document metadata",
-        "progress": 0.2,
-        "status": "working"
-      },
-      "spark_delta": 0.12322366557132268
-    },
     {
       "sender_id": "ORBIT",
       "target_tier": 2,
@@ -671,6 +658,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T22:21:19Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T22:50:53Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T22:50:53Z"
       },
       "spark_delta": 0.1,
       "metadata": {
