@@ -9,3 +9,8 @@ docs/minions.json merge=ours
 docs/agora.json merge=ours
 docs/build.json merge=ours
 docs/roster.html merge=ours
+
+docs/realm.html merge=ours
+docs/realm.js merge=ours
+
+docs/avatars/identicons/** merge=ours

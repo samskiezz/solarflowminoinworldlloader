@@ -101,5 +101,14 @@
   </script>
 
   <script type="module" src="./realm.js?v=01a169b"></script>
+  <script nomodule>
+    (function(){
+      try{
+        var st = document.getElementById('status');
+        if(st) st.textContent = 'browser too old (no ES modules)';
+        if(window.__realmShowErr) window.__realmShowErr('Your browser does not support ES modules. Please update your browser (or try Chrome/Safari).');
+      }catch(e){}
+    })();
+  </script>
 </body>
 </html>
