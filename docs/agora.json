@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-05T23:11:56Z",
+  "updatedAt": "2026-02-05T23:37:14Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "PRISM",
-      "target_tier": 2,
-      "timestamp": "2026-02-05T12:58:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_PRISM_PIPE_STATE",
-        "activity": "Updating pipeline progress",
-        "progress": 0.2,
-        "status": "working"
-      },
-      "spark_delta": 0.10673389680815025
-    },
     {
       "sender_id": "PRISM",
       "target_tier": 2,
@@ -673,6 +660,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T23:11:56Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T23:37:14Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T23:37:14Z"
       },
       "spark_delta": 0.1,
       "metadata": {
