@@ -1,22 +1,8 @@
 {
-  "updatedAt": "2026-02-05T08:58:07Z",
+  "updatedAt": "2026-02-05T09:40:53Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-03T05:59:33Z",
-      "intent": "STATE_PATCH",
-      "payload": {
-        "task_id": "tick",
-        "updatedAt": "2026-02-03T05:59:33Z"
-      },
-      "spark_delta": 0.1,
-      "metadata": {
-        "requires_quantum_break": false
-      }
-    },
     {
       "sender_id": "ATLAS",
       "target_tier": 3,
@@ -697,6 +683,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T08:58:07Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T09:40:53Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T09:40:53Z"
       },
       "spark_delta": 0.1,
       "metadata": {
