@@ -7,17 +7,19 @@ class AutonomousMinionSystem {
     constructor() {
         this.minions = [];
         this.products = [];
+        this.qaDatabase = [];
         this.knowledgeBase = new Map();
         this.isRunning = false;
         this.activityFeed = [];
         
-        this.initializeSystem();
-        this.startRealTimeUpdates();
+        this.initializeSystem().then(() => {
+            this.startRealTimeUpdates();
+        });
     }
 
-    initializeSystem() {
+    async initializeSystem() {
         this.createMinionRoster();
-        this.loadCERProducts();
+        await this.loadRealCERProducts();
         this.initializeKnowledgeBase();
         this.renderMinionRoster();
         this.renderProducts();
@@ -98,8 +100,84 @@ class AutonomousMinionSystem {
         return 'working';
     }
 
-    loadCERProducts() {
-        // Real CER approved products database
+    async loadRealCERProducts() {
+        // Load real CER products from scraped database
+        try {
+            const response = await fetch('./minion_complete_knowledge.json');
+            if (response.ok) {
+                const knowledgeData = await response.json();
+                this.products = knowledgeData.products.map(product => ({
+                    id: product.id,
+                    brand: product.brand,
+                    model: product.model,
+                    type: this.getCategoryDisplayName(product.category),
+                    category: product.category,
+                    specs: this.formatSpecsForDisplay(product.specifications),
+                    cerApproved: product.cerApproved,
+                    image: this.getCategoryIcon(product.category)
+                }));
+                
+                // Load Q&A database for instant recall
+                const qaResponse = await fetch('./minion_instant_qa.json');
+                if (qaResponse.ok) {
+                    const qaData = await qaResponse.json();
+                    this.qaDatabase = qaData.questions;
+                }
+                
+                console.log(`✅ Loaded ${this.products.length} real CER products with ${this.qaDatabase?.length || 0} Q&A pairs`);
+                return;
+            }
+        } catch (error) {
+            console.warn('Failed to load real CER data, using fallback:', error.message);
+        }
+        
+        // Fallback to embedded data if files not found
+        this.loadFallbackProducts();
+    }
+
+    getCategoryDisplayName(category) {
+        const names = {
+            'solar_panel': 'Solar Panel',
+            'inverter': 'Inverter',
+            'battery': 'Battery Storage'
+        };
+        return names[category] || category;
+    }
+
+    getCategoryIcon(category) {
+        const icons = {
+            'solar_panel': '☀️',
+            'inverter': '⚡',
+            'battery': '🔋'
+        };
+        return icons[category] || '📦';
+    }
+
+    formatSpecsForDisplay(specs) {
+        const formatted = {};
+        
+        // Solar panel specs
+        if (specs.power) formatted.power = `${specs.power}W`;
+        if (specs.voc) formatted.voc = `${specs.voc}V`;
+        if (specs.vmp) formatted.vmp = `${specs.vmp}V`;
+        if (specs.isc) formatted.isc = `${specs.isc}A`;
+        if (specs.imp) formatted.imp = `${specs.imp}A`;
+        if (specs.efficiency) formatted.efficiency = `${specs.efficiency}%`;
+        
+        // Inverter specs
+        if (specs.maxDCVoltage) formatted.maxDCVoltage = `${specs.maxDCVoltage}V`;
+        if (specs.mpptRange) formatted.mpptRange = specs.mpptRange;
+        
+        // Battery specs
+        if (specs.capacity) formatted.capacity = `${specs.capacity}kWh`;
+        if (specs.continuousPower) formatted.continuousPower = `${specs.continuousPower}kW`;
+        if (specs.peakPower) formatted.peakPower = `${specs.peakPower}kW`;
+        
+        return formatted;
+    }
+
+    loadFallbackProducts() {
+        // Minimal fallback data
         this.products = [
             // Solar Panels
             {
@@ -755,9 +833,22 @@ class AutonomousMinionSystem {
     generateKnowledgeResponse(query) {
         const queryLower = query.toLowerCase();
         
-        // VOC (Voltage Open Circuit) queries
-        if (queryLower.includes('voc') && queryLower.includes('trina') && queryLower.includes('440')) {
-            return `<strong>Trina 440W Panel VOC:</strong> The Trina Solar TSM-DE06M.05(II) 440W panel has a VOC (Voltage Open Circuit) of <strong>40.4V</strong>. This specification is critical for string sizing calculations and ensuring the total DC voltage doesn't exceed inverter maximum input voltage limits.`;
+        // First, try to find exact matches in the Q&A database
+        if (this.qaDatabase && this.qaDatabase.length > 0) {
+            const exactMatch = this.qaDatabase.find(qa => 
+                qa.question.toLowerCase().includes(queryLower) ||
+                queryLower.includes(qa.question.toLowerCase()) ||
+                this.fuzzyMatch(queryLower, qa.question.toLowerCase())
+            );
+            
+            if (exactMatch) {
+                return `<strong>Instant Recall:</strong> ${exactMatch.answer}`;
+            }
+        }
+        
+        // Specific real product answers
+        if (queryLower.includes('voc') && (queryLower.includes('trina') && queryLower.includes('440'))) {
+            return `<strong>Trina 440W Panel VOC:</strong> 40.4V - Critical for string sizing calculations and ensuring the total DC voltage doesn't exceed inverter maximum input voltage limits.`;
         }
         
         if (queryLower.includes('voc') && queryLower.includes('jinko')) {
@@ -877,6 +968,18 @@ class AutonomousMinionSystem {
         </ul>
         
         Try asking specific questions like "What's the VOC of Trina 440W panel?" or "What's the spacing for Fronius inverter?"`;
+    }
+
+    fuzzyMatch(query, target) {
+        // Simple fuzzy matching - checks if query words appear in target
+        const queryWords = query.split(/\s+/).filter(w => w.length > 2);
+        const targetWords = target.split(/\s+/);
+        
+        return queryWords.some(qw => 
+            targetWords.some(tw => 
+                tw.includes(qw) || qw.includes(tw)
+            )
+        );
     }
 
     startAutonomousWork() {

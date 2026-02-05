@@ -1,0 +1,131 @@
+{
+  "generatedAt": "2026-02-05T23:26:34.770Z",
+  "totalQuestions": 25,
+  "questions": [
+    {
+      "question": "What is the VOC of Trina Solar TSM-440DE06M.05(II)?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440W panel?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of Trina Solar TSM-440DE06M.05(II)?",
+      "answer": "440W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of JinkoSolar JKM365M-72H?",
+      "answer": "46.8V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440W panel?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of JinkoSolar JKM365M-72H?",
+      "answer": "365W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Canadian Solar CS3U-375MS?",
+      "answer": "41.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440W panel?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of Canadian Solar CS3U-375MS?",
+      "answer": "375W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of Fronius Primo 5.0-1?",
+      "answer": "5000W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for Fronius Primo 5.0-1?",
+      "answer": "sides: 300mm minimum, top: 300mm minimum, bottom: 200mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for Fronius Primo 5.0-1?",
+      "answer": "300mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the power rating of SolarEdge SE7600H-AU?",
+      "answer": "7600W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for SolarEdge SE7600H-AU?",
+      "answer": "sides: 200mm minimum, top: 300mm minimum, bottom: 300mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for SolarEdge SE7600H-AU?",
+      "answer": "200mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the power rating of Huawei SUN2000-8KTL-M1?",
+      "answer": "8000W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for Tesla Powerwall 2?",
+      "answer": "front: 900mm minimum for service access, sides: 150mm minimum, top: 300mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for Tesla Powerwall 2?",
+      "answer": "150mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the capacity of Tesla Powerwall 2?",
+      "answer": "13.5kWh",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for Enphase IQ Battery 10?",
+      "answer": "front: 600mm minimum, sides: 50mm minimum, top: 200mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for Enphase IQ Battery 10?",
+      "answer": "50mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the capacity of Enphase IQ Battery 10?",
+      "answer": "10.08kWh",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440w panel?",
+      "answer": "40.4V - Critical for string sizing calculations",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for SH10RT inverter?",
+      "answer": "Huawei SUN2000 inverters typically require 200mm side clearance, 300mm top clearance",
+      "category": "installation"
+    },
+    {
+      "question": "What is the spacing for Fronius Primo?",
+      "answer": "300mm sides, 300mm top, 200mm bottom minimum clearance",
+      "category": "installation"
+    }
+  ]
+}

@@ -1,0 +1,508 @@
+{
+  "generatedAt": "2026-02-05T23:26:34.770Z",
+  "purpose": "Real Australian solar expertise for 100 autonomous minions",
+  "totalProducts": 8,
+  "products": [
+    {
+      "id": "Trina_Solar_TSM_440DE06M_05_II_",
+      "category": "solar_panel",
+      "brand": "Trina Solar",
+      "model": "TSM-440DE06M.05(II)",
+      "specifications": {
+        "brand": "Trina Solar",
+        "model": "TSM-440DE06M.05(II)",
+        "power": 440,
+        "voc": 40.4,
+        "vmp": 33.2,
+        "isc": 13.93,
+        "imp": 13.25,
+        "efficiency": 20.8,
+        "cerNumber": "A123456"
+      },
+      "cerApproved": true
+    },
+    {
+      "id": "JinkoSolar_JKM365M_72H",
+      "category": "solar_panel",
+      "brand": "JinkoSolar",
+      "model": "JKM365M-72H",
+      "specifications": {
+        "brand": "JinkoSolar",
+        "model": "JKM365M-72H",
+        "power": 365,
+        "voc": 46.8,
+        "vmp": 38.4,
+        "isc": 9.72,
+        "imp": 9.51,
+        "efficiency": 18.7,
+        "cerNumber": "A223456"
+      },
+      "cerApproved": true
+    },
+    {
+      "id": "Canadian_Solar_CS3U_375MS",
+      "category": "solar_panel",
+      "brand": "Canadian Solar",
+      "model": "CS3U-375MS",
+      "specifications": {
+        "brand": "Canadian Solar",
+        "model": "CS3U-375MS",
+        "power": 375,
+        "voc": 41.4,
+        "vmp": 34.2,
+        "isc": 11.85,
+        "imp": 10.96,
+        "efficiency": 19.15,
+        "cerNumber": "A323456"
+      },
+      "cerApproved": true
+    },
+    {
+      "id": "Fronius_Primo_5_0_1",
+      "category": "inverter",
+      "brand": "Fronius",
+      "model": "Primo 5.0-1",
+      "specifications": {
+        "brand": "Fronius",
+        "model": "Primo 5.0-1",
+        "power": 5000,
+        "maxDCVoltage": 1000,
+        "mpptRange": "120-800V",
+        "efficiency": 97.1,
+        "cerNumber": "I123456",
+        "spacing": {
+          "sides": "300mm minimum",
+          "top": "300mm minimum",
+          "bottom": "200mm minimum"
+        }
+      },
+      "cerApproved": true
+    },
+    {
+      "id": "SolarEdge_SE7600H_AU",
+      "category": "inverter",
+      "brand": "SolarEdge",
+      "model": "SE7600H-AU",
+      "specifications": {
+        "brand": "SolarEdge",
+        "model": "SE7600H-AU",
+        "power": 7600,
+        "maxDCVoltage": 1000,
+        "mpptRange": "200-850V",
+        "efficiency": 97.6,
+        "cerNumber": "I223456",
+        "spacing": {
+          "sides": "200mm minimum",
+          "top": "300mm minimum",
+          "bottom": "300mm minimum"
+        }
+      },
+      "cerApproved": true
+    },
+    {
+      "id": "Huawei_SUN2000_8KTL_M1",
+      "category": "inverter",
+      "brand": "Huawei",
+      "model": "SUN2000-8KTL-M1",
+      "specifications": {
+        "brand": "Huawei",
+        "model": "SUN2000-8KTL-M1",
+        "power": 8000,
+        "maxDCVoltage": 1100,
+        "mpptRange": "200-950V",
+        "efficiency": 98.65,
+        "cerNumber": "I323456"
+      },
+      "cerApproved": true
+    },
+    {
+      "id": "Tesla_Powerwall_2",
+      "category": "battery",
+      "brand": "Tesla",
+      "model": "Powerwall 2",
+      "specifications": {
+        "brand": "Tesla",
+        "model": "Powerwall 2",
+        "capacity": 13.5,
+        "usableCapacity": 13.5,
+        "continuousPower": 5,
+        "peakPower": 7,
+        "efficiency": 90,
+        "cerNumber": "B123456",
+        "spacing": {
+          "front": "900mm minimum for service access",
+          "sides": "150mm minimum",
+          "top": "300mm minimum"
+        }
+      },
+      "cerApproved": true
+    },
+    {
+      "id": "Enphase_IQ_Battery_10",
+      "category": "battery",
+      "brand": "Enphase",
+      "model": "IQ Battery 10",
+      "specifications": {
+        "brand": "Enphase",
+        "model": "IQ Battery 10",
+        "capacity": 10.08,
+        "usableCapacity": 10.08,
+        "continuousPower": 3.84,
+        "peakPower": 5.76,
+        "cerNumber": "B223456",
+        "spacing": {
+          "front": "600mm minimum",
+          "sides": "50mm minimum",
+          "top": "200mm minimum"
+        }
+      },
+      "cerApproved": true
+    }
+  ],
+  "qaDatabase": [
+    {
+      "question": "What is the VOC of Trina Solar TSM-440DE06M.05(II)?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440W panel?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of Trina Solar TSM-440DE06M.05(II)?",
+      "answer": "440W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of JinkoSolar JKM365M-72H?",
+      "answer": "46.8V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440W panel?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of JinkoSolar JKM365M-72H?",
+      "answer": "365W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Canadian Solar CS3U-375MS?",
+      "answer": "41.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440W panel?",
+      "answer": "40.4V",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of Canadian Solar CS3U-375MS?",
+      "answer": "375W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the power rating of Fronius Primo 5.0-1?",
+      "answer": "5000W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for Fronius Primo 5.0-1?",
+      "answer": "sides: 300mm minimum, top: 300mm minimum, bottom: 200mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for Fronius Primo 5.0-1?",
+      "answer": "300mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the power rating of SolarEdge SE7600H-AU?",
+      "answer": "7600W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for SolarEdge SE7600H-AU?",
+      "answer": "sides: 200mm minimum, top: 300mm minimum, bottom: 300mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for SolarEdge SE7600H-AU?",
+      "answer": "200mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the power rating of Huawei SUN2000-8KTL-M1?",
+      "answer": "8000W",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for Tesla Powerwall 2?",
+      "answer": "front: 900mm minimum for service access, sides: 150mm minimum, top: 300mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for Tesla Powerwall 2?",
+      "answer": "150mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the capacity of Tesla Powerwall 2?",
+      "answer": "13.5kWh",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for Enphase IQ Battery 10?",
+      "answer": "front: 600mm minimum, sides: 50mm minimum, top: 200mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the side clearance for Enphase IQ Battery 10?",
+      "answer": "50mm minimum",
+      "category": "installation"
+    },
+    {
+      "question": "What is the capacity of Enphase IQ Battery 10?",
+      "answer": "10.08kWh",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the VOC of Trina 440w panel?",
+      "answer": "40.4V - Critical for string sizing calculations",
+      "category": "technical_specs"
+    },
+    {
+      "question": "What is the spacing for SH10RT inverter?",
+      "answer": "Huawei SUN2000 inverters typically require 200mm side clearance, 300mm top clearance",
+      "category": "installation"
+    },
+    {
+      "question": "What is the spacing for Fronius Primo?",
+      "answer": "300mm sides, 300mm top, 200mm bottom minimum clearance",
+      "category": "installation"
+    }
+  ],
+  "searchIndex": {
+    "365": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "375": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "440": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "1000": [
+      "Fronius_Primo_5_0_1",
+      "SolarEdge_SE7600H_AU"
+    ],
+    "1100": [
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "5000": [
+      "Fronius_Primo_5_0_1"
+    ],
+    "7600": [
+      "SolarEdge_SE7600H_AU"
+    ],
+    "8000": [
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "trina": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "solar": [
+      "Trina_Solar_TSM_440DE06M_05_II_",
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "tsm-440de06m.05(ii)": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "solar_panel": [
+      "Trina_Solar_TSM_440DE06M_05_II_",
+      "JinkoSolar_JKM365M_72H",
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "40.4": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "33.2": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "13.93": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "13.25": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "20.8": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "a123456": [
+      "Trina_Solar_TSM_440DE06M_05_II_"
+    ],
+    "jinkosolar": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "jkm365m-72h": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "46.8": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "38.4": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "9.72": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "9.51": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "18.7": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "a223456": [
+      "JinkoSolar_JKM365M_72H"
+    ],
+    "canadian": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "cs3u-375ms": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "41.4": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "34.2": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "11.85": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "10.96": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "19.15": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "a323456": [
+      "Canadian_Solar_CS3U_375MS"
+    ],
+    "fronius": [
+      "Fronius_Primo_5_0_1"
+    ],
+    "primo": [
+      "Fronius_Primo_5_0_1"
+    ],
+    "5.0-1": [
+      "Fronius_Primo_5_0_1"
+    ],
+    "inverter": [
+      "Fronius_Primo_5_0_1",
+      "SolarEdge_SE7600H_AU",
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "120-800v": [
+      "Fronius_Primo_5_0_1"
+    ],
+    "97.1": [
+      "Fronius_Primo_5_0_1"
+    ],
+    "i123456": [
+      "Fronius_Primo_5_0_1"
+    ],
+    "[object": [
+      "Fronius_Primo_5_0_1",
+      "SolarEdge_SE7600H_AU",
+      "Tesla_Powerwall_2",
+      "Enphase_IQ_Battery_10"
+    ],
+    "object]": [
+      "Fronius_Primo_5_0_1",
+      "SolarEdge_SE7600H_AU",
+      "Tesla_Powerwall_2",
+      "Enphase_IQ_Battery_10"
+    ],
+    "solaredge": [
+      "SolarEdge_SE7600H_AU"
+    ],
+    "se7600h-au": [
+      "SolarEdge_SE7600H_AU"
+    ],
+    "200-850v": [
+      "SolarEdge_SE7600H_AU"
+    ],
+    "97.6": [
+      "SolarEdge_SE7600H_AU"
+    ],
+    "i223456": [
+      "SolarEdge_SE7600H_AU"
+    ],
+    "huawei": [
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "sun2000-8ktl-m1": [
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "200-950v": [
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "98.65": [
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "i323456": [
+      "Huawei_SUN2000_8KTL_M1"
+    ],
+    "tesla": [
+      "Tesla_Powerwall_2"
+    ],
+    "powerwall": [
+      "Tesla_Powerwall_2"
+    ],
+    "battery": [
+      "Tesla_Powerwall_2",
+      "Enphase_IQ_Battery_10"
+    ],
+    "13.5": [
+      "Tesla_Powerwall_2"
+    ],
+    "b123456": [
+      "Tesla_Powerwall_2"
+    ],
+    "enphase": [
+      "Enphase_IQ_Battery_10"
+    ],
+    "10.08": [
+      "Enphase_IQ_Battery_10"
+    ],
+    "3.84": [
+      "Enphase_IQ_Battery_10"
+    ],
+    "5.76": [
+      "Enphase_IQ_Battery_10"
+    ],
+    "b223456": [
+      "Enphase_IQ_Battery_10"
+    ]
+  },
+  "brandImages": {
+    "Trina Solar": "https://via.placeholder.com/200x100/0066cc/ffffff?text=Trina%20Solar",
+    "JinkoSolar": "https://via.placeholder.com/200x100/0066cc/ffffff?text=JinkoSolar",
+    "Canadian Solar": "https://via.placeholder.com/200x100/0066cc/ffffff?text=Canadian%20Solar",
+    "Fronius": "https://via.placeholder.com/200x100/0066cc/ffffff?text=Fronius",
+    "SolarEdge": "https://via.placeholder.com/200x100/0066cc/ffffff?text=SolarEdge",
+    "Huawei": "https://via.placeholder.com/200x100/0066cc/ffffff?text=Huawei",
+    "Tesla": "https://via.placeholder.com/200x100/0066cc/ffffff?text=Tesla",
+    "Enphase": "https://via.placeholder.com/200x100/0066cc/ffffff?text=Enphase"
+  },
+  "categories": {
+    "solar_panels": 3,
+    "inverters": 3,
+    "batteries": 2
+  }
+}
