@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-05T17:24:46Z",
+  "updatedAt": "2026-02-05T18:07:45Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "ATLAS",
-      "target_tier": 3,
-      "timestamp": "2026-02-05T14:13:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_ATLAS_DOC_DISCOVERY",
-        "activity": "Mapping sitemap hierarchy",
-        "progress": 0.5,
-        "status": "in-progress"
-      },
-      "spark_delta": 0.08853310117755807
-    },
     {
       "sender_id": "EMBER",
       "timestamp": "2026-02-05T14:12:22.274Z",
@@ -670,6 +657,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-05T17:24:46Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-05T18:07:45Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-05T18:07:45Z"
       },
       "spark_delta": 0.1,
       "metadata": {
