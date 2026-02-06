@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-06T10:07:14Z",
+  "updatedAt": "2026-02-06T10:57:07Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "EMBER",
-      "target_tier": 1,
-      "timestamp": "2026-02-05T10:28:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_EMBER_AGORA",
-        "activity": "Identifying key exchanges",
-        "progress": 0.8,
-        "status": "in-progress"
-      },
-      "spark_delta": 0.10392279619342593
-    },
     {
       "sender_id": "RUNE",
       "target_tier": 2,
@@ -685,6 +672,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-06T10:07:14Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-06T10:57:07Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-06T10:57:07Z"
       },
       "spark_delta": 0.1,
       "metadata": {
