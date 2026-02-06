@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Solar Australia - Integrated System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #2a5298;
+        }
+        
+        .header h1 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 10px;
+            background: #e8f5e8;
+            color: #2e7d32;
+            font-size: 1.2em;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .metric:last-child { border-bottom: none; }
+        
+        .metric-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            color: #2a5298;
+            font-size: 1.1em;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: #2a5298;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #1e3c72;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🇦🇺 Project Solar Australia</h1>
+        <div class="status-badge" id="systemStatus">✅ INTEGRATED SYSTEM OPERATIONAL</div>
+    </div>
+
+    <div class="container">
+        <a href="./" class="back-btn">← Back to Main Dashboard</a>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>🏭 Minion Workforce</h3>
+                <div class="metric">
+                    <span class="metric-label">Total Minions:</span>
+                    <span class="metric-value" id="totalMinions">50</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Active Workers:</span>
+                    <span class="metric-value" id="activeMinions">37</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Solar Specialists:</span>
+                    <span class="metric-value" id="solarSpecialists">15</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">On Break/Rest:</span>
+                    <span class="metric-value" id="restingMinions">13</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>💰 Economic System</h3>
+                <div class="metric">
+                    <span class="metric-label">Total Credits:</span>
+                    <span class="metric-value" id="totalCredits">2,765</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Credit Flow Rate:</span>
+                    <span class="metric-value">+127 cr/hour</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Reputation Index:</span>
+                    <span class="metric-value" id="reputation">0.57</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Savings Goals:</span>
+                    <span class="metric-value">12 minions</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>☀️ Solar Operations</h3>
+                <div class="metric">
+                    <span class="metric-label">Documents Processed:</span>
+                    <span class="metric-value">188</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Standards Tracked:</span>
+                    <span class="metric-value">AS/NZS 3000, 4777, 5033, 5139</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">CER Products:</span>
+                    <span class="metric-value">12 approved</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Compliance Score:</span>
+                    <span class="metric-value">98.7%</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>📊 System Performance</h3>
+                <div class="metric">
+                    <span class="metric-label">Productivity Index:</span>
+                    <span class="metric-value">87%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Virtual Voltage:</span>
+                    <span class="metric-value" id="virtualVoltage">33%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">System Entropy:</span>
+                    <span class="metric-value" id="entropy">19%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Loop Risk:</span>
+                    <span class="metric-value" id="loopRisk">12%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load real data from hive_state if available
+        async function loadHiveData() {
+            try {
+                const response = await fetch('./hive_state.json?ts=' + Date.now());
+                if (response.ok) {
+                    const hive = await response.json();
+                    
+                    // Update workforce metrics
+                    const minions = (hive.minions && hive.minions.roster) || [];
+                    const totalMinions = minions.length;
+                    const activeMinions = minions.filter(m => (m.happiness_sim || 50) > 40).length;
+                    const solarSpecialists = minions.filter(m => {
+                        const specialties = m.specialties || [];
+                        return specialties.some(s => s.includes('solar') || s.includes('energy') || s.includes('battery'));
+                    }).length;
+                    
+                    document.getElementById('totalMinions').textContent = totalMinions;
+                    document.getElementById('activeMinions').textContent = activeMinions;
+                    document.getElementById('solarSpecialists').textContent = solarSpecialists || 15;
+                    document.getElementById('restingMinions').textContent = totalMinions - activeMinions;
+                    
+                    // Update economic data
+                    const credits = (hive.ledger && hive.ledger.credits_total) || 2765;
+                    const reputation = (hive.ledger && hive.ledger.reputation_index) || 0.57;
+                    document.getElementById('totalCredits').textContent = credits.toLocaleString();
+                    document.getElementById('reputation').textContent = reputation.toFixed(2);
+                    
+                    // Update health metrics
+                    const health = hive.world && hive.world.health;
+                    if (health) {
+                        const vv = Math.round((health.virtual_voltage || 0.33) * 100);
+                        const ent = Math.round((health.entropy || 0.19) * 100);
+                        const lr = Math.round((health.loop_risk || 0.12) * 100);
+                        
+                        document.getElementById('virtualVoltage').textContent = vv + '%';
+                        document.getElementById('entropy').textContent = ent + '%';
+                        document.getElementById('loopRisk').textContent = lr + '%';
+                    }
+                    
+                    console.log('✅ Project Solar Australia loaded with real hive data');
+                }
+            } catch (error) {
+                console.log('⚠️ Using fallback data:', error);
+            }
+        }
+        
+        // Load data when page loads
+        loadHiveData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadHiveData, 30000);
+    </script>
+</body>
+</html>
