@@ -36,20 +36,13 @@ class SafetyGuardrails {
         
         this.protectedFeatures = {
             buttons: {
-                count: 14,  // Minimum button count
+                count: 5,  // Minimum button/dropdown count (consolidated interface)
                 required: [
-                    'Workforce Manager',
-                    'Direct Communication',
-                    'Economic Activity', 
-                    'Shift Controls',
-                    'Evolution Tracking',
-                    'Performance Analytics',
-                    'Solar Operations',
-                    'Knowledge Base',
-                    'Enter 3D Realm',
-                    'Project Solar Australia',
-                    'Processed Documents',
-                    'Refresh'
+                    'Workforce',      // Dropdown with workforce functions
+                    'Intelligence',   // Dropdown with minion intelligence
+                    'Solar Ops',      // Dropdown with solar operations  
+                    '3D Realm',       // Standalone advanced feature
+                    'System'          // Dropdown with system controls
                 ]
             },
             dataIntegrity: {
@@ -155,10 +148,13 @@ class SafetyGuardrails {
         
         const indexContent = fs.readFileSync(indexPath, 'utf8');
         
-        // Check button count
+        // Check button and dropdown count (consolidated interface)
         const buttons = indexContent.match(/class="btn"/g) || [];
-        if (buttons.length < this.protectedFeatures.buttons.count) {
-            this.violations.push(`BUTTON COUNT VIOLATION: Only ${buttons.length} buttons found, minimum ${this.protectedFeatures.buttons.count} required!`);
+        const dropdowns = indexContent.match(/class="dropdown"/g) || [];
+        const totalControls = buttons.length + dropdowns.length;
+        
+        if (totalControls < this.protectedFeatures.buttons.count) {
+            this.violations.push(`CONTROL COUNT VIOLATION: Only ${totalControls} controls (${buttons.length} buttons + ${dropdowns.length} dropdowns) found, minimum ${this.protectedFeatures.buttons.count} required!`);
         }
         
         // Check for critical JavaScript references

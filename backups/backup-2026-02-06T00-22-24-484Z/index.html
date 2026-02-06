@@ -26,18 +26,6 @@
     .pill strong{color:var(--text);font-weight:600}
     .btn{cursor:pointer;border:1px solid var(--stroke);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));color:var(--text);
       padding:9px 12px;border-radius:10px;font-size:13px}
-    
-    /* Dropdown Styles */
-    .dropdown{position:relative;display:inline-block}
-    .dropdown-btn{position:relative}
-    .dropdown-content{display:none;position:absolute;background:linear-gradient(180deg,var(--card),var(--card2));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-      min-width:200px;border:1px solid var(--stroke);border-radius:12px;z-index:1000;top:100%;left:0;margin-top:4px;overflow:hidden}
-    .dropdown-content a{color:var(--text);padding:10px 14px;text-decoration:none;display:block;font-size:13px;
-      transition:background-color 0.2s ease}
-    .dropdown-content a:hover{background:rgba(255,255,255,.08)}
-    .dropdown:hover .dropdown-content{display:block}
-    .dropdown:hover .dropdown-btn{background:linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,.10))}
-    
     .spin{display:inline-block;width:12px;height:12px;border-radius:999px;border:2px solid rgba(255,255,255,.25);border-top-color:rgba(34,211,238,.95);animation:spin 0.9s linear infinite;vertical-align:-2px;margin-right:6px}
     .spin.paused{animation:none;border-top-color:rgba(255,255,255,.25)}
     @keyframes spin{to{transform:rotate(360deg)}}
@@ -2863,50 +2851,20 @@
         <div class="pill"><strong>CI</strong>: <span id="ciText">passing</span></div>
         <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-06T00:00:06Z</strong></div>
         <button class="btn" id="btnToggle">Pause</button>
-        <!-- Workforce Management Dropdown -->
-        <div class="dropdown">
-          <button class="btn dropdown-btn">👥 Workforce ▼</button>
-          <div class="dropdown-content">
-            <a href="./roster.html">👥 Minion Roster</a>
-            <a href="./minion-chat.html">💬 Direct Communication</a>
-            <a href="./minion-control.html">🎛️ Shift Controls</a>
-            <a href="./activity-feed.html">📊 Economic Activity</a>
-            <a href="./existential-threat-system.html">🎉 Happiness & Activities</a>
-          </div>
-        </div>
-
-        <!-- Minion Intelligence Dropdown -->
-        <div class="dropdown">
-          <button class="btn dropdown-btn">🧠 Intelligence ▼</button>
-          <div class="dropdown-content">
-            <a href="./consciousness-engine.html">🧠 Evolution Tracking</a>
-            <a href="./real-work-consciousness.html">⚙️ Performance Analytics</a>
-            <a href="./autonomous-minion-knowledge-system.html">🤖 Knowledge Base</a>
-            <a href="./autonomous-world.html">🌍 Autonomous World</a>
-          </div>
-        </div>
-
-        <!-- Solar Operations Dropdown -->
-        <div class="dropdown">
-          <button class="btn dropdown-btn" style="background:linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: 600;">🏗️ Solar Ops ▼</button>
-          <div class="dropdown-content">
-            <a href="./simple-solar-australia.html">🇦🇺 Project Solar Australia</a>
-            <a href="./autonomous-minion-knowledge-system.html">🏛️ CER Products Database</a>
-            <a href="./processed-documents.html">📚 Document Pipeline</a>
-          </div>
-        </div>
-
-        <!-- Advanced Features -->
-        <button class="btn" onclick="location.href='./realm.html'" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; font-weight: 600;">🌐 3D Realm</button>
-
-        <!-- System Controls -->
-        <div class="dropdown">
-          <button class="btn dropdown-btn">⚙️ System ▼</button>
-          <div class="dropdown-content">
-            <a href="#" onclick="document.getElementById('btnToggle').click(); return false;">⏸️ Pause/Resume</a>
-            <a href="#" onclick="location.reload(); return false;">🔄 Refresh Interface</a>
-          </div>
-        </div>
+        <button class="btn" onclick="location.href='./roster.html'">👥 Workforce Manager</button>
+        <button class="btn" onclick="location.href='./minion-chat.html'">💬 Direct Communication</button>
+        <button class="btn" onclick="location.href='./activity-feed.html'">📊 Economic Activity</button>
+        <button class="btn" onclick="location.href='./minion-control.html'">🎛️ Shift Controls</button>
+        <button class="btn" onclick="location.href='./consciousness-engine.html'">🧠 Evolution Tracking</button>
+        <button class="btn" onclick="location.href='./real-work-consciousness.html'">⚙️ Performance Analytics</button>
+        <button class="btn" onclick="location.href='./autonomous-world.html'">🌍 Solar Operations</button>
+        <button class="btn" onclick="location.href='./existential-threat-system.html'" style="background:linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 600;">🎉 Happiness & Activities</button>
+        <button class="btn" onclick="location.href='./autonomous-minion-knowledge-system.html'">🤖 Knowledge Base</button>
+        <button class="btn" onclick="location.href='./realm.html'">🌐 Enter 3D Realm</button>
+        <button class="btn" onclick="location.href='./simple-solar-australia.html'" style="background:linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: 600;">🇦🇺 Project Solar Australia</button>
+        <button class="btn" onclick="location.href='./autonomous-minion-knowledge-system.html'" style="background:linear-gradient(135deg, #3b82f6, #1e40af); color: white; font-weight: 600; border: 2px solid #60a5fa;">🏛️ CER Products & Knowledge</button>
+        <button class="btn" onclick="location.href='./processed-documents.html'" style="background:linear-gradient(135deg, #059669, #047857); color: white; font-weight: 600;">📚 Processed Documents</button>
+        <button class="btn" onclick="location.reload()">🔄 Refresh</button>
       </div>
     </div>
 
