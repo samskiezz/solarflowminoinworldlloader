@@ -166,8 +166,16 @@ export class StateStore {
         return this.minions.filter(m => m.role === role);
     }
 
-    getActiveMiniokns() {
+    getActiveMinions() {
         return this.minions.filter(m => m.isActive);
+    }
+    
+    getMinions() {
+        return this.minions;
+    }
+    
+    getMinion(id) {
+        return this.getMinionById(id);
     }
 
     getTotalCredits() {

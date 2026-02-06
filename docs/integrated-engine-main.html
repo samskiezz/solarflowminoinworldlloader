@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-height=1.0">
+    <title>Integrated Engine - Complete Wiring</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0e27, #16213e);
+            color: white;
+            overflow: hidden;
+        }
+        
+        #c { display: block; width: 100vw; height: 100vh; }
+        
+        .hud {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 12px;
+            min-width: 300px;
+            z-index: 100;
+        }
+        
+        .hud h3 {
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+        
+        .metric-value {
+            color: #4caf50;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        button {
+            background: linear-gradient(145deg, #1976d2, #0d47a1);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background: linear-gradient(145deg, #2196f3, #1565c0);
+            transform: translateY(-1px);
+        }
+        
+        .log {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+            z-index: 100;
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+        }
+        
+        .log-info { color: #64ffda; }
+        .log-success { color: #4caf50; }
+        .log-warning { color: #ff9800; }
+        .log-error { color: #f44336; }
+        
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #64ffda;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div>
+            <div class="spinner"></div>
+            <h2>🚀 Initializing Integrated Engine</h2>
+            <p>Loading modular systems...</p>
+        </div>
+    </div>
+
+    <canvas id="c"></canvas>
+
+    <!-- HUD -->
+    <div class="hud">
+        <h3><span class="status-dot"></span>Integrated Engine Status</h3>
+        <div class="metric">
+            <span>Engine State:</span>
+            <span class="metric-value" id="engine-state">Initializing</span>
+        </div>
+        <div class="metric">
+            <span>Hive Refresh:</span>
+            <span class="metric-value" id="refresh-status">Starting</span>
+        </div>
+        <div class="metric">
+            <span>Minions:</span>
+            <span class="metric-value" id="minion-count">0</span>
+        </div>
+        <div class="metric">
+            <span>PostFX:</span>
+            <span class="metric-value" id="postfx-state">Loading</span>
+        </div>
+        <div class="metric">
+            <span>Assets:</span>
+            <span class="metric-value" id="asset-state">Loading</span>
+        </div>
+        <div class="metric">
+            <span>FPS:</span>
+            <span class="metric-value" id="fps-counter">0</span>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button onclick="toggleAutoRefresh()">Toggle Refresh</button>
+        <button onclick="manualRefresh()">Refresh Now</button>
+        <button onclick="resetCamera()">Reset Camera</button>
+        <button onclick="togglePostFX()">Toggle PostFX</button>
+        <button onclick="showStats()">Stats</button>
+    </div>
+
+    <!-- Log -->
+    <div class="log" id="log"></div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        // Your complete integrated wiring
+        import { createEngine } from '../src/core/Engine.js';
+        import { eventBus } from '../src/core/EventBus.js';
+        import { stateStore } from '../src/core/StateStore.js';
+
+        let engine = null;
+        let autoRefreshEnabled = true;
+        let fpsCounter = 0;
+
+        // Main initialization - exactly as you specified
+        async function init() {
+            try {
+                log('🚀 Starting integrated engine initialization...', 'info');
+                
+                // Create engine with canvas
+                const canvas = document.querySelector("#c");
+                engine = new (await import('../src/core/Engine.js')).DominionEngine(canvas);
+                
+                log('🔧 Initializing engine systems...', 'info');
+                await engine.initialize();
+                
+                log('🔄 Starting auto-refresh (30s intervals)...', 'info');
+                engine.startAutoRefresh(30000);
+                
+                log('🎮 Starting animation tick loop...', 'info');
+                engine.tick();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+                // Hide loading screen
+                document.getElementById('loading').style.display = 'none';
+                
+                log('✅ Integrated engine fully operational!', 'success');
+                updateHUD();
+                
+            } catch (error) {
+                log(`❌ Initialization failed: ${error.message}`, 'error');
+                console.error('Full error:', error);
+            }
+        }
+
+        function setupEventListeners() {
+            // Hive state events
+            eventBus.on('hive:loaded', (data) => {
+                log(`📊 Hive loaded: ${data.minions.length} minions`, 'info');
+                updateHUD();
+            });
+            
+            eventBus.on('hive:updated', (data) => {
+                log('🔄 Hive state refreshed from canonical source', 'info');
+                updateHUD();
+            });
+            
+            eventBus.on('minions:initialized', (data) => {
+                log('🤖 Minion system initialized', 'info');
+                updateHUD();
+            });
+            
+            eventBus.on('avatars:synced', (data) => {
+                log(`👥 Avatars synced: ${data.total} total, ${data.new} new`, 'info');
+                updateHUD();
+            });
+            
+            eventBus.on('engine:frame', () => {
+                fpsCounter++;
+            });
+            
+            eventBus.on('avatar:selected', (data) => {
+                log(`👆 Selected: ${data.minionData.id}`, 'info');
+            });
+            
+            // Error handling
+            eventBus.on('engine:error', (data) => {
+                log(`💥 Engine error: ${data.error.message}`, 'error');
+            });
+            
+            // Window resize
+            window.addEventListener('resize', () => {
+                engine?.onResize();
+            });
+        }
+
+        function updateHUD() {
+            if (!engine) return;
+            
+            const stats = engine.getEngineStats();
+            
+            document.getElementById('engine-state').textContent = engine.initialized ? 'Running' : 'Initializing';
+            document.getElementById('refresh-status').textContent = autoRefreshEnabled ? 'Active' : 'Paused';
+            document.getElementById('minion-count').textContent = stats.avatars || 0;
+            document.getElementById('postfx-state').textContent = engine.postFX?.enabled ? 'Active' : 'Disabled';
+            document.getElementById('asset-state').textContent = engine.assets ? 'Ready' : 'Loading';
+        }
+
+        // Performance monitoring
+        setInterval(() => {
+            document.getElementById('fps-counter').textContent = fpsCounter;
+            fpsCounter = 0;
+        }, 1000);
+
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+            
+            // Keep log manageable
+            if (logEl.children.length > 50) {
+                logEl.removeChild(logEl.firstChild);
+            }
+        }
+
+        // Control functions
+        window.toggleAutoRefresh = () => {
+            autoRefreshEnabled = !autoRefreshEnabled;
+            log(`🔄 Auto-refresh ${autoRefreshEnabled ? 'enabled' : 'disabled'}`, 'info');
+            updateHUD();
+        };
+
+        window.manualRefresh = async () => {
+            if (engine) {
+                log('🔄 Manual hive refresh triggered...', 'info');
+                try {
+                    await engine.refreshHive();
+                    log('✅ Manual refresh complete', 'success');
+                } catch (error) {
+                    log(`❌ Manual refresh failed: ${error.message}`, 'error');
+                }
+            }
+        };
+
+        window.resetCamera = () => {
+            if (engine) {
+                engine.resetCamera();
+                log('📷 Camera reset', 'info');
+            }
+        };
+
+        window.togglePostFX = () => {
+            if (engine?.postFX) {
+                engine.postFX.enabled ? engine.postFX.disable() : engine.postFX.enable();
+                log(`✨ PostFX ${engine.postFX.enabled ? 'enabled' : 'disabled'}`, 'info');
+                updateHUD();
+            }
+        };
+
+        window.showStats = () => {
+            if (engine) {
+                const stats = engine.getEngineStats();
+                const assetStats = engine.assets?.getStats();
+                
+                log('📊 === ENGINE STATS ===', 'info');
+                log(`Avatars: ${stats.avatars}, Selected: ${stats.selectedAvatar || 'None'}`, 'info');
+                log(`PostFX: ${stats.postFXEnabled ? 'ON' : 'OFF'}, FPS: ${document.getElementById('fps-counter').textContent}`, 'info');
+                if (assetStats) {
+                    log(`Assets: ${assetStats.cacheSize} cached, ${assetStats.memoryEstimate} memory`, 'info');
+                }
+                log('===================', 'info');
+            }
+        };
+
+        // Error handling
+        window.addEventListener('error', (event) => {
+            log(`💥 Global error: ${event.error?.message || 'Unknown error'}`, 'error');
+        });
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

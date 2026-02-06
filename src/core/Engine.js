@@ -340,35 +340,36 @@ export class DominionEngine {
         }
     }
 
-    // Animation loop
-    start() {
-        if (this.animationId) return;
-        
-        this.clock.start();
-        this.animate();
-        
-        console.log('[Engine] Animation started');
-        eventBus.emit('engine:started');
-    }
-
-    stop() {
-        if (this.animationId) {
-            cancelAnimationFrame(this.animationId);
-            this.animationId = null;
+    // IMPORTANT: canonical hive refresh path
+    async refreshHive() {
+        try {
+            const res = await fetch("hive_state.json?" + Date.now(), { cache: "no-store" });
+            const hive = await res.json();
+            
+            // Apply to store and emit update
+            stateStore.applyHive(hive);
+            eventBus.emit("hive:updated", hive);
+            
+            console.log('[Engine] Hive state refreshed from canonical source');
+            return hive;
+        } catch (error) {
+            console.error('[Engine] Failed to refresh hive state:', error);
+            throw error;
         }
-        
-        console.log('[Engine] Animation stopped');
-        eventBus.emit('engine:stopped');
     }
 
-    animate() {
-        this.animationId = requestAnimationFrame(() => this.animate());
-        
-        const deltaTime = this.clock.getDelta();
+    startAutoRefresh(ms = 30000) {
+        console.log(`[Engine] Starting auto-refresh every ${ms}ms`);
+        setInterval(() => this.refreshHive().catch(console.error), ms);
+    }
+
+    // Enhanced tick method with proper animation loop
+    tick() {
+        const dt = this.clock.getDelta();
         
         // Update minion system (handles all avatars)
         if (this.minions) {
-            this.minions.update(deltaTime);
+            this.minions.update(dt);
         }
         
         // Update camera following
@@ -386,13 +387,55 @@ export class DominionEngine {
         
         // Render with composer for post-processing
         if (this.postFX && this.postFX.composer) {
-            this.postFX.render(deltaTime);
+            this.postFX.render(dt);
         } else {
             this.renderer.render(this.scene, this.camera);
         }
         
         // Emit frame event for external systems
-        eventBus.emit('engine:frame', { deltaTime, frame: this.clock.elapsedTime });
+        eventBus.emit('engine:frame', { deltaTime: dt, frame: this.clock.elapsedTime });
+        
+        // Continue animation loop
+        requestAnimationFrame(() => this.tick());
+    }
+
+    // Enhanced resize handling
+    onResize() {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        // Update composer size for post-processing
+        if (this.postFX && this.postFX.composer) {
+            this.postFX.composer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        console.log(`[Engine] Resized to ${window.innerWidth}x${window.innerHeight}`);
+        eventBus.emit('engine:resized', { 
+            width: window.innerWidth, 
+            height: window.innerHeight 
+        });
+    }
+
+    // Animation loop (legacy method for compatibility)
+    start() {
+        if (this.animationId) return;
+        
+        this.clock.start();
+        this.tick(); // Use enhanced tick method
+        
+        console.log('[Engine] Animation started with tick loop');
+        eventBus.emit('engine:started');
+    }
+
+    stop() {
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+        }
+        
+        console.log('[Engine] Animation stopped');
+        eventBus.emit('engine:stopped');
     }
 
     // Enhanced environment loading
