@@ -368,26 +368,16 @@
           const response = await fetch('./hive_state.json');
           if (response.ok) {
             const hiveData = await response.json();
-            
-            // Use the REAL minions from hive_state.json
-            if (hiveData.minions && hiveData.minions.roster) {
-              this.minions = hiveData.minions.roster.map(minion => ({
-                id: minion.id,
-                name: minion.id,
-                avatar: minion.avatar_url || `./avatars/identicons/${minion.id}.svg`,
-                credits: minion.energy_credits || 0,
-                happiness: minion.happiness_sim || 50,
-                status: this.mapModeToStatus(minion.mode),
-                specialization: this.mapSpecialization(minion.specialties),
-                tier: minion.tier,
-                role: minion.role,
-                reputation: minion.reputation,
-                lastActive: Date.now() - Math.floor(Math.random() * 3600000)
-              }));
-              
-              console.log(`✅ Loaded ${this.minions.length} real minions from hive state`);
-              return;
-            }
+            this.minions = Object.entries(hiveData.roster || {}).map(([id, data]) => ({
+              id: id,
+              name: id,
+              avatar: `./avatars/identicons/${id}.svg`,
+              credits: data.credits || 500,
+              happiness: data.happiness || 75,
+              status: this.getRandomStatus(),
+              specialization: this.getRandomSpecialization(),
+              lastActive: Date.now() - Math.floor(Math.random() * 3600000)
+            }));
           }
         } catch (error) {
           console.warn('Could not load hive data, using fallback:', error);
@@ -412,40 +402,6 @@
         this.minions.forEach(minion => {
           this.unreadCounts.set(minion.id, 0);
         });
-      }
-
-      mapModeToStatus(mode) {
-        const statusMap = {
-          'COLLAB': 'Collaborating with team',
-          'FOCUS': 'Deep focus work',
-          'LEARN': 'Learning new skills', 
-          'BREAK': 'Taking a break',
-          'IDLE': 'Available for tasks',
-          'BUSY': 'Working on priority tasks'
-        };
-        return statusMap[mode] || 'Working on solar projects';
-      }
-
-      mapSpecialization(specialties) {
-        if (!specialties || specialties.length === 0) return 'Solar Systems Specialist';
-        
-        const specialty = specialties[0];
-        const mapping = {
-          'orchestration': 'System Orchestrator',
-          'governance': 'Governance Specialist', 
-          'world-state': 'World State Manager',
-          'priorities': 'Priority Manager',
-          'paradox-resolution': 'Problem Solver',
-          'release-train': 'Release Coordinator',
-          'comms-fusion': 'Communication Hub',
-          'batch-processing': 'Data Processor',
-          'system-modeling': 'System Architect',
-          'consensus-fusion': 'Consensus Builder'
-        };
-        
-        return mapping[specialty] || specialty.split('-').map(word => 
-          word.charAt(0).toUpperCase() + word.slice(1)
-        ).join(' ') + ' Specialist';
       }
 
       getRandomStatus() {

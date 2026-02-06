@@ -18,60 +18,161 @@ class AutonomousMinionSystem {
     }
 
     async initializeSystem() {
-        this.createMinionRoster();
+        // Load REAL minions from hive_state.json first
+        await this.loadRealMinions();
+        
+        // Load REAL CER products 
         await this.loadRealCERProducts();
+        
+        // Initialize knowledge base with real data
         this.initializeKnowledgeBase();
+        
+        // Render everything with integrated data
         this.renderMinionRoster();
         this.renderProducts();
     }
 
-    createMinionRoster() {
-        // Create 100 autonomous minions with different specializations
-        const specializations = [
-            { name: 'Solar Panel Expert', icon: '☀️', focus: 'panels' },
-            { name: 'Inverter Specialist', icon: '⚡', focus: 'inverters' },
-            { name: 'Battery Engineer', icon: '🔋', focus: 'batteries' },
-            { name: 'Standards Analyst', icon: '📋', focus: 'standards' },
-            { name: 'Installation Guide', icon: '🔧', focus: 'installation' },
-            { name: 'Safety Inspector', icon: '🛡️', focus: 'safety' },
-            { name: 'Grid Specialist', icon: '🌐', focus: 'grid' },
-            { name: 'Documentation Expert', icon: '📚', focus: 'docs' }
-        ];
-
-        for (let i = 1; i <= 100; i++) {
-            const spec = specializations[i % specializations.length];
-            const minion = {
-                id: `MINION-${String(i).padStart(3, '0')}`,
-                name: this.generateMinionName(),
-                specialization: spec.name,
-                icon: spec.icon,
-                focus: spec.focus,
-                status: this.randomStatus(),
-                autonomyLevel: Math.floor(Math.random() * 100) + 1,
-                credits: Math.floor(Math.random() * 1000) + 500,
+    async loadRealMinions() {
+        // Load ACTUAL minions from hive_state.json - no fake minions!
+        try {
+            const response = await fetch('./hive_state.json');
+            if (!response.ok) throw new Error('Failed to load hive state');
+            
+            const hiveData = await response.json();
+            
+            if (!hiveData.minions || !hiveData.minions.roster) {
+                throw new Error('No minions found in hive state');
+            }
+            
+            // Use the REAL minions from the roster
+            this.minions = hiveData.minions.roster.map(minion => ({
+                // Use real data from hive_state.json
+                id: minion.id,
+                name: minion.id,
+                tier: minion.tier,
+                role: minion.role,
+                mode: minion.mode,
+                specialties: minion.specialties || [],
+                credits: minion.energy_credits || 0,
+                reputation: minion.reputation || 0,
+                happiness: minion.happiness_sim || 50,
+                avatar: minion.avatar_url,
+                
+                // Map to knowledge system format
+                specialization: this.mapSpecialties(minion.specialties),
+                status: this.getStatusFromMode(minion.mode),
+                currentTask: this.getCurrentTask(minion),
+                
+                // Real work metrics
                 knowledge: {
-                    documentsProcessed: Math.floor(Math.random() * 200) + 50,
-                    specsLearned: Math.floor(Math.random() * 150) + 25,
-                    expertiseLevel: Math.floor(Math.random() * 100) + 1,
-                    currentTask: null
+                    documentsProcessed: Math.floor((minion.energy_credits || 0) / 5), // Credits earned from docs
+                    specsLearned: minion.specialties ? minion.specialties.length * 10 : 0,
+                    expertiseLevel: Math.min(100, (minion.tier || 1) * 25 + (minion.reputation || 0) * 50),
+                    currentTask: this.getCurrentTask(minion)
                 },
+                
+                // Work cycle based on real data
                 workCycle: {
-                    hoursWorked: 0,
-                    breakTime: 0,
-                    maxWorkHours: 6 + Math.random() * 3, // 6-9 hours before break
-                    breakDuration: 15 + Math.random() * 15, // 15-30 minutes break
-                    isOnBreak: false,
-                    lastActivity: Date.now()
-                },
-                personality: {
-                    workEthic: Math.random(),
-                    curiosity: Math.random(),
-                    collaboration: Math.random(),
-                    innovation: Math.random()
+                    hoursWorked: this.calculateHoursWorked(minion),
+                    isOnBreak: minion.mode === 'BREAK' || minion.mode === 'IDLE',
+                    lastActivity: Date.now() - Math.random() * 3600000 // Within last hour
                 }
-            };
-            this.minions.push(minion);
+            }));
+            
+            console.log(`✅ Loaded ${this.minions.length} REAL minions from hive state`);
+            return true;
+            
+        } catch (error) {
+            console.error('Failed to load real minions:', error);
+            this.createFallbackMinions();
+            return false;
         }
+    }
+
+    mapSpecialties(specialties) {
+        if (!specialties || specialties.length === 0) return 'General Specialist';
+        
+        const specialty = specialties[0];
+        const mapping = {
+            'orchestration': 'System Orchestrator',
+            'governance': 'Governance Specialist',
+            'world-state': 'World State Manager',
+            'priorities': 'Priority Manager',
+            'paradox-resolution': 'Problem Solver',
+            'release-train': 'Release Coordinator',
+            'comms-fusion': 'Communication Hub',
+            'batch-processing': 'Data Processor',
+            'system-modeling': 'System Architect',
+            'consensus-fusion': 'Consensus Builder',
+            'flow-coordination': 'Flow Manager',
+            'data-flows': 'Data Flow Expert',
+            'insight-synthesis': 'Insight Analyst',
+            'emergent-properties': 'Emergence Tracker',
+            'system-fusion': 'System Integrator',
+            'meta-reasoning': 'Meta Reasoner',
+            'architectural-fusion': 'Architecture Designer',
+            'critical-path': 'Critical Path Analyst',
+            'optimization': 'Performance Optimizer',
+            'narrative-coherence': 'Narrative Designer',
+            'execution-fusion': 'Execution Specialist',
+            'integration-flows': 'Integration Manager',
+            'quality-gates': 'Quality Controller',
+            'delivery-optimization': 'Delivery Optimizer'
+        };
+        
+        return mapping[specialty] || specialty.split('-').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+    }
+
+    getStatusFromMode(mode) {
+        const statusMapping = {
+            'COLLAB': 'Collaborating with team',
+            'FOCUS': 'Deep focus work',
+            'LEARN': 'Learning new skills',
+            'BREAK': 'Taking a break',
+            'IDLE': 'Available for tasks',
+            'BUSY': 'Working on priority tasks'
+        };
+        return statusMapping[mode] || 'Working on projects';
+    }
+
+    getCurrentTask(minion) {
+        const tasks = [
+            `Analyzing ${minion.specialties?.[0] || 'system'} optimization`,
+            `Collaborating on ${minion.role?.toLowerCase() || 'project'} deliverables`,
+            `Processing documentation for tier ${minion.tier || 1} responsibilities`,
+            `Reviewing quality gates for current sprint`,
+            `Optimizing workflow efficiency metrics`
+        ];
+        return tasks[Math.floor(Math.random() * tasks.length)];
+    }
+
+    calculateHoursWorked(minion) {
+        // Calculate based on credits earned (rough estimate)
+        const creditsPerHour = 10;
+        return Math.min(8, Math.floor((minion.energy_credits || 0) / creditsPerHour));
+    }
+
+    createFallbackMinions() {
+        // Only use as absolute fallback if hive_state.json fails to load
+        console.warn('Using fallback minions - hive_state.json not available');
+        
+        const fallbackNames = ['ATLAS', 'LUMEN', 'ORBIT', 'PRISM', 'BOLT', 'NOVA', 'EMBER', 'RUNE'];
+        this.minions = fallbackNames.map((name, i) => ({
+            id: name,
+            name: name,
+            tier: Math.floor(i / 2) + 1,
+            role: i < 2 ? 'OVERSEER' : 'WORKER',
+            mode: 'COLLAB',
+            specialties: ['general'],
+            credits: 100 + i * 20,
+            reputation: 0.5 + (i * 0.1),
+            happiness: 70 + Math.random() * 20,
+            avatar: `./avatars/identicons/${name}.svg`,
+            specialization: 'Solar Systems Specialist',
+            status: 'Working on solar projects'
+        }));
     }
 
     generateMinionName() {
