@@ -1329,7 +1329,8 @@ class AutonomousMinionSystem {
         
         // CER Products - use real data
         const cerProductCount = this.cerDatabase?.metadata?.totalProducts || this.products?.length || 12;
-        document.getElementById('cerProductCount').textContent = cerProductCount;
+        const cerElement = document.getElementById('cerProductCount');
+        if (cerElement) cerElement.textContent = cerProductCount;
         
         // Documents found - use real metadata
         const specSheetsFound = this.cerDatabase?.metadata?.documentsFound || 10;
@@ -1361,6 +1362,38 @@ class AutonomousMinionSystem {
         
         // Update product expertise with real data
         this.updateProductExpertise();
+        
+        // Update economy data with REAL minion credits
+        this.updateEconomyData();
+    }
+    
+    updateEconomyData() {
+        if (!this.minions || this.minions.length === 0) return;
+        
+        // Calculate REAL total credits from all minions
+        const totalCredits = this.minions.reduce((sum, minion) => sum + (minion.credits || 0), 0);
+        const dailyEarnings = Math.floor(totalCredits * 0.15); // Estimate daily earnings
+        
+        // Update economy display
+        const totalCreditsEl = document.getElementById('totalCredits');
+        const dailyEarningsEl = document.getElementById('dailyEarnings');
+        
+        if (totalCreditsEl) totalCreditsEl.textContent = totalCredits.toLocaleString();
+        if (dailyEarningsEl) dailyEarningsEl.textContent = dailyEarnings.toLocaleString();
+        
+        // Update mastered documents based on real work
+        const activeMinions = this.minions.filter(m => !m.workCycle?.isOnBreak).length;
+        const specSheetsMastered = Math.floor(totalCredits / 10); // 1 spec per 10 credits earned
+        const installManualsMastered = Math.floor(activeMinions * 2.5); // Active minions mastering manuals
+        const userGuidesMastered = Math.floor(specSheetsMastered * 0.6); // Related to spec sheets
+        
+        const specSheetsEl = document.getElementById('specSheetsMastered');
+        const installManualsEl = document.getElementById('installManualsMastered');
+        const userGuidesEl = document.getElementById('userGuidesMastered');
+        
+        if (specSheetsEl) specSheetsEl.textContent = specSheetsMastered;
+        if (installManualsEl) installManualsEl.textContent = installManualsMastered;
+        if (userGuidesEl) userGuidesEl.textContent = userGuidesMastered;
     }
 
     updateProductExpertise() {
