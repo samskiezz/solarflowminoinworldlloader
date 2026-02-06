@@ -1,11 +1,10 @@
 {
   "meta": {
-    "schema": "solarflow.hive_state.v2",
+    "schema": "solarflow.hive_state.v1",
     "updatedAt": "2026-02-06T04:24:28Z",
     "source": "canonical",
     "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
-  "schema_version": 2,
   "world": {
     "id": "solarflow-minionworld",
     "name": "SolarFlow • Minion Realm",
@@ -240,59 +239,35 @@
     "roster": [
       {
         "id": "ATLAS",
-        "name": "Atlas Prime",
-        "specialization": "System Orchestrator",
         "tier": 3,
-        "role": "OVERSEER", 
+        "role": "OVERSEER",
         "mode": "COLLAB",
         "specialties": [
           "orchestration",
-          "governance", 
+          "governance",
           "world-state"
         ],
         "energy_credits": 160,
-        "credits": 160,
         "reputation": 0.65,
         "avatar_url": "./avatars/identicons/ATLAS.svg",
-        "avatarUrl": "assets/models/minions/atlas.glb",
-        "avatarRig": "GLB",
-        "lodProfile": "high",
         "happiness_sim": 71,
-        "avatar_salt": 0,
-        "ai": {
-          "currentActivity": "Orchestrating",
-          "energy": 95,
-          "mood": 85,
-          "currentThought": "Coordinating realm-wide operations and maintaining system stability."
-        }
+        "avatar_salt": 0
       },
       {
         "id": "LUMEN",
-        "name": "Lumen Brightpath",
-        "specialization": "Priority Manager",
         "tier": 3,
         "role": "OVERSEER",
-        "mode": "COLLAB", 
+        "mode": "COLLAB",
         "specialties": [
           "priorities",
           "paradox-resolution",
           "release-train"
         ],
         "energy_credits": 160,
-        "credits": 160,
         "reputation": 0.63,
         "avatar_url": "./avatars/identicons/LUMEN.svg",
-        "avatarUrl": "assets/models/minions/lumen.glb",
-        "avatarRig": "GLB",
-        "lodProfile": "high",
         "happiness_sim": 78,
-        "avatar_salt": 0,
-        "ai": {
-          "currentActivity": "Priority Analysis",
-          "energy": 88,
-          "mood": 82,
-          "currentThought": "Analyzing task priorities and resolving system paradoxes."
-        }
+        "avatar_salt": 0
       },
       {
         "id": "ORBIT",

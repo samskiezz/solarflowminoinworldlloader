@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarFlow Function Diagnosis</title>
+    <style>
+        body { 
+            font-family: monospace; 
+            background: #0a0a0a; 
+            color: #00ff88; 
+            padding: 20px; 
+            line-height: 1.4;
+        }
+        .test-result { 
+            margin: 5px 0; 
+            padding: 8px; 
+            border-left: 3px solid; 
+        }
+        .pass { border-color: #00ff88; background: rgba(0, 255, 136, 0.1); }
+        .fail { border-color: #ff4444; background: rgba(255, 68, 68, 0.1); color: #ff8888; }
+        .warn { border-color: #ffaa00; background: rgba(255, 170, 0, 0.1); color: #ffcc88; }
+        button { 
+            background: #333; 
+            color: #00ff88; 
+            border: 1px solid #555; 
+            padding: 10px 15px; 
+            margin: 5px; 
+            cursor: pointer; 
+            border-radius: 4px;
+        }
+        button:hover { background: #555; }
+        .section { 
+            margin: 20px 0; 
+            border: 1px solid #333; 
+            padding: 15px; 
+            border-radius: 8px; 
+        }
+        .code { 
+            background: #111; 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin: 10px 0; 
+            white-space: pre-wrap; 
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 SolarFlow Function Diagnosis</h1>
+    <p>Comprehensive analysis of all UI functions and their working status</p>
+    
+    <button onclick="runFullDiagnosis()">🔍 Run Full Diagnosis</button>
+    <button onclick="testButtonFunctions()">🔘 Test Button Functions</button>
+    <button onclick="testScriptLoading()">📦 Test Script Loading</button>
+    <button onclick="clearResults()">🧹 Clear Results</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        let results = [];
+        
+        function log(message, type = 'info') {
+            results.push({message, type, timestamp: new Date().toLocaleTimeString()});
+            updateDisplay();
+        }
+        
+        function updateDisplay() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = results.map(r => {
+                const className = r.type === 'pass' ? 'pass' : r.type === 'fail' ? 'fail' : r.type === 'warn' ? 'warn' : '';
+                return `<div class="test-result ${className}">[${r.timestamp}] ${r.message}</div>`;
+            }).join('');
+        }
+        
+        function clearResults() {
+            results = [];
+            updateDisplay();
+        }
+        
+        function runFullDiagnosis() {
+            clearResults();
+            log('🔍 Starting comprehensive function diagnosis...', 'info');
+            
+            testScriptLoading();
+            testGlobalVariables();
+            testButtonFunctions();
+            testFileAccess();
+            testUIElements();
+            
+            log('✅ Diagnosis complete!', 'pass');
+        }
+        
+        function testScriptLoading() {
+            log('📦 Testing script loading...', 'info');
+            
+            // Test if universal function fix loaded
+            if (typeof window.UNIFIED_REAL_SYSTEM !== 'undefined') {
+                log('✅ UNIFIED_REAL_SYSTEM loaded', 'pass');
+            } else {
+                log('❌ UNIFIED_REAL_SYSTEM not loaded', 'fail');
+            }
+            
+            if (typeof window.UNIVERSAL_FUNCTION_FIX !== 'undefined') {
+                log('✅ UNIVERSAL_FUNCTION_FIX loaded', 'pass');
+            } else {
+                log('❌ UNIVERSAL_FUNCTION_FIX not loaded', 'fail');
+            }
+            
+            // Test for other key scripts
+            const scripts = document.querySelectorAll('script[src]');
+            log(`📦 Found ${scripts.length} external scripts`, 'info');
+            
+            scripts.forEach(script => {
+                const src = script.src;
+                const name = src.split('/').pop();
+                if (name.includes('function-fix') || name.includes('unified')) {
+                    try {
+                        // Check if script actually executed
+                        if (script.onload) {
+                            log(`✅ Script loaded: ${name}`, 'pass');
+                        } else {
+                            log(`⚠️ Script may not have executed: ${name}`, 'warn');
+                        }
+                    } catch (error) {
+                        log(`❌ Script error: ${name} - ${error.message}`, 'fail');
+                    }
+                }
+            });
+        }
+        
+        function testGlobalVariables() {
+            log('🌐 Testing global variables...', 'info');
+            
+            const expectedGlobals = [
+                'UNIFIED_REAL_SYSTEM',
+                'UNIVERSAL_FUNCTION_FIX',
+                'setPaused',
+                'paused'
+            ];
+            
+            expectedGlobals.forEach(varName => {
+                if (window[varName] !== undefined) {
+                    log(`✅ Global variable exists: ${varName}`, 'pass');
+                } else {
+                    log(`❌ Global variable missing: ${varName}`, 'fail');
+                }
+            });
+        }
+        
+        function testButtonFunctions() {
+            log('🔘 Testing button functions...', 'info');
+            
+            // Test main buttons
+            const mainButtons = [
+                { selector: 'button[onclick*="realm.html"]', name: '3D Realm Button' },
+                { selector: 'a[href*="comprehensive-function-test.html"]', name: 'Function Test Link' },
+                { selector: 'a[onclick*="btnToggle"]', name: 'Pause/Resume Button' },
+                { selector: 'a[onclick*="location.reload"]', name: 'Refresh Button' }
+            ];
+            
+            mainButtons.forEach(btn => {
+                const element = document.querySelector(btn.selector);
+                if (element) {
+                    log(`✅ Button found: ${btn.name}`, 'pass');
+                    
+                    // Test if onclick function is valid
+                    const onclick = element.getAttribute('onclick');
+                    if (onclick) {
+                        try {
+                            // Test if the function would execute (without actually executing)
+                            new Function(onclick.replace('return false', ''));
+                            log(`✅ Button function valid: ${btn.name}`, 'pass');
+                        } catch (error) {
+                            log(`❌ Button function invalid: ${btn.name} - ${error.message}`, 'fail');
+                        }
+                    }
+                } else {
+                    log(`❌ Button not found: ${btn.name}`, 'fail');
+                }
+            });
+            
+            // Test dropdown buttons
+            const dropdowns = document.querySelectorAll('.dropdown');
+            log(`🔽 Found ${dropdowns.length} dropdown menus`, 'info');
+            
+            dropdowns.forEach((dropdown, index) => {
+                const links = dropdown.querySelectorAll('.dropdown-content a');
+                log(`🔽 Dropdown ${index + 1} has ${links.length} links`, 'info');
+                
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    const text = link.textContent.trim();
+                    if (href && href !== '#') {
+                        log(`✅ Dropdown link: ${text} → ${href}`, 'pass');
+                    } else {
+                        log(`❌ Broken dropdown link: ${text}`, 'fail');
+                    }
+                });
+            });
+        }
+        
+        function testFileAccess() {
+            log('📄 Testing file access...', 'info');
+            
+            const criticalFiles = [
+                'hive_state.json',
+                'real-cer-product-database.json',
+                'realm.html',
+                'comprehensive-function-test.html'
+            ];
+            
+            criticalFiles.forEach(async (filename) => {
+                try {
+                    const response = await fetch(`./${filename}`);
+                    if (response.ok) {
+                        log(`✅ File accessible: ${filename}`, 'pass');
+                    } else {
+                        log(`❌ File not accessible: ${filename} (${response.status})`, 'fail');
+                    }
+                } catch (error) {
+                    log(`❌ File access error: ${filename} - ${error.message}`, 'fail');
+                }
+            });
+        }
+        
+        function testUIElements() {
+            log('🖥️ Testing UI elements...', 'info');
+            
+            // Test if key UI elements exist and are functional
+            const uiElements = [
+                { selector: '#btnToggle', name: 'Pause/Resume Toggle' },
+                { selector: '.meters', name: 'Metrics Display' },
+                { selector: '.feed', name: 'Activity Feed' },
+                { selector: '.rosterGrid', name: 'Minion Roster Grid' },
+                { selector: '.pillbar', name: 'Status Pills' }
+            ];
+            
+            uiElements.forEach(element => {
+                const el = document.querySelector(element.selector);
+                if (el) {
+                    log(`✅ UI element found: ${element.name}`, 'pass');
+                    
+                    // Test if element has content
+                    if (el.children.length > 0 || el.textContent.trim().length > 0) {
+                        log(`✅ UI element has content: ${element.name}`, 'pass');
+                    } else {
+                        log(`⚠️ UI element empty: ${element.name}`, 'warn');
+                    }
+                } else {
+                    log(`❌ UI element not found: ${element.name}`, 'fail');
+                }
+            });
+            
+            // Test data loading
+            setTimeout(() => {
+                if (window.minions && window.minions.length > 0) {
+                    log(`✅ Minion data loaded: ${window.minions.length} minions`, 'pass');
+                } else {
+                    log(`❌ Minion data not loaded`, 'fail');
+                }
+            }, 2000);
+        }
+        
+        // Auto-run diagnosis on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                log('🚀 Auto-diagnosis starting...', 'info');
+                runFullDiagnosis();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

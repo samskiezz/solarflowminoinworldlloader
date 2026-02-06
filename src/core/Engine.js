@@ -390,8 +390,8 @@ export class DominionEngine {
             this.camera.lookAt(avatarPos);
         }
         
-        // Render
-        if (this.postFX) {
+        // Render with composer for post-processing
+        if (this.postFX && this.postFX.composer) {
             this.postFX.render(deltaTime);
         } else {
             this.renderer.render(this.scene, this.camera);

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarFlow • 3D Minion Realm - FIXED</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+        
+        #canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        canvas {
+            display: block;
+            cursor: grab;
+        }
+        
+        canvas:active {
+            cursor: grabbing;
+        }
+        
+        .hud {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .hud-button {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .hud-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .status-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 136, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            min-width: 250px;
+        }
+        
+        .status-title {
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .status-item {
+            margin: 5px 0;
+            font-size: 13px;
+        }
+        
+        .minion-info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+        
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 255, 136, 0.3);
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #00ff88;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .loading-progress {
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        .error-display {
+            position: fixed;
+            inset: 20px;
+            z-index: 3000;
+            background: rgba(139, 69, 19, 0.9);
+            border: 2px solid #ff4444;
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+        
+        .error-title {
+            color: #ff6666;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .error-message {
+            color: #ffcccc;
+            font-size: 14px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        
+        .controls-help {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 255, 136, 0.9);
+            color: #000;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 4000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message">
+        🎉 3D Realm Successfully Initialized!
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Initializing 3D Minion Realm</div>
+        <div class="loading-progress" id="loadingProgress">Loading Three.js library...</div>
+    </div>
+
+    <!-- Error Display -->
+    <div id="errorDisplay" class="error-display">
+        <div class="error-title">3D Realm Error</div>
+        <div class="error-message" id="errorMessage"></div>
+        <button class="hud-button" onclick="location.reload()" style="margin-top: 15px;">Reload Page</button>
+    </div>
+
+    <!-- Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- HUD Controls -->
+    <div class="hud">
+        <button class="hud-button" onclick="location.href='./index.html'">← Back to Dashboard</button>
+        <button class="hud-button" onclick="resetCamera()">📷 Reset Camera</button>
+        <button class="hud-button" onclick="toggleAnimation()">⏸️ Pause Animation</button>
+        <button class="hud-button" onclick="toggleWireframe()">🔲 Wireframe</button>
+        <button class="hud-button" onclick="focusRandomMinion()">🎯 Focus Minion</button>
+    </div>
+
+    <!-- Status Display -->
+    <div class="status-display">
+        <div class="status-title">🌐 Realm Status</div>
+        <div class="status-item">Minions Loaded: <span id="minionCount">0</span></div>
+        <div class="status-item">3D Objects: <span id="objectCount">0</span></div>
+        <div class="status-item">Render Mode: <span id="renderMode">Normal</span></div>
+        <div class="status-item">Animation: <span id="animationStatus">Running</span></div>
+        <div class="status-item">FPS: <span id="fpsCounter">0</span></div>
+    </div>
+
+    <!-- Minion Info Panel -->
+    <div id="minionInfo" class="minion-info">
+        <div style="font-weight: bold; margin-bottom: 10px;" id="selectedMinionName">No minion selected</div>
+        <div id="selectedMinionDetails"></div>
+    </div>
+
+    <!-- Controls Help -->
+    <div class="controls-help">
+        <strong>Controls:</strong><br>
+        🖱️ Click & Drag: Rotate view<br>
+        🔍 Mouse Wheel: Zoom<br>
+        🎯 Click Minion: Select & Focus<br>
+        ⌨️ WASD: Move camera
+    </div>
+
+    <!-- Three.js from reliable CDN (NO ES MODULES) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // Simple 3D Realm - No ES modules, just plain JavaScript
+        console.log('🌐 Initializing Simple 3D Realm...');
+        
+        let scene, camera, renderer, minions = [], minionObjects = [];
+        let animationPaused = false, wireframeMode = false;
+        let cameraDistance = 20, cameraAngleY = 0, cameraAngleX = 0.3;
+        let frameCount = 0, lastTime = performance.now(), fps = 0;
+        
+        function updateProgress(message) {
+            console.log(`[3D Realm] ${message}`);
+            const progressEl = document.getElementById('loadingProgress');
+            if (progressEl) progressEl.textContent = message;
+        }
+        
+        function showError(message) {
+            console.error(`[3D Realm ERROR] ${message}`);
+            const errorDisplay = document.getElementById('errorDisplay');
+            const errorMessage = document.getElementById('errorMessage');
+            if (errorDisplay && errorMessage) {
+                errorMessage.textContent = message;
+                errorDisplay.style.display = 'block';
+            }
+            hideLoading();
+        }
+        
+        function hideLoading() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) loadingScreen.style.display = 'none';
+        }
+        
+        function showSuccess() {
+            const successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        async function initRealm() {
+            try {
+                updateProgress('Checking Three.js availability...');
+                
+                if (typeof THREE === 'undefined') {
+                    throw new Error('Three.js failed to load from CDN. Check internet connection.');
+                }
+                
+                updateProgress('Setting up 3D scene...');
+                setupScene();
+                
+                updateProgress('Loading minion data...');
+                await loadMinionData();
+                
+                updateProgress('Creating 3D minions...');
+                createMinionObjects();
+                
+                updateProgress('Setting up lighting...');
+                setupLighting();
+                
+                updateProgress('Starting animation...');
+                startAnimation();
+                
+                updateProgress('3D Realm ready!');
+                hideLoading();
+                showSuccess();
+                
+            } catch (error) {
+                showError(`Initialization failed: ${error.message}`);
+            }
+        }
+        
+        function setupScene() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a1a);
+            
+            // Create camera
+            const aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+            updateCameraPosition();
+            
+            // Create renderer
+            const container = document.getElementById('canvas-container');
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x0a0a1a);
+            container.appendChild(renderer.domElement);
+            
+            // Add grid
+            const gridHelper = new THREE.GridHelper(50, 50, 0x404040, 0x202020);
+            scene.add(gridHelper);
+            
+            // Setup controls
+            setupControls();
+            
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        function setupControls() {
+            const canvas = renderer.domElement;
+            let mouseDown = false, mouseX = 0, mouseY = 0;
+            
+            canvas.addEventListener('mousedown', (e) => {
+                mouseDown = true;
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (mouseDown) {
+                    const deltaX = e.clientX - mouseX;
+                    const deltaY = e.clientY - mouseY;
+                    
+                    cameraAngleY -= deltaX * 0.01;
+                    cameraAngleX -= deltaY * 0.01;
+                    cameraAngleX = Math.max(-Math.PI/2, Math.min(Math.PI/2, cameraAngleX));
+                    
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    updateCameraPosition();
+                }
+            });
+            
+            canvas.addEventListener('mouseup', () => {
+                mouseDown = false;
+            });
+            
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                cameraDistance += e.deltaY * 0.01;
+                cameraDistance = Math.max(5, Math.min(100, cameraDistance));
+                updateCameraPosition();
+            });
+        }
+        
+        function updateCameraPosition() {
+            const x = Math.cos(cameraAngleY) * Math.cos(cameraAngleX) * cameraDistance;
+            const y = Math.sin(cameraAngleX) * cameraDistance;
+            const z = Math.sin(cameraAngleY) * Math.cos(cameraAngleX) * cameraDistance;
+            
+            camera.position.set(x, y, z);
+            camera.lookAt(0, 0, 0);
+        }
+        
+        async function loadMinionData() {
+            try {
+                // Try loading from hive_state.json
+                const response = await fetch('./hive_state.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.minions && data.minions.roster) {
+                        minions = data.minions.roster;
+                        updateProgress(`Loaded ${minions.length} minions from hive_state.json`);
+                        return;
+                    }
+                }
+                throw new Error('No valid minion data found');
+            } catch (error) {
+                updateProgress('Using sample minion data...');
+                createSampleMinions();
+            }
+        }
+        
+        function createSampleMinions() {
+            minions = [
+                { id: 'ATLAS', tier: 3, role: 'OVERSEER', energy_credits: 250, happiness_sim: 0.8 },
+                { id: 'LUMEN', tier: 3, role: 'OVERSEER', energy_credits: 180, happiness_sim: 0.7 },
+                { id: 'ORBIT', tier: 2, role: 'SPECIALIST', energy_credits: 160, happiness_sim: 0.6 },
+                { id: 'PRISM', tier: 2, role: 'SPECIALIST', energy_credits: 140, happiness_sim: 0.9 },
+                { id: 'BOLT', tier: 2, role: 'SPECIALIST', energy_credits: 120, happiness_sim: 0.5 },
+                { id: 'NOVA', tier: 1, role: 'WORKER', energy_credits: 80, happiness_sim: 0.4 },
+                { id: 'ECHO', tier: 1, role: 'WORKER', energy_credits: 60, happiness_sim: 0.3 }
+            ];
+        }
+        
+        function createMinionObjects() {
+            const positions = generateMinionPositions(minions.length);
+            
+            minions.forEach((minion, index) => {
+                const minionObject = createMinionMesh(minion, positions[index]);
+                minionObjects.push(minionObject);
+                scene.add(minionObject);
+            });
+            
+            updateStats();
+        }
+        
+        function generateMinionPositions(count) {
+            const positions = [];
+            const radius = Math.max(8, Math.sqrt(count) * 2);
+            
+            for (let i = 0; i < count; i++) {
+                const angle = (i / count) * Math.PI * 2;
+                const ringRadius = radius + Math.sin(i * 0.1) * 2;
+                const height = Math.sin(i * 0.3) * 3;
+                
+                positions.push({
+                    x: Math.cos(angle) * ringRadius,
+                    y: height,
+                    z: Math.sin(angle) * ringRadius
+                });
+            }
+            
+            return positions;
+        }
+        
+        function createMinionMesh(minion, position) {
+            const group = new THREE.Group();
+            
+            // Body
+            const bodyGeometry = new THREE.BoxGeometry(1, 1.5, 1);
+            const bodyColor = getMinionColor(minion);
+            const bodyMaterial = new THREE.MeshLambertMaterial({ color: bodyColor });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 0.75;
+            group.add(body);
+            
+            // Head
+            const headGeometry = new THREE.SphereGeometry(0.4, 16, 16);
+            const headMaterial = new THREE.MeshLambertMaterial({ color: bodyColor });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 2;
+            group.add(head);
+            
+            // Eyes
+            const eyeGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+            const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            
+            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.15, 2.1, 0.35);
+            group.add(leftEye);
+            
+            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            rightEye.position.set(0.15, 2.1, 0.35);
+            group.add(rightEye);
+            
+            // Position
+            group.position.set(position.x, position.y, position.z);
+            group.userData = { minion: minion, originalY: position.y, animationOffset: Math.random() * Math.PI * 2 };
+            
+            return group;
+        }
+        
+        function getMinionColor(minion) {
+            const tierColors = {
+                1: 0x666666, // Gray
+                2: 0x4169E1, // Royal Blue
+                3: 0x00FF7F, // Spring Green
+                4: 0xFFD700, // Gold
+                5: 0xFF69B4  // Hot Pink
+            };
+            return tierColors[minion.tier] || 0x888888;
+        }
+        
+        function setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            scene.add(ambientLight);
+            
+            // Directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 5);
+            scene.add(directionalLight);
+            
+            // Point lights
+            const pointLight1 = new THREE.PointLight(0x00ffff, 0.5, 30);
+            pointLight1.position.set(10, 10, 10);
+            scene.add(pointLight1);
+            
+            const pointLight2 = new THREE.PointLight(0xff00ff, 0.5, 30);
+            pointLight2.position.set(-10, 10, -10);
+            scene.add(pointLight2);
+        }
+        
+        function startAnimation() {
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                if (!animationPaused) {
+                    updateAnimation();
+                }
+                
+                renderer.render(scene, camera);
+                updateFPS();
+            }
+            animate();
+        }
+        
+        function updateAnimation() {
+            const time = performance.now() * 0.001;
+            
+            minionObjects.forEach(minionObj => {
+                const minion = minionObj.userData.minion;
+                const happiness = minion.happiness_sim || 0.5;
+                
+                // Floating animation
+                const floatAmount = happiness * 2 + 0.5;
+                const floatSpeed = happiness * 2 + 1;
+                minionObj.position.y = minionObj.userData.originalY + 
+                    Math.sin(time * floatSpeed + minionObj.userData.animationOffset) * floatAmount;
+                
+                // Rotation
+                if (minion.role === 'OVERSEER') {
+                    minionObj.rotation.y += 0.01;
+                }
+            });
+        }
+        
+        function updateFPS() {
+            frameCount++;
+            const now = performance.now();
+            if (now - lastTime >= 1000) {
+                fps = Math.round(frameCount * 1000 / (now - lastTime));
+                frameCount = 0;
+                lastTime = now;
+                
+                const fpsEl = document.getElementById('fpsCounter');
+                if (fpsEl) fpsEl.textContent = fps;
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('minionCount').textContent = minions.length;
+            document.getElementById('objectCount').textContent = scene.children.length;
+        }
+        
+        // HUD Control Functions
+        window.resetCamera = function() {
+            cameraDistance = 20;
+            cameraAngleY = 0;
+            cameraAngleX = 0.3;
+            updateCameraPosition();
+        };
+        
+        window.toggleAnimation = function() {
+            animationPaused = !animationPaused;
+            document.getElementById('animationStatus').textContent = animationPaused ? 'Paused' : 'Running';
+        };
+        
+        window.toggleWireframe = function() {
+            wireframeMode = !wireframeMode;
+            
+            minionObjects.forEach(minionObj => {
+                minionObj.children.forEach(child => {
+                    if (child.material) {
+                        child.material.wireframe = wireframeMode;
+                    }
+                });
+            });
+            
+            document.getElementById('renderMode').textContent = wireframeMode ? 'Wireframe' : 'Normal';
+        };
+        
+        window.focusRandomMinion = function() {
+            if (minionObjects.length === 0) return;
+            
+            const randomMinion = minionObjects[Math.floor(Math.random() * minionObjects.length)];
+            const minion = randomMinion.userData.minion;
+            
+            // Focus camera
+            camera.lookAt(randomMinion.position);
+            
+            // Show info
+            document.getElementById('selectedMinionName').textContent = minion.id;
+            document.getElementById('selectedMinionDetails').innerHTML = `
+                <strong>Role:</strong> ${minion.role}<br>
+                <strong>Tier:</strong> ${minion.tier}<br>
+                <strong>Credits:</strong> ${minion.energy_credits}<br>
+                <strong>Happiness:</strong> ${Math.floor(minion.happiness_sim * 100)}%
+            `;
+            
+            const infoPanel = document.getElementById('minionInfo');
+            infoPanel.style.display = 'block';
+            setTimeout(() => infoPanel.style.display = 'none', 5000);
+        };
+        
+        // Error handling
+        window.addEventListener('error', (e) => {
+            showError(`JavaScript Error: ${e.message}\n\nStack: ${e.error?.stack || 'No stack trace'}`);
+        });
+        
+        // Initialize when ready
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initRealm, 1000);
+        });
+        
+        console.log('✅ Simple 3D Realm script loaded');
+    </script>
+</body>
+</html>

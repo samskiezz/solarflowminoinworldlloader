@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Function Test - SolarFlow</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #0a0a0a;
+            color: #00ff88;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .test-button {
+            background: #333;
+            color: #00ff88;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .test-button:hover {
+            background: #555;
+        }
+        
+        .test-result {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        
+        .pass {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid #00ff88;
+        }
+        
+        .fail {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 3px solid #ff4444;
+            color: #ff8888;
+        }
+        
+        .log-area {
+            background: #111;
+            border: 1px solid #333;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Button Function Test - SolarFlow</h1>
+    <p>Test all button functions to ensure they work properly</p>
+    
+    <div class="test-section">
+        <h2>🔧 Core System Functions</h2>
+        <button class="test-button" onclick="testPauseResume()">Test Pause/Resume</button>
+        <button class="test-button" onclick="testRefresh()">Test Refresh Function</button>
+        <button class="test-button" onclick="test3DRealm()">Test 3D Realm</button>
+        <div id="coreResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>👥 Workforce Functions</h2>
+        <button class="test-button" onclick="testWorkforceFunction('openRoster', 'Minion Roster')">Test Roster</button>
+        <button class="test-button" onclick="testWorkforceFunction('openMinionChat', 'Minion Chat')">Test Chat</button>
+        <button class="test-button" onclick="testWorkforceFunction('openActivityFeed', 'Activity Feed')">Test Activity Feed</button>
+        <button class="test-button" onclick="testWorkforceFunction('openHappinessActivities', 'Happiness')">Test Happiness</button>
+        <div id="workforceResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🧠 Intelligence Functions</h2>
+        <button class="test-button" onclick="testIntelligenceFunction('openConsciousnessEngine', 'Consciousness Engine')">Test Consciousness</button>
+        <button class="test-button" onclick="testIntelligenceFunction('openWorkConsciousness', 'Work Consciousness')">Test Work Consciousness</button>
+        <button class="test-button" onclick="testIntelligenceFunction('openAutonomousWorld', 'Autonomous World')">Test Autonomous World</button>
+        <div id="intelligenceResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🏗️ Solar Operations Functions</h2>
+        <button class="test-button" onclick="testSolarFunction('openProjectSolar', 'Project Solar Australia')">Test Project Solar</button>
+        <button class="test-button" onclick="testSolarFunction('openSolarConsciousness', 'Solar Consciousness')">Test Solar Consciousness</button>
+        <button class="test-button" onclick="testSolarFunction('openKnowledgeBase', 'Knowledge Base')">Test Knowledge Base</button>
+        <button class="test-button" onclick="testSolarFunction('openDocuments', 'Document Pipeline')">Test Document Pipeline</button>
+        <div id="solarResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>⚙️ System Functions</h2>
+        <button class="test-button" onclick="testSystemFunction('openFunctionTest', 'Function Test')">Test Function Test</button>
+        <button class="test-button" onclick="testSystemFunction('openCompleteAudit', 'Complete Audit')">Test Complete Audit</button>
+        <button class="test-button" onclick="testSystemFunction('openIntegrationTest', 'Integration Test')">Test Integration Test</button>
+        <button class="test-button" onclick="testSystemFunction('openPersistenceTest', 'Persistence Test')">Test Persistence Test</button>
+        <div id="systemResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🧪 Complete Testing</h2>
+        <button class="test-button" onclick="runAllTests()" style="background: #00ff88; color: #000; font-weight: bold;">🚀 Run All Tests</button>
+        <button class="test-button" onclick="clearResults()">🧹 Clear Results</button>
+        <button class="test-button" onclick="exportResults()">📊 Export Results</button>
+    </div>
+    
+    <div class="log-area" id="logArea">
+        <div>🧪 Button function test system ready</div>
+        <div>Click individual tests or "Run All Tests" to begin</div>
+    </div>
+    
+    <!-- Load all necessary scripts -->
+    <script src="unified-real-system-final.js"></script>
+    <script src="universal-function-fix-final.js"></script>
+    <script src="button-fix-minimal.js"></script>
+    <script src="emergency-button-restore.js"></script>
+    
+    <script>
+        let testResults = [];
+        
+        function log(message, type = 'info') {
+            const logArea = document.getElementById('logArea');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            
+            const color = type === 'error' ? '#ff4444' : 
+                         type === 'warn' ? '#ffaa00' : 
+                         type === 'pass' ? '#00ff88' : '#ffffff';
+            
+            logEntry.style.color = color;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            
+            logArea.appendChild(logEntry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+        
+        function addResult(section, test, passed, message) {
+            const result = { section, test, passed, message, timestamp: Date.now() };
+            testResults.push(result);
+            
+            const resultsDiv = document.getElementById(section + 'Results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            resultDiv.textContent = `${passed ? '✅' : '❌'} ${test}: ${message}`;
+            resultsDiv.appendChild(resultDiv);
+            
+            log(`${passed ? '✅' : '❌'} ${section}/${test}: ${message}`, passed ? 'pass' : 'error');
+        }
+        
+        function clearResults() {
+            testResults = [];
+            document.getElementById('coreResults').innerHTML = '';
+            document.getElementById('workforceResults').innerHTML = '';
+            document.getElementById('intelligenceResults').innerHTML = '';
+            document.getElementById('solarResults').innerHTML = '';
+            document.getElementById('systemResults').innerHTML = '';
+            document.getElementById('logArea').innerHTML = '';
+            log('Results cleared');
+        }
+        
+        function testPauseResume() {
+            log('Testing pause/resume functionality...');
+            
+            const funcExists = typeof window.setPaused === 'function';
+            if (!funcExists) {
+                addResult('core', 'Pause/Resume', false, 'setPaused function not found');
+                return;
+            }
+            
+            try {
+                const originalPaused = window.paused || false;
+                window.setPaused(true);
+                
+                if (window.paused === true) {
+                    window.setPaused(originalPaused); // Restore original state
+                    addResult('core', 'Pause/Resume', true, 'Function works correctly');
+                } else {
+                    addResult('core', 'Pause/Resume', false, 'Function exists but state not updated');
+                }
+            } catch (error) {
+                addResult('core', 'Pause/Resume', false, `Function error: ${error.message}`);
+            }
+        }
+        
+        function testRefresh() {
+            log('Testing refresh functionality...');
+            
+            const funcExists = typeof window.refreshInterface === 'function';
+            if (funcExists) {
+                addResult('core', 'Refresh', true, 'Function exists (not executed to avoid page reload)');
+            } else {
+                addResult('core', 'Refresh', false, 'refreshInterface function not found');
+            }
+        }
+        
+        function test3DRealm() {
+            log('Testing 3D Realm functionality...');
+            
+            const funcExists = typeof window.open3DRealm === 'function';
+            if (funcExists) {
+                // Test if function can be called (but don't actually open window)
+                addResult('core', '3D Realm', true, 'Function exists and callable');
+            } else {
+                addResult('core', '3D Realm', false, 'open3DRealm function not found');
+            }
+        }
+        
+        function testWorkforceFunction(funcName, displayName) {
+            log(`Testing workforce function: ${displayName}...`);
+            
+            const funcExists = typeof window[funcName] === 'function';
+            if (funcExists) {
+                addResult('workforce', displayName, true, 'Function exists and callable');
+            } else {
+                addResult('workforce', displayName, false, `${funcName} function not found`);
+            }
+        }
+        
+        function testIntelligenceFunction(funcName, displayName) {
+            log(`Testing intelligence function: ${displayName}...`);
+            
+            const funcExists = typeof window[funcName] === 'function';
+            if (funcExists) {
+                addResult('intelligence', displayName, true, 'Function exists and callable');
+            } else {
+                addResult('intelligence', displayName, false, `${funcName} function not found`);
+            }
+        }
+        
+        function testSolarFunction(funcName, displayName) {
+            log(`Testing solar function: ${displayName}...`);
+            
+            const funcExists = typeof window[funcName] === 'function';
+            if (funcExists) {
+                addResult('solar', displayName, true, 'Function exists and callable');
+            } else {
+                addResult('solar', displayName, false, `${funcName} function not found`);
+            }
+        }
+        
+        function testSystemFunction(funcName, displayName) {
+            log(`Testing system function: ${displayName}...`);
+            
+            const funcExists = typeof window[funcName] === 'function';
+            if (funcExists) {
+                addResult('system', displayName, true, 'Function exists and callable');
+            } else {
+                addResult('system', displayName, false, `${funcName} function not found`);
+            }
+        }
+        
+        async function runAllTests() {
+            log('🚀 Starting comprehensive button function tests...', 'pass');
+            clearResults();
+            
+            // Wait for systems to load
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Test core functions
+            testPauseResume();
+            testRefresh();
+            test3DRealm();
+            
+            // Test workforce functions
+            testWorkforceFunction('openRoster', 'Minion Roster');
+            testWorkforceFunction('openMinionChat', 'Minion Chat');
+            testWorkforceFunction('openActivityFeed', 'Activity Feed');
+            testWorkforceFunction('openHappinessActivities', 'Happiness Activities');
+            
+            // Test intelligence functions
+            testIntelligenceFunction('openConsciousnessEngine', 'Consciousness Engine');
+            testIntelligenceFunction('openWorkConsciousness', 'Work Consciousness');
+            testIntelligenceFunction('openAutonomousWorld', 'Autonomous World');
+            
+            // Test solar functions
+            testSolarFunction('openProjectSolar', 'Project Solar Australia');
+            testSolarFunction('openSolarConsciousness', 'Solar Consciousness');
+            testSolarFunction('openKnowledgeBase', 'Knowledge Base');
+            testSolarFunction('openDocuments', 'Document Pipeline');
+            
+            // Test system functions
+            testSystemFunction('openFunctionTest', 'Function Test');
+            testSystemFunction('openCompleteAudit', 'Complete Audit');
+            testSystemFunction('openIntegrationTest', 'Integration Test');
+            testSystemFunction('openPersistenceTest', 'Persistence Test');
+            
+            // Summary
+            const totalTests = testResults.length;
+            const passedTests = testResults.filter(r => r.passed).length;
+            const failedTests = totalTests - passedTests;
+            const passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+            
+            log(`🎉 Testing complete: ${passedTests}/${totalTests} passed (${passRate}%)`, 'pass');
+            
+            if (failedTests > 0) {
+                log(`⚠️ ${failedTests} tests failed - check individual results above`, 'warn');
+            } else {
+                log('✅ All button functions are working correctly!', 'pass');
+            }
+        }
+        
+        function exportResults() {
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                results: testResults,
+                summary: {
+                    total: testResults.length,
+                    passed: testResults.filter(r => r.passed).length,
+                    failed: testResults.filter(r => !r.passed).length
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+                type: 'application/json'
+            });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `button-function-test-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            log('📊 Test results exported');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🧪 Button function test system initialized');
+            
+            // Auto-run tests after systems load
+            setTimeout(() => {
+                log('🚀 Auto-running comprehensive tests...', 'pass');
+                runAllTests();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

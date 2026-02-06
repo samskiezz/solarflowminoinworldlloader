@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Full Roster • SolarFlow Minion World</title>
+  <meta name="color-scheme" content="dark light" />
+  <style>
+    :root{--bg1:#070A12;--bg2:#0B1530;--card:rgba(255,255,255,.08);--card2:rgba(255,255,255,.06);--stroke:rgba(255,255,255,.14);--text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.62);--good:#22c55e;--warn:#f59e0b;--bad:#ef4444;--blue:#60a5fa;--purple:#a78bfa;--cyan:#22d3ee;}
+    
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
+      background:radial-gradient(1200px 600px at 10% 10%, rgba(167,139,250,.22), transparent 60%),
+               radial-gradient(900px 500px at 85% 20%, rgba(34,211,238,.18), transparent 55%),
+               radial-gradient(1000px 700px at 50% 110%, rgba(96,165,250,.14), transparent 60%),
+               linear-gradient(180deg,var(--bg1),var(--bg2));
+      min-height:100vh;overflow-x:hidden}
+    
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 18px 80px}
+    
+    .header{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:24px}
+    .brand{display:flex;flex-direction:column;gap:2px}
+    .brand h1{margin:0;font-size:22px;letter-spacing:.2px;color:var(--text)}
+    .brand .sub{font-size:13px;color:var(--muted)}
+    
+    .controls-section{background:linear-gradient(180deg,var(--card),var(--card2));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      border:1px solid var(--stroke);border-radius:16px;padding:20px;margin-bottom:24px}
+    
+    .search-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+    .search-input{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);color:var(--text);padding:12px 16px;border-radius:12px;font-size:14px;outline:none;flex:1;min-width:300px}
+    .search-input::placeholder{color:var(--muted)}
+    
+    .filter-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .filter-select{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);color:var(--text);padding:10px 14px;border-radius:10px;font-size:13px;outline:none;min-width:120px}
+    .filter-select option{background:var(--bg2);color:var(--text)}
+    
+    .clear-btn{cursor:pointer;background:linear-gradient(135deg, var(--bad), #c53030);color:white;border:none;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600}
+    .clear-btn:hover{background:linear-gradient(135deg, #c53030, var(--bad))}
+    
+    .stats-bar{display:flex;gap:16px;align-items:center;padding:16px 0;border-top:1px solid rgba(255,255,255,.1);margin-top:16px;font-size:13px}
+    .stat{color:var(--muted)}
+    .stat strong{color:var(--text)}
+    
+    .roster-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:16px}
+    @media (max-width:768px){.roster-grid{grid-template-columns:1fr}}
+    
+    .minion-card{background:linear-gradient(180deg,var(--card),var(--card2));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      border:1px solid var(--stroke);border-radius:16px;padding:16px;transition:all 0.3s ease;cursor:pointer}
+    .minion-card:hover{border-color:rgba(0,255,136,0.4);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.08))}
+    
+    .minion-header{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    .avatar{width:48px;height:48px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.2);flex:0 0 48px;background:linear-gradient(135deg, rgba(34,211,238,.4), rgba(167,139,250,.3))}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .minion-info{flex:1;min-width:0}
+    .minion-name{font-weight:700;font-size:16px;margin-bottom:2px}
+    .minion-role{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+    
+    .minion-status{display:flex;gap:6px;margin-bottom:12px}
+    .status-chip{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid;font-weight:600}
+    .tier-1{border-color:rgba(102,102,102,0.5);background:rgba(102,102,102,0.1);color:#aaa}
+    .tier-2{border-color:rgba(65,105,225,0.5);background:rgba(65,105,225,0.1);color:#7eb3ff}
+    .tier-3{border-color:rgba(0,255,127,0.5);background:rgba(0,255,127,0.1);color:#7fff7f}
+    .tier-4{border-color:rgba(255,215,0,0.5);background:rgba(255,215,0,0.1);color:#ffd700}
+    .tier-5{border-color:rgba(255,105,180,0.5);background:rgba(255,105,180,0.1);color:#ff69b4}
+    
+    .mode-COLLAB{border-color:rgba(34,211,238,0.5);background:rgba(34,211,238,0.1);color:#22d3ee}
+    .mode-FOCUS{border-color:rgba(255,215,0,0.5);background:rgba(255,215,0,0.1);color:#fbbf24}
+    .mode-EXECUTION{border-color:rgba(34,197,94,0.5);background:rgba(34,197,94,0.1);color:#4ade80}
+    .mode-idle{border-color:rgba(148,163,184,0.5);background:rgba(148,163,184,0.1);color:#94a3b8}
+    
+    .minion-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+    .metric{text-align:center}
+    .metric-value{font-weight:700;font-size:16px;margin-bottom:2px}
+    .metric-label{font-size:11px;color:var(--muted);text-transform:uppercase}
+    
+    .specialties{display:flex;gap:4px;flex-wrap:wrap}
+    .specialty-chip{font-size:10px;padding:3px 6px;border-radius:6px;background:rgba(255,255,255,0.08);color:var(--muted);border:1px solid rgba(255,255,255,0.1)}
+    
+    .task-assignment{margin-top:12px;padding:10px;background:rgba(0,0,0,0.2);border-radius:8px;border-left:3px solid var(--blue)}
+    .task-title{font-size:12px;font-weight:600;margin-bottom:4px}
+    .task-progress{display:flex;align-items:center;gap:8px}
+    .progress-bar{flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:width 0.3s ease}
+    .progress-text{font-size:11px;color:var(--muted)}
+    
+    .no-results{text-align:center;padding:60px 20px;color:var(--muted)}
+    .no-results h3{color:var(--text);margin-bottom:8px}
+    
+    .back-link{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,.88);text-decoration:none;padding:10px 16px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);margin-bottom:20px;transition:all 0.3s ease}
+    .back-link:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">
+        <h1>Full Roster</h1>
+        <div class="sub">All minions • Search + Filters • Static hosting via hive_state.json</div>
+      </div>
+    </div>
+    
+    <a href="./index.html" class="back-link">← Back to Dashboard</a>
+    
+    <div class="controls-section">
+      <div class="search-controls">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search minions by ID, role, specialties...">
+      </div>
+      
+      <div class="filter-controls">
+        <select id="tierFilter" class="filter-select">
+          <option value="">All Tiers</option>
+          <option value="1">Tier 1 (Operators)</option>
+          <option value="2">Tier 2 (Specialists)</option>
+          <option value="3">Tier 3 (Overseers)</option>
+          <option value="4">Tier 4 (Architects)</option>
+          <option value="5">Tier 5 (Legends)</option>
+        </select>
+        
+        <select id="roleFilter" class="filter-select">
+          <option value="">All Roles</option>
+          <option value="OPERATOR">Operators</option>
+          <option value="SPECIALIST">Specialists</option>
+          <option value="OVERSEER">Overseers</option>
+          <option value="ARCHITECT">Architects</option>
+        </select>
+        
+        <select id="modeFilter" class="filter-select">
+          <option value="">All Modes</option>
+          <option value="COLLAB">Collaborating</option>
+          <option value="FOCUS">Focused Work</option>
+          <option value="EXECUTION">Executing Tasks</option>
+          <option value="idle">Idle</option>
+        </select>
+        
+        <select id="sortBy" class="filter-select">
+          <option value="id">Sort by ID</option>
+          <option value="tier">Sort by Tier</option>
+          <option value="credits">Sort by Credits</option>
+          <option value="happiness">Sort by Happiness</option>
+          <option value="reputation">Sort by Reputation</option>
+        </select>
+        
+        <button id="clearFilters" class="clear-btn">Clear All</button>
+      </div>
+      
+      <div class="stats-bar">
+        <div class="stat">Showing: <strong id="showingCount">0</strong> of <strong id="totalCount">0</strong> minions</div>
+        <div class="stat">Average Happiness: <strong id="avgHappiness">0%</strong></div>
+        <div class="stat">Total Credits: <strong id="totalCredits">0</strong></div>
+        <div class="stat">Active Tasks: <strong id="activeTasks">0</strong></div>
+      </div>
+    </div>
+    
+    <div id="rosterGrid" class="roster-grid">
+      <!-- Minions will be populated here -->
+    </div>
+    
+    <div id="noResults" class="no-results" style="display: none;">
+      <h3>No minions found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+  </div>
+  
+  <!-- Load all systems -->
+  <script src="unified-real-system-final.js"></script>
+  <script src="task-progression-via-commits.js"></script>
+  
+  <script>
+    class FullRosterSystem {
+      constructor() {
+        this.allMinions = [];
+        this.filteredMinions = [];
+        this.tasks = [];
+        this.searchTerm = '';
+        this.filters = {
+          tier: '',
+          role: '',
+          mode: ''
+        };
+        this.sortBy = 'id';
+        
+        this.init();
+      }
+      
+      async init() {
+        console.log('👥 Initializing full roster system...');
+        await this.loadData();
+        this.setupEventHandlers();
+        this.renderRoster();
+      }
+      
+      async loadData() {
+        try {
+          // Load from hive_state.json (static hosting approach)
+          console.log('📄 Loading hive state...');
+          const response = await fetch('./hive_state.json');
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          
+          const hiveState = await response.json();
+          
+          if (hiveState.minions?.roster) {
+            this.allMinions = hiveState.minions.roster;
+            console.log(`✅ Loaded ${this.allMinions.length} minions from hive_state.json`);
+          }
+          
+          if (hiveState.tasks?.board) {
+            this.tasks = hiveState.tasks.board;
+            console.log(`📋 Loaded ${this.tasks.length} tasks`);
+          }
+          
+          this.filteredMinions = [...this.allMinions];
+          
+        } catch (error) {
+          console.error('❌ Failed to load hive state:', error);
+          this.createFallbackData();
+        }
+      }
+      
+      createFallbackData() {
+        console.log('🔄 Creating fallback roster data...');
+        this.allMinions = [
+          {
+            id: 'ATLAS',
+            tier: 3,
+            role: 'OVERSEER', 
+            mode: 'COLLAB',
+            energy_credits: 250,
+            happiness_sim: 85,
+            reputation: 0.8,
+            specialties: ['orchestration', 'leadership', 'systems']
+          },
+          {
+            id: 'LUMEN',
+            tier: 3,
+            role: 'OVERSEER',
+            mode: 'FOCUS', 
+            energy_credits: 180,
+            happiness_sim: 75,
+            reputation: 0.7,
+            specialties: ['analysis', 'optimization', 'data']
+          }
+        ];
+        this.filteredMinions = [...this.allMinions];
+      }
+      
+      setupEventHandlers() {
+        // Search input
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+          this.searchTerm = e.target.value.toLowerCase();
+          this.applyFilters();
+        });
+        
+        // Filter selects
+        ['tierFilter', 'roleFilter', 'modeFilter'].forEach(id => {
+          const select = document.getElementById(id);
+          select.addEventListener('change', (e) => {
+            const filterType = id.replace('Filter', '');
+            this.filters[filterType] = e.target.value;
+            this.applyFilters();
+          });
+        });
+        
+        // Sort select
+        document.getElementById('sortBy').addEventListener('change', (e) => {
+          this.sortBy = e.target.value;
+          this.applyFilters();
+        });
+        
+        // Clear filters
+        document.getElementById('clearFilters').addEventListener('click', () => {
+          this.clearAllFilters();
+        });
+      }
+      
+      applyFilters() {
+        console.log('🔍 Applying filters and search...');
+        
+        this.filteredMinions = this.allMinions.filter(minion => {
+          // Search filter
+          if (this.searchTerm) {
+            const searchText = [
+              minion.id,
+              minion.role,
+              ...(minion.specialties || [])
+            ].join(' ').toLowerCase();
+            
+            if (!searchText.includes(this.searchTerm)) {
+              return false;
+            }
+          }
+          
+          // Tier filter
+          if (this.filters.tier && minion.tier.toString() !== this.filters.tier) {
+            return false;
+          }
+          
+          // Role filter
+          if (this.filters.role && minion.role !== this.filters.role) {
+            return false;
+          }
+          
+          // Mode filter
+          if (this.filters.mode && minion.mode !== this.filters.mode) {
+            return false;
+          }
+          
+          return true;
+        });
+        
+        // Apply sorting
+        this.sortMinions();
+        
+        // Update display
+        this.renderRoster();
+        this.updateStats();
+      }
+      
+      sortMinions() {
+        this.filteredMinions.sort((a, b) => {
+          switch(this.sortBy) {
+            case 'tier':
+              return b.tier - a.tier;
+            case 'credits':
+              return (b.energy_credits || 0) - (a.energy_credits || 0);
+            case 'happiness':
+              return (b.happiness_sim || 0) - (a.happiness_sim || 0);
+            case 'reputation':
+              return (b.reputation || 0) - (a.reputation || 0);
+            default:
+              return a.id.localeCompare(b.id);
+          }
+        });
+      }
+      
+      clearAllFilters() {
+        console.log('🧹 Clearing all filters...');
+        
+        document.getElementById('searchInput').value = '';
+        document.getElementById('tierFilter').value = '';
+        document.getElementById('roleFilter').value = '';
+        document.getElementById('modeFilter').value = '';
+        document.getElementById('sortBy').value = 'id';
+        
+        this.searchTerm = '';
+        this.filters = { tier: '', role: '', mode: '' };
+        this.sortBy = 'id';
+        
+        this.applyFilters();
+      }
+      
+      renderRoster() {
+        console.log(`🖥️ Rendering ${this.filteredMinions.length} minions...`);
+        
+        const grid = document.getElementById('rosterGrid');
+        const noResults = document.getElementById('noResults');
+        
+        if (this.filteredMinions.length === 0) {
+          grid.style.display = 'none';
+          noResults.style.display = 'block';
+          return;
+        }
+        
+        grid.style.display = 'grid';
+        noResults.style.display = 'none';
+        
+        grid.innerHTML = this.filteredMinions.map(minion => {
+          return this.renderMinionCard(minion);
+        }).join('');
+        
+        // Add click handlers
+        grid.querySelectorAll('.minion-card').forEach((card, index) => {
+          card.addEventListener('click', () => {
+            this.showMinionDetails(this.filteredMinions[index]);
+          });
+        });
+      }
+      
+      renderMinionCard(minion) {
+        const task = this.tasks.find(t => t.owner === minion.id);
+        const avatarUrl = minion.avatar_url || `./avatars/identicons/${minion.id}.svg`;
+        const happiness = minion.happiness_sim || 0;
+        const credits = minion.energy_credits || 0;
+        const reputation = minion.reputation || 0;
+        
+        return `
+          <div class="minion-card" data-minion-id="${minion.id}">
+            <div class="minion-header">
+              <div class="avatar">
+                <img src="${avatarUrl}" alt="${minion.id}" onerror="this.style.display='none'">
+              </div>
+              <div class="minion-info">
+                <div class="minion-name">${minion.id}</div>
+                <div class="minion-role">${minion.role}</div>
+              </div>
+            </div>
+            
+            <div class="minion-status">
+              <div class="status-chip tier-${minion.tier}">Tier ${minion.tier}</div>
+              <div class="status-chip mode-${minion.mode || 'idle'}">${minion.mode || 'idle'}</div>
+            </div>
+            
+            <div class="minion-metrics">
+              <div class="metric">
+                <div class="metric-value">${credits.toLocaleString()}</div>
+                <div class="metric-label">Credits</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">${happiness}%</div>
+                <div class="metric-label">Happiness</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">${Math.round(reputation * 100)}%</div>
+                <div class="metric-label">Reputation</div>
+              </div>
+            </div>
+            
+            ${minion.specialties ? `
+              <div class="specialties">
+                ${minion.specialties.map(s => `<div class="specialty-chip">${s}</div>`).join('')}
+              </div>
+            ` : ''}
+            
+            ${task ? `
+              <div class="task-assignment">
+                <div class="task-title">📋 ${task.title}</div>
+                <div class="task-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${(task.progress || 0) * 100}%"></div>
+                  </div>
+                  <div class="progress-text">${Math.round((task.progress || 0) * 100)}%</div>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+      
+      updateStats() {
+        const total = this.allMinions.length;
+        const showing = this.filteredMinions.length;
+        const avgHappiness = showing > 0 ? 
+          Math.round(this.filteredMinions.reduce((sum, m) => sum + (m.happiness_sim || 0), 0) / showing) : 0;
+        const totalCredits = this.filteredMinions.reduce((sum, m) => sum + (m.energy_credits || 0), 0);
+        const activeTasks = this.tasks.filter(t => t.status !== 'done').length;
+        
+        document.getElementById('showingCount').textContent = showing;
+        document.getElementById('totalCount').textContent = total;
+        document.getElementById('avgHappiness').textContent = avgHappiness + '%';
+        document.getElementById('totalCredits').textContent = totalCredits.toLocaleString();
+        document.getElementById('activeTasks').textContent = activeTasks;
+      }
+      
+      showMinionDetails(minion) {
+        const task = this.tasks.find(t => t.owner === minion.id);
+        
+        const details = `
+Minion: ${minion.id}
+Tier: ${minion.tier} (${minion.role})
+Mode: ${minion.mode || 'idle'}
+Credits: ${(minion.energy_credits || 0).toLocaleString()}
+Happiness: ${minion.happiness_sim || 0}%
+Reputation: ${Math.round((minion.reputation || 0) * 100)}%
+Specialties: ${(minion.specialties || []).join(', ')}
+${task ? `\nCurrent Task: ${task.title}\nProgress: ${Math.round((task.progress || 0) * 100)}%\nStatus: ${task.status}` : '\nNo active tasks'}
+        `;
+        
+        alert(details);
+      }
+    }
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('📋 Initializing full roster page...');
+      window.fullRosterSystem = new FullRosterSystem();
+    });
+  </script>
+</body>
+</html>

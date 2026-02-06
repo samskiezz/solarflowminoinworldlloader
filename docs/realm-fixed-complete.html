@@ -1,0 +1,74 @@
+            toggleWireframe() {
+                this.wireframeMode = !this.wireframeMode;
+                
+                this.minionObjects.forEach(minionObj => {
+                    minionObj.children.forEach(child => {
+                        if (child.material) {
+                            child.material.wireframe = this.wireframeMode;
+                        }
+                    });
+                });
+                
+                document.getElementById('renderMode').textContent = this.wireframeMode ? 'Wireframe' : 'Normal';
+            }
+            
+            focusRandomMinion() {
+                if (this.minionObjects.length === 0) return;
+                
+                const randomMinion = this.minionObjects[Math.floor(Math.random() * this.minionObjects.length)];
+                this.selectMinion(randomMinion);
+            }
+        }
+
+        // Global control functions for HUD
+        let realmInstance = null;
+
+        window.resetCamera = () => {
+            if (realmInstance) realmInstance.resetCamera();
+        };
+
+        window.toggleAnimation = () => {
+            if (realmInstance) realmInstance.toggleAnimation();
+        };
+
+        window.toggleWireframe = () => {
+            if (realmInstance) realmInstance.toggleWireframe();
+        };
+
+        window.focusRandomMinion = () => {
+            if (realmInstance) realmInstance.focusRandomMinion();
+        };
+
+        // Error handling
+        window.addEventListener('error', (e) => {
+            console.error('3D Realm Error:', e);
+            const errorDisplay = document.getElementById('errorDisplay');
+            const errorMessage = document.getElementById('errorMessage');
+            if (errorDisplay && errorMessage) {
+                errorMessage.textContent = `JavaScript Error: ${e.message}\n\nStack: ${e.error?.stack || 'No stack trace'}`;
+                errorDisplay.style.display = 'block';
+            }
+        });
+
+        // Initialize the 3D realm when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🌐 Initializing 3D SolarFlow Realm...');
+            
+            // Small delay to ensure all resources are loaded
+            setTimeout(() => {
+                try {
+                    realmInstance = new SolarFlow3DRealm();
+                } catch (error) {
+                    console.error('Failed to initialize 3D realm:', error);
+                    const errorDisplay = document.getElementById('errorDisplay');
+                    const errorMessage = document.getElementById('errorMessage');
+                    if (errorDisplay && errorMessage) {
+                        errorMessage.textContent = `Initialization Error: ${error.message}\n\nThis usually means Three.js failed to load or your browser doesn't support WebGL.`;
+                        errorDisplay.style.display = 'block';
+                    }
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

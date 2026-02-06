@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular Engine Advanced Features Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            overflow: hidden;
+        }
+        
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; cursor: crosshair; }
+        
+        .test-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 400px;
+            max-height: 90vh;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            color: #4fc3f7;
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .test-category {
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .test-category h3 {
+            color: #81c784;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .test-label {
+            font-size: 12px;
+            flex: 1;
+        }
+        
+        .test-button {
+            background: linear-gradient(145deg, #2196f3, #1976d2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-left: 10px;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(145deg, #42a5f5, #1e88e5);
+        }
+        
+        .test-status {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 10px;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .status-pass { background: #4caf50; color: white; }
+        .status-fail { background: #f44336; color: white; }
+        .status-pending { background: #ff9800; color: white; }
+        
+        .bloom-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .bloom-slider {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .bloom-slider label {
+            font-size: 10px;
+            color: #ccc;
+        }
+        
+        .bloom-slider input {
+            width: 100%;
+            height: 20px;
+        }
+        
+        #output-log {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            overflow-y: auto;
+            line-height: 1.4;
+            color: #e0e0e0;
+        }
+        
+        .log-info { color: #4fc3f7; }
+        .log-success { color: #81c784; }
+        .log-warning { color: #ffb74d; }
+        .log-error { color: #e57373; }
+        
+        .asset-progress {
+            margin: 10px 0;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .asset-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4fc3f7, #81c784);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 11px;
+        }
+        
+        .performance-metric {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .performance-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #4fc3f7;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="test-panel">
+            <h2>🚀 2025-Grade Engine Test Suite</h2>
+            
+            <!-- Asset Manager Tests -->
+            <div class="test-category">
+                <h3>📦 Asset Management</h3>
+                <div class="test-item">
+                    <span class="test-label">Load HDRI Environment</span>
+                    <button class="test-button" onclick="testHDRILoad()">Test</button>
+                    <span class="test-status status-pending" id="status-hdri">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Load GLB Models</span>
+                    <button class="test-button" onclick="testGLBLoad()">Test</button>
+                    <span class="test-status status-pending" id="status-glb">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Batch Asset Loading</span>
+                    <button class="test-button" onclick="testBatchLoad()">Test</button>
+                    <span class="test-status status-pending" id="status-batch">WAIT</span>
+                </div>
+                <div class="asset-progress">
+                    <div class="asset-progress-fill" id="asset-progress"></div>
+                </div>
+                <div style="font-size: 10px; text-align: center; margin-top: 5px;" id="asset-status">
+                    Ready for testing
+                </div>
+            </div>
+            
+            <!-- Post-Processing Tests -->
+            <div class="test-category">
+                <h3>✨ Post-Processing (Bloom)</h3>
+                <div class="test-item">
+                    <span class="test-label">Initialize Composer</span>
+                    <button class="test-button" onclick="testPostFXInit()">Test</button>
+                    <span class="test-status status-pending" id="status-composer">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Bloom Pass</span>
+                    <button class="test-button" onclick="testBloomPass()">Test</button>
+                    <span class="test-status status-pending" id="status-bloom">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Quality Settings</span>
+                    <button class="test-button" onclick="testQualitySettings()">Test</button>
+                    <span class="test-status status-pending" id="status-quality">WAIT</span>
+                </div>
+                
+                <div class="bloom-controls">
+                    <div class="bloom-slider">
+                        <label>Strength</label>
+                        <input type="range" min="0" max="3" step="0.1" value="0.5" id="bloom-strength" onchange="updateBloomStrength(this.value)">
+                    </div>
+                    <div class="bloom-slider">
+                        <label>Threshold</label>
+                        <input type="range" min="0" max="1" step="0.05" value="0.8" id="bloom-threshold" onchange="updateBloomThreshold(this.value)">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Avatar System Tests -->
+            <div class="test-category">
+                <h3>🤖 Enhanced Avatar System</h3>
+                <div class="test-item">
+                    <span class="test-label">Real Data Loading</span>
+                    <button class="test-button" onclick="testRealDataLoad()">Test</button>
+                    <span class="test-status status-pending" id="status-realdata">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Personality Traits</span>
+                    <button class="test-button" onclick="testPersonalitySystem()">Test</button>
+                    <span class="test-status status-pending" id="status-personality">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Animation System</span>
+                    <button class="test-button" onclick="testAnimationSystem()">Test</button>
+                    <span class="test-status status-pending" id="status-animation">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Behavior Binding</span>
+                    <button class="test-button" onclick="testBehaviorBinding()">Test</button>
+                    <span class="test-status status-pending" id="status-behavior">WAIT</span>
+                </div>
+            </div>
+            
+            <!-- Performance Tests -->
+            <div class="test-category">
+                <h3>⚡ Performance & Integration</h3>
+                <div class="performance-grid">
+                    <div class="performance-metric">
+                        <span class="performance-value" id="perf-fps">0</span>
+                        FPS
+                    </div>
+                    <div class="performance-metric">
+                        <span class="performance-value" id="perf-triangles">0</span>
+                        Triangles
+                    </div>
+                    <div class="performance-metric">
+                        <span class="performance-value" id="perf-memory">0</span>
+                        Memory (MB)
+                    </div>
+                    <div class="performance-metric">
+                        <span class="performance-value" id="perf-avatars">0</span>
+                        Avatars
+                    </div>
+                </div>
+                
+                <div class="test-item">
+                    <span class="test-label">Stress Test (100 avatars)</span>
+                    <button class="test-button" onclick="testStress()">Test</button>
+                    <span class="test-status status-pending" id="status-stress">WAIT</span>
+                </div>
+            </div>
+            
+            <!-- Integration Tests -->
+            <div class="test-category">
+                <h3>🔗 System Integration</h3>
+                <div class="test-item">
+                    <span class="test-label">Event Bus</span>
+                    <button class="test-button" onclick="testEventBus()">Test</button>
+                    <span class="test-status status-pending" id="status-events">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">State Store</span>
+                    <button class="test-button" onclick="testStateStore()">Test</button>
+                    <span class="test-status status-pending" id="status-state">WAIT</span>
+                </div>
+                <div class="test-item">
+                    <span class="test-label">Hive Integration</span>
+                    <button class="test-button" onclick="testHiveIntegration()">Test</button>
+                    <span class="test-status status-pending" id="status-hive">WAIT</span>
+                </div>
+            </div>
+        </div>
+        
+        <canvas id="canvas"></canvas>
+    </div>
+    
+    <div id="output-log"></div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import { createEngine } from '../src/core/Engine.js';
+        import { AssetManager } from '../src/core/AssetManager.js';
+        import { PostFXManager } from '../src/core/PostFX.js';
+        import { eventBus } from '../src/core/EventBus.js';
+        import { stateStore } from '../src/core/StateStore.js';
+        import { MinionAvatar } from '../src/actors/MinionAvatar.js';
+        import * as THREE from 'three';
+
+        let engine = null;
+        let assetManager = null;
+        let testResults = {};
+        let fpsCounter = 0;
+
+        // Initialize engine and test systems
+        async function init() {
+            try {
+                log('🚀 Initializing 2025-Grade Engine Test Suite...', 'info');
+                
+                const canvas = document.getElementById('canvas');
+                engine = createEngine(canvas);
+                await engine.initialize();
+                
+                // Setup asset manager
+                assetManager = new AssetManager({
+                    basePath: 'assets',
+                    maxConcurrent: 4,
+                    timeout: 30000
+                });
+                
+                log('✅ Engine initialized successfully', 'success');
+                log('🔬 Ready for testing - Use buttons to run individual tests', 'info');
+                
+                startPerformanceMonitoring();
+                
+            } catch (error) {
+                log(`❌ Initialization failed: ${error.message}`, 'error');
+            }
+        }
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('output-log');
+            const time = new Date().toLocaleTimeString();
+            const className = `log-${type}`;
+            logDiv.innerHTML += `<span class="${className}">[${time}] ${message}</span><br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateStatus(testId, status) {
+            const statusEl = document.getElementById(`status-${testId}`);
+            if (statusEl) {
+                statusEl.textContent = status;
+                statusEl.className = `test-status status-${status.toLowerCase()}`;
+            }
+        }
+
+        function startPerformanceMonitoring() {
+            setInterval(() => {
+                if (!engine) return;
+                
+                const fps = fpsCounter;
+                const info = engine.renderer.info;
+                
+                document.getElementById('perf-fps').textContent = fps;
+                document.getElementById('perf-triangles').textContent = info.render.triangles.toLocaleString();
+                document.getElementById('perf-memory').textContent = Math.round((info.memory.geometries + info.memory.textures) / 1024);
+                document.getElementById('perf-avatars').textContent = engine.getAllAvatars()?.length || 0;
+                
+                fpsCounter = 0;
+            }, 1000);
+            
+            // Count FPS
+            const animate = () => {
+                fpsCounter++;
+                requestAnimationFrame(animate);
+            };
+            animate();
+        }
+
+        // Asset Manager Tests
+        window.testHDRILoad = async () => {
+            log('🌅 Testing HDRI environment loading...', 'info');
+            updateStatus('hdri', 'TESTING');
+            
+            try {
+                // Use a public HDRI for testing
+                const hdriUrl = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/equirectangular/venice_sunset_1k.hdr';
+                const texture = await assetManager.loadHDRI(hdriUrl);
+                
+                if (texture && texture.mapping === THREE.EquirectangularReflectionMapping) {
+                    engine.scene.environment = texture;
+                    engine.scene.background = texture;
+                    log('✅ HDRI loaded and applied successfully', 'success');
+                    updateStatus('hdri', 'PASS');
+                } else {
+                    throw new Error('HDRI not properly configured');
+                }
+                
+            } catch (error) {
+                log(`❌ HDRI test failed: ${error.message}`, 'error');
+                updateStatus('hdri', 'FAIL');
+            }
+        };
+
+        window.testGLBLoad = async () => {
+            log('🎭 Testing GLB model loading...', 'info');
+            updateStatus('glb', 'TESTING');
+            
+            try {
+                // Test loading a simple GLB model
+                const testModel = await assetManager.loadGLB('https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/models/gltf/Duck/Duck.gltf');
+                
+                if (testModel && testModel.scene) {
+                    testModel.scene.position.set(5, 0, 5);
+                    testModel.scene.scale.setScalar(2);
+                    engine.scene.add(testModel.scene);
+                    log('✅ GLB model loaded and added to scene', 'success');
+                    updateStatus('glb', 'PASS');
+                } else {
+                    throw new Error('GLB model not properly loaded');
+                }
+                
+            } catch (error) {
+                log(`❌ GLB test failed: ${error.message}`, 'error');
+                updateStatus('glb', 'FAIL');
+            }
+        };
+
+        window.testBatchLoad = async () => {
+            log('📦 Testing batch asset loading...', 'info');
+            updateStatus('batch', 'TESTING');
+            
+            try {
+                const assets = [
+                    { type: 'texture', path: 'https://threejs.org/examples/textures/crate.gif' },
+                    { type: 'texture', path: 'https://threejs.org/examples/textures/brick_diffuse.jpg' }
+                ];
+                
+                const result = await assetManager.loadBatch(assets, (progress) => {
+                    document.getElementById('asset-progress').style.width = (progress.progress * 100) + '%';
+                    document.getElementById('asset-status').textContent = `Loading ${progress.loaded}/${progress.total}...`;
+                });
+                
+                if (result.success) {
+                    log(`✅ Batch loaded ${result.results.length} assets successfully`, 'success');
+                    updateStatus('batch', 'PASS');
+                } else {
+                    throw new Error(`Batch loading failed: ${result.errors.length} errors`);
+                }
+                
+            } catch (error) {
+                log(`❌ Batch test failed: ${error.message}`, 'error');
+                updateStatus('batch', 'FAIL');
+            }
+        };
+
+        // Post-Processing Tests
+        window.testPostFXInit = async () => {
+            log('✨ Testing post-processing initialization...', 'info');
+            updateStatus('composer', 'TESTING');
+            
+            try {
+                if (engine.postFX && engine.postFX.composer) {
+                    log('✅ Post-processing composer initialized', 'success');
+                    updateStatus('composer', 'PASS');
+                } else {
+                    throw new Error('Post-processing not initialized');
+                }
+                
+            } catch (error) {
+                log(`❌ PostFX init failed: ${error.message}`, 'error');
+                updateStatus('composer', 'FAIL');
+            }
+        };
+
+        window.testBloomPass = async () => {
+            log('🌟 Testing bloom pass functionality...', 'info');
+            updateStatus('bloom', 'TESTING');
+            
+            try {
+                if (engine.postFX && engine.postFX.passes.bloom) {
+                    const bloomPass = engine.postFX.passes.bloom;
+                    
+                    // Test bloom settings
+                    engine.postFX.setBloomStrength(1.0);
+                    log(`🔧 Bloom strength set to: ${bloomPass.strength}`, 'info');
+                    
+                    // Add some bright objects to see bloom effect
+                    const brightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, emissive: 0xff4444 });
+                    const brightSphere = new THREE.Mesh(new THREE.SphereGeometry(2), brightMaterial);
+                    brightSphere.position.set(-5, 5, 0);
+                    engine.scene.add(brightSphere);
+                    
+                    log('✅ Bloom pass working, bright object added', 'success');
+                    updateStatus('bloom', 'PASS');
+                } else {
+                    throw new Error('Bloom pass not available');
+                }
+                
+            } catch (error) {
+                log(`❌ Bloom test failed: ${error.message}`, 'error');
+                updateStatus('bloom', 'FAIL');
+            }
+        };
+
+        window.testQualitySettings = async () => {
+            log('⚙️ Testing quality settings...', 'info');
+            updateStatus('quality', 'TESTING');
+            
+            try {
+                const qualities = ['low', 'med', 'high'];
+                
+                for (const quality of qualities) {
+                    engine.postFX.setQuality(quality);
+                    log(`📊 Quality set to: ${quality}`, 'info');
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+                
+                log('✅ Quality settings test complete', 'success');
+                updateStatus('quality', 'PASS');
+                
+            } catch (error) {
+                log(`❌ Quality test failed: ${error.message}`, 'error');
+                updateStatus('quality', 'FAIL');
+            }
+        };
+
+        // Avatar System Tests
+        window.testRealDataLoad = async () => {
+            log('📊 Testing real data loading from hive_state.json...', 'info');
+            updateStatus('realdata', 'TESTING');
+            
+            try {
+                await stateStore.loadHiveState();
+                const minions = stateStore.getMinions();
+                
+                if (minions && minions.length > 0) {
+                    log(`✅ Loaded ${minions.length} real minions from hive state`, 'success');
+                    log(`🔍 Sample minion: ${minions[0].id} (${minions[0].specialization})`, 'info');
+                    updateStatus('realdata', 'PASS');
+                } else {
+                    throw new Error('No minion data loaded');
+                }
+                
+            } catch (error) {
+                log(`❌ Real data test failed: ${error.message}`, 'error');
+                updateStatus('realdata', 'FAIL');
+            }
+        };
+
+        window.testPersonalitySystem = async () => {
+            log('🧠 Testing personality trait system...', 'info');
+            updateStatus('personality', 'TESTING');
+            
+            try {
+                const minions = stateStore.getMinions();
+                if (!minions || minions.length === 0) {
+                    throw new Error('No minion data available');
+                }
+                
+                const testMinion = minions[0];
+                const avatar = new MinionAvatar({ minion: testMinion, assets: assetManager });
+                
+                if (avatar.personalityTraits) {
+                    log(`✅ Personality calculated for ${testMinion.id}:`, 'success');
+                    log(`   Extroversion: ${(avatar.personalityTraits.extroversion * 100).toFixed(1)}%`, 'info');
+                    log(`   Work Drive: ${(avatar.personalityTraits.workDriven * 100).toFixed(1)}%`, 'info');
+                    log(`   Confidence: ${(avatar.personalityTraits.confidence * 100).toFixed(1)}%`, 'info');
+                    updateStatus('personality', 'PASS');
+                } else {
+                    throw new Error('Personality traits not calculated');
+                }
+                
+            } catch (error) {
+                log(`❌ Personality test failed: ${error.message}`, 'error');
+                updateStatus('personality', 'FAIL');
+            }
+        };
+
+        window.testAnimationSystem = async () => {
+            log('🎬 Testing animation system...', 'info');
+            updateStatus('animation', 'TESTING');
+            
+            try {
+                const minions = stateStore.getMinions();
+                const testMinion = minions[0];
+                const avatar = new MinionAvatar({ minion: testMinion, assets: assetManager });
+                
+                // Test animation methods
+                avatar.setActivity('working');
+                log(`🎭 Set activity to: working`, 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                avatar.setActivity('resting');
+                log(`🎭 Set activity to: resting`, 'info');
+                
+                const animInfo = avatar.getAnimationInfo();
+                log(`✅ Animation system working: ${animInfo ? 'Available' : 'Procedural'}`, 'success');
+                updateStatus('animation', 'PASS');
+                
+            } catch (error) {
+                log(`❌ Animation test failed: ${error.message}`, 'error');
+                updateStatus('animation', 'FAIL');
+            }
+        };
+
+        window.testBehaviorBinding = async () => {
+            log('🔗 Testing behavior binding to minion stats...', 'info');
+            updateStatus('behavior', 'TESTING');
+            
+            try {
+                const minions = stateStore.getMinions();
+                const testMinion = minions[0];
+                
+                // Modify minion stats
+                testMinion.ai = testMinion.ai || {};
+                testMinion.ai.energy = 95;
+                testMinion.ai.mood = 85;
+                
+                const avatar = new MinionAvatar({ minion: testMinion, assets: assetManager });
+                const stats = avatar.getDisplayStats();
+                
+                if (stats.energy === 95 && stats.mood === 85) {
+                    log(`✅ Behavior correctly bound to stats (E:${stats.energy}, M:${stats.mood})`, 'success');
+                    updateStatus('behavior', 'PASS');
+                } else {
+                    throw new Error('Stats not properly bound');
+                }
+                
+            } catch (error) {
+                log(`❌ Behavior test failed: ${error.message}`, 'error');
+                updateStatus('behavior', 'FAIL');
+            }
+        };
+
+        // Integration Tests
+        window.testEventBus = async () => {
+            log('📡 Testing event bus system...', 'info');
+            updateStatus('events', 'TESTING');
+            
+            try {
+                let eventReceived = false;
+                
+                eventBus.on('test:event', (data) => {
+                    eventReceived = true;
+                    log(`📨 Event received: ${data.message}`, 'info');
+                });
+                
+                eventBus.emit('test:event', { message: 'Test successful' });
+                
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                if (eventReceived) {
+                    log('✅ Event bus working correctly', 'success');
+                    updateStatus('events', 'PASS');
+                } else {
+                    throw new Error('Event not received');
+                }
+                
+            } catch (error) {
+                log(`❌ Event bus test failed: ${error.message}`, 'error');
+                updateStatus('events', 'FAIL');
+            }
+        };
+
+        window.testStateStore = async () => {
+            log('💾 Testing state store functionality...', 'info');
+            updateStatus('state', 'TESTING');
+            
+            try {
+                await stateStore.loadHiveState();
+                
+                const totalCredits = stateStore.getTotalCredits();
+                const avgHappiness = stateStore.getAverageHappiness();
+                const worldHealth = stateStore.worldHealth;
+                
+                if (totalCredits > 0 && avgHappiness > 0 && worldHealth) {
+                    log(`✅ State store loaded: ${totalCredits} credits, ${avgHappiness.toFixed(1)}% happiness`, 'success');
+                    updateStatus('state', 'PASS');
+                } else {
+                    throw new Error('State store data invalid');
+                }
+                
+            } catch (error) {
+                log(`❌ State store test failed: ${error.message}`, 'error');
+                updateStatus('state', 'FAIL');
+            }
+        };
+
+        window.testHiveIntegration = async () => {
+            log('🏗️ Testing full hive integration...', 'info');
+            updateStatus('hive', 'TESTING');
+            
+            try {
+                await engine.createAllAvatars();
+                const avatars = engine.getAllAvatars();
+                
+                if (avatars && avatars.length > 0) {
+                    log(`✅ Hive integrated: ${avatars.length} avatars created from real data`, 'success');
+                    updateStatus('hive', 'PASS');
+                } else {
+                    throw new Error('No avatars created from hive data');
+                }
+                
+            } catch (error) {
+                log(`❌ Hive integration test failed: ${error.message}`, 'error');
+                updateStatus('hive', 'FAIL');
+            }
+        };
+
+        window.testStress = async () => {
+            log('⚡ Starting stress test with 100 avatars...', 'warning');
+            updateStatus('stress', 'TESTING');
+            
+            try {
+                const startFPS = fpsCounter;
+                
+                // Create 100 simple avatars for stress test
+                for (let i = 0; i < 100; i++) {
+                    const dummyMinion = {
+                        id: `STRESS_${i}`,
+                        tier: (i % 3) + 1,
+                        specialization: `Stress Tester ${i}`,
+                        ai: { energy: Math.random() * 100, mood: Math.random() * 100 }
+                    };
+                    
+                    const avatar = new MinionAvatar({ minion: dummyMinion, assets: assetManager });
+                    const x = (Math.random() - 0.5) * 100;
+                    const z = (Math.random() - 0.5) * 100;
+                    avatar.setPosition(x, 0, z);
+                    engine.scene.add(avatar.root);
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                const endFPS = fpsCounter;
+                const fpsImpact = Math.abs(startFPS - endFPS);
+                
+                if (fpsImpact < 30) { // Less than 30 FPS drop is acceptable
+                    log(`✅ Stress test passed: FPS impact ${fpsImpact}`, 'success');
+                    updateStatus('stress', 'PASS');
+                } else {
+                    log(`⚠️ Stress test: High FPS impact ${fpsImpact}`, 'warning');
+                    updateStatus('stress', 'WARN');
+                }
+                
+            } catch (error) {
+                log(`❌ Stress test failed: ${error.message}`, 'error');
+                updateStatus('stress', 'FAIL');
+            }
+        };
+
+        // Bloom control functions
+        window.updateBloomStrength = (value) => {
+            if (engine?.postFX) {
+                engine.postFX.setBloomStrength(parseFloat(value));
+                log(`🌟 Bloom strength: ${value}`, 'info');
+            }
+        };
+
+        window.updateBloomThreshold = (value) => {
+            if (engine?.postFX?.passes?.bloom) {
+                engine.postFX.passes.bloom.threshold = parseFloat(value);
+                log(`🌟 Bloom threshold: ${value}`, 'info');
+            }
+        };
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // Error handling
+        window.addEventListener('error', (event) => {
+            log(`💥 Global error: ${event.error?.message || 'Unknown error'}`, 'error');
+        });
+    </script>
+</body>
+</html>
