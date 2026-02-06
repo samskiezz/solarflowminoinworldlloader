@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CER Products Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .product { border: 1px solid #ccc; margin: 10px 0; padding: 15px; border-radius: 8px; }
+        .pdf-link { background: #007cba; color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none; margin: 5px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <h1>CER Products Test - Real Data Loading</h1>
+    <div id="products">Loading...</div>
+    <div id="debug"></div>
+
+    <script>
+        async function testCERProducts() {
+            try {
+                const response = await fetch('./cer-product-database.json');
+                const data = await response.json();
+                
+                console.log('CER Database loaded:', data);
+                
+                const productsDiv = document.getElementById('products');
+                const debugDiv = document.getElementById('debug');
+                
+                debugDiv.innerHTML = `
+                    <h3>Debug Info:</h3>
+                    <p>Total Products: ${data.metadata?.totalProducts || 0}</p>
+                    <p>Categories: ${Object.keys(data.categories || {}).join(', ')}</p>
+                `;
+                
+                let html = '';
+                
+                if (data.categories) {
+                    Object.entries(data.categories).forEach(([categoryName, products]) => {
+                        html += `<h2>${categoryName.replace('_', ' ').toUpperCase()} (${products.length})</h2>`;
+                        
+                        products.forEach(product => {
+                            html += `
+                                <div class="product">
+                                    <h3>${product.manufacturer} ${product.model}</h3>
+                                    <p><strong>Type:</strong> ${product.type}</p>
+                                    <p><strong>CER Approved:</strong> ${product.cerApproved ? '✅ Yes' : '❌ No'}</p>
+                                    
+                                    <h4>Specifications:</h4>
+                                    <ul>
+                                        ${Object.entries(product.specifications || {}).map(([key, value]) => 
+                                            `<li><strong>${key}:</strong> ${value}</li>`
+                                        ).join('')}
+                                    </ul>
+                                    
+                                    <h4>📚 Documentation (Clickable PDFs):</h4>
+                                    ${Object.entries(product.documents || {}).length > 0 ? 
+                                        Object.entries(product.documents).map(([type, url]) => 
+                                            `<a href="${url}" target="_blank" class="pdf-link">📄 ${type}</a>`
+                                        ).join('') : 
+                                        '<p style="color: #999;">No documentation available</p>'
+                                    }
+                                </div>
+                            `;
+                        });
+                    });
+                }
+                
+                productsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading CER products:', error);
+                document.getElementById('products').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+
+        // Load on page ready
+        document.addEventListener('DOMContentLoaded', testCERProducts);
+    </script>
+</body>
+</html>
