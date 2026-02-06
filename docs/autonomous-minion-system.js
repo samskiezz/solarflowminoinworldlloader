@@ -216,9 +216,9 @@ class AutonomousMinionSystem {
 
     async loadRealCERProducts() {
         // Load real CER products from scraped database
-        console.log('📥 Loading real CER products from cer-product-database.json...');
+        console.log('📥 Loading MASSIVE CER products from real-cer-product-database.json...');
         try {
-            const response = await fetch('./cer-product-database.json');
+            const response = await fetch('./real-cer-product-database.json');
             if (response.ok) {
                 const cerData = await response.json();
                 console.log('📊 CER database loaded:', cerData);

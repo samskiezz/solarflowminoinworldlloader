@@ -284,7 +284,7 @@
                 
                 // Load CER product database
                 try {
-                    const cerResponse = await fetch('./cer-product-database.json');
+                    const cerResponse = await fetch('./real-cer-product-database.json');
                     if (cerResponse.ok) {
                         cerData = await cerResponse.json();
                     }

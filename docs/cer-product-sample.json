@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "totalProducts": 0,
+    "lastUpdated": "2026-02-06T01:01:13.381Z",
+    "source": "Real CER Website + Realistic Mock Data",
+    "categories": {
+      "solar_panels": 0,
+      "inverters": 0,
+      "batteries": 0,
+      "water_heaters": 0
+    }
+  },
+  "categories": {
+    "solar_panels": [],
+    "inverters": [],
+    "batteries": [],
+    "water_heaters": []
+  }
+}
