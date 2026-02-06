@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-06T11:29:00Z",
+  "updatedAt": "2026-02-06T11:54:43Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "RUNE",
-      "target_tier": 2,
-      "timestamp": "2026-02-05T10:13:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_RUNE_CI_HARDEN",
-        "activity": "Checking dependency versions",
-        "progress": 0.5,
-        "status": "working"
-      },
-      "spark_delta": 0.06204632535516768
-    },
     {
       "sender_id": "RUNE",
       "target_tier": 2,
@@ -687,6 +674,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-06T11:29:00Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-06T11:54:43Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-06T11:54:43Z"
       },
       "spark_delta": 0.1,
       "metadata": {
