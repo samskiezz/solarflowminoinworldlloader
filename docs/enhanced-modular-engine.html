@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Modular Engine - Complete Integration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f1419, #1a1f2e);
+            color: white;
+            overflow: hidden;
+        }
+        
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; cursor: crosshair; }
+        
+        /* Enhanced UI Panels */
+        .ui-panel {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            font-size: 13px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .ui-panel:hover {
+            background: rgba(0, 0, 0, 0.95);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        #engine-status {
+            top: 20px;
+            left: 20px;
+            width: 320px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        #controls {
+            top: 20px;
+            right: 20px;
+            width: 280px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        #performance {
+            bottom: 20px;
+            right: 20px;
+            min-width: 200px;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section:last-child { border-bottom: none; }
+        
+        .section h3 {
+            color: #64ffda;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 12px;
+            align-items: center;
+        }
+        
+        .metric-value {
+            color: #81c784;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        
+        button {
+            background: linear-gradient(145deg, #1976d2, #0d47a1);
+            border: none;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+            background: linear-gradient(145deg, #2196f3, #1565c0);
+        }
+        
+        button:active { transform: translateY(0); }
+        
+        .bloom-btn { background: linear-gradient(145deg, #9c27b0, #6a1b9a); }
+        .bloom-btn:hover { background: linear-gradient(145deg, #ba68c8, #8e24aa); }
+        
+        .asset-btn { background: linear-gradient(145deg, #ff9800, #e65100); }
+        .asset-btn:hover { background: linear-gradient(145deg, #ffb74d, #ff8f00); }
+        
+        .minion-btn { background: linear-gradient(145deg, #4caf50, #2e7d32); }
+        .minion-btn:hover { background: linear-gradient(145deg, #66bb6a, #388e3c); }
+        
+        .log-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 350px;
+            height: 140px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+        
+        .log-info { color: #64ffda; }
+        .log-success { color: #4caf50; }
+        .log-warning { color: #ff9800; }
+        .log-error { color: #f44336; }
+        
+        .bloom-controls {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(156, 39, 176, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(156, 39, 176, 0.3);
+        }
+        
+        .bloom-slider {
+            margin: 10px 0;
+        }
+        
+        .bloom-slider label {
+            display: block;
+            font-size: 10px;
+            color: #ccc;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .bloom-slider input {
+            width: 100%;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .avatar-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .avatar-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #64ffda;
+            transform: translateY(-2px);
+        }
+        
+        .avatar-card.selected {
+            background: rgba(100, 255, 218, 0.2);
+            border-color: #64ffda;
+        }
+        
+        .avatar-id {
+            font-size: 10px;
+            font-weight: bold;
+            color: #64ffda;
+        }
+        
+        .avatar-tier {
+            font-size: 8px;
+            color: #ccc;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .loading-content {
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(100, 255, 218, 0.2);
+            border-top: 4px solid #64ffda;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #64ffda, #4caf50);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>🚀 Enhanced Modular Engine</h2>
+            <p>Initializing 2025-grade architecture...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <div id="loading-status">Starting up...</div>
+        </div>
+    </div>
+    
+    <div id="container">
+        <!-- Engine Status Panel -->
+        <div id="engine-status" class="ui-panel">
+            <div class="section">
+                <h3>
+                    <span class="status-dot"></span>
+                    Enhanced Engine Status
+                </h3>
+                <div class="metric">
+                    <span>Engine State:</span>
+                    <span class="metric-value" id="engine-state">Initializing</span>
+                </div>
+                <div class="metric">
+                    <span>Post-FX:</span>
+                    <span class="metric-value" id="postfx-status">Loading</span>
+                </div>
+                <div class="metric">
+                    <span>Asset Manager:</span>
+                    <span class="metric-value" id="assets-status">Loading</span>
+                </div>
+                <div class="metric">
+                    <span>Minion System:</span>
+                    <span class="metric-value" id="minion-status">Loading</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🤖 Minion Population</h3>
+                <div class="metric">
+                    <span>Total Avatars:</span>
+                    <span class="metric-value" id="total-avatars">0</span>
+                </div>
+                <div class="metric">
+                    <span>Active:</span>
+                    <span class="metric-value" id="active-avatars">0</span>
+                </div>
+                <div class="metric">
+                    <span>Working:</span>
+                    <span class="metric-value" id="working-avatars">0</span>
+                </div>
+                <div class="metric">
+                    <span>Resting:</span>
+                    <span class="metric-value" id="resting-avatars">0</span>
+                </div>
+                <div class="metric">
+                    <span>Selected:</span>
+                    <span class="metric-value" id="selected-avatar">None</span>
+                </div>
+                
+                <!-- Avatar Grid -->
+                <div class="avatar-grid" id="avatar-grid"></div>
+            </div>
+            
+            <div class="section">
+                <h3>📊 Hive Metrics</h3>
+                <div class="metric">
+                    <span>Total Credits:</span>
+                    <span class="metric-value" id="total-credits">0</span>
+                </div>
+                <div class="metric">
+                    <span>Avg Happiness:</span>
+                    <span class="metric-value" id="avg-happiness">0%</span>
+                </div>
+                <div class="metric">
+                    <span>World Voltage:</span>
+                    <span class="metric-value" id="world-voltage">0%</span>
+                </div>
+                <div class="metric">
+                    <span>Entropy:</span>
+                    <span class="metric-value" id="world-entropy">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls Panel -->
+        <div id="controls" class="ui-panel">
+            <div class="section">
+                <h3>✨ Post-Processing Controls</h3>
+                <div class="button-grid">
+                    <button class="bloom-btn" onclick="togglePostFX()">Toggle FX</button>
+                    <button class="bloom-btn" onclick="toggleBloom()">Bloom</button>
+                    <button class="bloom-btn" onclick="setQuality('low')">Low Quality</button>
+                    <button class="bloom-btn" onclick="setQuality('high')">High Quality</button>
+                </div>
+                
+                <div class="bloom-controls">
+                    <div class="bloom-slider">
+                        <label>Bloom Strength</label>
+                        <input type="range" min="0" max="3" step="0.1" value="0.5" id="bloom-strength" onchange="updateBloomStrength(this.value)">
+                        <div id="strength-value">0.5</div>
+                    </div>
+                    <div class="bloom-slider">
+                        <label>Bloom Threshold</label>
+                        <input type="range" min="0" max="1" step="0.05" value="0.8" id="bloom-threshold" onchange="updateBloomThreshold(this.value)">
+                        <div id="threshold-value">0.8</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>📦 Asset Management</h3>
+                <div class="button-grid">
+                    <button class="asset-btn" onclick="loadHDRITest()">Load HDRI</button>
+                    <button class="asset-btn" onclick="loadModelsTest()">Load Models</button>
+                    <button class="asset-btn" onclick="batchLoadTest()">Batch Load</button>
+                    <button class="asset-btn" onclick="clearCache()">Clear Cache</button>
+                </div>
+                
+                <div class="metric">
+                    <span>Cache Size:</span>
+                    <span class="metric-value" id="cache-size">0 items</span>
+                </div>
+                <div class="metric">
+                    <span>Memory Est:</span>
+                    <span class="metric-value" id="memory-est">0 MB</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🎮 Minion Controls</h3>
+                <div class="button-grid">
+                    <button class="minion-btn" onclick="arrangeFormation('circle')">Circle</button>
+                    <button class="minion-btn" onclick="arrangeFormation('grid')">Grid</button>
+                    <button class="minion-btn" onclick="arrangeFormation('line')">Line</button>
+                    <button class="minion-btn" onclick="arrangeFormation('scatter')">Scatter</button>
+                    <button class="minion-btn" onclick="selectRandomAvatar()">Random</button>
+                    <button class="minion-btn" onclick="followSelected()">Follow</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🔧 Engine Controls</h3>
+                <div class="button-grid">
+                    <button onclick="resetCamera()">Reset Cam</button>
+                    <button onclick="refreshData()">Refresh</button>
+                    <button onclick="runDiagnostics()">Diagnose</button>
+                    <button onclick="exportStats()">Export</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Panel -->
+        <div id="performance" class="ui-panel">
+            <div class="section">
+                <h3>⚡ Performance</h3>
+                <div class="metric">
+                    <span>FPS:</span>
+                    <span class="metric-value" id="fps">0</span>
+                </div>
+                <div class="metric">
+                    <span>Draw Calls:</span>
+                    <span class="metric-value" id="draw-calls">0</span>
+                </div>
+                <div class="metric">
+                    <span>Triangles:</span>
+                    <span class="metric-value" id="triangles">0</span>
+                </div>
+                <div class="metric">
+                    <span>WebGL Memory:</span>
+                    <span class="metric-value" id="webgl-memory">0 MB</span>
+                </div>
+            </div>
+        </div>
+        
+        <canvas id="canvas"></canvas>
+    </div>
+    
+    <!-- Log Panel -->
+    <div class="log-panel" id="log-panel"></div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import { createEngine } from '../src/core/Engine.js';
+        import { AssetManager } from '../src/core/AssetManager.js';
+        import { eventBus } from '../src/core/EventBus.js';
+        import { stateStore } from '../src/core/StateStore.js';
+
+        let engine = null;
+        let assetManager = null;
+        let fpsCounter = 0;
+        let lastFpsTime = Date.now();
+
+        // Initialize the enhanced engine
+        async function init() {
+            try {
+                updateProgress(10, 'Creating engine core...');
+                const canvas = document.getElementById('canvas');
+                engine = createEngine(canvas);
+                
+                updateProgress(30, 'Initializing systems...');
+                await engine.initialize();
+                
+                updateProgress(50, 'Setting up asset manager...');
+                assetManager = engine.assets;
+                
+                updateProgress(70, 'Loading hive state...');
+                await stateStore.loadHiveState();
+                
+                updateProgress(90, 'Finalizing setup...');
+                setupEventListeners();
+                startPerformanceMonitoring();
+                
+                updateProgress(100, 'Ready!');
+                
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    updateUI();
+                    log('🚀 Enhanced Modular Engine initialized successfully!', 'success');
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Engine initialization failed:', error);
+                log(`❌ Initialization failed: ${error.message}`, 'error');
+                showError(error.message);
+            }
+        }
+
+        function updateProgress(percent, status) {
+            document.getElementById('progress').style.width = percent + '%';
+            document.getElementById('loading-status').textContent = status;
+        }
+
+        function showError(message) {
+            document.getElementById('loading').innerHTML = `
+                <div style="text-align: center; color: #f44336;">
+                    <h2>❌ Initialization Failed</h2>
+                    <p>${message}</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Retry
+                    </button>
+                </div>
+            `;
+        }
+
+        function setupEventListeners() {
+            // Engine events
+            eventBus.on('engine:initialized', (data) => {
+                log('🔧 Engine core initialized', 'info');
+                updateStatus();
+            });
+            
+            eventBus.on('minions:initialized', (data) => {
+                log(`🤖 Minion system initialized`, 'info');
+                updateStatus();
+            });
+            
+            eventBus.on('avatar:selected', (data) => {
+                log(`👆 Selected: ${data.minionData.id}`, 'info');
+                highlightAvatar(data.minionData.id);
+                updateUI();
+            });
+            
+            eventBus.on('avatar:clicked', (data) => {
+                log(`🖱️ Clicked: ${data.minionId}`, 'info');
+            });
+            
+            eventBus.on('avatars:synced', (data) => {
+                log(`🔄 Avatars synced: ${data.total} total, ${data.new} new`, 'info');
+                updateAvatarGrid();
+            });
+            
+            eventBus.on('engine:frame', () => {
+                fpsCounter++;
+            });
+            
+            // Error handling
+            eventBus.on('engine:error', (data) => {
+                log(`💥 Engine error: ${data.error.message}`, 'error');
+            });
+        }
+
+        function startPerformanceMonitoring() {
+            setInterval(() => {
+                updatePerformanceStats();
+                fpsCounter = 0;
+            }, 1000);
+        }
+
+        function updatePerformanceStats() {
+            const fps = fpsCounter;
+            document.getElementById('fps').textContent = fps;
+            
+            if (engine?.renderer) {
+                const info = engine.renderer.info;
+                document.getElementById('draw-calls').textContent = info.render.calls;
+                document.getElementById('triangles').textContent = info.render.triangles.toLocaleString();
+                
+                const memory = Math.round((info.memory.geometries + info.memory.textures) / 1024);
+                document.getElementById('webgl-memory').textContent = memory + ' MB';
+            }
+        }
+
+        function updateStatus() {
+            document.getElementById('engine-state').textContent = engine?.initialized ? 'Running' : 'Starting';
+            document.getElementById('postfx-status').textContent = engine?.postFX ? 'Active' : 'Disabled';
+            document.getElementById('assets-status').textContent = engine?.assets ? 'Ready' : 'Loading';
+            document.getElementById('minion-status').textContent = engine?.minions ? 'Active' : 'Loading';
+        }
+
+        function updateUI() {
+            if (!engine) return;
+            
+            const stats = engine.getEngineStats();
+            
+            // Update engine status
+            updateStatus();
+            
+            // Update minion stats
+            document.getElementById('total-avatars').textContent = stats.avatars;
+            document.getElementById('active-avatars').textContent = stats.minionStats?.active || 0;
+            document.getElementById('working-avatars').textContent = stats.minionStats?.working || 0;
+            document.getElementById('resting-avatars').textContent = stats.minionStats?.resting || 0;
+            document.getElementById('selected-avatar').textContent = stats.selectedAvatar || 'None';
+            
+            // Update hive metrics
+            document.getElementById('total-credits').textContent = stateStore.getTotalCredits().toLocaleString();
+            document.getElementById('avg-happiness').textContent = Math.round(stateStore.getAverageHappiness()) + '%';
+            document.getElementById('world-voltage').textContent = Math.round(stateStore.worldHealth.voltage * 100) + '%';
+            document.getElementById('world-entropy').textContent = Math.round(stateStore.worldHealth.entropy * 100) + '%';
+            
+            // Update asset stats
+            if (assetManager) {
+                const assetStats = assetManager.getStats();
+                document.getElementById('cache-size').textContent = assetStats.cacheSize + ' items';
+                document.getElementById('memory-est').textContent = assetStats.memoryEstimate;
+            }
+        }
+
+        function updateAvatarGrid() {
+            const grid = document.getElementById('avatar-grid');
+            const avatars = engine?.getAllAvatars() || [];
+            
+            grid.innerHTML = '';
+            
+            avatars.forEach(avatar => {
+                const card = document.createElement('div');
+                card.className = 'avatar-card';
+                card.dataset.id = avatar.minionData.id;
+                card.onclick = () => selectAvatar(avatar.minionData.id);
+                
+                card.innerHTML = `
+                    <div class="avatar-id">${avatar.minionData.id}</div>
+                    <div class="avatar-tier">Tier ${avatar.minionData.tier}</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function selectAvatar(minionId) {
+            const avatar = engine?.getAvatar(minionId);
+            if (avatar) {
+                engine.selectAvatar(avatar);
+                highlightAvatar(minionId);
+            }
+        }
+
+        function highlightAvatar(minionId) {
+            // Remove previous selection
+            document.querySelectorAll('.avatar-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Highlight selected
+            const selectedCard = document.querySelector(`[data-id="${minionId}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
+        }
+
+        function log(message, type = 'info') {
+            const logPanel = document.getElementById('log-panel');
+            const time = new Date().toLocaleTimeString();
+            const className = `log-${type}`;
+            
+            logPanel.innerHTML += `<div class="${className}">[${time}] ${message}</div>`;
+            logPanel.scrollTop = logPanel.scrollHeight;
+            
+            // Keep log size manageable
+            const lines = logPanel.children;
+            if (lines.length > 50) {
+                lines[0].remove();
+            }
+        }
+
+        // Control Functions
+        window.togglePostFX = () => {
+            if (engine?.postFX) {
+                engine.postFX.enabled ? engine.postFX.disable() : engine.postFX.enable();
+                log('Post-FX toggled', 'info');
+                updateStatus();
+            }
+        };
+
+        window.toggleBloom = () => {
+            if (engine?.postFX) {
+                const enabled = engine.postFX.toggleBloom();
+                log('Bloom: ' + (enabled ? 'ON' : 'OFF'), 'info');
+            }
+        };
+
+        window.setQuality = (level) => {
+            if (engine?.postFX) {
+                engine.postFX.setQuality(level);
+                log(`Quality set to: ${level}`, 'info');
+            }
+        };
+
+        window.updateBloomStrength = (value) => {
+            if (engine?.postFX) {
+                engine.postFX.setBloomStrength(parseFloat(value));
+                document.getElementById('strength-value').textContent = value;
+                log(`Bloom strength: ${value}`, 'info');
+            }
+        };
+
+        window.updateBloomThreshold = (value) => {
+            if (engine?.postFX?.passes?.bloom) {
+                engine.postFX.passes.bloom.threshold = parseFloat(value);
+                document.getElementById('threshold-value').textContent = value;
+                log(`Bloom threshold: ${value}`, 'info');
+            }
+        };
+
+        window.loadHDRITest = async () => {
+            log('🌅 Testing HDRI loading...', 'info');
+            try {
+                const hdriUrl = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/equirectangular/venice_sunset_1k.hdr';
+                await assetManager.loadHDRI(hdriUrl);
+                log('✅ HDRI loaded successfully', 'success');
+            } catch (error) {
+                log(`❌ HDRI load failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.loadModelsTest = async () => {
+            log('🎭 Testing model loading...', 'info');
+            try {
+                const modelUrl = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/models/gltf/Duck/Duck.gltf';
+                await assetManager.loadGLB(modelUrl);
+                log('✅ Model loaded successfully', 'success');
+            } catch (error) {
+                log(`❌ Model load failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.batchLoadTest = async () => {
+            log('📦 Testing batch loading...', 'info');
+            try {
+                const assets = [
+                    { type: 'texture', path: 'https://threejs.org/examples/textures/crate.gif' },
+                    { type: 'texture', path: 'https://threejs.org/examples/textures/brick_diffuse.jpg' }
+                ];
+                
+                await assetManager.loadBatch(assets, (progress) => {
+                    log(`Loading: ${progress.loaded}/${progress.total}`, 'info');
+                });
+                
+                log('✅ Batch loading completed', 'success');
+            } catch (error) {
+                log(`❌ Batch load failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.clearCache = () => {
+            if (assetManager) {
+                assetManager.clearCache();
+                log('🗑️ Asset cache cleared', 'info');
+                updateUI();
+            }
+        };
+
+        window.arrangeFormation = (formation) => {
+            if (engine?.minions) {
+                engine.minions.arrangeInFormation(formation);
+                log(`🔄 Arranged in ${formation} formation`, 'info');
+            }
+        };
+
+        window.selectRandomAvatar = () => {
+            const avatars = engine?.getAllAvatars();
+            if (avatars?.length > 0) {
+                const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+                engine.selectAvatar(randomAvatar);
+                log(`🎲 Selected random: ${randomAvatar.minionData.id}`, 'info');
+            }
+        };
+
+        window.followSelected = () => {
+            if (engine?.selectedAvatar) {
+                engine.followAvatar(engine.selectedAvatar);
+                log(`👁️ Following: ${engine.selectedAvatar.minionData.id}`, 'info');
+            } else {
+                log('⚠️ No avatar selected to follow', 'warning');
+            }
+        };
+
+        window.resetCamera = () => {
+            if (engine) {
+                engine.resetCamera();
+                log('📷 Camera reset', 'info');
+            }
+        };
+
+        window.refreshData = async () => {
+            log('🔄 Refreshing hive data...', 'info');
+            await stateStore.loadHiveState();
+            if (engine?.minions) {
+                await engine.minions.syncFromStore();
+            }
+            updateUI();
+            updateAvatarGrid();
+            log('✅ Data refreshed', 'success');
+        };
+
+        window.runDiagnostics = () => {
+            const stats = engine?.getEngineStats();
+            const assetStats = assetManager?.getStats();
+            
+            log('🔍 Running diagnostics...', 'info');
+            log(`Engine: ${stats?.avatars} avatars, PostFX: ${stats?.postFXEnabled ? 'ON' : 'OFF'}`, 'info');
+            log(`Assets: ${assetStats?.cacheSize} cached, ${assetStats?.memoryEstimate} memory`, 'info');
+            log(`Performance: ${document.getElementById('fps').textContent} FPS, ${document.getElementById('triangles').textContent} triangles`, 'info');
+            log('✅ Diagnostics complete', 'success');
+        };
+
+        window.exportStats = () => {
+            const data = {
+                engine: engine?.getEngineStats(),
+                assets: assetManager?.getStats(),
+                hive: {
+                    credits: stateStore.getTotalCredits(),
+                    happiness: stateStore.getAverageHappiness(),
+                    voltage: stateStore.worldHealth.voltage,
+                    entropy: stateStore.worldHealth.entropy
+                },
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `engine-stats-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            log('📊 Stats exported', 'info');
+        };
+
+        // Update UI every 5 seconds
+        setInterval(updateUI, 5000);
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Error handling
+        window.addEventListener('error', (event) => {
+            log(`💥 Global error: ${event.error?.message || 'Unknown error'}`, 'error');
+        });
+    </script>
+</body>
+</html>

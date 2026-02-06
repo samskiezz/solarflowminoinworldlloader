@@ -266,6 +266,11 @@
                     <button class="test-button" onclick="testBehaviorBinding()">Test</button>
                     <span class="test-status status-pending" id="status-behavior">WAIT</span>
                 </div>
+                <div class="test-item">
+                    <span class="test-label">MinionSystem Integration</span>
+                    <button class="test-button" onclick="testMinionSystem()">Test</button>
+                    <span class="test-status status-pending" id="status-minionsystem">WAIT</span>
+                </div>
             </div>
             
             <!-- Performance Tests -->
@@ -339,6 +344,7 @@
         import { eventBus } from '../src/core/EventBus.js';
         import { stateStore } from '../src/core/StateStore.js';
         import { MinionAvatar } from '../src/actors/MinionAvatar.js';
+        import { MinionSystem } from '../src/actors/MinionSystem.js';
         import * as THREE from 'three';
 
         let engine = null;
@@ -665,6 +671,46 @@
             } catch (error) {
                 log(`❌ Behavior test failed: ${error.message}`, 'error');
                 updateStatus('behavior', 'FAIL');
+            }
+        };
+
+        window.testMinionSystem = async () => {
+            log('🤖 Testing MinionSystem integration...', 'info');
+            updateStatus('minionsystem', 'TESTING');
+            
+            try {
+                const dummyScene = new THREE.Scene();
+                
+                const minionSystem = new MinionSystem({
+                    scene: dummyScene,
+                    assets: assetManager,
+                    store: stateStore,
+                    bus: eventBus
+                });
+                
+                // Test sync from store
+                await minionSystem.syncFromStore();
+                const stats = minionSystem.getStats();
+                
+                if (stats.total > 0) {
+                    log(`✅ MinionSystem created ${stats.total} avatars`, 'success');
+                    
+                    // Test formation arrangement
+                    minionSystem.arrangeInFormation('circle');
+                    log(`🔄 Arranged avatars in circle formation`, 'info');
+                    
+                    // Test hoverable detection
+                    const hoverables = minionSystem.getHoverables();
+                    log(`🎯 Found ${hoverables.length} hoverable objects`, 'info');
+                    
+                    updateStatus('minionsystem', 'PASS');
+                } else {
+                    throw new Error('No avatars created in MinionSystem');
+                }
+                
+            } catch (error) {
+                log(`❌ MinionSystem test failed: ${error.message}`, 'error');
+                updateStatus('minionsystem', 'FAIL');
             }
         };
 

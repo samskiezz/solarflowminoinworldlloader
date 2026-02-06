@@ -341,19 +341,20 @@ export class MinionAvatar {
     updateProceduralAnimations() {
         if (!this.avatarMesh) return;
         
-        const time = Date.now() * 0.001;
+        // Enhanced subtle animation based on energy and mood for realism
+        const energy = this.minionData.ai?.energy ?? 80;
+        const mood = this.minionData.happiness_sim ?? 70;
         
-        // Idle animation - slight breathing
-        if (this.idleAnimation) {
-            const breathe = Math.sin(time * 2) * this.idleAnimation.amplitude;
-            this.avatarMesh.position.y = breathe;
-        }
+        // subtle bob + posture for realism
+        const t = performance.now() * 0.001;
+        this.group.position.y = 0.02 * Math.sin(t * (0.8 + (energy / 200)));
+        this.group.rotation.y += 0.0005 * (mood < 40 ? -1 : 1);
         
         // Walk animation
         if (this.walkAnimation) {
-            const step = Math.sin(time * this.walkAnimation.stepFreq) * 0.1;
+            const step = Math.sin(t * this.walkAnimation.stepFreq) * 0.1;
             this.avatarMesh.position.y = Math.abs(step);
-            this.avatarMesh.rotation.z = Math.sin(time * this.walkAnimation.stepFreq * 2) * 0.1;
+            this.avatarMesh.rotation.z = Math.sin(t * this.walkAnimation.stepFreq * 2) * 0.1;
         }
     }
 

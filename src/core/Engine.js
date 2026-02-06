@@ -5,10 +5,11 @@
 import * as THREE from 'three';
 import { createRenderer, createScene, createCamera, createLighting, handleResize } from './Renderer.js';
 import { PostFXManager } from './PostFX.js';
+import { AssetManager } from './AssetManager.js';
 import { eventBus } from './EventBus.js';
 import { stateStore } from './StateStore.js';
 import { createCity } from '../world/City.js';
-import { createMinionAvatar } from '../actors/MinionAvatar.js';
+import { MinionSystem } from '../actors/MinionSystem.js';
 
 export class DominionEngine {
     constructor(canvas) {
@@ -20,7 +21,8 @@ export class DominionEngine {
         
         // Game systems
         this.city = null;
-        this.avatars = new Map(); // minionId -> MinionAvatar
+        this.assets = new AssetManager({ basePath: './assets' });
+        this.minions = null; // MinionSystem
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
         
@@ -65,8 +67,8 @@ export class DominionEngine {
             // Build world
             await this.buildWorld();
             
-            // Create minion avatars
-            await this.createAvatars();
+            // Initialize minion system
+            await this.initializeMinionSystem();
             
             // Setup interaction
             this.setupInteraction();
@@ -99,30 +101,22 @@ export class DominionEngine {
         eventBus.emit('world:built', { city: this.city });
     }
 
-    async createAvatars() {
-        console.log('[Engine] Creating minion avatars...');
+    async initializeMinionSystem() {
+        console.log('[Engine] Initializing enhanced minion system...');
         
-        const minions = stateStore.minions;
-        const avatarPromises = minions.map(async minionData => {
-            try {
-                const avatar = createMinionAvatar(minionData);
-                await avatar.init();
-                
-                this.scene.add(avatar.group);
-                this.avatars.set(minionData.id, avatar);
-                
-                return avatar;
-            } catch (error) {
-                console.error(`[Engine] Failed to create avatar for ${minionData.id}:`, error);
-                return null;
-            }
+        // Create minion system with integrated asset management
+        this.minions = new MinionSystem({
+            scene: this.scene,
+            assets: this.assets,
+            store: stateStore,
+            bus: eventBus
         });
         
-        const results = await Promise.allSettled(avatarPromises);
-        const successful = results.filter(r => r.status === 'fulfilled' && r.value).length;
+        // Sync from store to create initial avatars
+        await this.minions.syncFromStore();
         
-        console.log(`[Engine] Created ${successful}/${minions.length} avatars successfully`);
-        eventBus.emit('avatars:created', { count: successful, total: minions.length });
+        console.log('[Engine] Minion system initialized');
+        eventBus.emit('minions:initialized', { system: this.minions });
     }
 
     setupInteraction() {
@@ -172,25 +166,20 @@ export class DominionEngine {
         
         this.raycaster.setFromCamera(this.mouse, this.camera);
         
-        // Check for avatar intersections
-        const avatarObjects = [];
-        this.avatars.forEach(avatar => {
-            if (avatar.interactionZone) {
-                avatarObjects.push(avatar.interactionZone);
-            }
-        });
-        
-        const intersects = this.raycaster.intersectObjects(avatarObjects);
+        // Check for avatar intersections using minion system
+        const hoverables = this.minions?.getHoverables() || [];
+        const intersects = this.raycaster.intersectObjects(hoverables);
         
         if (intersects.length > 0) {
             const hitObject = intersects[0].object;
             const avatar = hitObject.userData.avatar;
+            const minionId = hitObject.userData.minionId;
             
-            if (avatar) {
+            if (avatar && minionId) {
                 this.selectAvatar(avatar);
                 eventBus.emit('avatar:clicked', { 
                     avatar, 
-                    minionId: avatar.minionData.id,
+                    minionId: minionId,
                     position: intersects[0].point
                 });
             }
@@ -377,10 +366,10 @@ export class DominionEngine {
         
         const deltaTime = this.clock.getDelta();
         
-        // Update avatars
-        this.avatars.forEach(avatar => {
-            avatar.update(deltaTime);
-        });
+        // Update minion system (handles all avatars)
+        if (this.minions) {
+            this.minions.update(deltaTime);
+        }
         
         // Update camera following
         if (this.followingAvatar) {
@@ -388,6 +377,11 @@ export class DominionEngine {
             const offset = new THREE.Vector3(10, 10, 10);
             this.camera.position.lerp(avatarPos.clone().add(offset), 0.02);
             this.camera.lookAt(avatarPos);
+        }
+        
+        // Optional: Load HDRI environment if not already loaded
+        if (!this.scene.environment && this.assets) {
+            this.loadEnvironment();
         }
         
         // Render with composer for post-processing
@@ -401,13 +395,27 @@ export class DominionEngine {
         eventBus.emit('engine:frame', { deltaTime, frame: this.clock.elapsedTime });
     }
 
+    // Enhanced environment loading
+    async loadEnvironment() {
+        try {
+            // Try to load HDRI environment if available
+            const hdri = await this.assets.loadHDRI('hdri/studio_small_09_2k.hdr');
+            if (hdri) {
+                this.scene.environment = hdri;
+                console.log('[Engine] HDRI environment loaded');
+            }
+        } catch (error) {
+            console.log('[Engine] HDRI not available, using basic lighting');
+        }
+    }
+
     // Public API methods
     getAvatar(minionId) {
-        return this.avatars.get(minionId);
+        return this.minions?.getAvatar(minionId);
     }
 
     getAllAvatars() {
-        return Array.from(this.avatars.values());
+        return this.minions?.getAllAvatars() || [];
     }
 
     getSelectedAvatar() {
@@ -423,13 +431,16 @@ export class DominionEngine {
     }
 
     getEngineStats() {
+        const minionStats = this.minions?.getStats() || {};
+        
         return {
-            avatars: this.avatars.size,
+            avatars: minionStats.total || 0,
             selectedAvatar: this.selectedAvatar?.minionData.id || null,
             followingAvatar: this.followingAvatar?.minionData.id || null,
             gameTime: this.gameTime,
             postFXEnabled: this.postFX?.enabled || false,
-            renderInfo: this.renderer?.info || {}
+            renderInfo: this.renderer?.info || {},
+            minionStats
         };
     }
 
@@ -437,9 +448,15 @@ export class DominionEngine {
     dispose() {
         this.stop();
         
-        // Dispose avatars
-        this.avatars.forEach(avatar => avatar.dispose());
-        this.avatars.clear();
+        // Dispose minion system
+        if (this.minions) {
+            this.minions.dispose();
+        }
+        
+        // Dispose assets
+        if (this.assets) {
+            this.assets.dispose();
+        }
         
         // Dispose renderer
         this.renderer?.dispose();
