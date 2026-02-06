@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastRealUpdate": "2026-02-06T20:31:46Z",
+    "lastRealUpdate": "2026-02-06T21:28:44Z",
     "source": "real_persistent_system",
     "dataType": "live_minion_work"
   },
@@ -11,15 +11,15 @@
     "processingDocuments": 15
   },
   "realProgress": {
-    "documentsProcessed": 1406,
-    "knowledgeBuilt": 606,
-    "totalCredits": 14906
+    "documentsProcessed": 824,
+    "knowledgeBuilt": 524,
+    "totalCredits": 8324
   },
   "realActivities": [
-    "20:31:46 - VOLT-X1 completed processing Trina Solar TSM-440 spec sheet",
-    "20:31:46 - AMP-PRO learned VOC specification: 40.4V for Trina 440W",
-    "20:31:46 - SOLAR-AU earned 15 credits for CER compliance analysis",
-    "20:31:46 - WATT-MAX updated installation clearance database",
-    "20:31:46 - GRID-OZ processed AS/NZS 5033 solar installation standard"
+    "21:28:44 - VOLT-X1 completed processing Trina Solar TSM-440 spec sheet",
+    "21:28:44 - AMP-PRO learned VOC specification: 40.4V for Trina 440W",
+    "21:28:44 - SOLAR-AU earned 15 credits for CER compliance analysis",
+    "21:28:44 - WATT-MAX updated installation clearance database",
+    "21:28:44 - GRID-OZ processed AS/NZS 5033 solar installation standard"
   ]
 }
