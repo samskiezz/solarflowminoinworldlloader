@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-06T00:00:06Z",
+  "updatedAt": "2026-02-06T02:22:28Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "BOLT",
-      "target_tier": 2,
-      "timestamp": "2026-02-05T12:28:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_BOLT_UI_PROGRESS",
-        "activity": "Validating progress indicators",
-        "progress": 0.2,
-        "status": "working"
-      },
-      "spark_delta": 0.11275364948225185
-    },
     {
       "sender_id": "BOLT",
       "target_tier": 2,
@@ -676,6 +663,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-06T00:00:06Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-06T02:22:28Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-06T02:22:28Z"
       },
       "spark_delta": 0.1,
       "metadata": {
