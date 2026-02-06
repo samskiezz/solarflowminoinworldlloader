@@ -103,32 +103,41 @@ class AutonomousMinionSystem {
     async loadRealCERProducts() {
         // Load real CER products from scraped database
         try {
-            const response = await fetch('./minion_complete_knowledge.json');
+            const response = await fetch('./cer-product-database.json');
             if (response.ok) {
-                const knowledgeData = await response.json();
-                this.products = knowledgeData.products.map(product => ({
-                    id: product.id,
-                    brand: product.brand,
-                    model: product.model,
-                    type: this.getCategoryDisplayName(product.category),
-                    category: product.category,
-                    specs: this.formatSpecsForDisplay(product.specifications),
-                    cerApproved: product.cerApproved,
-                    image: this.getCategoryIcon(product.category)
-                }));
+                const cerData = await response.json();
                 
-                // Load Q&A database for instant recall
-                const qaResponse = await fetch('./minion_instant_qa.json');
-                if (qaResponse.ok) {
-                    const qaData = await qaResponse.json();
-                    this.qaDatabase = qaData.questions;
-                }
+                // Flatten all products from categories
+                this.products = [];
+                Object.values(cerData.categories).forEach(categoryProducts => {
+                    categoryProducts.forEach(product => {
+                        this.products.push({
+                            id: product.id,
+                            brand: product.manufacturer,
+                            model: product.model,
+                            type: this.getCategoryDisplayName(product.category),
+                            category: product.category,
+                            specs: this.formatSpecsForDisplay(product.specifications),
+                            cerApproved: product.cerApproved,
+                            image: this.getCategoryIcon(product.category),
+                            documents: product.documents || {},
+                            knowledgePoints: product.knowledgePoints || [],
+                            installation: product.installation || {}
+                        });
+                    });
+                });
                 
-                console.log(`✅ Loaded ${this.products.length} real CER products with ${this.qaDatabase?.length || 0} Q&A pairs`);
+                // Store original CER data for detailed display
+                this.cerDatabase = cerData;
+                
+                // Initialize CER products interface
+                this.initializeCERInterface();
+                
+                console.log(`✅ Loaded ${this.products.length} real CER products from database`);
                 return;
             }
         } catch (error) {
-            console.warn('Failed to load real CER data, using fallback:', error.message);
+            console.warn('Failed to load CER database:', error.message);
         }
         
         // Fallback to embedded data if files not found
@@ -1013,6 +1022,196 @@ class AutonomousMinionSystem {
             alert('Knowledge base reset! Minions will start learning from scratch.');
         }
     }
+
+    // CER Products Interface Methods
+    initializeCERInterface() {
+        if (!this.cerDatabase) return;
+        
+        // Set up CER interface after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            const searchInput = document.getElementById('cerSearch');
+            const categorySelect = document.getElementById('cerCategory');
+            const brandSelect = document.getElementById('cerBrand');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', () => this.filterCERProducts());
+            }
+            if (categorySelect) {
+                categorySelect.addEventListener('change', () => this.filterCERProducts());
+            }
+            if (brandSelect) {
+                brandSelect.addEventListener('change', () => this.filterCERProducts());
+            }
+            
+            // Initial render
+            this.renderCERProducts();
+        }, 500);
+    }
+
+    filterCERProducts() {
+        if (!this.cerDatabase) return;
+        
+        const searchTerm = document.getElementById('cerSearch')?.value.toLowerCase() || '';
+        const categoryFilter = document.getElementById('cerCategory')?.value || 'all';
+        const brandFilter = document.getElementById('cerBrand')?.value || 'all';
+        
+        // Get all products
+        const allProducts = [];
+        Object.values(this.cerDatabase.categories).forEach(categoryProducts => {
+            allProducts.push(...categoryProducts);
+        });
+        
+        // Apply filters
+        const filtered = allProducts.filter(product => {
+            // Category filter
+            if (categoryFilter !== 'all' && product.category !== categoryFilter) {
+                return false;
+            }
+            
+            // Brand filter
+            if (brandFilter !== 'all' && product.manufacturer !== brandFilter) {
+                return false;
+            }
+            
+            // Search filter
+            if (searchTerm) {
+                const searchableText = [
+                    product.manufacturer,
+                    product.model,
+                    product.type,
+                    JSON.stringify(product.specifications),
+                    ...(product.knowledgePoints || [])
+                ].join(' ').toLowerCase();
+                
+                if (!searchableText.includes(searchTerm)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        });
+        
+        this.renderCERProducts(filtered);
+    }
+
+    renderCERProducts(filteredProducts = null) {
+        const container = document.getElementById('cerProductsGrid');
+        const loading = document.getElementById('cerLoading');
+        const error = document.getElementById('cerError');
+        
+        if (!container || !this.cerDatabase) return;
+        
+        // Hide loading/error states
+        if (loading) loading.style.display = 'none';
+        if (error) error.style.display = 'none';
+        
+        // Get products to display
+        const products = filteredProducts || (() => {
+            const all = [];
+            Object.values(this.cerDatabase.categories).forEach(categoryProducts => {
+                all.push(...categoryProducts);
+            });
+            return all;
+        })();
+        
+        // Update stats
+        const total = Object.values(this.cerDatabase.categories).flat().length;
+        const docsCount = products.filter(p => Object.keys(p.documents || {}).length > 0).length;
+        
+        const totalEl = document.getElementById('cerTotal');
+        const showingEl = document.getElementById('cerShowing');
+        const docsEl = document.getElementById('cerDocs');
+        
+        if (totalEl) totalEl.textContent = total;
+        if (showingEl) showingEl.textContent = products.length;
+        if (docsEl) docsEl.textContent = docsCount;
+        
+        // Render products
+        container.innerHTML = products.map(product => this.generateCERProductCard(product)).join('');
+    }
+
+    generateCERProductCard(product) {
+        const specs = product.specifications || {};
+        const documents = product.documents || {};
+        
+        // Generate key specs based on product type
+        let keySpecs = [];
+        if (product.category === 'solar_panel') {
+            if (specs.power_watts) keySpecs.push({ label: 'Power', value: `${specs.power_watts}W` });
+            if (specs.voc_volts) keySpecs.push({ label: 'VOC', value: `${specs.voc_volts}V` });
+            if (specs.efficiency_percent) keySpecs.push({ label: 'Efficiency', value: `${specs.efficiency_percent}%` });
+        } else if (product.category === 'inverter') {
+            if (specs.ac_power_watts) keySpecs.push({ label: 'AC Power', value: `${specs.ac_power_watts}W` });
+            if (specs.max_dc_voltage) keySpecs.push({ label: 'Max DC', value: `${specs.max_dc_voltage}V` });
+            if (specs.efficiency_percent) keySpecs.push({ label: 'Efficiency', value: `${specs.efficiency_percent}%` });
+        } else if (product.category === 'battery') {
+            if (specs.usable_capacity_kwh) keySpecs.push({ label: 'Capacity', value: `${specs.usable_capacity_kwh}kWh` });
+            if (specs.continuous_power_kw) keySpecs.push({ label: 'Power', value: `${specs.continuous_power_kw}kW` });
+            if (specs.efficiency_percent) keySpecs.push({ label: 'Efficiency', value: `${specs.efficiency_percent}%` });
+        }
+        
+        // Generate document links
+        const docLinks = Object.entries(documents).map(([type, url]) => {
+            const icons = {
+                datasheet: '📊',
+                specsheet: '📋',
+                installationManual: '🔧',
+                userManual: '📖'
+            };
+            const labels = {
+                datasheet: 'Data Sheet',
+                specsheet: 'Spec Sheet', 
+                installationManual: 'Install Guide',
+                userManual: 'User Manual'
+            };
+            return `<a href="${url}" target="_blank" style="display: inline-block; background: #2a5298; color: white; padding: 5px 10px; border-radius: 15px; text-decoration: none; font-size: 0.8em; margin: 2px;">${icons[type] || '📄'} ${labels[type] || type}</a>`;
+        }).join('');
+        
+        const categoryColors = {
+            'solar_panel': '#e8f5e8',
+            'inverter': '#fff3cd',
+            'battery': '#e3f2fd'
+        };
+        
+        return `
+            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 4px solid #2a5298;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: #1e3c72;">${product.manufacturer} ${product.model}</h4>
+                        <p style="margin: 0; color: #666; font-size: 0.9em;">${product.type} ${product.cerApproved ? '• CER Approved ✅' : ''}</p>
+                    </div>
+                    <div style="background: ${categoryColors[product.category] || '#f0f0f0'}; padding: 4px 8px; border-radius: 12px; font-size: 0.75em; font-weight: bold;">
+                        ${product.category.replace('_', ' ').toUpperCase()}
+                    </div>
+                </div>
+                
+                ${keySpecs.length > 0 ? `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; margin: 10px 0;">
+                        ${keySpecs.map(spec => `
+                            <div style="background: #f8f9fa; padding: 8px; border-radius: 4px; text-align: center;">
+                                <div style="font-weight: bold; color: #2a5298;">${spec.value}</div>
+                                <div style="font-size: 0.75em; color: #666;">${spec.label}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+                
+                ${product.knowledgePoints && product.knowledgePoints.length > 0 ? `
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                        <h5 style="margin: 0 0 5px 0; color: #2a5298; font-size: 0.8em;">🧠 Key Technical Points</h5>
+                        <ul style="margin: 0; padding-left: 15px; font-size: 0.8em; line-height: 1.4;">
+                            ${product.knowledgePoints.slice(0, 2).map(point => `<li>${point}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                <div style="margin-top: 10px;">
+                    <strong style="font-size: 0.8em; color: #2a5298;">📚 Documentation:</strong><br>
+                    ${docLinks || '<em style="color: #999; font-size: 0.8em;">No documentation available</em>'}
+                </div>
+            </div>
+        `;
+    }
 }
 
 // Tab switching functionality
@@ -1033,6 +1232,13 @@ function showTab(tabName) {
     
     // Add active class to clicked header
     event.target.classList.add('active');
+    
+    // Initialize CER interface when knowledge tab is shown
+    if (tabName === 'knowledge' && window.minionSystem) {
+        setTimeout(() => {
+            window.minionSystem.renderCERProducts();
+        }, 100);
+    }
 }
 
 // Global functions for UI interaction
