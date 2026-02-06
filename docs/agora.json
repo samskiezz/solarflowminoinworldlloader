@@ -1,21 +1,8 @@
 {
-  "updatedAt": "2026-02-06T14:26:00Z",
+  "updatedAt": "2026-02-06T15:05:48Z",
   "mode": "SIMULATED",
   "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
   "messages": [
-    {
-      "sender_id": "AURORA",
-      "target_tier": 1,
-      "timestamp": "2026-02-05T09:28:10.039Z",
-      "intent": "WORK_UPDATE",
-      "payload": {
-        "task_id": "TASK_AURORA_PERF_MOBILE",
-        "activity": "Profiling render times",
-        "progress": 0.8,
-        "status": "in-progress"
-      },
-      "spark_delta": 0.12367707894227523
-    },
     {
       "sender_id": "FORGE",
       "target_tier": 2,
@@ -691,6 +678,20 @@
       "payload": {
         "task_id": "tick",
         "updatedAt": "2026-02-06T14:26:00Z"
+      },
+      "spark_delta": 0.1,
+      "metadata": {
+        "requires_quantum_break": false
+      }
+    },
+    {
+      "sender_id": "ATLAS",
+      "target_tier": 3,
+      "timestamp": "2026-02-06T15:05:48Z",
+      "intent": "STATE_PATCH",
+      "payload": {
+        "task_id": "tick",
+        "updatedAt": "2026-02-06T15:05:48Z"
       },
       "spark_delta": 0.1,
       "metadata": {
