@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dominion City - Modular Engine</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            overflow: hidden;
+        }
+        
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; cursor: crosshair; }
+        
+        /* Modern UI Panels */
+        .ui-panel {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        #engine-status {
+            top: 20px;
+            left: 20px;
+            min-width: 280px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        #controls {
+            top: 20px;
+            right: 20px;
+            width: 260px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        #time-hud {
+            bottom: 20px;
+            left: 20px;
+            min-width: 200px;
+        }
+        
+        #performance {
+            bottom: 20px;
+            right: 20px;
+            min-width: 180px;
+        }
+        
+        .section {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section:last-child { border-bottom: none; }
+        
+        .section h3 {
+            color: #4fc3f7;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+            font-size: 12px;
+        }
+        
+        .metric-value {
+            color: #81c784;
+            font-weight: 500;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        button {
+            background: linear-gradient(145deg, #2196f3, #1976d2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(145deg, #42a5f5, #1e88e5);
+        }
+        
+        button:active { transform: translateY(0); }
+        
+        .time-btn { background: linear-gradient(145deg, #ff9800, #f57c00); }
+        .camera-btn { background: linear-gradient(145deg, #4caf50, #388e3c); }
+        .engine-btn { background: linear-gradient(145deg, #9c27b0, #7b1fa2); }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        
+        .status-green { background: #4caf50; }
+        .status-yellow { background: #ff9800; }
+        .status-red { background: #f44336; }
+        
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4fc3f7, #29b6f6);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .log {
+            max-height: 120px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+        
+        .error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #ff5722;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #ff5722;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <h2>🏙️ Initializing Dominion Engine</h2>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        <div id="loading-status">Loading core systems...</div>
+    </div>
+    
+    <div id="container">
+        <div id="engine-status" class="ui-panel">
+            <div class="section">
+                <h3>🏙️ Dominion City Engine</h3>
+                <div class="metric">
+                    <span>Status:</span>
+                    <span class="metric-value">
+                        <span class="status-indicator status-green"></span>
+                        <span id="engine-state">Initializing</span>
+                    </span>
+                </div>
+                <div class="metric">
+                    <span>Avatars:</span>
+                    <span class="metric-value" id="avatar-count">0</span>
+                </div>
+                <div class="metric">
+                    <span>Selected:</span>
+                    <span class="metric-value" id="selected-avatar">None</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🌍 World State</h3>
+                <div class="metric">
+                    <span>Buildings:</span>
+                    <span class="metric-value" id="building-count">0</span>
+                </div>
+                <div class="metric">
+                    <span>Parks:</span>
+                    <span class="metric-value" id="park-count">0</span>
+                </div>
+                <div class="metric">
+                    <span>Street Lights:</span>
+                    <span class="metric-value" id="light-count">0</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>📊 Hive Metrics</h3>
+                <div class="metric">
+                    <span>Total Credits:</span>
+                    <span class="metric-value" id="total-credits">0</span>
+                </div>
+                <div class="metric">
+                    <span>Avg Happiness:</span>
+                    <span class="metric-value" id="avg-happiness">0%</span>
+                </div>
+                <div class="metric">
+                    <span>Voltage:</span>
+                    <span class="metric-value" id="world-voltage">0%</span>
+                </div>
+                <div class="metric">
+                    <span>Entropy:</span>
+                    <span class="metric-value" id="world-entropy">0%</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🎬 Activity Log</h3>
+                <div class="log" id="activity-log">
+                    Engine starting up...<br>
+                </div>
+            </div>
+        </div>
+        
+        <div id="controls" class="ui-panel">
+            <div class="section">
+                <h3>📷 Camera Controls</h3>
+                <div class="button-grid">
+                    <button class="camera-btn" onclick="cityOverview()">City View</button>
+                    <button class="camera-btn" onclick="followSelected()">Follow</button>
+                    <button class="camera-btn" onclick="aerialView()">Aerial</button>
+                    <button class="camera-btn" onclick="streetLevel()">Street</button>
+                    <button class="camera-btn" onclick="resetCamera()">Reset</button>
+                    <button class="camera-btn" onclick="randomView()">Random</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>⏰ Time Controls</h3>
+                <div class="button-grid">
+                    <button class="time-btn" onclick="pauseTime()">⏸️ Pause</button>
+                    <button class="time-btn" onclick="resumeTime()">▶️ Play</button>
+                    <button class="time-btn" onclick="setTimeSpeed(1)">1x Speed</button>
+                    <button class="time-btn" onclick="setTimeSpeed(5)">5x Speed</button>
+                    <button class="time-btn" onclick="skipToEvening()">🌅 Evening</button>
+                    <button class="time-btn" onclick="skipToNight()">🌙 Night</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🎮 Avatar Controls</h3>
+                <div class="button-grid">
+                    <button onclick="selectRandomAvatar()">Random</button>
+                    <button onclick="gatherAvatars()">Gather</button>
+                    <button onclick="scatterAvatars()">Scatter</button>
+                    <button onclick="makeHappy()">Happy Mode</button>
+                    <button onclick="workMode()">Work Mode</button>
+                    <button onclick="relaxMode()">Relax Mode</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🔧 Engine Settings</h3>
+                <div class="button-grid">
+                    <button class="engine-btn" onclick="togglePostFX()">Toggle FX</button>
+                    <button class="engine-btn" onclick="toggleBloom()">Bloom</button>
+                    <button class="engine-btn" onclick="setQuality('low')">Low Quality</button>
+                    <button class="engine-btn" onclick="setQuality('high')">High Quality</button>
+                    <button class="engine-btn" onclick="refreshData()">Refresh Data</button>
+                    <button class="engine-btn" onclick="showStats()">Show Stats</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="time-hud" class="ui-panel">
+            <div class="section">
+                <h3>🕒 Game Time</h3>
+                <div id="game-time" style="font-size: 16px; font-weight: bold; color: #4fc3f7;">
+                    Day 1 - 08:00 AM
+                </div>
+                <div class="metric">
+                    <span>Speed:</span>
+                    <span class="metric-value" id="time-speed">1x</span>
+                </div>
+                <div class="metric">
+                    <span>Season:</span>
+                    <span class="metric-value">Spring</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="performance" class="ui-panel">
+            <div class="section">
+                <h3>⚡ Performance</h3>
+                <div class="metric">
+                    <span>FPS:</span>
+                    <span class="metric-value" id="fps">0</span>
+                </div>
+                <div class="metric">
+                    <span>Draw Calls:</span>
+                    <span class="metric-value" id="draw-calls">0</span>
+                </div>
+                <div class="metric">
+                    <span>Triangles:</span>
+                    <span class="metric-value" id="triangles">0</span>
+                </div>
+                <div class="metric">
+                    <span>Memory:</span>
+                    <span class="metric-value" id="memory">0 MB</span>
+                </div>
+            </div>
+        </div>
+        
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import { createEngine } from '../src/core/Engine.js';
+        import { eventBus } from '../src/core/EventBus.js';
+        import { stateStore } from '../src/core/StateStore.js';
+
+        // Global engine instance
+        let engine = null;
+        let fpsCounter = 0;
+        let lastFpsTime = Date.now();
+
+        // Initialization
+        async function init() {
+            try {
+                updateProgress(10, 'Creating engine...');
+                
+                const canvas = document.getElementById('canvas');
+                engine = createEngine(canvas);
+                
+                updateProgress(30, 'Initializing systems...');
+                await engine.initialize();
+                
+                updateProgress(100, 'Ready!');
+                
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    setupEventListeners();
+                    startPerformanceMonitoring();
+                    updateUI();
+                }, 500);
+                
+            } catch (error) {
+                console.error('Initialization failed:', error);
+                showError('Failed to initialize: ' + error.message);
+            }
+        }
+
+        function updateProgress(percent, status) {
+            document.getElementById('progress').style.width = percent + '%';
+            document.getElementById('loading-status').textContent = status;
+        }
+
+        function showError(message) {
+            document.getElementById('loading').innerHTML = `
+                <div class="error">
+                    <h3>Initialization Failed</h3>
+                    <p>${message}</p>
+                    <button onclick="location.reload()">Retry</button>
+                    <button onclick="location.href='index.html'">← Back</button>
+                </div>
+            `;
+        }
+
+        function setupEventListeners() {
+            // Engine events
+            eventBus.on('avatar:selected', (data) => {
+                log(`Selected: ${data.minionData.id}`);
+                updateUI();
+            });
+            
+            eventBus.on('avatar:clicked', (data) => {
+                log(`Clicked: ${data.minionId}`);
+            });
+            
+            eventBus.on('time:updated', (gameTime) => {
+                updateTimeDisplay(gameTime);
+            });
+            
+            eventBus.on('engine:frame', () => {
+                fpsCounter++;
+            });
+            
+            eventBus.on('world:built', (data) => {
+                log('World built successfully');
+                updateUI();
+            });
+            
+            eventBus.on('avatars:created', (data) => {
+                log(`Created ${data.count}/${data.total} avatars`);
+                updateUI();
+            });
+        }
+
+        function startPerformanceMonitoring() {
+            setInterval(() => {
+                updatePerformanceStats();
+                fpsCounter = 0;
+            }, 1000);
+        }
+
+        function updatePerformanceStats() {
+            const fps = fpsCounter;
+            document.getElementById('fps').textContent = fps;
+            
+            if (engine?.renderer) {
+                const info = engine.renderer.info;
+                document.getElementById('draw-calls').textContent = info.render.calls;
+                document.getElementById('triangles').textContent = info.render.triangles.toLocaleString();
+                
+                // Memory approximation
+                const memory = Math.round((info.memory.geometries + info.memory.textures) / 1024) + ' MB';
+                document.getElementById('memory').textContent = memory;
+            }
+        }
+
+        function updateUI() {
+            if (!engine) return;
+            
+            const stats = engine.getEngineStats();
+            
+            document.getElementById('engine-state').textContent = engine.initialized ? 'Running' : 'Starting';
+            document.getElementById('avatar-count').textContent = stats.avatars;
+            document.getElementById('selected-avatar').textContent = stats.selectedAvatar || 'None';
+            
+            const cityStats = engine.getCityStats();
+            document.getElementById('building-count').textContent = cityStats.buildings || 0;
+            document.getElementById('park-count').textContent = cityStats.parks || 0;
+            document.getElementById('light-count').textContent = cityStats.lights || 0;
+            
+            // Hive metrics
+            document.getElementById('total-credits').textContent = stateStore.getTotalCredits().toLocaleString();
+            document.getElementById('avg-happiness').textContent = Math.round(stateStore.getAverageHappiness()) + '%';
+            document.getElementById('world-voltage').textContent = Math.round(stateStore.worldHealth.voltage * 100) + '%';
+            document.getElementById('world-entropy').textContent = Math.round(stateStore.worldHealth.entropy * 100) + '%';
+        }
+
+        function updateTimeDisplay(gameTime) {
+            const hour = gameTime.hour === 0 ? 12 : (gameTime.hour > 12 ? gameTime.hour - 12 : gameTime.hour);
+            const minute = gameTime.minute.toString().padStart(2, '0');
+            const ampm = gameTime.hour >= 12 ? 'PM' : 'AM';
+            
+            document.getElementById('game-time').textContent = `Day ${gameTime.day} - ${hour}:${minute} ${ampm}`;
+            document.getElementById('time-speed').textContent = gameTime.speed + 'x';
+        }
+
+        function log(message) {
+            const logDiv = document.getElementById('activity-log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `${time}: ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // Control Functions
+        window.cityOverview = () => { engine?.setCameraPosition(0, 50, 50); engine?.setCameraTarget(0, 0, 0); log('City overview'); };
+        window.followSelected = () => { engine?.selectedAvatar ? engine.followAvatar(engine.selectedAvatar) : log('No avatar selected'); };
+        window.aerialView = () => { engine?.setCameraPosition(0, 80, 0); engine?.setCameraTarget(0, 0, 0); log('Aerial view'); };
+        window.streetLevel = () => { engine?.setCameraPosition(5, 3, 5); engine?.setCameraTarget(0, 0, 0); log('Street level'); };
+        window.resetCamera = () => { engine?.resetCamera(); log('Camera reset'); };
+        window.randomView = () => { 
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 30 + Math.random() * 30;
+            const height = 10 + Math.random() * 20;
+            engine?.setCameraPosition(Math.cos(angle) * distance, height, Math.sin(angle) * distance);
+            engine?.setCameraTarget(0, 0, 0);
+            log('Random view');
+        };
+
+        window.pauseTime = () => { engine?.pause(); log('Time paused'); };
+        window.resumeTime = () => { engine?.resume(); log('Time resumed'); };
+        window.setTimeSpeed = (speed) => { engine?.setTimeSpeed(speed); log(`Time speed: ${speed}x`); };
+        window.skipToEvening = () => { if(engine) engine.gameTime.hour = 18; log('Skipped to evening'); };
+        window.skipToNight = () => { if(engine) engine.gameTime.hour = 22; log('Skipped to night'); };
+
+        window.selectRandomAvatar = () => {
+            const avatars = engine?.getAllAvatars();
+            if (avatars?.length > 0) {
+                const avatar = avatars[Math.floor(Math.random() * avatars.length)];
+                engine.selectAvatar(avatar);
+                log(`Selected random: ${avatar.minionData.id}`);
+            }
+        };
+
+        window.gatherAvatars = () => {
+            engine?.getAllAvatars().forEach(avatar => {
+                avatar.setWalkTarget(0, 0);
+            });
+            log('Gathering all avatars');
+        };
+
+        window.scatterAvatars = () => {
+            engine?.getAllAvatars().forEach(avatar => {
+                avatar.setRandomWalkTarget();
+            });
+            log('Scattering avatars');
+        };
+
+        window.makeHappy = () => {
+            engine?.getAllAvatars().forEach(avatar => {
+                avatar.minionData.happiness = Math.min(100, avatar.minionData.happiness + 20);
+            });
+            log('Happiness boost applied');
+            updateUI();
+        };
+
+        window.workMode = () => {
+            engine?.getAllAvatars().forEach(avatar => {
+                avatar.minionData.ai.currentActivity = 'Working hard';
+            });
+            log('All avatars working');
+        };
+
+        window.relaxMode = () => {
+            engine?.getAllAvatars().forEach(avatar => {
+                avatar.minionData.ai.currentActivity = 'Relaxing';
+            });
+            log('All avatars relaxing');
+        };
+
+        window.togglePostFX = () => {
+            if (engine?.postFX) {
+                engine.postFX.enabled ? engine.postFX.disable() : engine.postFX.enable();
+                log('Post-FX toggled');
+            }
+        };
+
+        window.toggleBloom = () => {
+            if (engine?.postFX) {
+                const enabled = engine.postFX.toggleBloom();
+                log('Bloom: ' + (enabled ? 'ON' : 'OFF'));
+            }
+        };
+
+        window.setQuality = (level) => {
+            engine?.postFX?.setQuality(level);
+            log(`Quality: ${level}`);
+        };
+
+        window.refreshData = async () => {
+            log('Refreshing hive data...');
+            await stateStore.loadHiveState();
+            updateUI();
+            log('Data refreshed');
+        };
+
+        window.showStats = () => {
+            const stats = engine?.getEngineStats();
+            console.log('Engine Stats:', stats);
+            log('Stats logged to console');
+        };
+
+        // Error handling
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+            log('ERROR: ' + (event.error?.message || 'Unknown error'));
+        });
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

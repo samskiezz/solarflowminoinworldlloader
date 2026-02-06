@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-06T02:22:28Z",
+  "updatedAt": "2026-02-06T04:24:28Z",
   "minions": [
     {
       "id": "ATLAS",
@@ -30,7 +30,7 @@
       "energy_credits": 160,
       "reputation": 0.63,
       "avatar_url": "./avatars/identicons/LUMEN.svg",
-      "happiness_sim": 77,
+      "happiness_sim": 78,
       "avatar_salt": 0
     },
     {
@@ -46,7 +46,7 @@
       "energy_credits": 120,
       "reputation": 0.54,
       "avatar_url": "./avatars/identicons/ORBIT.svg",
-      "happiness_sim": 87,
+      "happiness_sim": 86,
       "avatar_salt": 0
     },
     {
@@ -78,7 +78,7 @@
       "energy_credits": 120,
       "reputation": 0.6,
       "avatar_url": "./avatars/identicons/BOLT.svg",
-      "happiness_sim": 69,
+      "happiness_sim": 70,
       "avatar_salt": 0
     },
     {
@@ -94,7 +94,7 @@
       "energy_credits": 120,
       "reputation": 0.58,
       "avatar_url": "./avatars/identicons/SABLE.svg",
-      "happiness_sim": 90,
+      "happiness_sim": 89,
       "avatar_salt": 0
     },
     {
@@ -126,7 +126,7 @@
       "energy_credits": 90,
       "reputation": 0.48,
       "avatar_url": "./avatars/identicons/EMBER.svg",
-      "happiness_sim": 68,
+      "happiness_sim": 69,
       "avatar_salt": 0
     },
     {
@@ -142,7 +142,7 @@
       "energy_credits": 110,
       "reputation": 0.52,
       "avatar_url": "./avatars/identicons/RUNE.svg",
-      "happiness_sim": 80,
+      "happiness_sim": 79,
       "avatar_salt": 0
     },
     {
@@ -174,7 +174,7 @@
       "energy_credits": 110,
       "reputation": 0.51,
       "avatar_url": "./avatars/identicons/FORGE.svg",
-      "happiness_sim": 70,
+      "happiness_sim": 71,
       "avatar_salt": 0
     },
     {
@@ -190,7 +190,7 @@
       "energy_credits": 90,
       "reputation": 0.46,
       "avatar_url": "./avatars/identicons/KITE.svg",
-      "happiness_sim": 77,
+      "happiness_sim": 76,
       "avatar_salt": 0
     },
     {
@@ -222,7 +222,7 @@
       "energy_credits": 90,
       "reputation": 0.45,
       "avatar_url": "./avatars/identicons/GLINT.svg",
-      "happiness_sim": 66,
+      "happiness_sim": 67,
       "avatar_salt": 0
     },
     {
@@ -238,7 +238,7 @@
       "energy_credits": 90,
       "reputation": 0.44,
       "avatar_url": "./avatars/identicons/MOSS.svg",
-      "happiness_sim": 81,
+      "happiness_sim": 80,
       "avatar_salt": 0
     },
     {
@@ -270,7 +270,7 @@
       "energy_credits": 120,
       "reputation": 0.55,
       "avatar_url": "./avatars/identicons/SAGE.svg",
-      "happiness_sim": 72,
+      "happiness_sim": 73,
       "avatar_salt": 0
     },
     {
@@ -286,7 +286,7 @@
       "energy_credits": 90,
       "reputation": 0.45,
       "avatar_url": "./avatars/identicons/WREN.svg",
-      "happiness_sim": 82,
+      "happiness_sim": 81,
       "avatar_salt": 0
     },
     {
@@ -318,7 +318,7 @@
       "energy_credits": 120,
       "reputation": 0.56,
       "avatar_url": "./avatars/identicons/VAULT.svg",
-      "happiness_sim": 73,
+      "happiness_sim": 74,
       "avatar_salt": 0
     },
     {
@@ -334,7 +334,7 @@
       "energy_credits": 90,
       "reputation": 0.47,
       "avatar_url": "./avatars/identicons/ECHO.svg",
-      "happiness_sim": 77,
+      "happiness_sim": 76,
       "avatar_salt": 0
     },
     {
@@ -366,7 +366,7 @@
       "energy_credits": 120,
       "reputation": 0.52,
       "avatar_url": "./avatars/identicons/QUILL.svg",
-      "happiness_sim": 70,
+      "happiness_sim": 71,
       "avatar_salt": 0
     },
     {
@@ -382,7 +382,7 @@
       "energy_credits": 90,
       "reputation": 0.42,
       "avatar_url": "./avatars/identicons/ALPHA.svg",
-      "happiness_sim": 79,
+      "happiness_sim": 78,
       "avatar_salt": 0
     },
     {
@@ -414,7 +414,7 @@
       "energy_credits": 110,
       "reputation": 0.52,
       "avatar_url": "./avatars/identicons/CIPHER.svg",
-      "happiness_sim": 64,
+      "happiness_sim": 65,
       "avatar_salt": 0
     },
     {
@@ -430,7 +430,7 @@
       "energy_credits": 90,
       "reputation": 0.41,
       "avatar_url": "./avatars/identicons/COMET.svg",
-      "happiness_sim": 76,
+      "happiness_sim": 75,
       "avatar_salt": 0
     },
     {
@@ -462,7 +462,7 @@
       "energy_credits": 110,
       "reputation": 0.5,
       "avatar_url": "./avatars/identicons/EQUINOX.svg",
-      "happiness_sim": 65,
+      "happiness_sim": 66,
       "avatar_salt": 0
     },
     {
@@ -478,7 +478,7 @@
       "energy_credits": 90,
       "reputation": 0.44,
       "avatar_url": "./avatars/identicons/FABLE.svg",
-      "happiness_sim": 83,
+      "happiness_sim": 82,
       "avatar_salt": 0
     },
     {
@@ -510,7 +510,7 @@
       "energy_credits": 110,
       "reputation": 0.51,
       "avatar_url": "./avatars/identicons/HELIX.svg",
-      "happiness_sim": 66,
+      "happiness_sim": 67,
       "avatar_salt": 0
     },
     {
@@ -526,7 +526,7 @@
       "energy_credits": 90,
       "reputation": 0.43,
       "avatar_url": "./avatars/identicons/ION.svg",
-      "happiness_sim": 78,
+      "happiness_sim": 77,
       "avatar_salt": 0
     },
     {
@@ -558,7 +558,7 @@
       "energy_credits": 90,
       "reputation": 0.42,
       "avatar_url": "./avatars/identicons/JADE.svg",
-      "happiness_sim": 63,
+      "happiness_sim": 64,
       "avatar_salt": 0
     },
     {
@@ -574,7 +574,7 @@
       "energy_credits": 90,
       "reputation": 0.43,
       "avatar_url": "./avatars/identicons/JOLT.svg",
-      "happiness_sim": 77,
+      "happiness_sim": 76,
       "avatar_salt": 0
     },
     {
@@ -606,7 +606,7 @@
       "energy_credits": 90,
       "reputation": 0.41,
       "avatar_url": "./avatars/identicons/NIMBUS.svg",
-      "happiness_sim": 59,
+      "happiness_sim": 60,
       "avatar_salt": 0
     },
     {
@@ -622,7 +622,7 @@
       "energy_credits": 110,
       "reputation": 0.49,
       "avatar_url": "./avatars/identicons/ONYX.svg",
-      "happiness_sim": 79,
+      "happiness_sim": 78,
       "avatar_salt": 0
     },
     {
@@ -654,7 +654,7 @@
       "energy_credits": 90,
       "reputation": 0.4,
       "avatar_url": "./avatars/identicons/THORN.svg",
-      "happiness_sim": 58,
+      "happiness_sim": 59,
       "avatar_salt": 0
     },
     {
@@ -670,7 +670,7 @@
       "energy_credits": 110,
       "reputation": 0.5,
       "avatar_url": "./avatars/identicons/UMBRA.svg",
-      "happiness_sim": 82,
+      "happiness_sim": 81,
       "avatar_salt": 0
     },
     {
@@ -702,7 +702,7 @@
       "energy_credits": 110,
       "reputation": 0.5,
       "avatar_url": "./avatars/identicons/VEGA.svg",
-      "happiness_sim": 67,
+      "happiness_sim": 68,
       "avatar_salt": 0
     },
     {
@@ -718,7 +718,7 @@
       "energy_credits": 90,
       "reputation": 0.42,
       "avatar_url": "./avatars/identicons/WHISPER.svg",
-      "happiness_sim": 78,
+      "happiness_sim": 77,
       "avatar_salt": 0
     },
     {
@@ -750,7 +750,7 @@
       "energy_credits": 90,
       "reputation": 0.41,
       "avatar_url": "./avatars/identicons/YARROW.svg",
-      "happiness_sim": 61,
+      "happiness_sim": 62,
       "avatar_salt": 0
     },
     {
@@ -766,7 +766,7 @@
       "energy_credits": 110,
       "reputation": 0.49,
       "avatar_url": "./avatars/identicons/YONDER.svg",
-      "happiness_sim": 81,
+      "happiness_sim": 80,
       "avatar_salt": 0
     },
     {
@@ -798,7 +798,7 @@
       "energy_credits": 90,
       "reputation": 0.4,
       "avatar_url": "./avatars/identicons/ZEPHYR.svg",
-      "happiness_sim": 64,
+      "happiness_sim": 65,
       "avatar_salt": 0
     }
   ]
