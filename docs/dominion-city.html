@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dominion City - Living Minion Simulation</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: linear-gradient(135deg, #87CEEB, #98FB98); 
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; }
+        
+        /* UI Panels */
+        #city-hud {
+            position: fixed; top: 10px; left: 10px; z-index: 100;
+            background: rgba(255,255,255,0.95); border: 2px solid #4CAF50;
+            border-radius: 10px; padding: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            max-width: 280px; max-height: 85vh; overflow-y: auto;
+        }
+        
+        #controls {
+            position: fixed; top: 10px; right: 10px; z-index: 100;
+            background: rgba(255,255,255,0.95); border: 2px solid #2196F3;
+            border-radius: 10px; padding: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            width: 260px; max-height: 85vh; overflow-y: auto;
+        }
+        
+        #time-panel {
+            position: fixed; bottom: 10px; left: 10px; z-index: 100;
+            background: rgba(255,255,255,0.95); border: 2px solid #FF9800;
+            border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        /* Thought Bubble Styles */
+        .thought-bubble {
+            position: absolute; z-index: 50;
+            background: white; border: 2px solid #333;
+            border-radius: 20px; padding: 8px 12px;
+            font-size: 11px; color: #333; min-width: 80px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            pointer-events: none; opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .thought-bubble::before {
+            content: '';
+            position: absolute; bottom: -8px; left: 20px;
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid white;
+        }
+        
+        .thought-bubble::after {
+            content: '';
+            position: absolute; bottom: -10px; left: 18px;
+            width: 0; height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #333;
+        }
+        
+        /* Health Bar Styles */
+        .health-widget {
+            position: absolute; z-index: 60;
+            background: rgba(0,0,0,0.8); color: white;
+            border-radius: 8px; padding: 6px; font-size: 10px;
+            min-width: 120px; opacity: 0;
+            transition: opacity 0.3s ease; pointer-events: none;
+        }
+        
+        .health-bar {
+            width: 100%; height: 4px; background: #333;
+            border-radius: 2px; margin: 2px 0; overflow: hidden;
+        }
+        
+        .health-fill {
+            height: 100%; background: #4CAF50;
+            transition: width 0.3s ease;
+        }
+        
+        .happiness-fill { background: #FF9800; }
+        .energy-fill { background: #2196F3; }
+        .credits-fill { background: #FFD700; }
+        
+        /* Button Styles */
+        button {
+            background: linear-gradient(145deg, #4CAF50, #45a049);
+            border: none; color: white; padding: 6px 12px;
+            margin: 3px; border-radius: 6px; cursor: pointer;
+            font-size: 11px; font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        button:hover { transform: translateY(-1px); box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
+        button:active { transform: translateY(0); }
+        
+        .camera-btn { background: linear-gradient(145deg, #2196F3, #1976D2); }
+        .time-btn { background: linear-gradient(145deg, #FF9800, #F57C00); }
+        .city-btn { background: linear-gradient(145deg, #9C27B0, #7B1FA2); }
+        
+        .section {
+            margin: 10px 0; padding: 8px; 
+            background: rgba(240,240,240,0.8); border-radius: 8px;
+        }
+        .section h4 { 
+            margin: 0 0 8px 0; color: #333; font-size: 12px;
+            border-bottom: 1px solid #ccc; padding-bottom: 4px;
+        }
+        
+        #city-stats { font-size: 12px; color: #333; }
+        #loading {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.95); padding: 20px 40px;
+            border-radius: 15px; font-size: 16px; color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000;
+        }
+        
+        .error { 
+            color: #f44336; padding: 15px; text-align: center;
+            background: rgba(255,235,238,0.9); border-radius: 8px;
+        }
+        
+        .activity-log {
+            max-height: 120px; overflow-y: auto; font-size: 10px;
+            background: rgba(240,248,255,0.8); padding: 5px;
+            border-radius: 5px; margin-top: 5px;
+        }
+        
+        .time-display {
+            font-size: 14px; font-weight: bold; color: #333;
+            text-align: center; margin-bottom: 5px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            #city-hud, #controls { max-width: 220px; font-size: 11px; }
+            button { padding: 4px 8px; font-size: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">🏙️ Building Dominion City...</div>
+    
+    <div id="container">
+        <div id="city-hud">
+            <div class="section">
+                <h4>🏙️ Dominion City Status</h4>
+                <div id="city-stats">
+                    <div>Population: <span id="population">0</span></div>
+                    <div>Active Citizens: <span id="active-citizens">0</span></div>
+                    <div>City Happiness: <span id="city-happiness">0%</span></div>
+                    <div>Total Wealth: <span id="total-wealth">0</span></div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h4>👤 Selected Citizen</h4>
+                <div id="selected-minion">
+                    <div id="selected-name">None Selected</div>
+                    <div id="selected-details" style="font-size: 10px; margin-top: 5px;"></div>
+                    <div id="selected-thoughts" style="font-style: italic; color: #666; margin-top: 5px;"></div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h4>📊 City Activities</h4>
+                <div class="activity-log" id="activity-log">
+                    🏙️ Welcome to Dominion City!<br>
+                </div>
+            </div>
+        </div>
+        
+        <div id="controls">
+            <div class="section">
+                <h4>📷 Camera Controls</h4>
+                <button class="camera-btn" onclick="cityOverview()">City Overview</button>
+                <button class="camera-btn" onclick="followSelected()">Follow Citizen</button>
+                <button class="camera-btn" onclick="aerialView()">Aerial View</button>
+                <button class="camera-btn" onclick="streetLevel()">Street Level</button>
+                <button class="camera-btn" onclick="resetCamera()">Reset View</button>
+                <button class="camera-btn" onclick="randomView()">Random View</button>
+            </div>
+            
+            <div class="section">
+                <h4>⏰ Time Controls</h4>
+                <button class="time-btn" onclick="pauseTime()">⏸️ Pause</button>
+                <button class="time-btn" onclick="normalSpeed()">▶️ Normal</button>
+                <button class="time-btn" onclick="fastTime()">⏩ Fast</button>
+                <button class="time-btn" onclick="skipToEvening()">🌅 Evening</button>
+                <button class="time-btn" onclick="skipToNight()">🌙 Night</button>
+                <button class="time-btn" onclick="newDay()">🌞 New Day</button>
+            </div>
+            
+            <div class="section">
+                <h4>🏙️ City Features</h4>
+                <button class="city-btn" onclick="showBuildings()">Buildings</button>
+                <button class="city-btn" onclick="showRoads()">Roads</button>
+                <button class="city-btn" onclick="showParks()">Parks</button>
+                <button class="city-btn" onclick="showWorkplaces()">Workplaces</button>
+                <button class="city-btn" onclick="addDecorations()">Decorations</button>
+                <button class="city-btn" onclick="weatherEffects()">Weather</button>
+            </div>
+            
+            <div class="section">
+                <h4>👥 Citizen Control</h4>
+                <button onclick="selectRandomCitizen()">Random Citizen</button>
+                <button onclick="gatherCitizens()">Gather All</button>
+                <button onclick="scatterCitizens()">Scatter</button>
+                <button onclick="happyMode()">Happy Mode</button>
+                <button onclick="workMode()">Work Mode</button>
+                <button onclick="relaxMode()">Relax Mode</button>
+            </div>
+        </div>
+        
+        <div id="time-panel">
+            <div class="time-display">
+                <div id="game-time">Day 1 - 08:00 AM</div>
+                <div id="real-time" style="font-size: 11px; color: #666;"></div>
+            </div>
+            <div style="font-size: 10px; color: #666;">
+                Speed: <span id="time-speed">1x</span> | Season: <span id="season">Spring</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
+    <script>
+        // Global Game State
+        let scene, camera, renderer, raycaster, mouse;
+        let minions = [], minionMeshes = [], buildings = [], thoughtBubbles = [], healthWidgets = [];
+        let selectedMinion = null, followingMinion = null;
+        let gameTime = { day: 1, hour: 8, minute: 0, speed: 1, paused: false };
+        let cityStats = { population: 0, activecitizens: 0, happiness: 0, wealth: 0 };
+        let hiveData = {};
+        
+        // Camera controls
+        let cameraController = {
+            position: { x: 0, y: 30, z: 50 },
+            target: { x: 0, y: 0, z: 0 },
+            mode: 'free'
+        };
+        
+        // Minion AI states and activities
+        const activities = [
+            "Working on solar panels", "Analyzing energy data", "Collaborating with team",
+            "Taking a coffee break", "Reviewing documentation", "Planning new projects",
+            "Debugging code", "Attending meeting", "Learning new skills", "Relaxing in park",
+            "Shopping for groceries", "Exercising", "Reading a book", "Cooking dinner",
+            "Watching TV", "Playing games", "Socializing", "Sleeping", "Commuting"
+        ];
+        
+        const thoughts = [
+            "I love working on renewable energy!", "This solar data is fascinating",
+            "Time for a break soon", "Wonder what's for lunch today",
+            "This project is going well", "Need to collaborate more with team",
+            "The weather is lovely today", "Feeling productive today",
+            "Can't wait for the weekend", "This algorithm needs optimization",
+            "Coffee sounds good right now", "Happy to be part of this team"
+        ];
+
+        function log(message) {
+            const logDiv = document.getElementById('activity-log');
+            const time = formatGameTime();
+            logDiv.innerHTML += `${time}: ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[Dominion City] ${message}`);
+        }
+
+        async function init() {
+            try {
+                log('Initializing Dominion City simulation...');
+                
+                // Setup Three.js scene
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x87CEEB); // Sky blue
+                scene.fog = new THREE.Fog(0x87CEEB, 50, 200);
+                
+                // Camera setup
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                updateCameraPosition();
+                
+                // Renderer
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                document.getElementById('container').appendChild(renderer.domElement);
+                
+                // Mouse interaction
+                raycaster = new THREE.Raycaster();
+                mouse = new THREE.Vector2();
+                setupEventListeners();
+                
+                // Lighting - Natural daylight simulation
+                createLighting();
+                
+                // Build the city
+                await createCity();
+                
+                // Load minion data and create citizens
+                await loadMinionData();
+                createMinions();
+                
+                // Start the simulation
+                startTimeSystem();
+                startMinionAI();
+                animate();
+                
+                document.getElementById('loading').style.display = 'none';
+                updateCityStats();
+                log(`Dominion City is alive with ${minions.length} citizens!`);
+                
+            } catch (error) {
+                log('ERROR: ' + error.message);
+                document.getElementById('loading').innerHTML = 
+                    `<div class="error">Failed to build city: ${error.message}</div>`;
+            }
+        }
+
+        async function loadMinionData() {
+            try {
+                const response = await fetch('hive_state.json?' + Date.now());
+                if (response.ok) {
+                    hiveData = await response.json();
+                    minions = hiveData.minions?.roster || [];
+                    log(`Loaded ${minions.length} citizens from hive data`);
+                } else {
+                    throw new Error('Using fallback data');
+                }
+            } catch (error) {
+                log('Loading fallback citizen data...');
+                minions = [
+                    { id: 'ATLAS', tier: 3, role: 'OVERSEER', energy_credits: 160, happiness_sim: 85, specialties: ['orchestration'] },
+                    { id: 'LUMEN', tier: 3, role: 'OVERSEER', energy_credits: 160, happiness_sim: 90, specialties: ['priorities'] },
+                    { id: 'ORBIT', tier: 2, role: 'SPECIALIST', energy_credits: 120, happiness_sim: 75, specialties: ['memory'] },
+                    { id: 'PRISM', tier: 2, role: 'SPECIALIST', energy_credits: 120, happiness_sim: 80, specialties: ['ui'] },
+                    { id: 'BOLT', tier: 2, role: 'SPECIALIST', energy_credits: 120, happiness_sim: 70, specialties: ['ci-fix'] }
+                ];
+                hiveData = { health: { virtual_voltage: 0.33, entropy: 0.19 }, ledger: { credits_total: 2765 } };
+            }
+            
+            // Add AI state to each minion
+            minions.forEach(minion => {
+                minion.ai = {
+                    currentActivity: activities[Math.floor(Math.random() * activities.length)],
+                    currentThought: thoughts[Math.floor(Math.random() * thoughts.length)],
+                    energy: 80 + Math.random() * 20,
+                    mood: minion.happiness_sim || 70,
+                    lastActivityChange: Date.now(),
+                    destination: null,
+                    speed: 0.02 + Math.random() * 0.03
+                };
+            });
+        }
+
+        function createLighting() {
+            // Ambient light for overall illumination
+            const ambientLight = new THREE.AmbientLight(0x87CEEB, 0.6);
+            scene.add(ambientLight);
+            
+            // Directional light (sun)
+            const sunLight = new THREE.DirectionalLight(0xFFFFDD, 1.2);
+            sunLight.position.set(50, 80, 30);
+            sunLight.castShadow = true;
+            sunLight.shadow.mapSize.width = 2048;
+            sunLight.shadow.mapSize.height = 2048;
+            sunLight.shadow.camera.near = 0.5;
+            sunLight.shadow.camera.far = 200;
+            sunLight.shadow.camera.left = -50;
+            sunLight.shadow.camera.right = 50;
+            sunLight.shadow.camera.top = 50;
+            sunLight.shadow.camera.bottom = -50;
+            scene.add(sunLight);
+            
+            // Additional warm light
+            const fillLight = new THREE.DirectionalLight(0xFFE4B5, 0.4);
+            fillLight.position.set(-30, 40, -30);
+            scene.add(fillLight);
+        }
+
+        async function createCity() {
+            log('Building city infrastructure...');
+            
+            // Ground plane
+            const groundGeometry = new THREE.PlaneGeometry(200, 200);
+            const groundMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x90EE90,  // Light green
+                transparent: true,
+                opacity: 0.9
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Create city blocks and buildings
+            createBuildings();
+            createRoads();
+            createParks();
+            createDecorations();
+            
+            log('City infrastructure complete!');
+        }
+
+        function createBuildings() {
+            const buildingPositions = [
+                // Office buildings
+                { x: -30, z: -30, w: 8, h: 15, d: 8, color: 0x4A90E2 },
+                { x: 30, z: -30, w: 6, h: 12, d: 6, color: 0x7ED321 },
+                { x: -20, z: 20, w: 10, h: 18, d: 10, color: 0xF5A623 },
+                { x: 25, z: 25, w: 7, h: 14, d: 7, color: 0xBD10E0 },
+                
+                // Residential buildings
+                { x: -40, z: 0, w: 5, h: 8, d: 5, color: 0xFF6B6B },
+                { x: 40, z: 0, w: 4, h: 6, d: 4, color: 0x4ECDC4 },
+                { x: 0, z: -40, w: 6, h: 10, d: 6, color: 0xFFE66D },
+                { x: 0, z: 40, w: 5, h: 9, d: 5, color: 0xA8E6CF },
+            ];
+            
+            buildingPositions.forEach((pos, index) => {
+                const geometry = new THREE.BoxGeometry(pos.w, pos.h, pos.d);
+                const material = new THREE.MeshLambertMaterial({ color: pos.color });
+                const building = new THREE.Mesh(geometry, material);
+                
+                building.position.set(pos.x, pos.h / 2, pos.z);
+                building.castShadow = true;
+                building.receiveShadow = true;
+                
+                scene.add(building);
+                buildings.push(building);
+                
+                // Add building details (windows, etc.)
+                addBuildingDetails(building, pos);
+            });
+        }
+
+        function addBuildingDetails(building, pos) {
+            // Add windows
+            const windowGeometry = new THREE.PlaneGeometry(0.8, 0.8);
+            const windowMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0x87CEEB, 
+                transparent: true, 
+                opacity: 0.7 
+            });
+            
+            // Front windows
+            for (let i = 0; i < Math.floor(pos.h / 3); i++) {
+                for (let j = 0; j < Math.floor(pos.w / 2); j++) {
+                    const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                    window.position.set(
+                        building.position.x + (j - Math.floor(pos.w / 4)) * 2,
+                        building.position.y - pos.h/2 + (i + 1) * 3,
+                        building.position.z + pos.d/2 + 0.01
+                    );
+                    scene.add(window);
+                }
+            }
+        }
+
+        function createRoads() {
+            // Main roads
+            const roadGeometry = new THREE.PlaneGeometry(200, 4);
+            const roadMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+            
+            // Horizontal road
+            const roadH = new THREE.Mesh(roadGeometry, roadMaterial);
+            roadH.rotation.x = -Math.PI / 2;
+            roadH.position.y = 0.01;
+            scene.add(roadH);
+            
+            // Vertical road
+            const roadV = new THREE.Mesh(roadGeometry, roadMaterial);
+            roadV.rotation.x = -Math.PI / 2;
+            roadV.rotation.z = Math.PI / 2;
+            roadV.position.y = 0.01;
+            scene.add(roadV);
+            
+            // Road markings
+            const lineGeometry = new THREE.PlaneGeometry(200, 0.2);
+            const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+            
+            const centerLineH = new THREE.Mesh(lineGeometry, lineMaterial);
+            centerLineH.rotation.x = -Math.PI / 2;
+            centerLineH.position.y = 0.02;
+            scene.add(centerLineH);
+            
+            const centerLineV = new THREE.Mesh(lineGeometry, lineMaterial);
+            centerLineV.rotation.x = -Math.PI / 2;
+            centerLineV.rotation.z = Math.PI / 2;
+            centerLineV.position.y = 0.02;
+            scene.add(centerLineV);
+        }
+
+        function createParks() {
+            // Central park
+            const parkGeometry = new THREE.CircleGeometry(12, 16);
+            const parkMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+            const park = new THREE.Mesh(parkGeometry, parkMaterial);
+            park.rotation.x = -Math.PI / 2;
+            park.position.set(0, 0.02, 0);
+            scene.add(park);
+            
+            // Trees in park
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const radius = 8;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                createTree(x, z);
+            }
+        }
+
+        function createTree(x, z) {
+            // Trunk
+            const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, 4);
+            const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+            trunk.position.set(x, 2, z);
+            scene.add(trunk);
+            
+            // Foliage
+            const foliageGeometry = new THREE.SphereGeometry(3, 8, 6);
+            const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+            const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+            foliage.position.set(x, 5, z);
+            scene.add(foliage);
+        }
+
+        function createDecorations() {
+            // Street lamps
+            const lampPositions = [
+                { x: -15, z: -15 }, { x: 15, z: -15 },
+                { x: -15, z: 15 }, { x: 15, z: 15 }
+            ];
+            
+            lampPositions.forEach(pos => {
+                // Lamp post
+                const postGeometry = new THREE.CylinderGeometry(0.1, 0.1, 8);
+                const postMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+                const post = new THREE.Mesh(postGeometry, postMaterial);
+                post.position.set(pos.x, 4, pos.z);
+                scene.add(post);
+                
+                // Lamp
+                const lampGeometry = new THREE.SphereGeometry(0.5);
+                const lampMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0xFFFFAA,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
+                lamp.position.set(pos.x, 8, pos.z);
+                scene.add(lamp);
+            });
+        }
+
+        function createMinions() {
+            log('Creating citizens...');
+            
+            minions.forEach((minion, index) => {
+                // Position minions around the city
+                const angle = (index / minions.length) * Math.PI * 2;
+                const radius = 15 + (index % 3) * 5;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                // Create minion mesh - humanoid character
+                const group = new THREE.Group();
+                
+                // Body
+                const bodyGeometry = new THREE.CapsuleGeometry(0.4, 1.2);
+                let bodyColor = 0x87CEEB; // Default
+                
+                // Color by tier (like The Sims)
+                if (minion.tier === 3) bodyColor = 0xFFD700; // Gold
+                else if (minion.tier === 2) bodyColor = 0xC0C0C0; // Silver  
+                else bodyColor = 0xCD7F32; // Bronze
+                
+                const bodyMaterial = new THREE.MeshLambertMaterial({ color: bodyColor });
+                const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                body.position.y = 1;
+                group.add(body);
+                
+                // Head
+                const headGeometry = new THREE.SphereGeometry(0.3);
+                const headMaterial = new THREE.MeshLambertMaterial({ color: 0xFFDBCC }); // Skin tone
+                const head = new THREE.Mesh(headGeometry, headMaterial);
+                head.position.y = 1.8;
+                group.add(head);
+                
+                // Simple face
+                const eyeGeometry = new THREE.SphereGeometry(0.05);
+                const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+                const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                leftEye.position.set(-0.1, 1.85, 0.25);
+                group.add(leftEye);
+                const rightEye = leftEye.clone();
+                rightEye.position.x = 0.1;
+                group.add(rightEye);
+                
+                // Position in city
+                group.position.set(x, 0, z);
+                group.userData = { 
+                    minion: minion,
+                    originalPosition: { x, y: 0, z },
+                    walkTarget: null,
+                    walkSpeed: minion.ai.speed
+                };
+                
+                // Add shadows
+                body.castShadow = true;
+                head.castShadow = true;
+                
+                scene.add(group);
+                minionMeshes.push(group);
+                
+                // Create thought bubble for this minion
+                createThoughtBubble(minion);
+                
+                // Create health widget
+                createHealthWidget(minion);
+            });
+            
+            log(`${minions.length} citizens are now living in Dominion City!`);
+        }
+
+        function createThoughtBubble(minion) {
+            const bubble = document.createElement('div');
+            bubble.className = 'thought-bubble';
+            bubble.textContent = minion.ai.currentThought;
+            bubble.id = `thought-${minion.id}`;
+            document.body.appendChild(bubble);
+            thoughtBubbles.push(bubble);
+        }
+
+        function createHealthWidget(minion) {
+            const widget = document.createElement('div');
+            widget.className = 'health-widget';
+            widget.id = `health-${minion.id}`;
+            widget.innerHTML = `
+                <div style="font-weight: bold;">${minion.id}</div>
+                <div>Health: <div class="health-bar"><div class="health-fill" style="width: ${minion.ai.energy}%"></div></div></div>
+                <div>Mood: <div class="health-bar"><div class="health-fill happiness-fill" style="width: ${minion.ai.mood}%"></div></div></div>
+                <div>Credits: ${minion.energy_credits || 0}</div>
+                <div>Activity: ${minion.ai.currentActivity}</div>
+            `;
+            document.body.appendChild(widget);
+            healthWidgets.push(widget);
+        }
+
+        function setupEventListeners() {
+            renderer.domElement.addEventListener('click', onMouseClick);
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onMouseClick(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(minionMeshes);
+            
+            if (intersects.length > 0) {
+                const mesh = intersects[0].object.parent;
+                selectMinion(mesh.userData.minion, mesh);
+            }
+        }
+
+        function onMouseMove(event) {
+            // Update minion hover states and show health widgets
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(minionMeshes);
+            
+            // Hide all widgets first
+            healthWidgets.forEach(widget => widget.style.opacity = '0');
+            thoughtBubbles.forEach(bubble => bubble.style.opacity = '0');
+            
+            if (intersects.length > 0) {
+                const mesh = intersects[0].object.parent;
+                const minion = mesh.userData.minion;
+                
+                // Show health widget
+                const healthWidget = document.getElementById(`health-${minion.id}`);
+                if (healthWidget) {
+                    const vector = new THREE.Vector3();
+                    mesh.getWorldPosition(vector);
+                    vector.project(camera);
+                    
+                    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                    const y = (vector.y * -0.5 + 0.5) * window.innerHeight;
+                    
+                    healthWidget.style.left = (x + 10) + 'px';
+                    healthWidget.style.top = (y - 60) + 'px';
+                    healthWidget.style.opacity = '1';
+                }
+                
+                // Show thought bubble
+                const thoughtBubble = document.getElementById(`thought-${minion.id}`);
+                if (thoughtBubble) {
+                    const vector = new THREE.Vector3();
+                    mesh.getWorldPosition(vector);
+                    vector.y += 3; // Above head
+                    vector.project(camera);
+                    
+                    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                    const y = (vector.y * -0.5 + 0.5) * window.innerHeight;
+                    
+                    thoughtBubble.style.left = (x - 40) + 'px';
+                    thoughtBubble.style.top = (y - 40) + 'px';
+                    thoughtBubble.style.opacity = '1';
+                }
+            }
+        }
+
+        function selectMinion(minion, mesh) {
+            selectedMinion = { minion, mesh };
+            
+            // Update selected minion display
+            document.getElementById('selected-name').textContent = minion.id;
+            document.getElementById('selected-details').innerHTML = `
+                Tier: ${minion.tier} | Role: ${minion.role}<br>
+                Credits: ${minion.energy_credits || 0} | Mood: ${minion.ai.mood}%<br>
+                Energy: ${minion.ai.energy.toFixed(1)}%
+            `;
+            document.getElementById('selected-thoughts').textContent = `"${minion.ai.currentThought}"`;
+            
+            log(`Selected citizen: ${minion.id} - ${minion.ai.currentActivity}`);
+        }
+
+        function updateCameraPosition() {
+            camera.position.set(cameraController.position.x, cameraController.position.y, cameraController.position.z);
+            camera.lookAt(cameraController.target.x, cameraController.target.y, cameraController.target.z);
+        }
+
+        function startTimeSystem() {
+            setInterval(() => {
+                if (!gameTime.paused) {
+                    gameTime.minute += gameTime.speed;
+                    if (gameTime.minute >= 60) {
+                        gameTime.minute = 0;
+                        gameTime.hour++;
+                        if (gameTime.hour >= 24) {
+                            gameTime.hour = 0;
+                            gameTime.day++;
+                        }
+                    }
+                    updateTimeDisplay();
+                    updateLighting();
+                }
+            }, 1000);
+        }
+
+        function startMinionAI() {
+            setInterval(() => {
+                if (!gameTime.paused) {
+                    minions.forEach((minion, index) => {
+                        updateMinionAI(minion, index);
+                    });
+                    updateCityStats();
+                }
+            }, 2000);
+        }
+
+        function updateMinionAI(minion, index) {
+            const now = Date.now();
+            
+            // Change activity every 30-60 seconds
+            if (now - minion.ai.lastActivityChange > 30000 + Math.random() * 30000) {
+                minion.ai.currentActivity = activities[Math.floor(Math.random() * activities.length)];
+                minion.ai.currentThought = thoughts[Math.floor(Math.random() * thoughts.length)];
+                minion.ai.lastActivityChange = now;
+                
+                // Update thought bubble
+                const bubble = document.getElementById(`thought-${minion.id}`);
+                if (bubble) bubble.textContent = minion.ai.currentThought;
+                
+                // Update health widget
+                const widget = document.getElementById(`health-${minion.id}`);
+                if (widget) {
+                    widget.innerHTML = `
+                        <div style="font-weight: bold;">${minion.id}</div>
+                        <div>Health: <div class="health-bar"><div class="health-fill" style="width: ${minion.ai.energy}%"></div></div></div>
+                        <div>Mood: <div class="health-bar"><div class="health-fill happiness-fill" style="width: ${minion.ai.mood}%"></div></div></div>
+                        <div>Credits: ${minion.energy_credits || 0}</div>
+                        <div>Activity: ${minion.ai.currentActivity}</div>
+                    `;
+                }
+            }
+            
+            // Random movement
+            if (Math.random() < 0.1) {
+                const mesh = minionMeshes[index];
+                if (mesh) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 2 + Math.random() * 3;
+                    mesh.userData.walkTarget = {
+                        x: mesh.position.x + Math.cos(angle) * distance,
+                        z: mesh.position.z + Math.sin(angle) * distance
+                    };
+                }
+            }
+        }
+
+        function updateTimeDisplay() {
+            const timeString = formatGameTime();
+            document.getElementById('game-time').textContent = timeString;
+            document.getElementById('real-time').textContent = new Date().toLocaleTimeString();
+            document.getElementById('time-speed').textContent = gameTime.speed + 'x';
+        }
+
+        function formatGameTime() {
+            const hour = gameTime.hour.toString().padStart(2, '0');
+            const minute = gameTime.minute.toString().padStart(2, '0');
+            const ampm = gameTime.hour >= 12 ? 'PM' : 'AM';
+            const displayHour = gameTime.hour === 0 ? 12 : (gameTime.hour > 12 ? gameTime.hour - 12 : gameTime.hour);
+            return `Day ${gameTime.day} - ${displayHour.toString().padStart(2, '0')}:${minute} ${ampm}`;
+        }
+
+        function updateLighting() {
+            // Simulate day/night cycle
+            const timeOfDay = gameTime.hour + (gameTime.minute / 60);
+            let lightIntensity = 1.0;
+            let skyColor = 0x87CEEB; // Default sky blue
+            
+            if (timeOfDay < 6 || timeOfDay > 20) {
+                // Night
+                lightIntensity = 0.3;
+                skyColor = 0x191970; // Midnight blue
+            } else if (timeOfDay < 8 || timeOfDay > 18) {
+                // Dawn/dusk
+                lightIntensity = 0.6;
+                skyColor = 0xFFA500; // Orange
+            }
+            
+            scene.background = new THREE.Color(skyColor);
+            scene.fog.color = new THREE.Color(skyColor);
+            
+            // Update sun light
+            scene.children.forEach(child => {
+                if (child.type === 'DirectionalLight' && child.intensity > 1) {
+                    child.intensity = lightIntensity;
+                }
+            });
+        }
+
+        function updateCityStats() {
+            cityStats.population = minions.length;
+            cityStats.activecitizens = minions.filter(m => m.ai.currentActivity.includes('Working')).length;
+            cityStats.happiness = Math.round(minions.reduce((sum, m) => sum + m.ai.mood, 0) / minions.length);
+            cityStats.wealth = minions.reduce((sum, m) => sum + (m.energy_credits || 0), 0);
+            
+            document.getElementById('population').textContent = cityStats.population;
+            document.getElementById('active-citizens').textContent = cityStats.activecitizens;
+            document.getElementById('city-happiness').textContent = cityStats.happiness + '%';
+            document.getElementById('total-wealth').textContent = cityStats.wealth;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Animate minions
+            minionMeshes.forEach((mesh, index) => {
+                // Walking animation
+                if (mesh.userData.walkTarget) {
+                    const target = mesh.userData.walkTarget;
+                    const dx = target.x - mesh.position.x;
+                    const dz = target.z - mesh.position.z;
+                    const distance = Math.sqrt(dx * dx + dz * dz);
+                    
+                    if (distance > 0.5) {
+                        mesh.position.x += (dx / distance) * mesh.userData.walkSpeed;
+                        mesh.position.z += (dz / distance) * mesh.userData.walkSpeed;
+                        
+                        // Rotate to face direction
+                        mesh.rotation.y = Math.atan2(dx, dz);
+                    } else {
+                        mesh.userData.walkTarget = null;
+                    }
+                }
+                
+                // Idle animation - slight bobbing
+                mesh.position.y = Math.sin(Date.now() * 0.002 + index) * 0.05;
+                
+                // Slight rotation when idle
+                if (!mesh.userData.walkTarget) {
+                    mesh.rotation.y += 0.001;
+                }
+            });
+            
+            // Follow selected minion
+            if (followingMinion && selectedMinion) {
+                const pos = selectedMinion.mesh.position;
+                cameraController.target.x = pos.x;
+                cameraController.target.z = pos.z;
+                cameraController.position.x = pos.x + 10;
+                cameraController.position.z = pos.z + 10;
+                updateCameraPosition();
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // Control Functions
+        function cityOverview() { cameraController = { position: { x: 0, y: 50, z: 50 }, target: { x: 0, y: 0, z: 0 } }; followingMinion = false; updateCameraPosition(); log('City overview mode'); }
+        function followSelected() { if (selectedMinion) { followingMinion = true; log('Following ' + selectedMinion.minion.id); } }
+        function aerialView() { cameraController = { position: { x: 0, y: 80, z: 0 }, target: { x: 0, y: 0, z: 0 } }; followingMinion = false; updateCameraPosition(); log('Aerial view'); }
+        function streetLevel() { cameraController = { position: { x: 5, y: 3, z: 5 }, target: { x: 0, y: 0, z: 0 } }; followingMinion = false; updateCameraPosition(); log('Street level view'); }
+        function resetCamera() { cameraController = { position: { x: 0, y: 30, z: 50 }, target: { x: 0, y: 0, z: 0 } }; followingMinion = false; updateCameraPosition(); log('Camera reset'); }
+        function randomView() { const angle = Math.random() * Math.PI * 2; const distance = 30 + Math.random() * 30; cameraController.position.x = Math.cos(angle) * distance; cameraController.position.z = Math.sin(angle) * distance; updateCameraPosition(); log('Random view'); }
+        
+        function pauseTime() { gameTime.paused = true; log('Time paused'); }
+        function normalSpeed() { gameTime.speed = 1; gameTime.paused = false; log('Normal time speed'); }
+        function fastTime() { gameTime.speed = 5; gameTime.paused = false; log('Fast time mode'); }
+        function skipToEvening() { gameTime.hour = 18; gameTime.minute = 0; log('Skipped to evening'); }
+        function skipToNight() { gameTime.hour = 22; gameTime.minute = 0; log('Skipped to night'); }
+        function newDay() { gameTime.day++; gameTime.hour = 8; gameTime.minute = 0; log('New day started!'); }
+        
+        function showBuildings() { log('Building view enabled'); }
+        function showRoads() { log('Road network highlighted'); }
+        function showParks() { log('Parks and recreation areas shown'); }
+        function showWorkplaces() { log('Workplace locations highlighted'); }
+        function addDecorations() { log('City decorations added'); }
+        function weatherEffects() { log('Weather effects enabled'); }
+        
+        function selectRandomCitizen() { const minion = minions[Math.floor(Math.random() * minions.length)]; const mesh = minionMeshes.find(m => m.userData.minion.id === minion.id); if (mesh) selectMinion(minion, mesh); }
+        function gatherCitizens() { minionMeshes.forEach(mesh => { mesh.userData.walkTarget = { x: 0, z: 0 }; }); log('Citizens gathering at center'); }
+        function scatterCitizens() { minionMeshes.forEach(mesh => { mesh.userData.walkTarget = { x: (Math.random() - 0.5) * 80, z: (Math.random() - 0.5) * 80 }; }); log('Citizens scattering around city'); }
+        function happyMode() { minions.forEach(m => m.ai.mood = Math.min(100, m.ai.mood + 20)); log('Citizens are happier!'); }
+        function workMode() { minions.forEach(m => m.ai.currentActivity = 'Working hard'); log('All citizens working'); }
+        function relaxMode() { minions.forEach(m => m.ai.currentActivity = 'Relaxing'); log('Citizens relaxing'); }
+
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            if (typeof THREE !== 'undefined') {
+                init();
+            } else {
+                document.getElementById('loading').innerHTML = '<div class="error">Three.js failed to load</div>';
+            }
+        });
+    </script>
+</body>
+</html>
