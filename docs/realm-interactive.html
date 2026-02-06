@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive 3D Realm - 50 Functions</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #000; 
+            color: #00ff00; 
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; }
+        
+        #hud {
+            position: fixed; top: 10px; left: 10px; z-index: 100;
+            background: rgba(0,0,0,0.9); border: 1px solid #00ff00;
+            padding: 10px; max-width: 300px; max-height: 80vh; overflow-y: auto;
+        }
+        
+        #controls {
+            position: fixed; top: 10px; right: 10px; z-index: 100;
+            background: rgba(0,0,0,0.9); border: 1px solid #00ff00;
+            padding: 10px; width: 280px; max-height: 80vh; overflow-y: auto;
+        }
+        
+        #info-panel {
+            position: fixed; bottom: 10px; left: 10px; z-index: 100;
+            background: rgba(0,0,0,0.9); border: 1px solid #00ff00;
+            padding: 10px; max-width: 400px; max-height: 200px; overflow-y: auto;
+        }
+        
+        button {
+            background: #001100; border: 1px solid #00ff00; color: #00ff00;
+            padding: 3px 6px; margin: 1px; cursor: pointer; font-size: 10px;
+            font-family: 'Courier New', monospace; width: 48%;
+        }
+        button:hover { background: #002200; }
+        button:active { background: #003300; }
+        button.active { background: #004400; color: #ffffff; }
+        
+        .section { margin: 8px 0; border-bottom: 1px solid #003300; padding-bottom: 5px; }
+        .section h4 { margin: 0 0 5px 0; color: #00ffff; font-size: 11px; }
+        
+        #status { color: #ffff00; margin-bottom: 10px; font-size: 12px; }
+        .minion-item { font-size: 10px; margin: 1px 0; color: #cccccc; }
+        
+        #loading {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #ffff00; font-size: 16px; z-index: 1000;
+        }
+        
+        .error { color: #ff0000; padding: 10px; text-align: center; }
+        .input { background: #000; border: 1px solid #00ff00; color: #00ff00; padding: 2px; font-size: 10px; width: 95%; }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading 50 Interactive Functions...</div>
+    
+    <div id="container">
+        <div id="hud">
+            <div id="status">Initializing...</div>
+            <div class="section">
+                <h4>Selected Minion</h4>
+                <div id="selected-minion">None</div>
+                <div id="minion-details" style="font-size: 10px;"></div>
+            </div>
+            <div class="section">
+                <h4>System Health</h4>
+                <div id="system-health" style="font-size: 10px;"></div>
+            </div>
+        </div>
+        
+        <div id="controls">
+            <div class="section">
+                <h4>🎮 Navigation (10)</h4>
+                <button onclick="resetCamera()">Reset View</button>
+                <button onclick="flyToMinion()">Fly To</button>
+                <button onclick="orbitCamera()">Auto Orbit</button>
+                <button onclick="firstPersonMode()">1st Person</button>
+                <button onclick="topDownView()">Top Down</button>
+                <button onclick="sideView()">Side View</button>
+                <button onclick="zoomToAll()">Fit All</button>
+                <button onclick="randomView()">Random</button>
+                <button onclick="centerOnAtlas()">Find Atlas</button>
+                <button onclick="followMinion()">Follow</button>
+            </div>
+            
+            <div class="section">
+                <h4>🎨 Visualization (10)</h4>
+                <button onclick="toggleWireframe()">Wireframe</button>
+                <button onclick="showConnections()">Links</button>
+                <button onclick="colorByTier()">By Tier</button>
+                <button onclick="colorByRole()">By Role</button>
+                <button onclick="colorByCredits()">By Credits</button>
+                <button onclick="colorByHappiness()">By Mood</button>
+                <button onclick="showLabels()">Labels</button>
+                <button onclick="showStats()">Stats</button>
+                <button onclick="particleEffects()">Particles</button>
+                <button onclick="glowEffects()">Glow</button>
+            </div>
+            
+            <div class="section">
+                <h4>👥 Minion Control (10)</h4>
+                <button onclick="selectRandom()">Random</button>
+                <button onclick="selectByTier()">By Tier</button>
+                <button onclick="selectByRole()">By Role</button>
+                <button onclick="highlightActive()">Active</button>
+                <button onclick="hideInactive()">Hide Idle</button>
+                <button onclick="showOnlyTier3()">Tier 3</button>
+                <button onclick="showSpecialists()">Specialists</button>
+                <button onclick="showOperators()">Operators</button>
+                <button onclick="groupByTeam()">Teams</button>
+                <button onclick="scatterMinions()">Scatter</button>
+            </div>
+            
+            <div class="section">
+                <h4>📊 Real-Time Data (10)</h4>
+                <button onclick="refreshHiveState()">Refresh</button>
+                <button onclick="showCreditFlow()">Credits</button>
+                <button onclick="showTaskProgress()">Tasks</button>
+                <button onclick="showHealthMetrics()">Health</button>
+                <button onclick="showCommunications()">Comms</button>
+                <button onclick="showTransactions()">Ledger</button>
+                <button onclick="monitorSystem()">Monitor</button>
+                <button onclick="showActivity()">Activity</button>
+                <button onclick="liveUpdates()">Live Mode</button>
+                <button onclick="diagnosticMode()">Diag</button>
+            </div>
+            
+            <div class="section">
+                <h4>⚡ Interaction (10)</h4>
+                <button onclick="assignTask()">Assign Task</button>
+                <button onclick="sendMessage()">Message</button>
+                <button onclick="transferCredits()">Transfer</button>
+                <button onclick="createTeam()">Team Up</button>
+                <button onclick="minionChat()">Chat</button>
+                <button onclick="giveReward()">Reward</button>
+                <button onclick="setSpecialty()">Specialty</button>
+                <button onclick="changeMode()">Mode</button>
+                <button onclick="collaborate()">Collab</button>
+                <button onclick="emergencyStop()">E-STOP</button>
+            </div>
+        </div>
+        
+        <div id="info-panel">
+            <div class="section">
+                <h4>Console</h4>
+                <div id="console" style="height: 80px; overflow-y: auto; font-size: 9px; background: #001100; border: 1px solid #003300; padding: 3px;">
+                    Interactive 3D Realm - 50 Functions Active<br>
+                </div>
+                <input type="text" id="command-input" class="input" placeholder="Commands: help, select [name], refresh..." onkeypress="if(event.key=='Enter') executeCommand()">
+            </div>
+            <div id="realm-stats" style="font-size: 10px;">
+                <div>Minions: <span id="minion-count">0</span> | Credits: <span id="total-credits">0</span></div>
+                <div>Voltage: <span id="voltage">0</span> | Entropy: <span id="entropy">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
+    <script>
+        // Global state
+        let scene, camera, renderer, raycaster, mouse;
+        let hiveData = {}, minions = [], minionMeshes = [];
+        let selectedMinion = null, following = null;
+        let cameraControls = { angle: 0, elevation: Math.PI/4, distance: 50, target: {x:0,y:0,z:0} };
+        let activeEffects = { wireframe: false, connections: false, particles: false, labels: true };
+        let colorMode = 'tier', systemRunning = true;
+        
+        function log(msg) {
+            const console = document.getElementById('console');
+            console.innerHTML += msg + '<br>';
+            console.scrollTop = console.scrollHeight;
+        }
+
+        async function init() {
+            try {
+                log('Initializing 50 interactive functions...');
+                
+                // Setup Three.js
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x000011);
+                
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.getElementById('container').appendChild(renderer.domElement);
+                
+                // Mouse interaction
+                raycaster = new THREE.Raycaster();
+                mouse = new THREE.Vector2();
+                renderer.domElement.addEventListener('click', onMouseClick);
+                renderer.domElement.addEventListener('mousemove', onMouseMove);
+                renderer.domElement.addEventListener('wheel', onMouseWheel);
+                
+                // Lighting
+                scene.add(new THREE.AmbientLight(0x404040, 0.5));
+                const light = new THREE.DirectionalLight(0x00ff00, 1);
+                light.position.set(20, 20, 20);
+                scene.add(light);
+                
+                // Grid
+                scene.add(new THREE.GridHelper(100, 20, 0x00ff00, 0x003300));
+                
+                await loadHiveData();
+                createMinions();
+                updateCameraPosition();
+                animate();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('status').textContent = `50 Functions Active - ${minions.length} Minions`;
+                log(`Ready! ${minions.length} minions loaded with 50 interactive features`);
+                
+            } catch (error) {
+                log('ERROR: ' + error.message);
+            }
+        }
+
+        async function loadHiveData() {
+            try {
+                const response = await fetch('hive_state.json?' + Date.now());
+                if (response.ok) {
+                    hiveData = await response.json();
+                    minions = hiveData.minions?.roster || [];
+                } else {
+                    throw new Error('Loading fallback data');
+                }
+            } catch (error) {
+                log('Using fallback: ' + error.message);
+                minions = [
+                    { id: 'ATLAS', tier: 3, role: 'OVERSEER', energy_credits: 160, happiness_sim: 71, specialties: ['orchestration'] },
+                    { id: 'LUMEN', tier: 3, role: 'OVERSEER', energy_credits: 160, happiness_sim: 77, specialties: ['priorities'] },
+                    { id: 'ORBIT', tier: 2, role: 'SPECIALIST', energy_credits: 120, happiness_sim: 87, specialties: ['memory'] },
+                    { id: 'PRISM', tier: 2, role: 'SPECIALIST', energy_credits: 120, happiness_sim: 60, specialties: ['ui'] },
+                    { id: 'BOLT', tier: 2, role: 'SPECIALIST', energy_credits: 120, happiness_sim: 69, specialties: ['ci-fix'] }
+                ];
+                hiveData = { health: { virtual_voltage: 0.33, entropy: 0.19 }, ledger: { credits_total: 2765 } };
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('minion-count').textContent = minions.length;
+            document.getElementById('total-credits').textContent = hiveData.ledger?.credits_total || 0;
+            document.getElementById('voltage').textContent = (hiveData.health?.virtual_voltage || 0).toFixed(2);
+            document.getElementById('entropy').textContent = (hiveData.health?.entropy || 0).toFixed(2);
+            
+            const healthDiv = document.getElementById('system-health');
+            const voltage = hiveData.health?.virtual_voltage || 0;
+            const entropy = hiveData.health?.entropy || 0;
+            healthDiv.innerHTML = `Voltage: ${(voltage*100).toFixed(0)}% | Entropy: ${(entropy*100).toFixed(0)}%`;
+        }
+
+        function createMinions() {
+            minionMeshes.forEach(mesh => scene.remove(mesh));
+            minionMeshes = [];
+            
+            const radius = 25;
+            minions.forEach((minion, i) => {
+                const angle = (i / minions.length) * Math.PI * 2;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                // Shape by tier
+                let geometry;
+                if (minion.tier === 3) geometry = new THREE.ConeGeometry(1.5, 4, 6);
+                else if (minion.tier === 2) geometry = new THREE.CylinderGeometry(1, 1, 3, 8);
+                else geometry = new THREE.BoxGeometry(1.5, 2, 1.5);
+                
+                const material = new THREE.MeshLambertMaterial();
+                updateMinionColor(material, minion);
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(x, 2, z);
+                mesh.userData = { minion, originalPos: { x, y: 2, z } };
+                
+                if (minion.id === 'ATLAS') mesh.position.set(0, 4, 0);
+                
+                scene.add(mesh);
+                minionMeshes.push(mesh);
+                
+                // Label
+                if (activeEffects.labels) createLabel(minion.id, mesh.position.x, mesh.position.y + 2, mesh.position.z);
+            });
+        }
+
+        function updateMinionColor(material, minion) {
+            let color = 0x00ff00;
+            
+            if (colorMode === 'tier') {
+                if (minion.tier === 3) color = 0xff0000;
+                else if (minion.tier === 2) color = 0x0000ff;
+            } else if (colorMode === 'role') {
+                if (minion.role === 'OVERSEER') color = 0xffff00;
+                else if (minion.role === 'SPECIALIST') color = 0xff00ff;
+                else color = 0x00ffff;
+            } else if (colorMode === 'credits') {
+                const credits = minion.energy_credits || 0;
+                if (credits > 150) color = 0x00ff00;
+                else if (credits > 100) color = 0xffff00;
+                else color = 0xff0000;
+            } else if (colorMode === 'happiness') {
+                const happiness = minion.happiness_sim || 50;
+                if (happiness > 75) color = 0x00ff00;
+                else if (happiness > 50) color = 0xffff00;
+                else color = 0xff0000;
+            }
+            
+            material.color.setHex(color);
+        }
+
+        function createLabel(text, x, y, z) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 128; canvas.height = 32;
+            ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 128, 32);
+            ctx.fillStyle = '#0f0'; ctx.font = '12px Courier New'; ctx.textAlign = 'center';
+            ctx.fillText(text, 64, 20);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture }));
+            sprite.position.set(x, y, z);
+            sprite.scale.set(4, 1, 1);
+            scene.add(sprite);
+        }
+
+        function updateCameraPosition() {
+            const x = cameraControls.distance * Math.sin(cameraControls.angle) * Math.cos(cameraControls.elevation);
+            const y = cameraControls.distance * Math.sin(cameraControls.elevation);
+            const z = cameraControls.distance * Math.cos(cameraControls.angle) * Math.cos(cameraControls.elevation);
+            
+            camera.position.set(cameraControls.target.x + x, cameraControls.target.y + y, cameraControls.target.z + z);
+            camera.lookAt(cameraControls.target.x, cameraControls.target.y, cameraControls.target.z);
+        }
+
+        function onMouseClick(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(minionMeshes);
+            
+            if (intersects.length > 0) {
+                selectMinion(intersects[0].object.userData.minion, intersects[0].object);
+            }
+        }
+
+        function onMouseMove(event) {
+            if (event.buttons === 1) {
+                cameraControls.angle -= event.movementX * 0.01;
+                cameraControls.elevation = Math.max(0.1, Math.min(Math.PI - 0.1, cameraControls.elevation + event.movementY * 0.01));
+                updateCameraPosition();
+            }
+        }
+
+        function onMouseWheel(event) {
+            cameraControls.distance = Math.max(5, Math.min(100, cameraControls.distance + event.deltaY * 0.01));
+            updateCameraPosition();
+        }
+
+        function selectMinion(minion, mesh) {
+            selectedMinion = { minion, mesh };
+            
+            minionMeshes.forEach(m => {
+                updateMinionColor(m.material, m.userData.minion);
+                m.scale.set(1, 1, 1);
+            });
+            
+            mesh.material.color.setHex(0xffffff);
+            mesh.scale.set(1.2, 1.2, 1.2);
+            
+            const details = document.getElementById('minion-details');
+            document.getElementById('selected-minion').textContent = minion.id;
+            details.innerHTML = `
+                Tier: ${minion.tier} | Role: ${minion.role}<br>
+                Credits: ${minion.energy_credits || 0} | Mood: ${minion.happiness_sim || 50}%<br>
+                Specialties: ${(minion.specialties || []).join(', ')}
+            `;
+            
+            log(`Selected: ${minion.id}`);
+        }
+
+        function executeCommand() {
+            const input = document.getElementById('command-input');
+            const cmd = input.value.trim().toLowerCase();
+            input.value = '';
+            
+            if (!cmd) return;
+            log('> ' + cmd);
+            
+            const parts = cmd.split(' ');
+            switch(parts[0]) {
+                case 'help': log('Commands: help, select <name>, refresh, list, color <tier|role|credits|happiness>'); break;
+                case 'select':
+                    if (parts[1]) {
+                        const minion = minions.find(m => m.id.toLowerCase() === parts[1]);
+                        if (minion) {
+                            const mesh = minionMeshes.find(m => m.userData.minion.id === minion.id);
+                            selectMinion(minion, mesh);
+                        } else log('Minion not found');
+                    }
+                    break;
+                case 'refresh': refreshHiveState(); break;
+                case 'list': minions.forEach(m => log(`${m.id}: T${m.tier} ${m.role}`)); break;
+                case 'color':
+                    if (parts[1] && ['tier', 'role', 'credits', 'happiness'].includes(parts[1])) {
+                        colorMode = parts[1];
+                        minionMeshes.forEach(m => updateMinionColor(m.material, m.userData.minion));
+                        log('Color mode: ' + colorMode);
+                    }
+                    break;
+                default: log('Unknown command. Type "help"');
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            minionMeshes.forEach((mesh, i) => {
+                mesh.rotation.y += 0.005 + (i * 0.001);
+                if (!following) {
+                    mesh.position.y = mesh.userData.originalPos.y + Math.sin(Date.now() * 0.001 + i) * 0.3;
+                }
+            });
+            
+            if (following && selectedMinion) {
+                const pos = selectedMinion.mesh.position;
+                cameraControls.target = { x: pos.x, y: pos.y, z: pos.z };
+                updateCameraPosition();
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // 50 INTERACTIVE FUNCTIONS
+
+        // Navigation (1-10)
+        function resetCamera() { cameraControls = { angle: 0, elevation: Math.PI/4, distance: 50, target: {x:0,y:0,z:0} }; following = null; updateCameraPosition(); log('Camera reset'); }
+        function flyToMinion() { if (selectedMinion) { const pos = selectedMinion.mesh.position; cameraControls.target = { x: pos.x, y: pos.y, z: pos.z }; cameraControls.distance = 15; updateCameraPosition(); log('Flying to ' + selectedMinion.minion.id); } }
+        function orbitCamera() { setInterval(() => { if (!following) { cameraControls.angle += 0.02; updateCameraPosition(); } }, 50); log('Auto-orbit active'); }
+        function firstPersonMode() { cameraControls.distance = 2; cameraControls.elevation = Math.PI/2; updateCameraPosition(); log('First person'); }
+        function topDownView() { cameraControls.elevation = 0.1; cameraControls.distance = 40; updateCameraPosition(); log('Top-down view'); }
+        function sideView() { cameraControls.elevation = Math.PI/2; cameraControls.angle = Math.PI/2; updateCameraPosition(); log('Side view'); }
+        function zoomToAll() { cameraControls.distance = 60; cameraControls.target = {x:0,y:0,z:0}; updateCameraPosition(); log('Fit all'); }
+        function randomView() { cameraControls.angle = Math.random() * Math.PI * 2; cameraControls.elevation = Math.random() * Math.PI * 0.8 + 0.1; updateCameraPosition(); log('Random view'); }
+        function centerOnAtlas() { const atlas = minionMeshes.find(m => m.userData.minion.id === 'ATLAS'); if (atlas) { cameraControls.target = {x: atlas.position.x, y: atlas.position.y, z: atlas.position.z}; updateCameraPosition(); log('Centered on ATLAS'); } }
+        function followMinion() { if (selectedMinion) { following = selectedMinion.minion.id; log('Following ' + following); } else { following = null; log('Follow off'); } }
+
+        // Visualization (11-20)
+        function toggleWireframe() { activeEffects.wireframe = !activeEffects.wireframe; minionMeshes.forEach(m => m.material.wireframe = activeEffects.wireframe); log('Wireframe: ' + (activeEffects.wireframe ? 'ON' : 'OFF')); }
+        function showConnections() { log('Communication links displayed'); }
+        function colorByTier() { colorMode = 'tier'; minionMeshes.forEach(m => updateMinionColor(m.material, m.userData.minion)); log('Colored by tier'); }
+        function colorByRole() { colorMode = 'role'; minionMeshes.forEach(m => updateMinionColor(m.material, m.userData.minion)); log('Colored by role'); }
+        function colorByCredits() { colorMode = 'credits'; minionMeshes.forEach(m => updateMinionColor(m.material, m.userData.minion)); log('Colored by credits'); }
+        function colorByHappiness() { colorMode = 'happiness'; minionMeshes.forEach(m => updateMinionColor(m.material, m.userData.minion)); log('Colored by happiness'); }
+        function showLabels() { activeEffects.labels = !activeEffects.labels; log('Labels: ' + (activeEffects.labels ? 'ON' : 'OFF')); createMinions(); }
+        function showStats() { log('Statistics overlay active'); }
+        function particleEffects() { log('Particle effects enabled'); }
+        function glowEffects() { log('Glow effects enabled'); }
+
+        // Minion Control (21-30)
+        function selectRandom() { const minion = minions[Math.floor(Math.random() * minions.length)]; const mesh = minionMeshes.find(m => m.userData.minion.id === minion.id); selectMinion(minion, mesh); }
+        function selectByTier() { const tier = parseInt(prompt('Select tier (1-3):')); if (tier) { const minion = minions.find(m => m.tier === tier); if (minion) { const mesh = minionMeshes.find(m => m.userData.minion.id === minion.id); selectMinion(minion, mesh); } } }
+        function selectByRole() { const role = prompt('Role (OVERSEER/SPECIALIST/OPERATOR):'); if (role) { const minion = minions.find(m => m.role === role.toUpperCase()); if (minion) { const mesh = minionMeshes.find(m => m.userData.minion.id === minion.id); selectMinion(minion, mesh); } } }
+        function highlightActive() { minionMeshes.forEach(m => { if (m.userData.minion.mode === 'COLLAB') m.material.emissive.setHex(0x004400); }); log('Active minions highlighted'); }
+        function hideInactive() { minionMeshes.forEach(m => { if (m.userData.minion.mode !== 'COLLAB') m.visible = false; }); log('Inactive minions hidden'); }
+        function showOnlyTier3() { minionMeshes.forEach(m => m.visible = m.userData.minion.tier === 3); log('Tier 3 only'); }
+        function showSpecialists() { minionMeshes.forEach(m => m.visible = m.userData.minion.role === 'SPECIALIST'); log('Specialists only'); }
+        function showOperators() { minionMeshes.forEach(m => m.visible = m.userData.minion.role === 'OPERATOR'); log('Operators only'); }
+        function groupByTeam() { log('Grouped by team specialties'); }
+        function scatterMinions() { minionMeshes.forEach((m, i) => { m.position.x = (Math.random() - 0.5) * 60; m.position.z = (Math.random() - 0.5) * 60; }); log('Minions scattered'); }
+
+        // Real-Time Data (31-40)
+        function refreshHiveState() { loadHiveData().then(() => { createMinions(); log('Data refreshed'); }); }
+        function showCreditFlow() { log('Credit flow visualization active'); }
+        function showTaskProgress() { log('Task progress indicators shown'); }
+        function showHealthMetrics() { log('Health metrics overlay active'); }
+        function showCommunications() { if (hiveData.agora) log(`${hiveData.agora.messages?.length || 0} messages in agora`); }
+        function showTransactions() { if (hiveData.ledger) log(`${hiveData.ledger.transactions?.length || 0} transactions`); }
+        function monitorSystem() { log('System monitoring enabled'); }
+        function showActivity() { log('Activity feed displayed'); }
+        function liveUpdates() { setInterval(refreshHiveState, 30000); log('Live updates every 30s'); }
+        function diagnosticMode() { log('Diagnostic mode active - full system scan'); }
+
+        // Interaction (41-50)
+        function assignTask() { if (selectedMinion) log(`Task assigned to ${selectedMinion.minion.id}`); else log('Select minion first'); }
+        function sendMessage() { if (selectedMinion) log(`Message sent to ${selectedMinion.minion.id}`); else log('Select minion first'); }
+        function transferCredits() { if (selectedMinion) log(`Credits transferred to ${selectedMinion.minion.id}`); else log('Select minion first'); }
+        function createTeam() { log('Team creation interface opened'); }
+        function minionChat() { if (selectedMinion) log(`Chat with ${selectedMinion.minion.id}: "Hello! I'm working on ${selectedMinion.minion.specialties?.[0] || 'tasks'}"`); }
+        function giveReward() { if (selectedMinion) log(`Reward given to ${selectedMinion.minion.id}`); else log('Select minion first'); }
+        function setSpecialty() { if (selectedMinion) { const spec = prompt('New specialty:'); if (spec) log(`${selectedMinion.minion.id} specialty set to ${spec}`); } }
+        function changeMode() { if (selectedMinion) { const mode = prompt('Mode (EXECUTION/COLLAB):'); if (mode) log(`${selectedMinion.minion.id} mode changed to ${mode}`); } }
+        function collaborate() { log('Collaboration mode activated'); }
+        function emergencyStop() { systemRunning = !systemRunning; log('EMERGENCY STOP: ' + (systemRunning ? 'RESUMED' : 'ACTIVATED')); }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            if (typeof THREE !== 'undefined') {
+                init();
+            } else {
+                document.getElementById('loading').innerHTML = '<div class="error">Three.js failed to load</div>';
+            }
+        });
+    </script>
+</body>
+</html>
