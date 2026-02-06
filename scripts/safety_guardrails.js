@@ -70,6 +70,7 @@ class SafetyGuardrails {
         await this.checkFileProtection();
         await this.checkFeatureIntegrity();
         await this.checkButtonLinks();
+        await this.checkFakeSystemPrevention();
         
         if (this.violations.length > 0) {
             console.log('\n🚨 SAFETY VIOLATIONS DETECTED!');
@@ -87,6 +88,90 @@ class SafetyGuardrails {
         
         console.log('\n✅ SAFETY GUARDRAILS PASSED - Proceed with confidence!');
         return true;
+    }
+
+    async checkFakeSystemPrevention() {
+        console.log('🚫 Checking for fake system creation...');
+        
+        // Real minion names from hive_state.json (ONLY these are allowed)
+        const realMinionNames = [
+            'ATLAS', 'LUMEN', 'ORBIT', 'PRISM', 'BOLT', 'SABLE', 'NOVA', 'EMBER', 'RUNE', 'AURORA',
+            'FORGE', 'KITE', 'SENTRY', 'GLINT', 'MOSS', 'DELTA', 'SAGE', 'WREN', 'HAMMER', 'VAULT',
+            'ECHO', 'SPARROW', 'QUILL', 'ALPHA', 'BETA', 'CIPHER', 'COMET', 'DRIFT', 'EQUINOX', 'FABLE',
+            'GHOST', 'HELIX', 'ION', 'IRIS', 'JADE', 'JOLT', 'KODIAK', 'NIMBUS', 'ONYX', 'TALON',
+            'THORN', 'UMBRA', 'URSA', 'VEGA', 'WHISPER', 'XENO', 'YARROW', 'YONDER', 'ZENITH', 'ZEPHYR'
+        ];
+
+        // Fake patterns that should trigger violations
+        const fakePatterns = [
+            'MINION-\\d+',     // MINION-001, MINION-099
+            'NOVA-[A-Z0-9]+',  // NOVA-X1, NOVA-PRO  
+            'TITAN-[A-Z0-9]+', // TITAN-MAX, TITAN-01
+            'FAKE-[A-Z0-9]+',  // FAKE-DATA, FAKE-01
+            'TEST-[A-Z0-9]+',  // TEST-USER, TEST-01
+            'DUMMY-[A-Z0-9]+'  // DUMMY-DATA, DUMMY-01
+        ];
+
+        // Suspicious hardcoded numbers (common fake statistics)
+        const suspiciousNumbers = [
+            2847,   // Fake CER products count  
+            8541,   // Fake spec sheets
+            15234,  // Fake pages processed
+            89567,  // Fake specs extracted
+            3216,   // Fake installation manuals
+            847,    // Fake solar panel models
+            324,    // Fake inverter models
+            156     // Fake battery models
+        ];
+
+        // Check all JavaScript and HTML files
+        const docsDir = path.join(__dirname, '../docs');
+        const jsFiles = fs.readdirSync(docsDir).filter(f => f.endsWith('.js') || f.endsWith('.html'));
+        
+        for (const file of jsFiles) {
+            const filePath = path.join(docsDir, file);
+            if (!fs.existsSync(filePath)) continue;
+            
+            const content = fs.readFileSync(filePath, 'utf8');
+            
+            // Check for fake minion name patterns
+            for (const pattern of fakePatterns) {
+                const regex = new RegExp(pattern, 'g');
+                const matches = content.match(regex);
+                if (matches) {
+                    this.violations.push(`FAKE MINION NAMES in ${file}: Found ${matches.join(', ')} - Must use real minion names from hive_state.json only!`);
+                }
+            }
+            
+            // Check for hardcoded suspicious numbers
+            for (const number of suspiciousNumbers) {
+                const regex = new RegExp(`\\b${number}\\b`, 'g');
+                const matches = content.match(regex);
+                if (matches) {
+                    this.violations.push(`HARDCODED FAKE DATA in ${file}: Found suspicious number ${number} - Must load real data from JSON files!`);
+                }
+            }
+            
+            // Check for duplicate minion array creation
+            if (content.includes('const minions = [') || content.includes('let minions = [')) {
+                this.violations.push(`DUPLICATE MINION CREATION in ${file}: Creating new minion arrays not allowed - Must use hive_state.json!`);
+            }
+            
+            // Check for fake data file creation
+            if (content.includes('minion-data.json') || content.includes('fake-roster.json') || content.includes('new-minions.json')) {
+                this.violations.push(`SEPARATE DATA FILE in ${file}: Creating separate minion data files not allowed - Must use hive_state.json!`);
+            }
+        }
+        
+        // Check for creation of new JSON data files that duplicate existing functionality
+        const jsonFiles = fs.readdirSync(docsDir).filter(f => f.endsWith('.json'));
+        const allowedJsonFiles = ['hive_state.json', 'cer-product-database.json', 'status.json', 'agora.json'];
+        
+        for (const jsonFile of jsonFiles) {
+            if (!allowedJsonFiles.includes(jsonFile) && (jsonFile.includes('minion') || jsonFile.includes('roster'))) {
+                this.violations.push(`DUPLICATE DATA FILE: ${jsonFile} - New minion data files not allowed, use hive_state.json!`);
+            }
+        }
     }
 
     async createBackup() {
