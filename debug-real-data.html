@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Real Data Integration</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .section { background: white; margin: 10px 0; padding: 15px; border-radius: 8px; }
+        .error { color: red; }
+        .success { color: green; }
+        .debug { background: #f0f8ff; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .credit-card { background: #e8f5e8; padding: 10px; margin: 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Real Data Integration Debug</h1>
+    
+    <div class="section">
+        <h2>1. Loading hive_state.json</h2>
+        <div id="hive-status">Loading...</div>
+        <div id="hive-debug"></div>
+    </div>
+    
+    <div class="section">
+        <h2>2. Loading cer-product-database.json</h2>
+        <div id="cer-status">Loading...</div>
+        <div id="cer-debug"></div>
+    </div>
+    
+    <div class="section">
+        <h2>3. Real Credit Calculation</h2>
+        <div id="credits-calculation">Calculating...</div>
+        <div id="credits-debug"></div>
+    </div>
+    
+    <div class="section">
+        <h2>4. CER Products with PDF Links</h2>
+        <div id="products-display">Loading...</div>
+    </div>
+
+    <script>
+        async function debugRealDataIntegration() {
+            console.log('🔧 Starting real data debug...');
+            
+            // 1. Test hive_state.json loading
+            try {
+                const hiveResponse = await fetch('./hive_state.json');
+                if (!hiveResponse.ok) throw new Error(`HTTP ${hiveResponse.status}`);
+                
+                const hiveData = await hiveResponse.json();
+                
+                document.getElementById('hive-status').innerHTML = '<span class="success">✅ Successfully loaded hive_state.json</span>';
+                
+                // Calculate real credits
+                const minions = hiveData.minions?.roster || [];
+                const totalCredits = minions.reduce((sum, minion) => sum + (minion.energy_credits || minion.credits || 0), 0);
+                
+                document.getElementById('hive-debug').innerHTML = `
+                    <div class="debug">
+                        <strong>Minions Found:</strong> ${minions.length}<br>
+                        <strong>Real Total Credits:</strong> ${totalCredits.toLocaleString()}<br>
+                        <strong>First 5 minions:</strong><br>
+                        ${minions.slice(0, 5).map(m => `
+                            <div class="credit-card">
+                                ${m.id}: ${m.energy_credits || m.credits || 0} credits, tier ${m.tier}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                document.getElementById('credits-calculation').innerHTML = `
+                    <strong>REAL TOTAL:</strong> ${totalCredits.toLocaleString()} credits<br>
+                    <strong>Daily Earnings:</strong> ${Math.floor(totalCredits * 0.15).toLocaleString()}<br>
+                    <strong>Spec Sheets Mastered:</strong> ${Math.floor(totalCredits / 10)}<br>
+                    <em>(This should replace fake 45,820 in the main interface!)</em>
+                `;
+                
+            } catch (error) {
+                document.getElementById('hive-status').innerHTML = `<span class="error">❌ Failed to load hive_state.json: ${error.message}</span>`;
+                document.getElementById('hive-debug').innerHTML = `<div class="debug error">Error: ${error.stack}</div>`;
+            }
+            
+            // 2. Test CER products loading
+            try {
+                const cerResponse = await fetch('./cer-product-database.json');
+                if (!cerResponse.ok) throw new Error(`HTTP ${cerResponse.status}`);
+                
+                const cerData = await cerResponse.json();
+                
+                document.getElementById('cer-status').innerHTML = '<span class="success">✅ Successfully loaded cer-product-database.json</span>';
+                
+                const totalProducts = cerData.metadata?.totalProducts || 0;
+                const categories = cerData.categories || {};
+                
+                let productsWithDocs = 0;
+                let productCards = '';
+                
+                Object.entries(categories).forEach(([categoryName, products]) => {
+                    products.forEach(product => {
+                        const hasDocuments = product.documents && Object.keys(product.documents).length > 0;
+                        if (hasDocuments) productsWithDocs++;
+                        
+                        productCards += `
+                            <div style="border: 1px solid #ddd; margin: 10px 0; padding: 10px; border-radius: 4px;">
+                                <h4>${product.manufacturer} ${product.model}</h4>
+                                <p><strong>Category:</strong> ${product.category} | <strong>CER Approved:</strong> ${product.cerApproved ? '✅' : '❌'}</p>
+                                ${hasDocuments ? `
+                                    <div><strong>📚 Available PDFs:</strong></div>
+                                    ${Object.entries(product.documents).map(([type, url]) => `
+                                        <div>
+                                            <a href="${url}" target="_blank" style="background: #007cba; color: white; padding: 5px 10px; text-decoration: none; border-radius: 4px; margin: 2px; display: inline-block;">
+                                                📄 ${type}
+                                            </a>
+                                            <span style="font-size: 0.8em; color: #666;">${url}</span>
+                                        </div>
+                                    `).join('')}
+                                ` : '<em>No documentation available</em>'}
+                            </div>
+                        `;
+                    });
+                });
+                
+                document.getElementById('cer-debug').innerHTML = `
+                    <div class="debug">
+                        <strong>Real Total Products:</strong> ${totalProducts}<br>
+                        <strong>Products with PDFs:</strong> ${productsWithDocs}<br>
+                        <strong>Categories:</strong> ${Object.keys(categories).map(cat => `${cat}: ${categories[cat].length}`).join(', ')}<br>
+                        <em>(This should replace fake 2,859 in the main interface!)</em>
+                    </div>
+                `;
+                
+                document.getElementById('products-display').innerHTML = productCards;
+                
+            } catch (error) {
+                document.getElementById('cer-status').innerHTML = `<span class="error">❌ Failed to load cer-product-database.json: ${error.message}</span>`;
+                document.getElementById('cer-debug').innerHTML = `<div class="debug error">Error: ${error.stack}</div>`;
+            }
+        }
+
+        // Run debug on page load
+        document.addEventListener('DOMContentLoaded', debugRealDataIntegration);
+    </script>
+</body>
+</html>

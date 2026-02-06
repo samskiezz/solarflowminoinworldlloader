@@ -40,11 +40,13 @@ class AutonomousMinionSystem {
 
     async loadRealMinions() {
         // Load ACTUAL minions from hive_state.json - no fake minions!
+        console.log('📥 Loading real minions from hive_state.json...');
         try {
             const response = await fetch('./hive_state.json');
-            if (!response.ok) throw new Error('Failed to load hive state');
+            if (!response.ok) throw new Error(`HTTP ${response.status}: Failed to load hive state`);
             
             const hiveData = await response.json();
+            console.log('📊 Hive data loaded:', hiveData);
             
             if (!hiveData.minions || !hiveData.minions.roster) {
                 throw new Error('No minions found in hive state');
@@ -86,6 +88,11 @@ class AutonomousMinionSystem {
             }));
             
             console.log(`✅ Loaded ${this.minions.length} REAL minions from hive state`);
+            
+            // Calculate REAL total credits immediately and log
+            const totalCredits = this.minions.reduce((sum, minion) => sum + (minion.credits || 0), 0);
+            console.log(`💰 REAL total credits: ${totalCredits} (should replace fake 45,820)`);
+            
             return true;
             
         } catch (error) {
@@ -209,10 +216,12 @@ class AutonomousMinionSystem {
 
     async loadRealCERProducts() {
         // Load real CER products from scraped database
+        console.log('📥 Loading real CER products from cer-product-database.json...');
         try {
             const response = await fetch('./cer-product-database.json');
             if (response.ok) {
                 const cerData = await response.json();
+                console.log('📊 CER database loaded:', cerData);
                 
                 // Flatten all products from categories
                 this.products = [];
@@ -1326,11 +1335,18 @@ class AutonomousMinionSystem {
 
     updateRealStatistics() {
         // Update with REAL data from loaded sources
+        console.log('🔄 Updating interface with real statistics...');
         
         // CER Products - use real data
         const cerProductCount = this.cerDatabase?.metadata?.totalProducts || this.products?.length || 12;
+        console.log(`📊 Real CER products: ${cerProductCount} (replacing fake 2,859)`);
         const cerElement = document.getElementById('cerProductCount');
-        if (cerElement) cerElement.textContent = cerProductCount;
+        if (cerElement) {
+            cerElement.textContent = cerProductCount;
+            console.log('✅ Updated CER product count in interface');
+        } else {
+            console.log('❌ cerProductCount element not found');
+        }
         
         // Documents found - use real metadata
         const specSheetsFound = this.cerDatabase?.metadata?.documentsFound || 10;
@@ -1368,11 +1384,16 @@ class AutonomousMinionSystem {
     }
     
     updateEconomyData() {
-        if (!this.minions || this.minions.length === 0) return;
+        if (!this.minions || this.minions.length === 0) {
+            console.log('❌ No minions available for economy calculation');
+            return;
+        }
         
         // Calculate REAL total credits from all minions
         const totalCredits = this.minions.reduce((sum, minion) => sum + (minion.credits || 0), 0);
         const dailyEarnings = Math.floor(totalCredits * 0.15); // Estimate daily earnings
+        
+        console.log(`💰 Calculating real economy: ${totalCredits} total credits from ${this.minions.length} minions`);
         
         // Update economy display
         const totalCreditsEl = document.getElementById('totalCredits');
@@ -1556,5 +1577,17 @@ function resetKnowledge() {
 
 // Initialize the system when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    window.minionSystem = new AutonomousMinionSystem();
+    console.log('🚀 Initializing Autonomous Minion System...');
+    try {
+        window.minionSystem = new AutonomousMinionSystem();
+        console.log('✅ System initialized successfully');
+    } catch (error) {
+        console.error('❌ Failed to initialize system:', error);
+        // Show error in interface
+        document.body.insertAdjacentHTML('afterbegin', `
+            <div style="background: red; color: white; padding: 10px; margin: 10px; border-radius: 4px;">
+                ❌ System initialization failed: ${error.message}
+            </div>
+        `);
+    }
 });
