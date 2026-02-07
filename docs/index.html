@@ -797,6 +797,12 @@ All 18 systems functioning as designed with verified deployment
             console.log('🚀 Deployed: ' + DEPLOY_TIME);
             console.log('🎯 All 18 systems operational and verified');
             console.log('🧠 Neural optimization engine loading...');
+
+            // Load neural status display for immediate visual feedback
+            const statusScript = document.createElement('script');
+            statusScript.src = './neural-status-display.js';
+            statusScript.async = true;
+            document.head.appendChild(statusScript);
         });
     </script>
 </body>
