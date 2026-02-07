@@ -243,11 +243,11 @@
         "name": "Atlas Prime",
         "specialization": "System Orchestrator",
         "tier": 3,
-        "role": "OVERSEER", 
+        "role": "OVERSEER",
         "mode": "COLLAB",
         "specialties": [
           "orchestration",
-          "governance", 
+          "governance",
           "world-state"
         ],
         "energy_credits": 160,
@@ -272,7 +272,7 @@
         "specialization": "Priority Manager",
         "tier": 3,
         "role": "OVERSEER",
-        "mode": "COLLAB", 
+        "mode": "COLLAB",
         "specialties": [
           "priorities",
           "paradox-resolution",
