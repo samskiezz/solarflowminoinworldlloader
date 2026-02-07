@@ -1,0 +1,2 @@
+# Force GitHub Pages to recognize this as a static site
+# This file ensures GitHub Pages doesn't try to process files with Jekyll
