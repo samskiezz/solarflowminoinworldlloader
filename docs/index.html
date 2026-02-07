@@ -80,6 +80,11 @@
             border-top: 1px solid rgba(255,255,255,0.1);
         }
         
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(211, 47, 47, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(211, 47, 47, 0.9); }
+        }
+        
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .grid { grid-template-columns: 1fr; }
@@ -114,6 +119,7 @@
                     <button class="btn success" onclick="location.href='./project-solar-australia-WORKING.html'">⚡ Project Solar Australia</button>
                     <button class="btn" onclick="location.href='./enhanced-public-standards-system.html'">📖 Standards Database</button>
                     <button class="btn danger" onclick="location.href='./comprehensive-standards-harvester.html'">🔍 Harvester (1,846 Searches)</button>
+                    <button class="btn danger" onclick="location.href='./IMMEDIATE-STANDARDS-COLLECTION.html'" style="font-weight: 900; animation: pulse 2s infinite;">🚨 IMMEDIATE ACCESS</button>
                     <button class="btn warning" onclick="location.href='./cer-products.html'">🔌 CER Products</button>
                     <button class="btn special" onclick="location.href='./processed-documents.html'">📄 Documents</button>
                 </div>
