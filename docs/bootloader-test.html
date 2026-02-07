@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarFlow Bootloader Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: white; padding: 2rem; margin: 0;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .test-section {
+            background: rgba(255,255,255,0.1); padding: 1.5rem;
+            border-radius: 12px; margin: 1rem 0; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .status { padding: 0.5rem 1rem; border-radius: 8px; margin: 0.5rem 0; }
+        .success { background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; }
+        .error { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; }
+        .warning { background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; }
+        .data-display { 
+            background: #000; padding: 1rem; border-radius: 8px;
+            font-family: monospace; font-size: 0.9rem; margin: 1rem 0;
+            white-space: pre-wrap; overflow-x: auto;
+        }
+        button {
+            background: #1976d2; color: white; border: none; padding: 0.75rem 1.5rem;
+            border-radius: 8px; cursor: pointer; margin: 0.5rem; font-weight: 600;
+        }
+        button:hover { background: #1565c0; }
+        .back-btn { background: #6b7280; }
+        .back-btn:hover { background: #4b5563; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1>🚀 SolarFlow Bootloader Test</h1>
+            <a href="./index.html" style="text-decoration: none;">
+                <button class="back-btn">← Back to Main</button>
+            </a>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 Bootloader Detection</h2>
+            <div id="bootloader-status" class="status warning">
+                ⏳ Checking bootloader status...
+            </div>
+            <div id="bootloader-details"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>💾 Data Persistence Test</h2>
+            <p>This test saves data and checks if it persists across page reloads.</p>
+            <button onclick="saveTestData()">💾 Save Test Data</button>
+            <button onclick="loadTestData()">📂 Load Test Data</button>
+            <button onclick="clearTestData()">🗑️ Clear Test Data</button>
+            <div id="persistence-status" class="status warning">
+                ⏳ No test data saved yet
+            </div>
+            <div id="test-data-display" class="data-display"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 System State</h2>
+            <button onclick="showSystemState()">📋 Show Current State</button>
+            <button onclick="addTestActivity()">➕ Add Test Activity</button>
+            <div id="state-display" class="data-display"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Auto-Save Test</h2>
+            <p>This tests if the auto-save system is working.</p>
+            <button onclick="startAutoSaveTest()">▶️ Start Auto-Save Test</button>
+            <button onclick="stopAutoSaveTest()">⏹️ Stop Test</button>
+            <div id="autosave-log" class="data-display"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔄 Page Refresh Test</h2>
+            <p>Save some data, then refresh the page to see if it persists.</p>
+            <button onclick="saveRefreshTestData()">💾 Save & Prepare for Refresh</button>
+            <button onclick="window.location.reload()">🔄 Refresh Page</button>
+            <div id="refresh-test-status"></div>
+        </div>
+    </div>
+
+    <script>
+        let autoSaveTestInterval = null;
+        let autoSaveTestCounter = 0;
+
+        // Check bootloader status on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkBootloaderStatus, 1000);
+            setTimeout(checkForRefreshTestData, 500);
+        });
+
+        function checkBootloaderStatus() {
+            const statusEl = document.getElementById('bootloader-status');
+            const detailsEl = document.getElementById('bootloader-details');
+
+            if (window.SolarFlow && window.SolarFlow.bootloader) {
+                statusEl.className = 'status success';
+                statusEl.innerHTML = '✅ Bootloader detected and active!';
+                
+                const bootloader = window.SolarFlow.bootloader;
+                const details = `
+                    <strong>Bootloader Details:</strong>
+                    • Version: ${bootloader.version}
+                    • Initialized: ${bootloader.initialized}
+                    • Session ID: ${bootloader.sessionId}
+                    • Auto-save active: ${bootloader.autoSaveInterval ? 'Yes' : 'No'}
+                `;
+                detailsEl.innerHTML = details;
+            } else {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '❌ Bootloader not found! Data will not persist.';
+                detailsEl.innerHTML = '<strong>Issue:</strong> The SolarFlow bootloader is not available on this page.';
+            }
+        }
+
+        function saveTestData() {
+            const testData = {
+                message: 'This is test data from bootloader-test.html',
+                timestamp: new Date().toISOString(),
+                counter: Math.floor(Math.random() * 1000),
+                status: 'saved'
+            };
+
+            if (window.SolarFlow) {
+                window.SolarFlow.saveState({ testData });
+                document.getElementById('persistence-status').className = 'status success';
+                document.getElementById('persistence-status').innerHTML = '✅ Test data saved via bootloader!';
+            } else {
+                localStorage.setItem('bootloader-test-data', JSON.stringify(testData));
+                document.getElementById('persistence-status').className = 'status warning';
+                document.getElementById('persistence-status').innerHTML = '⚠️ Test data saved via localStorage (fallback)';
+            }
+
+            document.getElementById('test-data-display').textContent = JSON.stringify(testData, null, 2);
+        }
+
+        function loadTestData() {
+            let testData = null;
+
+            if (window.SolarFlow) {
+                const state = window.SolarFlow.getState();
+                testData = state.testData;
+                if (testData) {
+                    document.getElementById('persistence-status').className = 'status success';
+                    document.getElementById('persistence-status').innerHTML = '✅ Test data loaded via bootloader!';
+                } else {
+                    document.getElementById('persistence-status').className = 'status warning';
+                    document.getElementById('persistence-status').innerHTML = '⚠️ No test data found in bootloader state';
+                }
+            } else {
+                const stored = localStorage.getItem('bootloader-test-data');
+                if (stored) {
+                    testData = JSON.parse(stored);
+                    document.getElementById('persistence-status').className = 'status warning';
+                    document.getElementById('persistence-status').innerHTML = '⚠️ Test data loaded via localStorage (fallback)';
+                } else {
+                    document.getElementById('persistence-status').className = 'status error';
+                    document.getElementById('persistence-status').innerHTML = '❌ No test data found!';
+                }
+            }
+
+            document.getElementById('test-data-display').textContent = testData ? 
+                JSON.stringify(testData, null, 2) : 'No data found';
+        }
+
+        function clearTestData() {
+            if (window.SolarFlow) {
+                const state = window.SolarFlow.getState();
+                delete state.testData;
+                window.SolarFlow.saveState(state);
+            }
+            localStorage.removeItem('bootloader-test-data');
+            
+            document.getElementById('persistence-status').className = 'status warning';
+            document.getElementById('persistence-status').innerHTML = '🗑️ Test data cleared';
+            document.getElementById('test-data-display').textContent = '';
+        }
+
+        function showSystemState() {
+            let stateData = {};
+
+            if (window.SolarFlow) {
+                stateData = window.SolarFlow.getState();
+                document.getElementById('state-display').textContent = 
+                    'BOOTLOADER STATE:\n' + JSON.stringify(stateData, null, 2);
+            } else {
+                // Show localStorage data as fallback
+                const keys = Object.keys(localStorage);
+                for (const key of keys) {
+                    if (key.startsWith('solarflow') || key.includes('autonomous') || key.includes('test')) {
+                        try {
+                            stateData[key] = JSON.parse(localStorage.getItem(key));
+                        } catch {
+                            stateData[key] = localStorage.getItem(key);
+                        }
+                    }
+                }
+                document.getElementById('state-display').textContent = 
+                    'LOCALSTORAGE DATA:\n' + JSON.stringify(stateData, null, 2);
+            }
+        }
+
+        function addTestActivity() {
+            const activity = {
+                type: 'test',
+                message: 'Test activity from bootloader-test.html',
+                timestamp: Date.now()
+            };
+
+            if (window.SolarFlow) {
+                window.SolarFlow.addActivity(activity);
+                alert('✅ Test activity added to bootloader state!');
+            } else {
+                alert('❌ Bootloader not available - cannot add activity');
+            }
+        }
+
+        function startAutoSaveTest() {
+            if (autoSaveTestInterval) clearInterval(autoSaveTestInterval);
+            
+            autoSaveTestCounter = 0;
+            autoSaveTestInterval = setInterval(() => {
+                autoSaveTestCounter++;
+                const logEl = document.getElementById('autosave-log');
+                
+                if (window.SolarFlow) {
+                    const testState = {
+                        autoSaveTest: {
+                            counter: autoSaveTestCounter,
+                            timestamp: new Date().toISOString()
+                        }
+                    };
+                    window.SolarFlow.saveState(testState);
+                    
+                    logEl.textContent += `[${new Date().toLocaleTimeString()}] Auto-save test #${autoSaveTestCounter} - Saved via bootloader\n`;
+                } else {
+                    logEl.textContent += `[${new Date().toLocaleTimeString()}] Auto-save test #${autoSaveTestCounter} - Bootloader not available!\n`;
+                }
+                
+                // Scroll to bottom
+                logEl.scrollTop = logEl.scrollHeight;
+                
+            }, 3000); // Save every 3 seconds for testing
+            
+            document.getElementById('autosave-log').textContent = 'Auto-save test started...\n';
+        }
+
+        function stopAutoSaveTest() {
+            if (autoSaveTestInterval) {
+                clearInterval(autoSaveTestInterval);
+                autoSaveTestInterval = null;
+                document.getElementById('autosave-log').textContent += '\nAuto-save test stopped.\n';
+            }
+        }
+
+        function saveRefreshTestData() {
+            const refreshTestData = {
+                message: 'This data was saved before page refresh',
+                savedAt: new Date().toISOString(),
+                shouldPersist: true
+            };
+
+            if (window.SolarFlow) {
+                window.SolarFlow.saveState({ refreshTestData });
+                alert('✅ Data saved via bootloader! Now refresh the page to test persistence.');
+            } else {
+                localStorage.setItem('refresh-test-data', JSON.stringify(refreshTestData));
+                alert('⚠️ Data saved via localStorage! Now refresh the page to test persistence.');
+            }
+        }
+
+        function checkForRefreshTestData() {
+            let refreshData = null;
+            const statusEl = document.getElementById('refresh-test-status');
+
+            if (window.SolarFlow) {
+                const state = window.SolarFlow.getState();
+                refreshData = state.refreshTestData;
+                if (refreshData) {
+                    statusEl.innerHTML = `
+                        <div class="status success">
+                            ✅ Refresh test PASSED! Data persisted via bootloader.
+                            <div class="data-display">${JSON.stringify(refreshData, null, 2)}</div>
+                        </div>
+                    `;
+                }
+            } else {
+                const stored = localStorage.getItem('refresh-test-data');
+                if (stored) {
+                    refreshData = JSON.parse(stored);
+                    statusEl.innerHTML = `
+                        <div class="status warning">
+                            ⚠️ Refresh test partial - Data persisted via localStorage only.
+                            <div class="data-display">${JSON.stringify(refreshData, null, 2)}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (!refreshData) {
+                statusEl.innerHTML = `
+                    <div class="status warning">
+                        ℹ️ No refresh test data found. Run the refresh test above.
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
