@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Data System - Real Storage</title>
+    <style>
+        body { 
+            font-family: monospace; background: #000; color: #0f0; 
+            padding: 20px; margin: 0; 
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { border: 1px solid #0f0; padding: 20px; margin-bottom: 20px; }
+        .section { border: 1px solid #333; padding: 15px; margin: 10px 0; }
+        .button { 
+            background: #003300; color: #0f0; border: 1px solid #0f0;
+            padding: 8px 12px; margin: 5px; cursor: pointer; 
+        }
+        .button:hover { background: #006600; }
+        .input { 
+            background: #001100; color: #0f0; border: 1px solid #0f0;
+            padding: 8px; margin: 5px; 
+        }
+        .data-display { 
+            background: #001100; border: 1px solid #333; 
+            padding: 10px; margin: 10px 0; white-space: pre-wrap;
+            max-height: 200px; overflow-y: auto;
+        }
+        .status { color: #ff0; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 REAL PERSISTENT DATA SYSTEM</h1>
+            <p>This system actually stores data and persists between page reloads.</p>
+            <p class="status" id="storage-status">Checking storage capability...</p>
+        </div>
+        
+        <div class="section">
+            <h3>📊 Persistent Minion System</h3>
+            <div>
+                <input type="text" id="minion-name" class="input" placeholder="Minion Name" />
+                <input type="text" id="minion-role" class="input" placeholder="Role" />
+                <input type="number" id="minion-energy" class="input" placeholder="Energy" value="100" />
+                <button class="button" onclick="addMinion()">➕ Add Minion</button>
+                <button class="button" onclick="clearMinions()">🗑️ Clear All</button>
+            </div>
+            <div class="data-display" id="minions-display"></div>
+        </div>
+        
+        <div class="section">
+            <h3>📋 Document Storage</h3>
+            <div>
+                <input type="text" id="doc-title" class="input" placeholder="Document Title" />
+                <input type="text" id="doc-url" class="input" placeholder="Document URL" />
+                <textarea id="doc-content" class="input" placeholder="Content" rows="3"></textarea>
+                <button class="button" onclick="addDocument()">📄 Store Document</button>
+                <button class="button" onclick="clearDocuments()">🗑️ Clear Docs</button>
+            </div>
+            <div class="data-display" id="documents-display"></div>
+        </div>
+        
+        <div class="section">
+            <h3>⚙️ System Settings</h3>
+            <div>
+                <label>System Name: <input type="text" id="system-name" class="input" placeholder="System Name" /></label>
+                <label>Max Minions: <input type="number" id="max-minions" class="input" value="50" /></label>
+                <button class="button" onclick="saveSettings()">💾 Save Settings</button>
+            </div>
+            <div class="data-display" id="settings-display"></div>
+        </div>
+        
+        <div class="section">
+            <h3>📈 Progress Tracking</h3>
+            <div>
+                <input type="text" id="progress-task" class="input" placeholder="Task Name" />
+                <input type="range" id="progress-value" min="0" max="100" value="0" />
+                <span id="progress-percent">0%</span>
+                <button class="button" onclick="updateProgress()">📊 Update Progress</button>
+            </div>
+            <div class="data-display" id="progress-display"></div>
+        </div>
+        
+        <div class="section">
+            <h3>🔍 Data Export/Import</h3>
+            <button class="button" onclick="exportData()">📤 Export All Data</button>
+            <button class="button" onclick="importData()">📥 Import Data</button>
+            <button class="button" onclick="showRawStorage()">🔧 Show Raw Storage</button>
+            <div class="data-display" id="export-display"></div>
+        </div>
+        
+        <div class="section">
+            <h3>📊 Storage Statistics</h3>
+            <div id="storage-stats" class="data-display"></div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🔧 Initializing REAL persistent data system...');
+        
+        // Storage namespace to avoid conflicts
+        const STORAGE_PREFIX = 'solarflow_persistent_';
+        
+        // Data structure
+        let persistentData = {
+            minions: [],
+            documents: [],
+            settings: {
+                systemName: 'SolarFlow Persistent System',
+                maxMinions: 50,
+                createdAt: new Date().toISOString()
+            },
+            progress: {},
+            metadata: {
+                version: '1.0.0',
+                lastModified: new Date().toISOString(),
+                totalInteractions: 0
+            }
+        };
+        
+        // Real persistence functions
+        function saveData() {
+            try {
+                persistentData.metadata.lastModified = new Date().toISOString();
+                persistentData.metadata.totalInteractions++;
+                
+                const dataString = JSON.stringify(persistentData, null, 2);
+                localStorage.setItem(STORAGE_PREFIX + 'main', dataString);
+                
+                updateStatus('✅ Data saved successfully', 'success');
+                updateStorageStats();
+                return true;
+                
+            } catch (error) {
+                updateStatus('❌ Save failed: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        function loadData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_PREFIX + 'main');
+                if (stored) {
+                    persistentData = JSON.parse(stored);
+                    updateStatus('✅ Data loaded successfully', 'success');
+                } else {
+                    updateStatus('ℹ️ No stored data found, using defaults', 'status');
+                }
+                
+                updateAllDisplays();
+                updateStorageStats();
+                return true;
+                
+            } catch (error) {
+                updateStatus('❌ Load failed: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        function addMinion() {
+            const name = document.getElementById('minion-name').value.trim();
+            const role = document.getElementById('minion-role').value.trim();
+            const energy = parseInt(document.getElementById('minion-energy').value) || 100;
+            
+            if (!name || !role) {
+                updateStatus('❌ Please enter both name and role', 'error');
+                return;
+            }
+            
+            const minion = {
+                id: 'MINION_' + Date.now(),
+                name: name,
+                role: role,
+                energy: energy,
+                createdAt: new Date().toISOString(),
+                status: 'ACTIVE'
+            };
+            
+            persistentData.minions.push(minion);
+            
+            if (saveData()) {
+                document.getElementById('minion-name').value = '';
+                document.getElementById('minion-role').value = '';
+                document.getElementById('minion-energy').value = '100';
+                updateMinionsDisplay();
+                updateStatus(`✅ Added minion: ${name}`, 'success');
+            }
+        }
+        
+        function addDocument() {
+            const title = document.getElementById('doc-title').value.trim();
+            const url = document.getElementById('doc-url').value.trim();
+            const content = document.getElementById('doc-content').value.trim();
+            
+            if (!title) {
+                updateStatus('❌ Please enter document title', 'error');
+                return;
+            }
+            
+            const document = {
+                id: 'DOC_' + Date.now(),
+                title: title,
+                url: url,
+                content: content,
+                createdAt: new Date().toISOString(),
+                size: content.length
+            };
+            
+            persistentData.documents.push(document);
+            
+            if (saveData()) {
+                document.getElementById('doc-title').value = '';
+                document.getElementById('doc-url').value = '';
+                document.getElementById('doc-content').value = '';
+                updateDocumentsDisplay();
+                updateStatus(`✅ Added document: ${title}`, 'success');
+            }
+        }
+        
+        function saveSettings() {
+            const systemName = document.getElementById('system-name').value.trim();
+            const maxMinions = parseInt(document.getElementById('max-minions').value) || 50;
+            
+            persistentData.settings.systemName = systemName || persistentData.settings.systemName;
+            persistentData.settings.maxMinions = maxMinions;
+            
+            if (saveData()) {
+                updateSettingsDisplay();
+                updateStatus('✅ Settings saved', 'success');
+            }
+        }
+        
+        function updateProgress() {
+            const task = document.getElementById('progress-task').value.trim();
+            const value = parseInt(document.getElementById('progress-value').value) || 0;
+            
+            if (!task) {
+                updateStatus('❌ Please enter task name', 'error');
+                return;
+            }
+            
+            persistentData.progress[task] = {
+                value: value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            if (saveData()) {
+                document.getElementById('progress-task').value = '';
+                document.getElementById('progress-value').value = '0';
+                document.getElementById('progress-percent').textContent = '0%';
+                updateProgressDisplay();
+                updateStatus(`✅ Updated progress: ${task} = ${value}%`, 'success');
+            }
+        }
+        
+        // Display functions
+        function updateMinionsDisplay() {
+            const display = document.getElementById('minions-display');
+            if (persistentData.minions.length === 0) {
+                display.textContent = 'No minions stored.';
+                return;
+            }
+            
+            let content = `Total Minions: ${persistentData.minions.length}\n\n`;
+            persistentData.minions.forEach((minion, index) => {
+                content += `${index + 1}. ${minion.name} (${minion.role})\n`;
+                content += `   Energy: ${minion.energy}% | Status: ${minion.status}\n`;
+                content += `   Created: ${new Date(minion.createdAt).toLocaleString()}\n\n`;
+            });
+            
+            display.textContent = content;
+        }
+        
+        function updateDocumentsDisplay() {
+            const display = document.getElementById('documents-display');
+            if (persistentData.documents.length === 0) {
+                display.textContent = 'No documents stored.';
+                return;
+            }
+            
+            let content = `Total Documents: ${persistentData.documents.length}\n\n`;
+            persistentData.documents.forEach((doc, index) => {
+                content += `${index + 1}. ${doc.title}\n`;
+                if (doc.url) content += `   URL: ${doc.url}\n`;
+                content += `   Size: ${doc.size} chars | Created: ${new Date(doc.createdAt).toLocaleString()}\n`;
+                if (doc.content) content += `   Content: ${doc.content.substring(0, 100)}...\n`;
+                content += `\n`;
+            });
+            
+            display.textContent = content;
+        }
+        
+        function updateSettingsDisplay() {
+            const display = document.getElementById('settings-display');
+            const settings = persistentData.settings;
+            
+            document.getElementById('system-name').value = settings.systemName;
+            document.getElementById('max-minions').value = settings.maxMinions;
+            
+            let content = `System Name: ${settings.systemName}\n`;
+            content += `Max Minions: ${settings.maxMinions}\n`;
+            content += `Created: ${new Date(settings.createdAt).toLocaleString()}\n`;
+            
+            display.textContent = content;
+        }
+        
+        function updateProgressDisplay() {
+            const display = document.getElementById('progress-display');
+            const progress = persistentData.progress;
+            
+            if (Object.keys(progress).length === 0) {
+                display.textContent = 'No progress tracked.';
+                return;
+            }
+            
+            let content = 'Progress Tracking:\n\n';
+            Object.entries(progress).forEach(([task, data]) => {
+                content += `${task}: ${data.value}%\n`;
+                content += `  Updated: ${new Date(data.updatedAt).toLocaleString()}\n\n`;
+            });
+            
+            display.textContent = content;
+        }
+        
+        function updateStorageStats() {
+            const display = document.getElementById('storage-stats');
+            const dataString = JSON.stringify(persistentData);
+            const sizeKB = (dataString.length / 1024).toFixed(2);
+            
+            let content = `Storage Statistics:\n\n`;
+            content += `Total Size: ${sizeKB} KB\n`;
+            content += `Minions: ${persistentData.minions.length}\n`;
+            content += `Documents: ${persistentData.documents.length}\n`;
+            content += `Progress Items: ${Object.keys(persistentData.progress).length}\n`;
+            content += `Total Interactions: ${persistentData.metadata.totalInteractions}\n`;
+            content += `Last Modified: ${new Date(persistentData.metadata.lastModified).toLocaleString()}\n`;
+            
+            // Check storage limits
+            const maxStorage = 5 * 1024; // 5MB typical limit
+            const usedPercent = ((dataString.length / 1024) / maxStorage * 100).toFixed(1);
+            content += `Storage Usage: ${usedPercent}% of ~5MB limit\n`;
+            
+            display.textContent = content;
+        }
+        
+        function updateAllDisplays() {
+            updateMinionsDisplay();
+            updateDocumentsDisplay();
+            updateSettingsDisplay();
+            updateProgressDisplay();
+        }
+        
+        // Clear functions
+        function clearMinions() {
+            if (confirm('Delete all minions? This cannot be undone.')) {
+                persistentData.minions = [];
+                if (saveData()) {
+                    updateMinionsDisplay();
+                    updateStatus('✅ All minions cleared', 'success');
+                }
+            }
+        }
+        
+        function clearDocuments() {
+            if (confirm('Delete all documents? This cannot be undone.')) {
+                persistentData.documents = [];
+                if (saveData()) {
+                    updateDocumentsDisplay();
+                    updateStatus('✅ All documents cleared', 'success');
+                }
+            }
+        }
+        
+        // Export/Import
+        function exportData() {
+            const display = document.getElementById('export-display');
+            const dataString = JSON.stringify(persistentData, null, 2);
+            
+            display.textContent = `EXPORTED DATA (Copy this to backup):\n\n${dataString}`;
+            updateStatus('✅ Data exported to display area', 'success');
+        }
+        
+        function importData() {
+            const jsonString = prompt('Paste exported JSON data:');
+            if (!jsonString) return;
+            
+            try {
+                const imported = JSON.parse(jsonString);
+                persistentData = imported;
+                
+                if (saveData()) {
+                    updateAllDisplays();
+                    updateStatus('✅ Data imported successfully', 'success');
+                }
+            } catch (error) {
+                updateStatus('❌ Import failed: Invalid JSON', 'error');
+            }
+        }
+        
+        function showRawStorage() {
+            const display = document.getElementById('export-display');
+            const stored = localStorage.getItem(STORAGE_PREFIX + 'main');
+            
+            if (stored) {
+                display.textContent = `RAW STORAGE DATA:\n\n${stored}`;
+            } else {
+                display.textContent = 'No data in storage.';
+            }
+        }
+        
+        // Utility functions
+        function updateStatus(message, type = 'status') {
+            const statusEl = document.getElementById('storage-status');
+            statusEl.textContent = message;
+            statusEl.className = type;
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        // Progress slider update
+        document.getElementById('progress-value').addEventListener('input', function() {
+            document.getElementById('progress-percent').textContent = this.value + '%';
+        });
+        
+        // Initialize system
+        window.addEventListener('load', function() {
+            console.log('🚀 Initializing persistent data system...');
+            
+            // Check storage capability
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                updateStatus('✅ LocalStorage available - real persistence enabled', 'success');
+            } catch (error) {
+                updateStatus('❌ LocalStorage not available - data will not persist', 'error');
+                return;
+            }
+            
+            // Load existing data
+            loadData();
+            
+            updateStatus('🔧 System ready - data will persist between sessions', 'success');
+            console.log('✅ Persistent data system initialized successfully');
+        });
+        
+        // Auto-save on page unload
+        window.addEventListener('beforeunload', function() {
+            if (persistentData.metadata.totalInteractions > 0) {
+                saveData();
+            }
+        });
+        
+        console.log('📦 Persistent data system loaded');
+    </script>
+</body>
+</html>
