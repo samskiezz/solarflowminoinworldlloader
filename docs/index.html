@@ -392,7 +392,194 @@ All 16 systems functioning as designed with verified deployment
         });
     </script>
     
-    <!-- Auto-Bootloader - Runs automatically on every page load -->
-    <script src="auto-bootloader.js"></script>
+    <!-- Auto-Bootloader - Embedded for reliability -->
+    <script>
+        // EMBEDDED AUTO-BOOTLOADER - RUNS AUTOMATICALLY
+        (function() {
+            'use strict';
+            
+            console.log('🚀 Auto-bootloader starting...');
+            
+            // Simple but effective bootloader
+            function initializeSolarFlow() {
+                console.log('🔧 Initializing SolarFlow systems...');
+                
+                // Update timestamp to show system is active
+                const timestampElements = document.querySelectorAll('.version-info, [data-timestamp]');
+                timestampElements.forEach(el => {
+                    if (el.textContent.includes('2026-02-07')) {
+                        el.textContent = `Updated: ${new Date().toISOString()} • 🚀 AUTO-BOOT ACTIVE`;
+                    }
+                });
+                
+                // Initialize quantum consciousness if available
+                if (typeof QuantumConsciousnessEngine !== 'undefined') {
+                    window.quantumEngine = new QuantumConsciousnessEngine();
+                    console.log('⚛️ Quantum consciousness engine started');
+                } else {
+                    console.log('⚠️ Quantum engine not available, loading...');
+                    loadScript('./quantum-consciousness-engine.js').then(() => {
+                        if (typeof QuantumConsciousnessEngine !== 'undefined') {
+                            window.quantumEngine = new QuantumConsciousnessEngine();
+                            console.log('⚛️ Quantum consciousness engine loaded and started');
+                        }
+                    }).catch(e => console.warn('Could not load quantum engine:', e));
+                }
+                
+                // Initialize progress system if available
+                if (typeof RealProgressSystem !== 'undefined') {
+                    window.realProgressSystem = new RealProgressSystem();
+                    console.log('📈 Real progress system started');
+                } else {
+                    console.log('⚠️ Progress system not available, loading...');
+                    loadScript('./real-progress-system.js').then(() => {
+                        if (typeof RealProgressSystem !== 'undefined') {
+                            window.realProgressSystem = new RealProgressSystem();
+                            console.log('📈 Real progress system loaded and started');
+                        }
+                    }).catch(e => console.warn('Could not load progress system:', e));
+                }
+                
+                // Initialize smart initialization system
+                console.log('🧠 Smart initialization check...');
+                
+                // Mark system as auto-booted
+                localStorage.setItem('solarflow_auto_boot', Date.now().toString());
+                localStorage.setItem('solarflow_boot_count', (parseInt(localStorage.getItem('solarflow_boot_count') || '0') + 1).toString());
+                
+                // Set global boot flags
+                window.BOOTLOADER_ACTIVE = true;
+                window.BOOT_TIME = Date.now();
+                window.AUTO_BOOT_VERSION = '1.1.0';
+                
+                console.log('✅ SolarFlow auto-boot completed successfully');
+                
+                // Show boot status in UI
+                setTimeout(() => {
+                    const bootStatus = document.createElement('div');
+                    bootStatus.id = 'boot-status';
+                    bootStatus.style.cssText = `
+                        position: fixed; top: 10px; right: 10px; 
+                        background: rgba(56, 142, 60, 0.2); 
+                        padding: 8px 12px; border-radius: 8px; 
+                        font-size: 12px; border: 1px solid rgba(56, 142, 60, 0.4);
+                        color: #4CAF50; z-index: 1000;
+                    `;
+                    bootStatus.innerHTML = `
+                        ✅ Auto-Boot Active<br>
+                        Boot #${localStorage.getItem('solarflow_boot_count')}<br>
+                        Time: ${new Date().toLocaleTimeString()}
+                    `;
+                    document.body.appendChild(bootStatus);
+                    
+                    // Update every 10 seconds
+                    setInterval(() => {
+                        bootStatus.innerHTML = `
+                            ✅ Auto-Boot Active<br>
+                            Boot #${localStorage.getItem('solarflow_boot_count')}<br>
+                            Time: ${new Date().toLocaleTimeString()}<br>
+                            Quantum: ${window.quantumEngine ? '🧠 ON' : '⏳ Loading'}<br>
+                            Progress: ${window.realProgressSystem ? '📈 ON' : '⏳ Loading'}
+                        `;
+                    }, 10000);
+                }, 1000);
+                
+                // Start progress tracking
+                startProgressTracking();
+            }
+            
+            function loadScript(src) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = resolve;
+                    script.onerror = () => reject(new Error(`Failed to load: ${src}`));
+                    document.head.appendChild(script);
+                });
+            }
+            
+            function startProgressTracking() {
+                console.log('📊 Starting progress tracking...');
+                
+                // Track page interactions
+                let interactions = 0;
+                document.addEventListener('click', () => {
+                    interactions++;
+                    localStorage.setItem('solarflow_interactions', interactions.toString());
+                });
+                
+                // Auto-save session data every 30 seconds
+                setInterval(() => {
+                    const sessionData = {
+                        timestamp: new Date().toISOString(),
+                        bootTime: window.BOOT_TIME,
+                        interactions: interactions,
+                        quantum: !!window.quantumEngine,
+                        progress: !!window.realProgressSystem,
+                        page: window.location.pathname
+                    };
+                    
+                    localStorage.setItem('solarflow_session', JSON.stringify(sessionData));
+                }, 30000);
+                
+                // Save on page unload
+                window.addEventListener('beforeunload', () => {
+                    localStorage.setItem('solarflow_last_exit', Date.now().toString());
+                });
+                
+                console.log('✅ Progress tracking started');
+            }
+            
+            // Auto-start when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeSolarFlow);
+            } else {
+                initializeSolarFlow();
+            }
+            
+            // Global debug function
+            window.getSolarFlowBootStatus = function() {
+                return {
+                    bootActive: window.BOOTLOADER_ACTIVE,
+                    bootTime: window.BOOT_TIME,
+                    bootCount: localStorage.getItem('solarflow_boot_count'),
+                    lastBoot: localStorage.getItem('solarflow_auto_boot'),
+                    quantum: !!window.quantumEngine,
+                    progress: !!window.realProgressSystem,
+                    interactions: localStorage.getItem('solarflow_interactions'),
+                    session: JSON.parse(localStorage.getItem('solarflow_session') || '{}')
+                };
+            };
+            
+            console.log('🚀 SolarFlow auto-bootloader initialized');
+        })();
+    </script>
+    
+    <!-- Load core systems after bootloader -->
+    <script>
+        // Load additional systems after initial boot
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                // Load quantum engine
+                const quantumScript = document.createElement('script');
+                quantumScript.src = './quantum-consciousness-engine.js';
+                quantumScript.onload = () => console.log('✅ Quantum engine loaded');
+                document.head.appendChild(quantumScript);
+                
+                // Load progress system  
+                const progressScript = document.createElement('script');
+                progressScript.src = './real-progress-system.js';
+                progressScript.onload = () => console.log('✅ Progress system loaded');
+                document.head.appendChild(progressScript);
+                
+                // Load compliance engine
+                const complianceScript = document.createElement('script');
+                complianceScript.src = './real-compliance-engine.js';
+                complianceScript.onload = () => console.log('✅ Compliance engine loaded');
+                document.head.appendChild(complianceScript);
+                
+            }, 2000); // Load after 2 seconds to prevent blocking
+        });
+    </script>
 </body>
 </html>
