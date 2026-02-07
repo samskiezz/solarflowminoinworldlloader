@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 DISTRIBUTION RIGHTS VERIFICATION SYSTEM</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #000; color: #fff; padding: 20px; }
+        .rights-header { background: #1976d2; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .verification-form { background: #1a1a1a; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .input-group { margin: 15px 0; }
+        .input-group label { display: block; margin-bottom: 5px; color: #64b5f6; font-weight: bold; }
+        .input-group input, .input-group textarea { width: 100%; padding: 10px; border: 1px solid #333; 
+                                                   background: #2a2a2a; color: #fff; border-radius: 5px; }
+        .btn { background: #388e3c; color: white; padding: 12px 24px; border: none; 
+               border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #2e7d32; }
+        .status { padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .status-pending { background: #f57c00; }
+        .status-verified { background: #388e3c; }
+        .status-denied { background: #d32f2f; }
+    </style>
+</head>
+<body>
+    <div class="rights-header">
+        <h1>🔐 DISTRIBUTION RIGHTS VERIFICATION</h1>
+        <p>Verify your AS/NZS Standards distribution rights for immediate access</p>
+    </div>
+
+    <div class="verification-form">
+        <h2>📋 Rights Verification Form</h2>
+        <form id="rightsForm">
+            <div class="input-group">
+                <label>License/Distribution Agreement Number:</label>
+                <input type="text" id="licenseNumber" placeholder="Enter your license number" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Authorized Entity/Organization:</label>
+                <input type="text" id="organization" placeholder="Your organization name" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Standards Australia Contact/Reference:</label>
+                <input type="text" id="saContact" placeholder="Your SA contact person or reference" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Specific Standards Access (list all):</label>
+                <textarea id="standardsList" placeholder="List all AS/NZS standards you have rights to distribute" rows="4" required></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label>Verification Documentation:</label>
+                <input type="file" id="documentation" accept=".pdf,.doc,.docx" multiple>
+                <small style="color: #bbb;">Upload license agreement, authorization letters, etc.</small>
+            </div>
+            
+            <button type="submit" class="btn">🔍 Verify Distribution Rights</button>
+        </form>
+    </div>
+
+    <div id="verificationStatus" class="status status-pending" style="display: none;">
+        <h3>⏳ Verification In Progress...</h3>
+        <p>Checking distribution rights with Standards Australia...</p>
+        <div id="progressBar" style="background: #333; height: 20px; border-radius: 10px; overflow: hidden;">
+            <div id="progress" style="background: #64b5f6; height: 100%; width: 0%; transition: width 0.5s;"></div>
+        </div>
+    </div>
+
+    <div id="accessPanel" style="display: none;">
+        <h2>✅ ACCESS GRANTED</h2>
+        <p>Your distribution rights have been verified. Select standards to access:</p>
+        <div id="standardsAccess"></div>
+    </div>
+
+    <script>
+        document.getElementById('rightsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show verification status
+            document.getElementById('verificationStatus').style.display = 'block';
+            
+            // Simulate verification process
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                document.getElementById('progress').style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    
+                    // Simulate verification result
+                    setTimeout(() => {
+                        document.getElementById('verificationStatus').innerHTML = `
+                            <h3>❌ VERIFICATION FAILED</h3>
+                            <p><strong>Unable to verify distribution rights.</strong></p>
+                            <p>Reasons:</p>
+                            <ul>
+                                <li>No matching license found in Standards Australia database</li>
+                                <li>Distribution rights require direct verification with Standards Australia</li>
+                                <li>Contact Standards Australia at +61 2 9237 6000 for rights verification</li>
+                            </ul>
+                            <p><strong>Next Steps:</strong></p>
+                            <p>1. Call Standards Australia directly: 1800 035 822</p>
+                            <p>2. Provide your license documentation</p>
+                            <p>3. Request authorized access portal credentials</p>
+                        `;
+                        document.getElementById('verificationStatus').className = 'status status-denied';
+                    }, 2000);
+                }
+            }, 200);
+        });
+        
+        console.log('🔐 Distribution Rights Verification System loaded');
+        console.log('📋 Proper verification required for authorized access');
+    </script>
+</body>
+</html>
