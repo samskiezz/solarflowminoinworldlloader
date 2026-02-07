@@ -1,0 +1,371 @@
+{
+  "metadata": {
+    "scraped_at": "2026-02-07T11:33:00Z",
+    "source": "Multiple sources including provided PDF and public information",
+    "purpose": "Comprehensive AS/NZS standards for solar, batteries, and electrical installations",
+    "note": "These are references to standards, not the full copyrighted content"
+  },
+  "electrical_installations": {
+    "AS_NZS_3000_2018": {
+      "title": "Electrical installations (Wiring Rules)",
+      "year": "2018",
+      "scope": "Fundamental standard for electrical installations in Australia and New Zealand",
+      "key_sections": [
+        "General requirements and definitions",
+        "Protection against electric shock",
+        "Protection against thermal effects", 
+        "Protection against overcurrent",
+        "Protection against voltage disturbances",
+        "Isolation and switching",
+        "Earthing arrangements",
+        "Selection and erection of equipment"
+      ],
+      "relevance_to_solar": "Primary wiring and electrical safety standard for all solar installations",
+      "pdf_provided": true,
+      "committee": "Joint Technical Committee EL-001"
+    },
+    "AS_NZS_3100": {
+      "title": "Approval and test specification - General requirements for electrical equipment",
+      "scope": "General safety requirements for electrical equipment",
+      "relevance_to_solar": "Applies to solar inverters and electrical components"
+    }
+  },
+  "solar_specific_standards": {
+    "AS_NZS_5033_2021": {
+      "title": "Installation and safety requirements for photovoltaic (PV) arrays",
+      "year": "2021", 
+      "scope": "Specific requirements for PV system installation",
+      "key_sections": [
+        "PV array installation requirements",
+        "Electrical installation requirements",
+        "Mechanical installation requirements", 
+        "Documentation and labeling",
+        "Testing and commissioning"
+      ],
+      "critical_requirements": [
+        "Minimum distances from roof edges",
+        "Cable management and protection",
+        "DC isolator requirements",
+        "Array earthing and bonding",
+        "Fire safety clearances"
+      ],
+      "relevance": "THE primary standard for PV installations in Australia/NZ"
+    },
+    "AS_NZS_4777_1_2016": {
+      "title": "Grid connection of energy systems via inverters - Installation requirements",
+      "year": "2016",
+      "scope": "Requirements for connecting distributed energy resources to the grid",
+      "key_sections": [
+        "Installation requirements",
+        "Safety and protection requirements", 
+        "Testing and commissioning",
+        "Documentation requirements"
+      ],
+      "relevance_to_solar": "Mandatory for all grid-connected solar systems"
+    },
+    "AS_NZS_4777_2_2020": {
+      "title": "Grid connection of energy systems via inverters - Inverter requirements", 
+      "year": "2020",
+      "scope": "Technical requirements for grid-connect inverters",
+      "key_requirements": [
+        "Power quality requirements",
+        "Protection settings",
+        "Response to grid disturbances",
+        "Anti-islanding protection"
+      ]
+    }
+  },
+  "battery_storage_standards": {
+    "AS_NZS_5139_2019": {
+      "title": "Electrical installations - Safety of battery systems for use with power conversion equipment",
+      "year": "2019",
+      "scope": "Safety requirements for battery energy storage systems",
+      "critical_sections": [
+        "Location and installation requirements",
+        "Ventilation requirements",
+        "Protection systems",
+        "Maintenance access",
+        "Fire safety requirements"
+      ],
+      "battery_types_covered": [
+        "Lithium-ion batteries",
+        "Lead-acid batteries", 
+        "Other electrochemical storage"
+      ],
+      "key_safety_requirements": [
+        "Minimum distances from dwellings",
+        "Ventilation for battery rooms",
+        "Temperature monitoring",
+        "Emergency shutdown systems",
+        "Fire suppression systems"
+      ],
+      "relevance": "MANDATORY for all battery storage installations"
+    },
+    "AS_IEC_62619": {
+      "title": "Secondary cells and batteries containing alkaline or other non-acid electrolytes - Safety requirements for secondary lithium cells and batteries",
+      "scope": "Specific safety requirements for lithium batteries",
+      "relevance_to_solar": "Applies to lithium battery systems in solar storage"
+    }
+  },
+  "building_and_construction": {
+    "AS_NZS_1170": {
+      "title": "Structural design actions",
+      "parts": [
+        "AS/NZS 1170.0 - General principles",
+        "AS/NZS 1170.2 - Wind actions", 
+        "AS/NZS 1170.3 - Snow and ice actions"
+      ],
+      "relevance_to_solar": "Structural requirements for rooftop solar mounting"
+    },
+    "AS_1684": {
+      "title": "Residential timber-framed construction",
+      "relevance_to_solar": "Roof structural requirements for residential solar"
+    }
+  },
+  "earthing_and_protection": {
+    "AS_NZS_1768": {
+      "title": "Lightning protection",
+      "scope": "Requirements for lightning protection systems",
+      "relevance_to_solar": "Important for solar installations in lightning-prone areas"
+    },
+    "AS_NZS_3835": {
+      "title": "Installation and safety requirements for photovoltaic (PV) arrays",
+      "note": "This was superseded by AS/NZS 5033"
+    }
+  },
+  "testing_and_commissioning": {
+    "AS_NZS_4509": {
+      "title": "Stand-alone power systems - Safety requirements and test methods",
+      "scope": "Requirements for off-grid power systems",
+      "relevance_to_solar": "Applies to off-grid solar installations"
+    }
+  },
+  "distribution_network_standards": {
+    "AS_NZS_4755": {
+      "title": "Demand response capabilities and supporting technologies",
+      "scope": "Smart grid and demand response requirements",
+      "relevance_to_solar": "Applies to smart solar inverters and battery systems"
+    }
+  },
+  "metering_standards": {
+    "AS_1284": {
+      "title": "Electricity metering",
+      "scope": "Requirements for electricity meters",
+      "relevance_to_solar": "Applies to net metering in solar installations"
+    }
+  },
+  "common_reddit_discussed_standards": [
+    {
+      "standard": "AS/NZS 3000",
+      "common_issues": [
+        "DC isolator placement requirements",
+        "Cable sizing for PV systems", 
+        "Earthing of PV arrays",
+        "Main switch labeling"
+      ]
+    },
+    {
+      "standard": "AS/NZS 5033", 
+      "common_issues": [
+        "Minimum clearances from roof edges",
+        "Cable support and protection",
+        "Access for maintenance",
+        "Fire setback requirements"
+      ]
+    },
+    {
+      "standard": "AS/NZS 5139",
+      "common_issues": [
+        "Battery room ventilation requirements",
+        "Minimum distances from habitable rooms",
+        "Temperature monitoring systems",
+        "Emergency shutdown procedures"
+      ]
+    },
+    {
+      "standard": "AS/NZS 4777.1",
+      "common_issues": [
+        "Grid protection settings",
+        "Testing and commissioning requirements",
+        "Documentation and certification",
+        "Inverter isolation requirements"
+      ]
+    }
+  ],
+  "state_specific_variations": {
+    "NSW": {
+      "additional_requirements": [
+        "Service and Installation Rules",
+        "Ausgrid/Endeavour/Essential Energy specific requirements"
+      ]
+    },
+    "VIC": {
+      "additional_requirements": [
+        "Victorian Service and Installation Rules",
+        "Powercor/CitiPower/AusNet/Jemena specific requirements"
+      ]
+    },
+    "QLD": {
+      "additional_requirements": [
+        "Queensland Electrical Safety Regulation",
+        "Energex/Ergon Energy specific requirements"
+      ]
+    },
+    "SA": {
+      "additional_requirements": [
+        "SA Power Networks specific requirements"
+      ]
+    },
+    "WA": {
+      "additional_requirements": [
+        "Western Power specific requirements",
+        "WA Electrical Requirements"
+      ]
+    },
+    "TAS": {
+      "additional_requirements": [
+        "TasNetworks specific requirements"
+      ]
+    },
+    "NT": {
+      "additional_requirements": [
+        "Power and Water Corporation requirements"
+      ]
+    },
+    "ACT": {
+      "additional_requirements": [
+        "Evoenergy specific requirements"
+      ]
+    }
+  },
+  "compliance_hierarchy": [
+    {
+      "level": 1,
+      "authority": "Electrical Safety Acts (State/Territory)",
+      "examples": ["Electrical Safety Act 2002 (Qld)", "Electricity Safety Act 1998 (Vic)"],
+      "enforcement": "Legal requirement - prosecution for breaches"
+    },
+    {
+      "level": 2, 
+      "authority": "AS/NZS Standards",
+      "examples": ["AS/NZS 3000", "AS/NZS 5033", "AS/NZS 5139"],
+      "enforcement": "Referenced in regulations - legal compliance required"
+    },
+    {
+      "level": 3,
+      "authority": "DNSP Connection Requirements", 
+      "examples": ["Ausgrid requirements", "Powercor requirements"],
+      "enforcement": "Required for grid connection approval"
+    },
+    {
+      "level": 4,
+      "authority": "Industry Guidelines",
+      "examples": ["Clean Energy Council guidelines", "Smart Energy Council guidelines"],
+      "enforcement": "Best practice - may be required for warranties/insurance"
+    }
+  ],
+  "enforcement_bodies": {
+    "electrical_safety": [
+      "Electrical Safety Office (Qld)",
+      "Energy Safe Victoria",
+      "SafeWork NSW",
+      "EnergySafety (WA)",
+      "Technical Regulator (SA)",
+      "Workplace Standards Tasmania",
+      "WorkSafe ACT",
+      "NT WorkSafe"
+    ],
+    "grid_connection": [
+      "Australian Energy Market Operator (AEMO)",
+      "Australian Energy Regulator (AER)", 
+      "Distribution Network Service Providers (DNSPs)"
+    ],
+    "consumer_protection": [
+      "Clean Energy Regulator",
+      "Australian Competition and Consumer Commission (ACCC)",
+      "State Fair Trading departments"
+    ]
+  },
+  "recent_updates_and_changes": {
+    "AS_NZS_4777_2020": {
+      "major_changes": [
+        "Updated grid protection settings",
+        "Enhanced power quality requirements",
+        "Improved fault ride-through capabilities"
+      ]
+    },
+    "AS_NZS_5139_2019": {
+      "major_changes": [
+        "New requirements for lithium battery installations",
+        "Updated ventilation requirements",
+        "Enhanced fire safety provisions"
+      ]
+    }
+  },
+  "cost_and_availability": {
+    "note": "AS/NZS standards are copyrighted and must be purchased from Standards Australia",
+    "typical_costs": {
+      "AS_NZS_3000": "~$200-300 AUD",
+      "AS_NZS_5033": "~$150-250 AUD", 
+      "AS_NZS_5139": "~$150-250 AUD",
+      "AS_NZS_4777_1": "~$100-200 AUD"
+    },
+    "free_resources": [
+      "Standards Australia free preview pages",
+      "Industry guidelines and summaries",
+      "Training course materials",
+      "Professional association resources"
+    ]
+  },
+  "additional_related_standards": {
+    "electromagnetic_compatibility": {
+      "AS_NZS_CISPR_11": "Industrial, scientific and medical equipment - Radio-frequency disturbance characteristics",
+      "AS_NZS_CISPR_22": "Information technology equipment - Radio disturbance characteristics"
+    },
+    "fire_safety": {
+      "AS_1530": "Methods for fire tests on building materials, components and structures",
+      "AS_1670": "Fire detection, warning, control and intercom systems"
+    },
+    "occupational_health_safety": {
+      "AS_NZS_1269": "Occupational noise management",
+      "AS_NZS_2243": "Safety in laboratories"
+    },
+    "environmental": {
+      "AS_NZS_ISO_14001": "Environmental management systems",
+      "AS_4360": "Risk management"
+    }
+  },
+  "commonly_referenced_international_standards": {
+    "IEC_60364": "Low-voltage electrical installations",
+    "IEC_61730": "Photovoltaic (PV) module safety qualification", 
+    "IEC_62109": "Safety of power converters for use in photovoltaic power systems",
+    "IEC_62548": "Photovoltaic (PV) arrays - Design requirements",
+    "IEC_62446": "Grid connected photovoltaic systems - Minimum requirements for system documentation, commissioning tests and inspection",
+    "IEC_61215": "Terrestrial photovoltaic (PV) modules - Design qualification and type approval",
+    "IEC_61727": "Photovoltaic (PV) systems - Characteristics of the utility interface",
+    "UL_1741": "Inverters, Converters, Controllers and Interconnection System Equipment",
+    "IEEE_1547": "Standard for Interconnection and Interoperability of Distributed Energy Resources"
+  },
+  "reddit_commonly_discussed_issues": [
+    "AS/NZS 3000 DC isolator placement - must be accessible but not in living areas",
+    "AS/NZS 5033 roof edge clearances - 1m from roof edges in most cases",
+    "AS/NZS 5139 battery ventilation - natural ventilation requirements for lithium batteries",
+    "AS/NZS 4777 grid protection - frequency and voltage ride-through settings",
+    "Switchboard labeling requirements under AS/NZS 3000",
+    "PV cable support requirements under AS/NZS 5033", 
+    "Battery room construction requirements under AS/NZS 5139",
+    "Inverter installation clearances and access requirements",
+    "Main switch accessibility and emergency isolation",
+    "Documentation and certification requirements for grid connection"
+  ],
+  "google_search_frequently_found": [
+    "AS/NZS 3000 free download - NOT AVAILABLE (copyrighted material)",
+    "AS/NZS 5033 summary - available from CEC and training providers",
+    "AS/NZS 5139 battery installation guide - summary guides available",
+    "AS/NZS 4777 grid connection requirements - DNSP summaries available",
+    "Electrical licensing requirements by state",
+    "Solar installation certification requirements",
+    "Battery storage safety requirements Australia",
+    "Grid connection application processes by DNSP"
+  ]}
+}
