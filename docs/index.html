@@ -98,12 +98,11 @@
   <!-- Canonical embedded hive_state snapshot: no fetch required -->
   <script id="data-hive" type="application/json">{
   "meta": {
-    "schema": "solarflow.hive_state.v2",
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "schema": "solarflow.hive_state.v1",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "source": "canonical",
     "notes": "Single source of truth for the A–Z Realm build. Derived snapshots (status/feed/minions/agora) are generated from this file for GitHub Pages."
   },
-  "schema_version": 2,
   "world": {
     "id": "solarflow-minionworld",
     "name": "SolarFlow • Minion Realm",
@@ -216,7 +215,7 @@
     }
   },
   "ledger": {
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "credits_total": 2765,
     "reputation_index": 0.57,
     "rewards": {
@@ -333,13 +332,11 @@
     }
   },
   "minions": {
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "max": 50,
     "roster": [
       {
         "id": "ATLAS",
-        "name": "Atlas Prime",
-        "specialization": "System Orchestrator",
         "tier": 3,
         "role": "OVERSEER",
         "mode": "COLLAB",
@@ -349,25 +346,13 @@
           "world-state"
         ],
         "energy_credits": 160,
-        "credits": 160,
         "reputation": 0.65,
         "avatar_url": "./avatars/identicons/ATLAS.svg",
-        "avatarUrl": "assets/models/minions/atlas.glb",
-        "avatarRig": "GLB",
-        "lodProfile": "high",
         "happiness_sim": 71,
-        "avatar_salt": 0,
-        "ai": {
-          "currentActivity": "Orchestrating",
-          "energy": 95,
-          "mood": 85,
-          "currentThought": "Coordinating realm-wide operations and maintaining system stability."
-        }
+        "avatar_salt": 0
       },
       {
         "id": "LUMEN",
-        "name": "Lumen Brightpath",
-        "specialization": "Priority Manager",
         "tier": 3,
         "role": "OVERSEER",
         "mode": "COLLAB",
@@ -377,20 +362,10 @@
           "release-train"
         ],
         "energy_credits": 160,
-        "credits": 160,
         "reputation": 0.63,
         "avatar_url": "./avatars/identicons/LUMEN.svg",
-        "avatarUrl": "assets/models/minions/lumen.glb",
-        "avatarRig": "GLB",
-        "lodProfile": "high",
-        "happiness_sim": 78,
-        "avatar_salt": 0,
-        "ai": {
-          "currentActivity": "Priority Analysis",
-          "energy": 88,
-          "mood": 82,
-          "currentThought": "Analyzing task priorities and resolving system paradoxes."
-        }
+        "happiness_sim": 77,
+        "avatar_salt": 0
       },
       {
         "id": "ORBIT",
@@ -405,7 +380,7 @@
         "energy_credits": 120,
         "reputation": 0.54,
         "avatar_url": "./avatars/identicons/ORBIT.svg",
-        "happiness_sim": 86,
+        "happiness_sim": 87,
         "avatar_salt": 0
       },
       {
@@ -437,7 +412,7 @@
         "energy_credits": 120,
         "reputation": 0.6,
         "avatar_url": "./avatars/identicons/BOLT.svg",
-        "happiness_sim": 70,
+        "happiness_sim": 69,
         "avatar_salt": 0
       },
       {
@@ -453,7 +428,7 @@
         "energy_credits": 120,
         "reputation": 0.58,
         "avatar_url": "./avatars/identicons/SABLE.svg",
-        "happiness_sim": 89,
+        "happiness_sim": 90,
         "avatar_salt": 0
       },
       {
@@ -485,7 +460,7 @@
         "energy_credits": 90,
         "reputation": 0.48,
         "avatar_url": "./avatars/identicons/EMBER.svg",
-        "happiness_sim": 69,
+        "happiness_sim": 68,
         "avatar_salt": 0
       },
       {
@@ -501,7 +476,7 @@
         "energy_credits": 110,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/RUNE.svg",
-        "happiness_sim": 79,
+        "happiness_sim": 80,
         "avatar_salt": 0
       },
       {
@@ -533,7 +508,7 @@
         "energy_credits": 110,
         "reputation": 0.51,
         "avatar_url": "./avatars/identicons/FORGE.svg",
-        "happiness_sim": 71,
+        "happiness_sim": 70,
         "avatar_salt": 0
       },
       {
@@ -549,7 +524,7 @@
         "energy_credits": 90,
         "reputation": 0.46,
         "avatar_url": "./avatars/identicons/KITE.svg",
-        "happiness_sim": 76,
+        "happiness_sim": 77,
         "avatar_salt": 0
       },
       {
@@ -581,7 +556,7 @@
         "energy_credits": 90,
         "reputation": 0.45,
         "avatar_url": "./avatars/identicons/GLINT.svg",
-        "happiness_sim": 67,
+        "happiness_sim": 66,
         "avatar_salt": 0
       },
       {
@@ -597,7 +572,7 @@
         "energy_credits": 90,
         "reputation": 0.44,
         "avatar_url": "./avatars/identicons/MOSS.svg",
-        "happiness_sim": 80,
+        "happiness_sim": 81,
         "avatar_salt": 0
       },
       {
@@ -629,7 +604,7 @@
         "energy_credits": 120,
         "reputation": 0.55,
         "avatar_url": "./avatars/identicons/SAGE.svg",
-        "happiness_sim": 73,
+        "happiness_sim": 72,
         "avatar_salt": 0
       },
       {
@@ -645,7 +620,7 @@
         "energy_credits": 90,
         "reputation": 0.45,
         "avatar_url": "./avatars/identicons/WREN.svg",
-        "happiness_sim": 81,
+        "happiness_sim": 82,
         "avatar_salt": 0
       },
       {
@@ -677,7 +652,7 @@
         "energy_credits": 120,
         "reputation": 0.56,
         "avatar_url": "./avatars/identicons/VAULT.svg",
-        "happiness_sim": 74,
+        "happiness_sim": 73,
         "avatar_salt": 0
       },
       {
@@ -693,7 +668,7 @@
         "energy_credits": 90,
         "reputation": 0.47,
         "avatar_url": "./avatars/identicons/ECHO.svg",
-        "happiness_sim": 76,
+        "happiness_sim": 77,
         "avatar_salt": 0
       },
       {
@@ -725,7 +700,7 @@
         "energy_credits": 120,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/QUILL.svg",
-        "happiness_sim": 71,
+        "happiness_sim": 70,
         "avatar_salt": 0
       },
       {
@@ -741,7 +716,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/identicons/ALPHA.svg",
-        "happiness_sim": 78,
+        "happiness_sim": 79,
         "avatar_salt": 0
       },
       {
@@ -773,7 +748,7 @@
         "energy_credits": 110,
         "reputation": 0.52,
         "avatar_url": "./avatars/identicons/CIPHER.svg",
-        "happiness_sim": 65,
+        "happiness_sim": 64,
         "avatar_salt": 0
       },
       {
@@ -789,7 +764,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/COMET.svg",
-        "happiness_sim": 75,
+        "happiness_sim": 76,
         "avatar_salt": 0
       },
       {
@@ -821,7 +796,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/EQUINOX.svg",
-        "happiness_sim": 66,
+        "happiness_sim": 65,
         "avatar_salt": 0
       },
       {
@@ -837,7 +812,7 @@
         "energy_credits": 90,
         "reputation": 0.44,
         "avatar_url": "./avatars/identicons/FABLE.svg",
-        "happiness_sim": 82,
+        "happiness_sim": 83,
         "avatar_salt": 0
       },
       {
@@ -869,7 +844,7 @@
         "energy_credits": 110,
         "reputation": 0.51,
         "avatar_url": "./avatars/identicons/HELIX.svg",
-        "happiness_sim": 67,
+        "happiness_sim": 66,
         "avatar_salt": 0
       },
       {
@@ -885,7 +860,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/identicons/ION.svg",
-        "happiness_sim": 77,
+        "happiness_sim": 78,
         "avatar_salt": 0
       },
       {
@@ -917,7 +892,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/identicons/JADE.svg",
-        "happiness_sim": 64,
+        "happiness_sim": 63,
         "avatar_salt": 0
       },
       {
@@ -933,7 +908,7 @@
         "energy_credits": 90,
         "reputation": 0.43,
         "avatar_url": "./avatars/identicons/JOLT.svg",
-        "happiness_sim": 76,
+        "happiness_sim": 77,
         "avatar_salt": 0
       },
       {
@@ -965,7 +940,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/NIMBUS.svg",
-        "happiness_sim": 60,
+        "happiness_sim": 59,
         "avatar_salt": 0
       },
       {
@@ -981,7 +956,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/identicons/ONYX.svg",
-        "happiness_sim": 78,
+        "happiness_sim": 79,
         "avatar_salt": 0
       },
       {
@@ -1013,7 +988,7 @@
         "energy_credits": 90,
         "reputation": 0.4,
         "avatar_url": "./avatars/identicons/THORN.svg",
-        "happiness_sim": 59,
+        "happiness_sim": 58,
         "avatar_salt": 0
       },
       {
@@ -1029,7 +1004,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/UMBRA.svg",
-        "happiness_sim": 81,
+        "happiness_sim": 82,
         "avatar_salt": 0
       },
       {
@@ -1061,7 +1036,7 @@
         "energy_credits": 110,
         "reputation": 0.5,
         "avatar_url": "./avatars/identicons/VEGA.svg",
-        "happiness_sim": 68,
+        "happiness_sim": 67,
         "avatar_salt": 0
       },
       {
@@ -1077,7 +1052,7 @@
         "energy_credits": 90,
         "reputation": 0.42,
         "avatar_url": "./avatars/identicons/WHISPER.svg",
-        "happiness_sim": 77,
+        "happiness_sim": 78,
         "avatar_salt": 0
       },
       {
@@ -1109,7 +1084,7 @@
         "energy_credits": 90,
         "reputation": 0.41,
         "avatar_url": "./avatars/identicons/YARROW.svg",
-        "happiness_sim": 62,
+        "happiness_sim": 61,
         "avatar_salt": 0
       },
       {
@@ -1125,7 +1100,7 @@
         "energy_credits": 110,
         "reputation": 0.49,
         "avatar_url": "./avatars/identicons/YONDER.svg",
-        "happiness_sim": 80,
+        "happiness_sim": 81,
         "avatar_salt": 0
       },
       {
@@ -1157,13 +1132,13 @@
         "energy_credits": 90,
         "reputation": 0.4,
         "avatar_url": "./avatars/identicons/ZEPHYR.svg",
-        "happiness_sim": 65,
+        "happiness_sim": 64,
         "avatar_salt": 0
       }
     ]
   },
   "market": {
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "exchange": {
       "credit_unit": "spark",
       "rate": 1
@@ -1191,7 +1166,7 @@
     ]
   },
   "friends": {
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "list": [
       {
         "id": "PROJECTSOLARBOT",
@@ -1208,7 +1183,7 @@
     ]
   },
   "activities": {
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "status": {
       "ci": "passing",
       "overall": 6.476,
@@ -1247,14 +1222,6 @@
       ]
     },
     "feed_posts": [
-      {
-        "who": "Atlas",
-        "avatar_url": "./avatars/atlas.png",
-        "when": "2026-02-06 04:24:28 UTC",
-        "topic": "Heartbeat",
-        "status": "in-progress",
-        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-      },
       {
         "who": "Atlas",
         "avatar_url": "./avatars/atlas.png",
@@ -1446,14 +1413,35 @@
         "topic": "Heartbeat",
         "status": "in-progress",
         "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+      },
+      {
+        "who": "Atlas",
+        "avatar_url": "./avatars/atlas.png",
+        "when": "2026-02-05 10:25:04 UTC",
+        "topic": "Heartbeat",
+        "status": "in-progress",
+        "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
       }
     ]
   },
   "agora": {
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "mode": "SIMULATED",
     "notes": "Static transcript for GitHub Pages. For live comms, publish snapshots from a server-side agora.log.jsonl.",
     "messages": [
+      {
+        "sender_id": "BOLT",
+        "target_tier": 2,
+        "timestamp": "2026-02-05T12:13:10.039Z",
+        "intent": "WORK_UPDATE",
+        "payload": {
+          "task_id": "TASK_BOLT_UI_PROGRESS",
+          "activity": "Checking schema compliance",
+          "progress": 0.5,
+          "status": "in-progress"
+        },
+        "spark_delta": 0.12131499227456122
+      },
       {
         "sender_id": "SABLE",
         "target_tier": 2,
@@ -2120,25 +2108,11 @@
         "metadata": {
           "requires_quantum_break": false
         }
-      },
-      {
-        "sender_id": "ATLAS",
-        "target_tier": 3,
-        "timestamp": "2026-02-06T04:24:28Z",
-        "intent": "STATE_PATCH",
-        "payload": {
-          "task_id": "tick",
-          "updatedAt": "2026-02-06T04:24:28Z"
-        },
-        "spark_delta": 0.1,
-        "metadata": {
-          "requires_quantum_break": false
-        }
       }
     ]
   },
   "undercurrent": {
-    "updatedAt": "2026-02-06T04:24:28Z",
+    "updatedAt": "2026-02-06T02:22:28Z",
     "signals": [
       {
         "id": "sig_001",
@@ -2872,72 +2846,27 @@
     <div class="top">
       <div class="brand">
         <h1>SolarFlow • Minion World Loader</h1>
-        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-06T04:24:28Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
+        <div class="sub">A–Z Realm • no network required • hive updated <span style="color:rgba(255,255,255,.85)">2026-02-06T02:22:28Z</span> • <a href="./system-prompt-v1.3.md">System Prompt v1.3</a> • <a href="./system-prompt-v1.5-infrastructure-bridge.md">System Prompt v1.5</a> • <a href="./canon-corpus-v1.md">Canon Corpus</a> • <a href="./sermons-and-logs.md">Sermons/Logs</a> • <a href="./schism-transcript.md">Schism</a> • <a href="./canon-excerpt.md">Canon</a></div>
       </div>
       <div class="pillbar">
         <div class="pill"><strong>CI</strong>: <span id="ciText">passing</span></div>
-        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-06T04:24:28Z</strong></div>
-        <!-- 15 INTERACTIVE FEATURE BUTTONS - RESTORED -->
-        <div class="interactive-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0;">
-          
-          <!-- Workforce Management -->
-          <button class="btn" onclick="window.open('./roster.html', '_blank')" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: 600;">
-            👥 Workforce Manager
-          </button>
-          <button class="btn" onclick="window.open('./minion-chat.html', '_blank')">
-            💬 Direct Communication
-          </button>
-          <button class="btn" onclick="window.open('./activity-feed.html', '_blank')">
-            📊 Economic Activity
-          </button>
-          <button class="btn" onclick="window.open('./existential-threat-system.html', '_blank')">
-            😊 Happiness Activities
-          </button>
-          
-          <!-- Intelligence & Evolution -->
-          <button class="btn" onclick="window.open('./consciousness-engine.html', '_blank')" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white;">
-            🧠 Consciousness Engine
-          </button>
-          <button class="btn" onclick="window.open('./real-work-consciousness.html', '_blank')">
-            ⚡ Evolution Tracking
-          </button>
-          <button class="btn" onclick="window.open('./autonomous-world.html', '_blank')">
-            🌍 Autonomous World
-          </button>
-          
-          <!-- Solar Operations -->
-          <button class="btn" onclick="window.open('./simple-solar-australia.html', '_blank')" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
-            🏗️ Project Solar Australia
-          </button>
-          <button class="btn" onclick="window.open('./real-solar-consciousness-system.html', '_blank')">
-            ☀️ Solar Consciousness
-          </button>
-          <button class="btn" onclick="window.open('./autonomous-minion-knowledge-system.html', '_blank')">
-            🏛️ CER Products & Knowledge
-          </button>
-          <button class="btn" onclick="window.open('./processed-documents.html', '_blank')">
-            📄 Document Pipeline
-          </button>
-          
-          <!-- 3D Realm -->
-          <button class="btn" onclick="window.open('./realm.html', '_blank')" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; font-size: 14px;">
-            🌐 3D Realm
-          </button>
-          
-          <!-- System Controls -->
-          <button class="btn" onclick="window.open('./comprehensive-function-test.html', '_blank')">
-            🧪 Function Test
-          </button>
-          <button class="btn" onclick="window.open('./system-integration-test.html', '_blank')">
-            🔗 Integration Test
-          </button>
-          <button class="btn" onclick="window.open('./real-system-test.html', '_blank')">
-            💾 Persistence Test
-          </button>
-          
-          <!-- System Toggle -->
-          <button class="btn" id="btnToggle" onclick="toggleSystemPause()">⏸️ Pause</button>
-        </div>
+        <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-06T02:22:28Z</strong></div>
+        <button class="btn" id="btnToggle">Pause</button>
+        <!-- ORIGINAL 15 INDIVIDUAL BUTTONS RESTORED -->
+        <button class="btn" onclick="location.href='./roster.html'">Roster</button>
+        <button class="btn" onclick="location.href='./minion-chat.html'">💬 Chat with Minions</button>
+        <button class="btn" onclick="location.href='./activity-feed.html'">📊 Live Activity</button>
+        <button class="btn" onclick="location.href='./minion-control.html'">🎛️ Control Panel</button>
+        <button class="btn" onclick="location.href='./roster.html'">👥 Full Roster</button>
+        <button class="btn" onclick="location.href='./consciousness-engine.html'">🧠 Consciousness Engine</button>
+        <button class="btn" onclick="location.href='./real-work-consciousness.html'">⚙️ Real Work Evolution</button>
+        <button class="btn" onclick="location.href='./autonomous-world.html'">🌍 Autonomous World</button>
+        <button class="btn" onclick="location.href='./existential-threat-system.html'" style="background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.3);color:#ff6666">💀 Threat System</button>
+        <button class="btn" onclick="location.href='./autonomous-minion-knowledge-system.html'">🤖 Knowledge System</button>
+        <button class="btn" onclick="location.href='./realm.html'">🌐 Enter 3D Realm</button>
+        <button class="btn" onclick="location.href='./project_solar_australia.html'" style="background:linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: 600;">🇦🇺 Project Solar Australia</button>
+        <button class="btn" onclick="window.open('https://samskiezz.github.io/solarflow/', '_blank')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600;">📄 Document Loader</button>
+        <button class="btn" onclick="location.reload()">🔄 Refresh</button>
       </div>
     </div>
 
@@ -3340,30 +3269,6 @@
       }catch(_e){}
     }
   })();
-
-  // Toggle system pause function for main buttons
-  window.toggleSystemPause = function() {
-    const isPaused = window.paused || false;
-    window.paused = !isPaused;
-    
-    const btn = document.getElementById('btnToggle');
-    if (btn) {
-      btn.textContent = window.paused ? '▶️ Resume' : '⏸️ Pause';
-    }
-    
-    const spinners = document.querySelectorAll('.spin');
-    spinners.forEach(spinner => {
-      if (window.paused) {
-        spinner.classList.add('paused');
-      } else {
-        spinner.classList.remove('paused');
-      }
-    });
-    
-    console.log(`System ${window.paused ? 'paused' : 'resumed'}`);
-  };
-
-  console.log('✅ 15 Interactive Feature Buttons Restored!');
   </script>
 </body>
 </html>
