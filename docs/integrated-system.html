@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarFlow • Consolidated System Architecture</title>
+    <style>
+        /* Core system styling */
+        :root {
+            --bg1: #070A12;
+            --bg2: #0B1530;
+            --card: rgba(255,255,255,.08);
+            --card2: rgba(255,255,255,.06);
+            --stroke: rgba(255,255,255,.14);
+            --text: rgba(255,255,255,.92);
+            --muted: rgba(255,255,255,.62);
+            --good: #22c55e;
+            --warn: #f59e0b;
+            --bad: #ef4444;
+            --blue: #60a5fa;
+            --purple: #a78bfa;
+            --cyan: #22d3ee;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text);
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(167,139,250,.22), transparent 60%),
+                       radial-gradient(900px 500px at 85% 20%, rgba(34,211,238,.18), transparent 55%),
+                       radial-gradient(1000px 700px at 50% 110%, rgba(96,165,250,.14), transparent 60%),
+                       linear-gradient(180deg, var(--bg1), var(--bg2));
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* System header */
+        .system-header {
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--stroke);
+        }
+
+        .system-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .system-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin: 5px 0 0 0;
+        }
+
+        /* Module categories layout */
+        .module-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .module-category {
+            border: 1px solid var(--stroke);
+            background: linear-gradient(180deg, var(--card), var(--card2));
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .module-category:hover {
+            border-color: var(--cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.2);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .category-icon {
+            font-size: 2rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .category-features {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .feature-item {
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--cyan);
+        }
+
+        /* Module panel */
+        .module-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+        }
+
+        .panel-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            height: 90vh;
+            max-width: 1200px;
+            max-height: 800px;
+            background: var(--bg1);
+            border: 2px solid var(--stroke);
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, var(--purple), var(--blue));
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .panel-close {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .panel-body {
+            height: calc(100% - 70px);
+            overflow: auto;
+        }
+
+        .panel-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: var(--bg2);
+        }
+
+        /* Status indicators */
+        .system-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(8px);
+            z-index: 100;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online { background: var(--good); }
+        .status-offline { background: var(--muted); }
+        .status-warning { background: var(--warn); }
+
+        /* Data viewer UI */
+        .data-viewer {
+            background: var(--bg2);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px;
+            border: 1px solid var(--stroke);
+        }
+
+        .data-viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .data-viewer-controls button {
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            color: var(--text);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 8px;
+            font-size: 0.8rem;
+        }
+
+        .data-collection {
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .data-collection h4 {
+            color: var(--cyan);
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+        }
+
+        .data-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            padding: 8px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+        }
+
+        .data-more {
+            color: var(--muted);
+            font-style: italic;
+            padding: 8px;
+        }
+
+        /* LLM configuration UI */
+        .llm-config-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .llm-config-modal {
+            background: var(--bg1);
+            border: 2px solid var(--stroke);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90vw;
+        }
+
+        .config-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .config-form label {
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .config-form input, .config-form select {
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            color: var(--text);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .config-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .config-buttons button {
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            color: var(--text);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .config-buttons button:first-child {
+            background: linear-gradient(135deg, var(--good), #16a34a);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .module-categories {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            
+            .panel-content {
+                width: 95vw;
+                height: 95vh;
+            }
+            
+            .system-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .module-category {
+            animation: fadeIn 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="system-status">
+        <span class="status-dot status-offline" id="system-status-dot"></span>
+        <span id="system-status-text">Initializing...</span>
+    </div>
+
+    <div class="system-header">
+        <h1 class="system-title">🚀 SolarFlow • Consolidated System</h1>
+        <p class="system-subtitle">Elite Principal Software Architect Implementation • NO NEW BUTTONS POLICY</p>
+    </div>
+
+    <div class="module-categories" id="module-categories">
+        <!-- Module categories will be populated by JavaScript -->
+    </div>
+
+    <!-- Module panel -->
+    <div class="module-panel" id="module-panel">
+        <div class="panel-content">
+            <div class="panel-header">
+                <h3 class="panel-title" id="panel-title">Module</h3>
+                <button class="panel-close" onclick="closePanel()">×</button>
+            </div>
+            <div class="panel-body">
+                <iframe class="panel-iframe" id="panel-iframe" src=""></iframe>
+                <div id="panel-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core system scripts -->
+    <script src="./core-system.js"></script>
+    <script src="./data-layer.js"></script>
+    <script src="./llm-engine.js"></script>
+    <script src="./system-diagnostics.js"></script>
+
+    <script>
+        /**
+         * CONSOLIDATED SYSTEM UI IMPLEMENTATION
+         * Loads all existing features as sub-modules of consolidated categories
+         */
+        
+        const moduleCategories = [
+            {
+                id: 'roster',
+                icon: '👥',
+                title: 'Minion Management',
+                description: 'All minion roster and communication features',
+                features: [
+                    { id: 'roster', name: 'Minion Roster', file: 'roster.html' },
+                    { id: 'roster-full', name: 'Full Roster View', file: 'roster.html?full=true' },
+                    { id: 'minion-chat', name: 'Minion Chat System', file: 'minion-chat.html' }
+                ]
+            },
+            {
+                id: 'activity',
+                icon: '📊',
+                title: 'Activity & Monitoring',
+                description: 'Live activity feeds and system monitoring',
+                features: [
+                    { id: 'activity-feed', name: 'Live Activity Feed', file: 'activity-feed.html' },
+                    { id: 'minion-control', name: 'Control Panel', file: 'minion-control.html' },
+                    { id: 'data-viewer', name: 'Data Store Inspector', type: 'internal' }
+                ]
+            },
+            {
+                id: 'consciousness',
+                icon: '🧠',
+                title: 'AI & Consciousness',
+                description: 'AI reasoning, consciousness engine, and LLM features',
+                features: [
+                    { id: 'consciousness-engine', name: 'Consciousness Engine', file: 'consciousness-engine.html' },
+                    { id: 'real-work-consciousness', name: 'Work Evolution System', file: 'real-work-consciousness.html' },
+                    { id: 'llm-config', name: 'AI Configuration', type: 'internal' },
+                    { id: 'llm-chat', name: 'AI Minion Chat', type: 'internal' }
+                ]
+            },
+            {
+                id: 'world',
+                icon: '🌍',
+                title: 'World & Systems',
+                description: 'Autonomous world management and system operations',
+                features: [
+                    { id: 'autonomous-world', name: 'Autonomous World', file: 'autonomous-world.html' },
+                    { id: 'threat-system', name: 'Threat Analysis', file: 'existential-threat-system.html' },
+                    { id: 'knowledge-system', name: 'Knowledge Base', file: 'autonomous-minion-knowledge-system.html' }
+                ]
+            },
+            {
+                id: 'realm',
+                icon: '🌐',
+                title: '3D Realm (Ultimate)',
+                description: 'Consolidated 3D realm with AI integration',
+                features: [
+                    { id: 'ultimate-realm', name: 'Ultimate AI Realm', file: 'ultimate-3d-realm-llm.html' },
+                    { id: 'dominion-city', name: 'Dominion City (Legacy)', file: 'dominion-city.html' },
+                    { id: 'realm-simple', name: 'Simple 3D Realm', file: 'realm.html' }
+                ]
+            },
+            {
+                id: 'solar',
+                icon: '🇦🇺',
+                title: 'Solar Australia',
+                description: 'Solar energy management and compliance systems',
+                features: [
+                    { id: 'project-solar', name: 'Project Solar Australia', file: 'project_solar_australia.html' },
+                    { id: 'cer-products', name: 'CER Product Database', file: 'cer-products.html' },
+                    { id: 'solar-compliance', name: 'Compliance Engine', type: 'internal' }
+                ]
+            }
+        ];
+
+        async function initializeSystem() {
+            console.log('🚀 Initializing consolidated system...');
+            
+            updateSystemStatus('loading', 'Core system loading...');
+            
+            // Wait for core system to be ready
+            while (!window.coreSystem) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            updateSystemStatus('loading', 'Data store initializing...');
+            
+            // Wait for data store
+            while (!window.coreSystem.dataStore?.isHealthy()) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            updateSystemStatus('loading', 'LLM engine initializing...');
+            
+            // Wait for LLM engine
+            while (!window.llmEngine?.isReady()) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // Render module categories
+            renderModuleCategories();
+            
+            // Run system diagnostics
+            const diagnostics = window.coreSystem.runSystemDiagnostics();
+            
+            updateSystemStatus('online', `System ready • ${diagnostics.features} features loaded`);
+            
+            console.log('✅ Consolidated system fully operational');
+        }
+
+        function renderModuleCategories() {
+            const container = document.getElementById('module-categories');
+            container.innerHTML = '';
+
+            moduleCategories.forEach((category, index) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'module-category';
+                categoryDiv.style.animationDelay = `${index * 0.1}s`;
+                categoryDiv.onclick = () => openCategory(category);
+
+                categoryDiv.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-icon">${category.icon}</div>
+                        <h3 class="category-title">${category.title}</h3>
+                    </div>
+                    <p style="color: var(--muted); margin-bottom: 15px; font-size: 0.9rem;">
+                        ${category.description}
+                    </p>
+                    <div class="category-features">
+                        ${category.features.map(feature => `
+                            <div class="feature-item" onclick="event.stopPropagation(); loadFeature('${feature.id}', '${feature.file || ''}', '${feature.type || 'file'}')"
+                                data-feature-id="${feature.id}">
+                                ${feature.name}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function openCategory(category) {
+            // For now, open the first feature in the category
+            if (category.features.length > 0) {
+                const firstFeature = category.features[0];
+                loadFeature(firstFeature.id, firstFeature.file || '', firstFeature.type || 'file');
+            }
+        }
+
+        async function loadFeature(featureId, file, type = 'file') {
+            console.log(`Loading feature: ${featureId} (${type})`);
+
+            const panel = document.getElementById('module-panel');
+            const iframe = document.getElementById('panel-iframe');
+            const contentDiv = document.getElementById('panel-content');
+            const titleElement = document.getElementById('panel-title');
+
+            // Special handling for internal features
+            if (type === 'internal') {
+                iframe.style.display = 'none';
+                contentDiv.style.display = 'block';
+                
+                switch (featureId) {
+                    case 'data-viewer':
+                        titleElement.textContent = '🔍 Data Store Inspector';
+                        const dataViewer = new DataViewerUI(window.coreSystem.dataStore);
+                        const viewerHTML = await dataViewer.render();
+                        contentDiv.innerHTML = '';
+                        contentDiv.appendChild(viewerHTML);
+                        break;
+                        
+                    case 'llm-config':
+                        titleElement.textContent = '🤖 AI Configuration';
+                        contentDiv.innerHTML = renderLLMConfig();
+                        break;
+                        
+                    case 'llm-chat':
+                        titleElement.textContent = '💬 AI Minion Chat';
+                        contentDiv.innerHTML = await renderLLMChat();
+                        break;
+                        
+                    case 'solar-compliance':
+                        titleElement.textContent = '☀️ Solar Compliance Engine';
+                        contentDiv.innerHTML = renderSolarCompliance();
+                        break;
+                        
+                    default:
+                        contentDiv.innerHTML = `<p style="padding: 20px; color: var(--muted);">Feature "${featureId}" not implemented yet.</p>`;
+                }
+            } else {
+                // Load external file
+                iframe.style.display = 'block';
+                contentDiv.style.display = 'none';
+                
+                if (file) {
+                    titleElement.textContent = `🔗 ${featureId}`;
+                    iframe.src = file;
+                } else {
+                    iframe.src = 'about:blank';
+                    iframe.contentDocument.body.innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: #666; font-family: sans-serif;">
+                            <h3>Feature: ${featureId}</h3>
+                            <p>File not specified for this feature.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            panel.style.display = 'block';
+            
+            // Log feature access
+            if (window.coreSystem?.dataStore) {
+                await window.coreSystem.dataStore.create('systemLogs', {
+                    type: 'feature_access',
+                    featureId: featureId,
+                    file: file,
+                    timestamp: Date.now()
+                });
+            }
+        }
+
+        function closePanel() {
+            document.getElementById('module-panel').style.display = 'none';
+        }
+
+        function updateSystemStatus(status, message) {
+            const dot = document.getElementById('system-status-dot');
+            const text = document.getElementById('system-status-text');
+            
+            dot.className = `status-dot status-${status}`;
+            text.textContent = message;
+        }
+
+        function renderLLMConfig() {
+            const status = window.llmEngine?.getStatus() || {};
+            
+            return `
+                <div style="padding: 20px;">
+                    <h4>🤖 Minion Cognition Engine Configuration</h4>
+                    <div style="margin: 15px 0; padding: 15px; background: var(--card); border-radius: 10px;">
+                        <p><strong>Status:</strong> ${status.enabled ? '✅ Enabled' : '⚠️ Disabled'}</p>
+                        <p><strong>Provider:</strong> ${status.provider || 'Not configured'}</p>
+                        <p><strong>Model:</strong> ${status.model || 'Not configured'}</p>
+                        <p><strong>Queue Length:</strong> ${status.queueLength || 0}</p>
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <h5>Available Minion Personalities:</h5>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                            ${(status.minionPersonalities || []).map(id => `
+                                <div style="padding: 10px; background: var(--card); border-radius: 8px; text-align: center;">
+                                    <strong>${id}</strong>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button onclick="window.llmEngine?.toggleEnabled()" 
+                                style="background: var(--good); border: none; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-right: 10px;">
+                            ${status.enabled ? 'Disable' : 'Configure'} AI
+                        </button>
+                        <button onclick="testLLMEngine()"
+                                style="background: var(--blue); border: none; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                            Test AI Response
+                        </button>
+                    </div>
+                    
+                    <div id="llm-test-result" style="margin-top: 20px;"></div>
+                </div>
+            `;
+        }
+
+        async function renderLLMChat() {
+            return `
+                <div style="padding: 20px;">
+                    <h4>💬 AI Minion Communication</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; height: 400px;">
+                        <div>
+                            <h5>Select Minion:</h5>
+                            <select id="minion-select" style="width: 100%; padding: 8px; background: var(--card); color: var(--text); border: 1px solid var(--stroke); border-radius: 6px;">
+                                <option value="ATLAS">ATLAS - System Orchestrator</option>
+                                <option value="LUMEN">LUMEN - Data Fetcher</option>
+                                <option value="ORBIT">ORBIT - Validator</option>
+                                <option value="PRISM">PRISM - Progress Tracker</option>
+                                <option value="NOVA">NOVA - Innovation Catalyst</option>
+                                <option value="BOLT">BOLT - Speed Optimizer</option>
+                            </select>
+                            
+                            <h5 style="margin-top: 20px;">Message:</h5>
+                            <textarea id="minion-message" 
+                                     style="width: 100%; height: 100px; padding: 8px; background: var(--card); color: var(--text); border: 1px solid var(--stroke); border-radius: 6px; resize: vertical;"
+                                     placeholder="Type your message to the minion..."></textarea>
+                            
+                            <button onclick="sendMinionMessage()" 
+                                   style="width: 100%; margin-top: 10px; padding: 10px; background: var(--cyan); border: none; color: white; border-radius: 6px; cursor: pointer;">
+                                Send Message
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <h5>Conversation:</h5>
+                            <div id="minion-conversation" 
+                                 style="height: 300px; overflow-y: auto; background: var(--bg2); border: 1px solid var(--stroke); border-radius: 6px; padding: 10px;">
+                                <p style="color: var(--muted); text-align: center;">Start a conversation with a minion...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSolarCompliance() {
+            return `
+                <div style="padding: 20px;">
+                    <h4>☀️ Solar Compliance Engine</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="padding: 15px; background: var(--card); border-radius: 10px;">
+                            <h5>🔍 CER Products</h5>
+                            <p style="color: var(--muted); font-size: 0.9rem;">Clean Energy Regulator approved products</p>
+                            <button onclick="loadFeature('cer-products', 'cer-products.html', 'file')" 
+                                   style="background: var(--good); border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+                                View Database
+                            </button>
+                        </div>
+                        
+                        <div style="padding: 15px; background: var(--card); border-radius: 10px;">
+                            <h5>📋 AS/NZS Standards</h5>
+                            <p style="color: var(--muted); font-size: 0.9rem;">Australian/New Zealand standards compliance</p>
+                            <div style="color: var(--good); font-size: 0.8rem;">✅ AS/NZS 5139 Battery Systems</div>
+                        </div>
+                        
+                        <div style="padding: 15px; background: var(--card); border-radius: 10px;">
+                            <h5>⚡ System Status</h5>
+                            <p style="color: var(--muted); font-size: 0.9rem;">Real-time compliance monitoring</p>
+                            <div id="compliance-status" style="color: var(--warn); font-size: 0.8rem;">⚠️ Monitoring active</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function testLLMEngine() {
+            if (!window.llmEngine) {
+                document.getElementById('llm-test-result').innerHTML = '<p style="color: var(--bad);">❌ LLM Engine not initialized</p>';
+                return;
+            }
+
+            const resultDiv = document.getElementById('llm-test-result');
+            resultDiv.innerHTML = '<p style="color: var(--muted);">🤔 Testing AI response...</p>';
+
+            try {
+                const response = await window.llmEngine.generateMinionResponse('ATLAS', 'Hello! Can you give me a system status report?');
+                
+                resultDiv.innerHTML = `
+                    <div style="background: var(--card); border-radius: 10px; padding: 15px; margin-top: 10px;">
+                        <h6>ATLAS Response:</h6>
+                        <p style="color: var(--text); line-height: 1.5;">${response.content || response}</p>
+                        ${response.confidence ? `<small style="color: var(--muted);">Confidence: ${Math.round(response.confidence * 100)}%</small>` : ''}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: var(--bad);">❌ Test failed: ${error.message}</p>`;
+            }
+        }
+
+        async function sendMinionMessage() {
+            const minionId = document.getElementById('minion-select').value;
+            const message = document.getElementById('minion-message').value.trim();
+            
+            if (!message) return;
+
+            const conversationDiv = document.getElementById('minion-conversation');
+            
+            // Add user message
+            conversationDiv.innerHTML += `
+                <div style="margin: 10px 0; padding: 8px; background: var(--blue); border-radius: 8px;">
+                    <strong>You:</strong> ${message}
+                </div>
+            `;
+            
+            // Clear input
+            document.getElementById('minion-message').value = '';
+            
+            // Add loading indicator
+            conversationDiv.innerHTML += `
+                <div id="loading-msg" style="margin: 10px 0; padding: 8px; background: var(--card); border-radius: 8px; color: var(--muted);">
+                    <strong>${minionId}:</strong> <em>thinking...</em>
+                </div>
+            `;
+            
+            conversationDiv.scrollTop = conversationDiv.scrollHeight;
+            
+            try {
+                // Get AI response
+                const response = await window.llmEngine.generateMinionResponse(minionId, message);
+                
+                // Remove loading indicator
+                document.getElementById('loading-msg').remove();
+                
+                // Add AI response
+                conversationDiv.innerHTML += `
+                    <div style="margin: 10px 0; padding: 8px; background: var(--card); border-radius: 8px;">
+                        <strong>${minionId}:</strong> ${response.content || response}
+                    </div>
+                `;
+                
+            } catch (error) {
+                document.getElementById('loading-msg').innerHTML = `
+                    <strong>${minionId}:</strong> <span style="color: var(--bad);">Error: ${error.message}</span>
+                `;
+            }
+            
+            conversationDiv.scrollTop = conversationDiv.scrollHeight;
+        }
+
+        // Global functions for onclick handlers
+        window.testLLMEngine = testLLMEngine;
+        window.sendMinionMessage = sendMinionMessage;
+        window.closePanel = closePanel;
+        window.loadFeature = loadFeature;
+
+        // Initialize system when page loads
+        document.addEventListener('DOMContentLoaded', initializeSystem);
+
+        // Handle escape key to close panel
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closePanel();
+            }
+        });
+        
+        console.log('🚀 SolarFlow Consolidated System UI loaded');
+    </script>
+</body>
+</html>
