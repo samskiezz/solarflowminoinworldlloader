@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomous World - Simple Persistence Version</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: white; padding: 2rem; margin: 0; min-height: 100vh;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #1976d2, #1565c0);
+            padding: 2rem; border-radius: 16px; margin-bottom: 2rem; text-align: center;
+        }
+        .world-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; margin-bottom: 2rem;
+        }
+        .world-card {
+            background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+        }
+        .stat-display {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem; font-weight: bold; color: #22c55e; margin-bottom: 0.5rem;
+        }
+        .stat-label { font-size: 0.9rem; color: #b0b0b0; }
+        .activity-feed {
+            background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px;
+            height: 300px; overflow-y: auto; margin: 1rem 0;
+        }
+        .activity-item {
+            padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-family: monospace; font-size: 0.9rem;
+        }
+        .activity-time { color: #60a5fa; }
+        .activity-minion { color: #22c55e; font-weight: bold; }
+        .activity-message { color: #e5e7eb; }
+        .controls {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0;
+        }
+        .btn {
+            background: linear-gradient(135deg, #1976d2, #1565c0);
+            color: white; border: none; padding: 1rem; border-radius: 12px;
+            cursor: pointer; font-weight: 600; transition: all 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(25,118,210,0.4); }
+        .btn.success { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .btn.warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .back-btn { background: linear-gradient(135deg, #6b7280, #4b5563); margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="btn back-btn" onclick="location.href='./index.html'">← Back to Dashboard</button>
+        
+        <div class="header">
+            <h1>🤖 Autonomous Solar Civilization</h1>
+            <p>Simple persistence version - data saves automatically</p>
+            <div id="persistence-status" style="margin-top: 1rem; padding: 0.5rem; background: rgba(34,197,94,0.2); border-radius: 8px;">
+                🟢 Persistence: Active
+            </div>
+        </div>
+
+        <div class="world-grid">
+            <div class="world-card">
+                <h3>🏙️ Civilization Status</h3>
+                <div class="stat-display">
+                    <div class="stat-item">
+                        <div class="stat-number" id="population">24</div>
+                        <div class="stat-label">Population</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="energyCredits">2765</div>
+                        <div class="stat-label">Energy Credits</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="efficiency">94.2%</div>
+                        <div class="stat-label">Efficiency</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="autonomyLevel">87.5%</div>
+                        <div class="stat-label">Autonomy</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="world-card">
+                <h3>📊 System Metrics</h3>
+                <div class="stat-display">
+                    <div class="stat-item">
+                        <div class="stat-number" id="activeWorkers">18</div>
+                        <div class="stat-label">Active Workers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="energyOutput">1247</div>
+                        <div class="stat-label">Energy Output</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="researchProgress">73</div>
+                        <div class="stat-label">Research Progress</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="lastSaved">Never</div>
+                        <div class="stat-label">Last Saved</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="world-card">
+            <h3>📝 Civilization Activity Feed</h3>
+            <div id="activityFeed" class="activity-feed">
+                <!-- Activity items will be inserted here -->
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn success" onclick="evolveCivilization()">🚀 Evolve Civilization</button>
+            <button class="btn" onclick="saveProgress()">💾 Save Progress</button>
+            <button class="btn warning" onclick="resetCivilization()">🔄 Reset</button>
+        </div>
+
+        <div class="world-card">
+            <h3>🧪 Persistence Test</h3>
+            <p>Navigate away from this page and come back - your progress should be preserved!</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem;">
+                <button class="btn" onclick="location.href='./index.html'">Go to Dashboard</button>
+                <button class="btn" onclick="location.href='./autonomous-minion-knowledge-system.html'">Go to Knowledge</button>
+                <button class="btn" onclick="location.href='./immediate-persistence-fix.html'">Go to Persistence Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // EMBEDDED SIMPLE PERSISTENCE - NO EXTERNAL DEPENDENCIES
+        const SIMPLE_PERSISTENCE = {
+            save: function(data) {
+                try {
+                    const saveObj = {
+                        ...data,
+                        lastSaved: Date.now(),
+                        version: '1.0'
+                    };
+                    localStorage.setItem('autonomous-world-simple', JSON.stringify(saveObj));
+                    console.log('✅ Autonomous world saved successfully');
+                    return true;
+                } catch (e) {
+                    console.error('❌ Save failed:', e);
+                    return false;
+                }
+            },
+            
+            load: function() {
+                try {
+                    const stored = localStorage.getItem('autonomous-world-simple');
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        console.log('✅ Autonomous world loaded from', new Date(parsed.lastSaved).toLocaleTimeString());
+                        return parsed;
+                    }
+                    return null;
+                } catch (e) {
+                    console.error('❌ Load failed:', e);
+                    return null;
+                }
+            }
+        };
+
+        // Civilization state
+        let civilizationState = {
+            population: 24,
+            energyCredits: 2765,
+            efficiency: 94.2,
+            autonomyLevel: 87.5,
+            activeWorkers: 18,
+            energyOutput: 1247,
+            researchProgress: 73,
+            activities: [
+                { time: '[15:54:09]', minion: 'ATLAS', message: 'Studying battery proximity compliance for AS/NZS 5139' },
+                { time: '[15:54:06]', minion: 'LUMEN', message: 'Processing OCR data from manufacturer specifications' },
+                { time: '[15:53:37]', minion: 'NOVA', message: 'Taking 23-minute break after processing 19 documents' },
+                { time: '[15:53:24]', minion: 'BOLT', message: 'Learned VOC specification for Seraphim Panel: 41.3V' },
+                { time: '[15:52:31]', minion: 'PRISM', message: 'Earned 34 credits for mastering AS/NZS 4777.1 standards' }
+            ]
+        };
+
+        function updateDisplays() {
+            document.getElementById('population').textContent = civilizationState.population;
+            document.getElementById('energyCredits').textContent = civilizationState.energyCredits.toLocaleString();
+            document.getElementById('efficiency').textContent = civilizationState.efficiency.toFixed(1) + '%';
+            document.getElementById('autonomyLevel').textContent = civilizationState.autonomyLevel.toFixed(1) + '%';
+            document.getElementById('activeWorkers').textContent = civilizationState.activeWorkers;
+            document.getElementById('energyOutput').textContent = civilizationState.energyOutput.toLocaleString();
+            document.getElementById('researchProgress').textContent = civilizationState.researchProgress;
+            
+            const lastSaved = localStorage.getItem('autonomous-world-simple');
+            if (lastSaved) {
+                const parsed = JSON.parse(lastSaved);
+                document.getElementById('lastSaved').textContent = new Date(parsed.lastSaved).toLocaleTimeString();
+            }
+            
+            updateActivityFeed();
+        }
+
+        function updateActivityFeed() {
+            const feed = document.getElementById('activityFeed');
+            feed.innerHTML = '';
+            
+            civilizationState.activities.forEach(activity => {
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+                item.innerHTML = 
+                    `<span class="activity-time">${activity.time}</span> ` +
+                    `<span class="activity-minion">${activity.minion}:</span> ` +
+                    `<span class="activity-message">${activity.message}</span>`;
+                feed.appendChild(item);
+            });
+            
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function addActivity(minion, message) {
+            const now = new Date();
+            const timeStr = `[${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}]`;
+            
+            civilizationState.activities.unshift({
+                time: timeStr,
+                minion: minion,
+                message: message
+            });
+            
+            // Keep only last 20 activities
+            if (civilizationState.activities.length > 20) {
+                civilizationState.activities = civilizationState.activities.slice(0, 20);
+            }
+            
+            updateActivityFeed();
+            autoSave();
+        }
+
+        function evolveCivilization() {
+            // Add some random evolution
+            civilizationState.energyCredits += Math.floor(Math.random() * 50) + 10;
+            civilizationState.efficiency += (Math.random() - 0.5) * 2;
+            civilizationState.autonomyLevel += (Math.random() - 0.3) * 3;
+            civilizationState.researchProgress += Math.floor(Math.random() * 3) + 1;
+            
+            // Keep values in bounds
+            civilizationState.efficiency = Math.max(0, Math.min(100, civilizationState.efficiency));
+            civilizationState.autonomyLevel = Math.max(0, Math.min(100, civilizationState.autonomyLevel));
+            civilizationState.researchProgress = Math.max(0, Math.min(100, civilizationState.researchProgress));
+            
+            const minions = ['ATLAS', 'LUMEN', 'NOVA', 'BOLT', 'PRISM', 'ORBIT'];
+            const actions = [
+                'Discovered new solar efficiency optimization',
+                'Improved energy storage algorithms',
+                'Enhanced autonomous decision-making protocols',
+                'Mastered advanced AS/NZS compliance procedures',
+                'Earned credits through knowledge advancement',
+                'Optimized civilization resource allocation'
+            ];
+            
+            const randomMinion = minions[Math.floor(Math.random() * minions.length)];
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+            
+            addActivity(randomMinion, randomAction);
+            updateDisplays();
+            
+            console.log('🚀 Civilization evolved!');
+        }
+
+        function saveProgress() {
+            const success = SIMPLE_PERSISTENCE.save(civilizationState);
+            if (success) {
+                addActivity('SYSTEM', 'Civilization progress saved successfully');
+                updateDisplays();
+                alert('✅ Progress saved! Navigate to other pages and come back - your data will persist.');
+            } else {
+                alert('❌ Save failed!');
+            }
+        }
+
+        function resetCivilization() {
+            if (confirm('Reset civilization? This will clear all progress.')) {
+                localStorage.removeItem('autonomous-world-simple');
+                civilizationState = {
+                    population: 24,
+                    energyCredits: 2765,
+                    efficiency: 94.2,
+                    autonomyLevel: 87.5,
+                    activeWorkers: 18,
+                    energyOutput: 1247,
+                    researchProgress: 73,
+                    activities: [
+                        { time: '[15:54:09]', minion: 'SYSTEM', message: 'Civilization reset to initial state' }
+                    ]
+                };
+                updateDisplays();
+                console.log('🔄 Civilization reset');
+            }
+        }
+
+        function autoSave() {
+            SIMPLE_PERSISTENCE.save(civilizationState);
+        }
+
+        function loadProgress() {
+            const saved = SIMPLE_PERSISTENCE.load();
+            if (saved) {
+                civilizationState = saved;
+                addActivity('SYSTEM', 'Previous civilization state restored successfully');
+                console.log('✅ Civilization state loaded from previous session');
+            } else {
+                addActivity('SYSTEM', 'New civilization initialized - no previous state found');
+                console.log('🆕 Starting fresh civilization');
+            }
+            updateDisplays();
+        }
+
+        // Auto-save every 10 seconds
+        setInterval(autoSave, 10000);
+
+        // Save on page unload
+        window.addEventListener('beforeunload', autoSave);
+
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            loadProgress();
+            
+            // Simulate ongoing civilization activity
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30% chance every 5 seconds
+                    evolveCivilization();
+                }
+            }, 5000);
+        });
+
+        console.log('🤖 Simple Autonomous World initialized');
+        console.log('💾 Auto-save every 10 seconds');
+        console.log('🔄 Data will persist across page navigation');
+    </script>
+</body>
+</html>
