@@ -8,7 +8,11 @@
     "dev": "node server.js",
     "deploy": "bash deploy.sh",
     "logs": "sudo journalctl -u solarflow-quantum -f",
-    "status": "sudo systemctl status solarflow-quantum"
+    "status": "sudo systemctl status solarflow-quantum",
+    "auto-start": "node auto-start.js",
+    "boot": "node bootloader.js boot",
+    "start-with-boot": "npm run auto-start && npm start",
+    "dev-with-boot": "npm run auto-start && npm run dev"
   },
   "dependencies": {
     "express": "^4.18.2",

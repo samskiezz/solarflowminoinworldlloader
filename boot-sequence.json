@@ -2,11 +2,11 @@
   "phase": "complete",
   "step": 8,
   "totalSteps": 8,
-  "startTime": 1770469421043,
+  "startTime": 1770469683780,
   "errors": [],
   "warnings": [
     "status structure invalid"
   ],
   "dataIntegrity": 80,
-  "lastSuccessfulBoot": 1770469421054
+  "lastSuccessfulBoot": 1770469683793
 }

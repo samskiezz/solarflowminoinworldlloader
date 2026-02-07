@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "createdAt": "2026-02-07T13:08:03.775Z",
+  "environment": "production",
+  "autoBootloader": true
+}
