@@ -1,0 +1,22 @@
+{
+  "url": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Datasheet-EN-2021-A.pdf",
+  "title": "PROD_TRINA_SOLAR_TSM_DE06M_05_II__440W datasheet",
+  "content": "Simulated content for datasheet of PROD_TRINA_SOLAR_TSM_DE06M_05_II__440W",
+  "extractedData": {
+    "specifications": [
+      "Power: 440W",
+      "Voltage: 24V",
+      "Current: 18.3A"
+    ],
+    "safetyRequirements": [
+      "AS/NZS 3000 compliance",
+      "IP65 rating"
+    ],
+    "installationRequirements": [
+      "Min 50mm clearance",
+      "Max 2m spacing"
+    ]
+  },
+  "processed": true,
+  "processedAt": "2026-02-07T07:36:16.135Z"
+}
