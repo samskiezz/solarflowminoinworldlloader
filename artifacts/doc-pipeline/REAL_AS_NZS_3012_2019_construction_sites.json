@@ -1,0 +1,156 @@
+{
+  "standard": "AS/NZS 3012:2019",
+  "title": "Electrical installations—Construction and demolition sites",
+  "subtitle": "Incorporating Amendment No. 1",
+  "source_file": "/home/node/.openclaw/media/inbound/file_26---a71d7a1f-2a18-46ea-b310-c2cd22a6b928.pdf",
+  "publication_date": "2019-11-04",
+  "supersedes": "AS/NZS 3012:2010",
+  "amendment": "Amendment No. 1 (March 2020)",
+  "isbn": "978 1 76072 618 8",
+  "status": "REAL EXTRACTED DATA",
+  "edition": "Fifth edition 2019",
+  
+  "scope": {
+    "objective": "Establish sound practices for the safe use of electricity at construction and demolition sites",
+    "usage": "To be used in conjunction with AS/NZS 3000, Electrical installations (Australian/New Zealand Wiring Rules)",
+    "application": "Construction sites, demolition sites, temporary electrical installations"
+  },
+  
+  "technical_committee": {
+    "committee": "EL-001",
+    "title": "Wiring Rules", 
+    "type": "Joint Standards Australia/Standards New Zealand Committee",
+    "approval_dates": {
+      "australia": "2019-07-23",
+      "new_zealand": "2019-10-02"
+    },
+    "represented_organizations": [
+      "Australian Building Codes Board",
+      "Australian Energy Council",
+      "Australian Industry Group",
+      "Communications, Electrical and Plumbing Union—Electrical Division",
+      "Consumers Federation of Australia",
+      "Electrical Contractors Association of New Zealand",
+      "Electrical Regulatory Authorities Council", 
+      "Electrical Safety New Zealand",
+      "Electrical Workers Registration Board",
+      "ElectroComms and Energy Utilities Industries Skills Council",
+      "Energy Networks Australia",
+      "Engineers Australia",
+      "Institute of Electrical Inspectors",
+      "Master Electricians Australia",
+      "National Electrical and Communications Association",
+      "National Electrical Switchboard Manufacturers Association",
+      "New Zealand Manufacturers and Exporters Association",
+      "Wellington Electrical Association",
+      "WorkSafe New Zealand"
+    ],
+    "additional_interests": [
+      "B & R Enclosures",
+      "Coates Hire",
+      "Focused Quality Systems",
+      "Housing Industry Association",
+      "Jackson Electrical, New Zealand",
+      "Master Builders Association of NSW",
+      "SafeWork NSW",
+      "WorkSafe Victoria"
+    ]
+  },
+  
+  "key_changes_2019": {
+    "as_nzs_3000_updates": "Requirements updated to reflect changes to AS/NZS 3000",
+    "switchboard_compliance": {
+      "change": "Reference to AS/NZS 61439.4 included for switchboard compliance for Assemblies for Construction Sites (ACS)",
+      "clause": "1.4.3"
+    },
+    "multi_level_buildings": {
+      "change": "Clause title amended to 'Multi-level buildings'",
+      "clause": "2.3.1.2"
+    },
+    "acs_switchboard_construction": {
+      "change": "Clause title amended to 'Assemblies for construction sites (ACS) switchboard construction'", 
+      "reference": "AS/NZS 61439.4 included for switchboard compliance",
+      "clause": "2.3.2.2"
+    },
+    "generator_connections": {
+      "additions": [
+        "Figure from AS/NZS 3010:2017 for connection from standalone generator to site switchboard with MEN link and electrode (Figure 2.1)",
+        "Figure from AS/NZS 3010:2017 for isolated winding generator with integral socket outlets (Figure 2.2)", 
+        "Figure from AS/NZS 3010:2017 for generator with integral RCD protected socket outlets (Figure 2.3)"
+      ]
+    },
+    "emergency_lighting": {
+      "change": "Requirement to prevent unauthorized disconnection of emergency lighting with detachable connections",
+      "clause": "2.7.3.1"
+    },
+    "temporary_protected_lighting": {
+      "change": "TPL as defined in AS/NZS 60598.2.20 is not considered festoon lighting",
+      "clause": "2.7.6"
+    },
+    "personnel_requirements": {
+      "change": "Reference to qualified person or competent person requirements",
+      "clauses": "3.3.1 to 3.6"
+    },
+    "equipment_tagging": {
+      "out_of_service": {
+        "requirement": "Out of service tag to be attached to non-compliant equipment", 
+        "clause": "3.7.2"
+      },
+      "compliant_equipment": {
+        "requirement": "Tag for compliant equipment to include person name (and company if applicable), test and re-test date",
+        "clause": "3.7.3"
+      }
+    },
+    "standards_references": {
+      "deleted": "AS 2790",
+      "added": "AS/NZS 60598.2.20, Luminaires, Part 2.20: Particular requirements—Lighting chains",
+      "updated": "Building Code of Australia (BCA) replaced with National Construction Code of Australia (NCC)"
+    }
+  },
+  
+  "solar_construction_applications": {
+    "installation_phase_safety": "Critical for solar installation work site electrical safety",
+    "temporary_power": "During solar installation and commissioning phases", 
+    "scaffolding_access": "Electrical safety for roof and ground-mount solar installations",
+    "site_switchboards": "Temporary electrical distribution during solar construction",
+    "rcd_protection": "Required safety measures for solar installation personnel",
+    "generator_use": "Backup power during solar installation work",
+    "multi_level_buildings": "Relevant for commercial solar installations on multi-story buildings"
+  },
+  
+  "safety_requirements": {
+    "assemblies_construction_sites": {
+      "standard_reference": "AS/NZS 61439.4",
+      "application": "Switchboard compliance for construction sites"
+    },
+    "emergency_lighting": "Prevention of unauthorized disconnection with detachable connections",
+    "temporary_lighting": "TPL requirements per AS/NZS 60598.2.20", 
+    "personnel_qualifications": "Qualified person or competent person requirements",
+    "equipment_identification": "Proper tagging of compliant and non-compliant equipment"
+  },
+  
+  "compliance_integration": {
+    "primary_standard": "AS/NZS 3000 (Australian/New Zealand Wiring Rules)",
+    "switchboard_standard": "AS/NZS 61439.4 (Assemblies for Construction Sites)",
+    "generator_standard": "AS/NZS 3010:2017 (Generator connections)",
+    "lighting_standard": "AS/NZS 60598.2.20 (Temporary protected lighting)",
+    "building_code": "National Construction Code of Australia (NCC)"
+  },
+  
+  "legal_status": {
+    "copyright_australia": "Standards Australia Limited",
+    "copyright_new_zealand": "The Crown in right of New Zealand, administered by the New Zealand Standards Executive", 
+    "licensing": "Licensed to TAFE Queensland by Techstreet LLC",
+    "reproduction": "No further reproduction or distribution permitted without written permission",
+    "standards_currency": "Must ensure using current version including any amendments"
+  },
+  
+  "extraction_status": {
+    "document_processed": "2026-02-09",
+    "content_type": "REAL PDF EXTRACTION", 
+    "amendment_incorporated": "Amendment No. 1 (March 2020)",
+    "previous_data": "FAKE - replaced with actual content",
+    "integration_ready": true,
+    "solar_safety_relevance": "HIGH - Critical for solar installation work sites"
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "standard": "AS/NZS 5033:2021",
+  "title": "Installation and safety requirements for photovoltaic (PV) arrays",
+  "source_file": "/home/node/.openclaw/media/inbound/file_24---eb018c21-b648-4f71-8b17-3b1c1311434b.pdf",
+  "publication_date": "2021-11-19",
+  "supersedes": "AS/NZS 5033:2014",
+  "transition_period": "6 months from 2021 publication",
+  "total_pages": 142,
+  "isbn": "978 1 76113 612 2",
+  
+  "scope": {
+    "maximum_pv_array_power_limit": "CHANGED - scope modified regarding maximum PV array power limit",
+    "dc_conditioning_units": "NEW - provisions relating to d.c. conditioning units",
+    "voltage_current_calculations": "NEW - voltage and current calculations for DC conditioning systems"
+  },
+  
+  "key_changes_2021": [
+    {
+      "category": "Overcurrent Protection & Earthing",
+      "changes": "Modified requirements for overcurrent protection and earthing methods",
+      "impact": "Updated protection schemes and earthing requirements"
+    },
+    {
+      "category": "PV Isolation Methods", 
+      "changes": "Updated methods of PV isolation including d.c conditioning units",
+      "impact": "Enhanced isolation procedures for maintenance and emergency situations"
+    },
+    {
+      "category": "Wiring Systems & Connectors",
+      "changes": "Updated requirements for wiring systems and revised connector requirements",
+      "impact": "New connector specifications and wiring installation standards"
+    },
+    {
+      "category": "Safety & Verification",
+      "changes": "New signs, verification and commissioning requirements",
+      "impact": "Enhanced testing and verification procedures"
+    }
+  ],
+  
+  "safety_hazards": {
+    "dc_systems": {
+      "primary_hazard": "Ability to produce and sustain electrical arcs with currents at normal operating levels",
+      "arc_detection": "Limited standards available at publication time",
+      "future_requirements": "Standard will be revised to require arc detection technology as standards develop"
+    }
+  },
+  
+  "related_standards": [
+    {
+      "standard": "AS/NZS 4777",
+      "title": "Grid connection of energy systems via inverters", 
+      "relationship": "Required for grid-connected PV systems"
+    },
+    {
+      "standard": "IEC 62109-2",
+      "title": "International Standard for inverters",
+      "relationship": "Required by both AS/NZS 5033 and 4777 for grid-connected PV"
+    },
+    {
+      "standard": "AS/NZS 3000",
+      "title": "Wiring Rules",
+      "relationship": "Electrical installation framework for PV systems"
+    }
+  ],
+  
+  "technical_committee": {
+    "committee": "EL-042",
+    "title": "Renewable Energy Power Supply Systems and Equipment",
+    "type": "Joint Standards Australia/Standards New Zealand Committee",
+    "key_organizations": [
+      "Australasian Fire and Emergency Service Authorities Council",
+      "Australian Energy Council",
+      "Australian Energy Market Operator",
+      "Australian PV Institute",
+      "Clean Energy Council",
+      "Clean Energy Regulator",
+      "CSIRO",
+      "Electrical Regulatory Authorities Council",
+      "Electrical Safety New Zealand",
+      "Energy Networks Australia",
+      "Engineers Australia",
+      "Fire and Emergency New Zealand",
+      "Master Electricians Australia",
+      "National Electrical and Communications Association",
+      "Smart Energy Council",
+      "Solar Energy Industries Association",
+      "WorkSafe New Zealand"
+    ]
+  },
+  
+  "compliance_requirements": {
+    "grid_connection": {
+      "must_comply_with": "AS/NZS 4777",
+      "inverter_standard": "IEC 62109-2"
+    },
+    "electrical_installation": {
+      "must_comply_with": "AS/NZS 3000",
+      "framework": "General electrical installation requirements"
+    },
+    "safety_management": {
+      "must_align_with": "AS/NZS 4836",
+      "focus": "Worker safety requirements"
+    },
+    "testing_verification": {
+      "must_incorporate": "AS/NZS 3017", 
+      "procedures": "Installation verification and testing"
+    }
+  },
+  
+  "regulatory_notes": {
+    "implementation_timing": "Regulatory authorities may apply requirements at different times than publication date",
+    "user_requirements": "Must consult regulatory authorities to confirm their specific requirements",
+    "legal_framework": "Standards Australia Limited/Crown of New Zealand 2021 - no reproduction without written permission"
+  },
+  
+  "integration_status": {
+    "document_received": "2026-02-09",
+    "pages_analyzed": "Cover pages and preliminary content",
+    "full_extraction_required": true,
+    "compliance_engine_updates_needed": true,
+    "cross_reference_integration_pending": [
+      "AS/NZS 3000:2018",
+      "AS/NZS 4777",
+      "AS/NZS 3017:2022", 
+      "AS/NZS 4836:2023"
+    ]
+  },
+  
+  "next_steps": [
+    "Extract detailed technical requirements from all 142 pages",
+    "Identify specific safety procedures and installation requirements", 
+    "Map voltage/current calculation requirements for DC conditioning units",
+    "Extract new connector and wiring specifications",
+    "Document updated isolation methods and procedures",
+    "Integrate with Victoria Electricity Safety Regulations 2019",
+    "Update solar compliance engine with AS/NZS 5033:2021 specific checks",
+    "Prepare system for future arc detection requirements"
+  ]
+}

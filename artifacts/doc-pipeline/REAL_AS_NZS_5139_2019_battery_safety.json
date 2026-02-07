@@ -1,0 +1,93 @@
+{
+  "standard_id": "AS/NZS 5139:2019",
+  "title": "Electrical installations — Safety of battery systems for use with power conversion equipment", 
+  "publication_date": "2019-10-11",
+  "approval_dates": {
+    "australia": "2019-09-23",
+    "new_zealand": "2019-09-04"
+  },
+  "supersedes": "AS 4086.2—1997",
+  "transition_period": "3 months after publication",
+  "scope": {
+    "primary": "Safety and installation requirements for battery energy storage systems connected to power conversion equipment for a.c. and/or d.c. power supply",
+    "target_users": [
+      "Manufacturers",
+      "System integrators", 
+      "Designers",
+      "Installers of battery energy storage systems"
+    ],
+    "applications": "Battery systems for use with power conversion equipment"
+  },
+  "key_committees": {
+    "joint_committee": "EL-042, Renewable Energy Power Supply Systems and Equipment",
+    "represented_organizations": [
+      "Australasian Fire and Emergency Service Authorities Council",
+      "Australian Energy Council",
+      "Australian Energy Market Operator",
+      "Australian PV Institute", 
+      "Clean Energy Council",
+      "Clean Energy Regulator",
+      "CSIRO",
+      "Electrical Regulatory Authorities Council",
+      "Electrical Safety New Zealand",
+      "Energy Networks Australia",
+      "Engineers Australia",
+      "Master Electricians Australia",
+      "National Electrical and Communications Association",
+      "Smart Energy Council",
+      "WorkSafe New Zealand"
+    ]
+  },
+  "regulatory_context": {
+    "application_timing": "Regulatory authorities that reference this Standard in regulation may apply these requirements at a different time. Users should consult with authorities to confirm requirements.",
+    "innovation_allowance": "Not intended to discourage innovation or exclude materials, equipment and methods that may be developed in the future"
+  },
+  "technical_evolution": {
+    "technology_basis": "Material contained in this Standard is based on the best information available at the time of preparation",
+    "future_updates": "Expected to require ongoing updating to ensure safe installation and operation of battery energy storage systems as technologies evolve",
+    "revision_process": "Revisions may be made from time to time in view of developments, and amendments will be made when necessary"
+  },
+  "informative_components": {
+    "purpose": "Substantial number of informative components to increase knowledge and understanding in this new field of technology",
+    "guidance_role": "Information acts as a guide for interested parties"
+  },
+  "acknowledgments": {
+    "iec_permissions": "Permission to reproduce definitions from IEC Electropedia and IEC 62109-1:2010",
+    "australian_energy_council": "Permission to reproduce information from Electrical Arc Flash Hazard Management Guideline Diagram 18"
+  },
+  "document_structure": {
+    "normative_appendix": "Integral part of the Standard",
+    "informative_appendix": "For information and guidance only"
+  },
+  "safety_considerations": {
+    "battery_technology_focus": "Covers existing types of energy storage with allowance for future technologies",
+    "risk_assessment": "Acknowledges lack of detailed information on risks and failures for new energy storage technologies",
+    "safety_priority": "Designed to provide safety requirements for battery systems connected to power conversion equipment"
+  },
+  "integration_context": {
+    "power_conversion_equipment": "Specifically addresses safety of battery systems when connected to power conversion equipment",
+    "ac_dc_applications": "Covers both alternating current (a.c.) and direct current (d.c.) power supply applications",
+    "system_integration": "Addresses complete battery energy storage systems, not just individual components"
+  },
+  "compliance_framework": {
+    "regulatory_reference": "Standard may be referenced in regulations by various authorities",
+    "timing_flexibility": "Regulatory authorities may apply requirements at different times than publication date",
+    "authority_consultation": "Users must consult with regulatory authorities to confirm their specific requirements"
+  },
+  "technical_standards_evolution": {
+    "living_document": "Expected to require ongoing updates as battery technologies and understanding evolve",
+    "best_practices": "Based on best available information at time of preparation",
+    "future_proofing": "Designed to accommodate future technological developments"
+  },
+  "extracted_from": "AS/NZS 5139:2019 PDF document - preface and preliminary sections",
+  "extraction_date": "2026-02-09",
+  "extraction_method": "Direct content extraction from uploaded PDF using read tool",
+  "document_status": "Current Australian/New Zealand Standard for battery systems safety",
+  "critical_applications": [
+    "Residential battery storage systems",
+    "Commercial energy storage installations", 
+    "Grid-connected battery systems",
+    "Battery systems with solar PV integration",
+    "Backup power battery installations"
+  ]
+}

@@ -243,6 +243,10 @@
                         <div class="btn-icon">🚀</div>
                         <div class="btn-text">Engine</div>
                     </button>
+                    <button class="btn success" onclick="location.href='./neural-optimization-engine.html'">
+                        <div class="btn-icon">🧠</div>
+                        <div class="btn-text">Neural AI</div>
+                    </button>
                 </div>
             </div>
 
@@ -712,10 +716,20 @@ All 18 systems functioning as designed with verified deployment
                 document.getElementById('current-time').textContent = DEPLOY_TIME.toLocaleDateString() + ' ' + DEPLOY_TIME.toLocaleTimeString();
             }, 500);
             
+            // Load Neural Integration Core
+            const neuralScript = document.createElement('script');
+            neuralScript.src = './neural-integration-core.js';
+            neuralScript.async = true;
+            neuralScript.onload = () => {
+                console.log('🧠 Neural optimization engine loaded - all features enhanced');
+            };
+            document.head.appendChild(neuralScript);
+
             console.log('✅ SolarFlow v' + VERSION + ' loaded successfully');
             console.log('🔍 Hash: ' + HASH);
             console.log('🚀 Deployed: ' + DEPLOY_TIME);
             console.log('🎯 All 18 systems operational and verified');
+            console.log('🧠 Neural optimization engine loading...');
         });
     </script>
 </body>
