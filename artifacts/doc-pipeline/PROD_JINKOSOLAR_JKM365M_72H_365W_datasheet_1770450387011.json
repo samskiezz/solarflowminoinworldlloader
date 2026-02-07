@@ -1,0 +1,22 @@
+{
+  "url": "https://www.jinkosolar.com/uploads/JinkoSolar_JKM365M-72H_EN.pdf",
+  "title": "PROD_JINKOSOLAR_JKM365M_72H_365W datasheet",
+  "content": "Simulated content for datasheet of PROD_JINKOSOLAR_JKM365M_72H_365W",
+  "extractedData": {
+    "specifications": [
+      "Power: 440W",
+      "Voltage: 24V",
+      "Current: 18.3A"
+    ],
+    "safetyRequirements": [
+      "AS/NZS 3000 compliance",
+      "IP65 rating"
+    ],
+    "installationRequirements": [
+      "Min 50mm clearance",
+      "Max 2m spacing"
+    ]
+  },
+  "processed": true,
+  "processedAt": "2026-02-07T07:46:27.011Z"
+}
