@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic 3D Sims Realm - Working Version</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: linear-gradient(135deg, #87CEEB, #98FB98); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: #333;
+        }
+        
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; cursor: crosshair; }
+        
+        /* Loading Screen */
+        #loading {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 1000; color: white; font-size: 18px;
+        }
+        
+        .spinner {
+            width: 40px; height: 40px; margin: 20px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white; border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* UI Panels */
+        .ui-panel {
+            position: fixed; background: rgba(255,255,255,0.95);
+            border: 2px solid #4CAF50; border-radius: 12px;
+            padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        #city-hud {
+            top: 10px; left: 10px; z-index: 100;
+            max-width: 300px; max-height: 85vh; overflow-y: auto;
+        }
+        
+        #controls {
+            top: 10px; right: 10px; z-index: 100;
+            width: 280px; max-height: 85vh; overflow-y: auto;
+        }
+        
+        #minion-panel {
+            bottom: 10px; left: 10px; z-index: 100;
+            width: 320px; max-height: 300px; overflow-y: auto;
+        }
+        
+        /* UI Elements */
+        .btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none; color: white; padding: 8px 16px;
+            margin: 4px; border-radius: 6px; cursor: pointer;
+            font-size: 12px; font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .stat-row {
+            display: flex; justify-content: space-between;
+            padding: 4px 0; border-bottom: 1px solid #eee;
+            font-size: 12px;
+        }
+        
+        .stat-label { font-weight: bold; color: #666; }
+        .stat-value { color: #2196F3; font-weight: bold; }
+        
+        .minion-item {
+            background: #f9f9f9; margin: 4px 0; padding: 8px;
+            border-radius: 6px; border-left: 4px solid #4CAF50;
+            cursor: pointer; transition: background 0.2s;
+        }
+        
+        .minion-item:hover { background: #e8f5e8; }
+        
+        .minion-name { font-weight: bold; font-size: 14px; }
+        .minion-status { font-size: 11px; color: #666; margin-top: 2px; }
+        
+        .error {
+            background: #ffebee; border-color: #f44336; color: #c62828;
+            padding: 12px; border-radius: 6px; margin: 10px 0;
+        }
+        
+        .success {
+            background: #e8f5e8; border-color: #4CAF50; color: #2e7d32;
+            padding: 8px; border-radius: 6px; margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div>Loading Futuristic Sims 3D Realm...</div>
+        <div style="font-size: 14px; margin-top: 10px; opacity: 0.8;">Initializing THREE.js environment</div>
+    </div>
+
+    <div id="city-hud" class="ui-panel" style="display: none;">
+        <h3 style="margin: 0 0 15px 0; color: #4CAF50; text-align: center;">🏙️ Dominion City Control</h3>
+        
+        <div class="success" style="margin-bottom: 10px; text-align: center;">
+            ✅ Futuristic Sims Realm Active
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <div class="stat-row">
+                <span class="stat-label">Citizens:</span>
+                <span class="stat-value" id="population">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Active Minions:</span>
+                <span class="stat-value" id="active-minions">6</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Happiness:</span>
+                <span class="stat-value" id="happiness">85%</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">City Wealth:</span>
+                <span class="stat-value" id="wealth">$2.3M</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Time:</span>
+                <span class="stat-value" id="game-time">Day 1, 08:00</span>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 10px;">
+            <button class="btn" onclick="location.href='./index.html'">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <div id="controls" class="ui-panel" style="display: none;">
+        <h3 style="margin: 0 0 15px 0; color: #2196F3; text-align: center;">🎮 Simulation Controls</h3>
+        
+        <div style="margin-bottom: 15px;">
+            <button class="btn" id="play-pause">⏸️ Pause Time</button>
+            <button class="btn" id="speed-up">⏩ Speed Up</button>
+            <button class="btn" id="reset-view">🔄 Reset View</button>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <h4 style="color: #666; margin: 0 0 8px 0;">Camera Controls:</h4>
+            <div style="font-size: 11px; line-height: 1.4; color: #888;">
+                <div>• WASD: Move around</div>
+                <div>• Mouse: Look around</div>
+                <div>• Scroll: Zoom in/out</div>
+                <div>• Click: Select minions</div>
+                <div>• Space: Follow selected</div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 10px;">
+            <div class="stat-row">
+                <span class="stat-label">Render FPS:</span>
+                <span class="stat-value" id="fps-counter">60</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">3D Objects:</span>
+                <span class="stat-value" id="object-count">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="minion-panel" class="ui-panel" style="display: none;">
+        <h3 style="margin: 0 0 10px 0; color: #FF9800; text-align: center;">👥 Active Minions</h3>
+        <div id="minion-list"></div>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- THREE.js CDN - Reliable version -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        console.log('🚀 Starting Futuristic Sims 3D Realm...');
+        
+        // Global variables
+        let scene, camera, renderer, raycaster, mouse;
+        let minions = [], buildings = [], citizens = [];
+        let selectedMinion = null, followingMinion = null;
+        let gameTime = { day: 1, hour: 8, minute: 0, speed: 1, paused: false };
+        let cityStats = { population: 6, happiness: 85, wealth: 2300000 };
+        
+        // Animation control
+        let animationId = null;
+        let lastTime = 0;
+        let fpsCounter = 0;
+        
+        // Initialize the Sims-style 3D realm
+        async function init() {
+            try {
+                console.log('🏗️ Initializing Futuristic Sims Realm...');
+                
+                // Verify THREE.js loaded
+                if (typeof THREE === 'undefined') {
+                    throw new Error('THREE.js failed to load from CDN');
+                }
+                
+                console.log('✅ THREE.js loaded successfully');
+                
+                // Create the 3D scene
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x87CEEB); // Sky blue
+                scene.fog = new THREE.Fog(0x87CEEB, 50, 200);
+                
+                // Setup camera
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(15, 15, 15);
+                camera.lookAt(0, 0, 0);
+                
+                // Create renderer
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                
+                document.getElementById('container').appendChild(renderer.domElement);
+                
+                // Add lighting system
+                await createLighting();
+                
+                // Build the city environment
+                await createCityEnvironment();
+                
+                // Create minion citizens
+                await createMinionCitizens();
+                
+                // Setup interaction systems
+                setupInteractions();
+                
+                // Start the simulation
+                startSimulation();
+                
+                // Show UI panels
+                showUI();
+                
+                console.log('🎉 Futuristic Sims Realm initialized successfully!');
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize 3D Realm:', error);
+                showError(error.message);
+            }
+        }
+        
+        // Create realistic lighting
+        async function createLighting() {
+            console.log('💡 Setting up lighting system...');
+            
+            // Ambient light for general illumination
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            // Directional light (sun)
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(50, 50, 25);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+            
+            // City glow lights
+            const cityLight1 = new THREE.PointLight(0x00ff88, 0.5, 50);
+            cityLight1.position.set(-10, 8, -10);
+            scene.add(cityLight1);
+            
+            const cityLight2 = new THREE.PointLight(0xff0088, 0.5, 50);
+            cityLight2.position.set(10, 8, 10);
+            scene.add(cityLight2);
+        }
+        
+        // Create the futuristic city environment
+        async function createCityEnvironment() {
+            console.log('🏗️ Building futuristic city...');
+            
+            // Ground plane
+            const groundGeometry = new THREE.PlaneGeometry(100, 100);
+            const groundMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x90EE90,
+                transparent: true,
+                opacity: 0.8
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Central plaza
+            const plazaGeometry = new THREE.CircleGeometry(8, 16);
+            const plazaMaterial = new THREE.MeshLambertMaterial({ color: 0x4169E1 });
+            const plaza = new THREE.Mesh(plazaGeometry, plazaMaterial);
+            plaza.rotation.x = -Math.PI / 2;
+            plaza.position.y = 0.1;
+            scene.add(plaza);
+            
+            // Futuristic buildings
+            await createBuildings();
+            
+            // City grid
+            const gridHelper = new THREE.GridHelper(50, 25, 0x00ff00, 0x004400);
+            gridHelper.position.y = 0.05;
+            scene.add(gridHelper);
+            
+            console.log('🏙️ City environment complete!');
+        }
+        
+        // Create futuristic buildings
+        async function createBuildings() {
+            const buildingPositions = [
+                { x: -15, z: -15, height: 12, color: 0x4169E1 },
+                { x: 15, z: -15, height: 8, color: 0x32CD32 },
+                { x: -15, z: 15, height: 10, color: 0xFF6347 },
+                { x: 15, z: 15, height: 15, color: 0x9370DB },
+                { x: 0, z: -25, height: 6, color: 0xFF69B4 },
+                { x: 0, z: 25, height: 7, color: 0x20B2AA }
+            ];
+            
+            buildingPositions.forEach((pos, index) => {
+                const geometry = new THREE.BoxGeometry(4, pos.height, 4);
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: pos.color,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const building = new THREE.Mesh(geometry, material);
+                building.position.set(pos.x, pos.height / 2, pos.z);
+                building.castShadow = true;
+                building.receiveShadow = true;
+                building.userData = { type: 'building', id: index };
+                
+                buildings.push(building);
+                scene.add(building);
+                
+                // Add glowing top
+                const glowGeometry = new THREE.BoxGeometry(4.2, 0.5, 4.2);
+                const glowMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                glow.position.set(pos.x, pos.height + 0.25, pos.z);
+                scene.add(glow);
+            });
+            
+            console.log(`🏢 Created ${buildings.length} futuristic buildings`);
+        }
+        
+        // Create Sims-style minion citizens
+        async function createMinionCitizens() {
+            console.log('👥 Creating minion citizens...');
+            
+            const minionNames = ['ATLAS', 'LUMEN', 'ORBIT', 'PRISM', 'NOVA', 'BOLT'];
+            const minionColors = [0xff4444, 0x44ff44, 0x4444ff, 0xffff44, 0xff44ff, 0x44ffff];
+            
+            for (let i = 0; i < minionNames.length; i++) {
+                const angle = (i / minionNames.length) * Math.PI * 2;
+                const radius = 12;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                // Create minion body
+                const bodyGeometry = new THREE.CapsuleGeometry(0.8, 2, 4, 8);
+                const bodyMaterial = new THREE.MeshPhongMaterial({ 
+                    color: minionColors[i],
+                    shininess: 100
+                });
+                const minionBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                minionBody.position.set(x, 1.5, z);
+                minionBody.castShadow = true;
+                
+                // Create minion head
+                const headGeometry = new THREE.SphereGeometry(0.6, 8, 8);
+                const headMaterial = new THREE.MeshPhongMaterial({ 
+                    color: minionColors[i],
+                    shininess: 100
+                });
+                const minionHead = new THREE.Mesh(headGeometry, headMaterial);
+                minionHead.position.set(x, 2.8, z);
+                minionHead.castShadow = true;
+                
+                // Group minion parts
+                const minionGroup = new THREE.Group();
+                minionGroup.add(minionBody);
+                minionGroup.add(minionHead);
+                minionGroup.userData = {
+                    name: minionNames[i],
+                    status: 'Active',
+                    mood: 'Happy',
+                    activity: 'Exploring',
+                    id: i
+                };
+                
+                minions.push(minionGroup);
+                scene.add(minionGroup);
+                
+                // Create floating name label
+                createNameLabel(minionNames[i], x, 4.5, z);
+                
+                console.log(`👤 Created citizen: ${minionNames[i]}`);
+            }
+            
+            // Update UI
+            updateMinionList();
+            updateStats();
+            
+            console.log(`✅ ${minions.length} minion citizens created!`);
+        }
+        
+        // Create floating name labels
+        function createNameLabel(text, x, y, z) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = 256;
+            canvas.height = 64;
+            
+            context.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            
+            context.font = 'Bold 18px Arial';
+            context.fillStyle = '#ffffff';
+            context.textAlign = 'center';
+            context.fillText(text, canvas.width / 2, canvas.height / 2 + 6);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.position.set(x, y, z);
+            sprite.scale.set(4, 1, 1);
+            
+            scene.add(sprite);
+        }
+        
+        // Setup interaction systems
+        function setupInteractions() {
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+            
+            // Mouse click interaction
+            renderer.domElement.addEventListener('click', onMouseClick);
+            
+            // Keyboard controls
+            document.addEventListener('keydown', onKeyDown);
+            
+            // UI button events
+            document.getElementById('play-pause').addEventListener('click', togglePause);
+            document.getElementById('speed-up').addEventListener('click', speedUp);
+            document.getElementById('reset-view').addEventListener('click', resetView);
+            
+            console.log('🎮 Interaction systems ready');
+        }
+        
+        // Mouse click handler
+        function onMouseClick(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+            
+            if (intersects.length > 0) {
+                const clicked = intersects[0].object;
+                
+                // Check if clicked a minion
+                let targetMinion = null;
+                minions.forEach(minion => {
+                    if (minion.children.includes(clicked)) {
+                        targetMinion = minion;
+                    }
+                });
+                
+                if (targetMinion) {
+                    selectMinion(targetMinion);
+                }
+            }
+        }
+        
+        // Select and focus on a minion
+        function selectMinion(minion) {
+            selectedMinion = minion;
+            followingMinion = minion;
+            
+            console.log(`👆 Selected: ${minion.userData.name}`);
+            
+            // Update UI to show selected minion info
+            updateMinionList();
+        }
+        
+        // Keyboard controls
+        function onKeyDown(event) {
+            const speed = 2;
+            
+            switch(event.code) {
+                case 'KeyW': camera.position.z -= speed; break;
+                case 'KeyS': camera.position.z += speed; break;
+                case 'KeyA': camera.position.x -= speed; break;
+                case 'KeyD': camera.position.x += speed; break;
+                case 'Space':
+                    if (selectedMinion) followingMinion = followingMinion ? null : selectedMinion;
+                    break;
+            }
+        }
+        
+        // UI Controls
+        function togglePause() {
+            gameTime.paused = !gameTime.paused;
+            document.getElementById('play-pause').textContent = gameTime.paused ? '▶️ Resume' : '⏸️ Pause';
+        }
+        
+        function speedUp() {
+            gameTime.speed = gameTime.speed >= 4 ? 1 : gameTime.speed + 1;
+            document.getElementById('speed-up').textContent = `⏩ Speed: ${gameTime.speed}x`;
+        }
+        
+        function resetView() {
+            camera.position.set(15, 15, 15);
+            camera.lookAt(0, 0, 0);
+            followingMinion = null;
+        }
+        
+        // Update minion list UI
+        function updateMinionList() {
+            const listContainer = document.getElementById('minion-list');
+            listContainer.innerHTML = '';
+            
+            minions.forEach(minion => {
+                const item = document.createElement('div');
+                item.className = 'minion-item';
+                if (selectedMinion === minion) item.style.background = '#e3f2fd';
+                
+                item.innerHTML = `
+                    <div class="minion-name">${minion.userData.name}</div>
+                    <div class="minion-status">${minion.userData.activity} • ${minion.userData.mood}</div>
+                `;
+                
+                item.addEventListener('click', () => selectMinion(minion));
+                listContainer.appendChild(item);
+            });
+        }
+        
+        // Update city statistics
+        function updateStats() {
+            document.getElementById('population').textContent = cityStats.population;
+            document.getElementById('active-minions').textContent = minions.length;
+            document.getElementById('happiness').textContent = cityStats.happiness + '%';
+            document.getElementById('wealth').textContent = '$' + (cityStats.wealth / 1000000).toFixed(1) + 'M';
+            document.getElementById('game-time').textContent = `Day ${gameTime.day}, ${String(gameTime.hour).padStart(2,'0')}:${String(gameTime.minute).padStart(2,'0')}`;
+            document.getElementById('object-count').textContent = scene.children.length;
+        }
+        
+        // Start the simulation loop
+        function startSimulation() {
+            animate();
+            
+            // Update game time every second
+            setInterval(() => {
+                if (!gameTime.paused) {
+                    gameTime.minute += gameTime.speed;
+                    if (gameTime.minute >= 60) {
+                        gameTime.minute = 0;
+                        gameTime.hour++;
+                        if (gameTime.hour >= 24) {
+                            gameTime.hour = 0;
+                            gameTime.day++;
+                        }
+                    }
+                    updateStats();
+                }
+            }, 1000);
+            
+            console.log('🎮 Simulation started!');
+        }
+        
+        // Main animation loop
+        function animate(currentTime = 0) {
+            animationId = requestAnimationFrame(animate);
+            
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            // Update FPS counter
+            if (deltaTime > 0) {
+                fpsCounter = Math.round(1000 / deltaTime);
+                document.getElementById('fps-counter').textContent = fpsCounter;
+            }
+            
+            // Animate minions
+            if (!gameTime.paused) {
+                animateMinions();
+            }
+            
+            // Follow selected minion
+            if (followingMinion) {
+                const pos = followingMinion.position;
+                camera.position.set(pos.x + 10, pos.y + 8, pos.z + 10);
+                camera.lookAt(pos);
+            }
+            
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+        
+        // Animate minion behaviors
+        function animateMinions() {
+            const time = Date.now() * 0.001;
+            
+            minions.forEach((minion, index) => {
+                // Gentle floating animation
+                minion.position.y = Math.sin(time + index * 2) * 0.3 + 1;
+                
+                // Gentle rotation
+                minion.rotation.y += 0.01;
+                
+                // Random movement occasionally
+                if (Math.random() < 0.001) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 3 + 10;
+                    minion.position.x = Math.cos(angle) * distance;
+                    minion.position.z = Math.sin(angle) * distance;
+                }
+            });
+        }
+        
+        // Show UI panels
+        function showUI() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('city-hud').style.display = 'block';
+            document.getElementById('controls').style.display = 'block';
+            document.getElementById('minion-panel').style.display = 'block';
+        }
+        
+        // Error handling
+        function showError(message) {
+            document.getElementById('loading').innerHTML = `
+                <div class="error">
+                    <h3>❌ Failed to load 3D Realm</h3>
+                    <p>${message}</p>
+                    <button class="btn" onclick="location.href='./index.html'">← Back to Dashboard</button>
+                    <button class="btn" onclick="location.reload()">🔄 Try Again</button>
+                </div>
+            `;
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        });
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 DOM ready, initializing 3D Realm...');
+            init();
+        });
+        
+        console.log('📝 Futuristic Sims 3D Realm script loaded successfully');
+    </script>
+</body>
+</html>
