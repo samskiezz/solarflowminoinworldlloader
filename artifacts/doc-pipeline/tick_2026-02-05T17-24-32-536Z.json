@@ -1,0 +1,31 @@
+{
+  "startedAt": "2026-02-05T17:24:32.536Z",
+  "finishedAt": "2026-02-05T17:24:37.689Z",
+  "ok": false,
+  "blocked": true,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 69
+  },
+  "errors": [
+    "Offline tick blocked by host backoff: cer.gov.au until 2026-02-05T18:16:04.910Z (rate limited (429), lastStatus=429)."
+  ],
+  "offlineRemediated": 0
+}

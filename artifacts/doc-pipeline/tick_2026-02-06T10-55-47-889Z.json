@@ -1,0 +1,83 @@
+{
+  "startedAt": "2026-02-06T10:55:47.889Z",
+  "finishedAt": "2026-02-06T10:55:49.845Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T10:55:49.811Z",
+      "finishedAt": "2026-02-06T10:55:49.819Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/emissions-intensity-determinations-table",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/emissions-intensity-determinations-table"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T10:55:49.819Z",
+      "finishedAt": "2026-02-06T10:55:49.829Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/emissions-intensity-determinations-table-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/emissions-intensity-determinations-table-0"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T10:55:49.829Z",
+      "finishedAt": "2026-02-06T10:55:49.841Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/safeguard-mechanism-emissions-intensity-audit-report-template",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/safeguard-mechanism-emissions-intensity-audit-report-template"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 3
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 613,
+    "retryableBlocked": 88,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

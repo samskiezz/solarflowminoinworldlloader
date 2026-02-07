@@ -1,0 +1,89 @@
+{
+  "startedAt": "2026-02-05T13:01:10.547Z",
+  "finishedAt": "2026-02-05T13:01:18.566Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T13:01:17.354Z",
+      "finishedAt": "2026-02-05T13:01:17.740Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/safeguard-facilities-data-2022-23-excel",
+        "finalUrl": "https://cer.gov.au/document/safeguard-facilities-data-2022-23-excel",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "contentLength": 39511,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T13:01:17.740Z",
+      "finishedAt": "2026-02-05T13:01:18.277Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/safeguard-facilities-data-2022-23",
+        "finalUrl": "https://cer.gov.au/document/safeguard-facilities-data-2022-23",
+        "httpStatus": 200,
+        "contentType": "text/csv; charset=UTF-8",
+        "contentLength": 34110,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T13:01:18.277Z",
+      "finishedAt": "2026-02-05T13:01:18.560Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/carbon-abatement-contract-register",
+        "finalUrl": "https://cer.gov.au/document/carbon-abatement-contract-register",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "contentLength": 90806,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 3,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 666,
+    "retryableBlocked": 63,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

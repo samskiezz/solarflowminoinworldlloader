@@ -1,0 +1,113 @@
+{
+  "startedAt": "2026-02-06T03:16:32.057Z",
+  "finishedAt": "2026-02-06T03:16:38.812Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T03:16:35.752Z",
+      "finishedAt": "2026-02-06T03:16:36.682Z",
+      "ok": true,
+      "data": {
+        "url": "https://pdfobject.com/pdf/sample.pdf",
+        "finalUrl": "https://pdfobject.com/pdf/sample.pdf",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 18810,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T03:16:36.682Z",
+      "finishedAt": "2026-02-06T03:16:37.503Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.adobe.com/content/dam/acom/en/accessibility/pdfs/accessing-pdf-sr.pdf",
+        "finalUrl": "https://www.adobe.com/content/dam/acom/en/accessibility/pdfs/accessing-pdf-sr.pdf",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 613380,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T03:16:37.503Z",
+      "finishedAt": "2026-02-06T03:16:38.775Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.epa.gov/sites/default/files/2021-01/documents/report_to_congress_2020_final.pdf",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://www.epa.gov/sites/default/files/2021-01/documents/report_to_congress_2020_final.pdf"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-06T03:16:38.775Z",
+      "finishedAt": "2026-02-06T03:16:38.789Z",
+      "ok": true,
+      "data": {
+        "url": "https://pdfobject.com/pdf/sample.pdf",
+        "finalUrl": "https://pdfobject.com/pdf/sample.pdf",
+        "sha256": "229defbb0cee6f02673a5cde290d0673e75a0dc31cec43989c8ab2a4eca7e1bb",
+        "bytes": 18810
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-06T03:16:38.789Z",
+      "finishedAt": "2026-02-06T03:16:38.809Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.adobe.com/content/dam/acom/en/accessibility/pdfs/accessing-pdf-sr.pdf",
+        "finalUrl": "https://www.adobe.com/content/dam/acom/en/accessibility/pdfs/accessing-pdf-sr.pdf",
+        "sha256": "cd2199c7f5a1aedd660eadc6704aafe2adbd3b77cd71860c48739e7f3d0b3b46",
+        "bytes": 65536
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 3,
+    "fetched": 2,
+    "processed": 2,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 1
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 3,
+    "pending": 625,
+    "retryableBlocked": 81,
+    "skippedByBackoff": 622,
+    "hostBackoffActive": 1,
+    "selectedFetch": 3,
+    "selectedProcess": 2
+  }
+}

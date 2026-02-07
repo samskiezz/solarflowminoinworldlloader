@@ -1,0 +1,115 @@
+{
+  "startedAt": "2026-02-06T02:18:13.530Z",
+  "finishedAt": "2026-02-06T02:18:20.512Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:18:17.159Z",
+      "finishedAt": "2026-02-06T02:18:18.571Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/combined-ceas-regeneration-and-environmental-planting-projects-guidance",
+        "finalUrl": "https://cer.gov.au/document/combined-ceas-regeneration-and-environmental-planting-projects-guidance",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 428289,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:18:18.571Z",
+      "finishedAt": "2026-02-06T02:18:18.862Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/trade-exposed-baseline-adjusted-determination-application-guideline",
+        "finalUrl": "https://cer.gov.au/document/trade-exposed-baseline-adjusted-determination-application-guideline",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 974444,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:18:18.862Z",
+      "finishedAt": "2026-02-06T02:18:20.320Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/trade-exposed-baseline-adjusted-determination-application-guideline-0",
+        "finalUrl": "https://cer.gov.au/document/trade-exposed-baseline-adjusted-determination-application-guideline-0",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 738761,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-06T02:18:20.321Z",
+      "finishedAt": "2026-02-06T02:18:20.333Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/combined-ceas-regeneration-and-environmental-planting-projects-guidance",
+        "finalUrl": "https://cer.gov.au/document/combined-ceas-regeneration-and-environmental-planting-projects-guidance",
+        "sha256": "d8e4f083c14efdeaa4d0c013b70cf771b070bc7a569c044db4790a6cc74213c6",
+        "bytes": 65536
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-06T02:18:20.333Z",
+      "finishedAt": "2026-02-06T02:18:20.509Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/trade-exposed-baseline-adjusted-determination-application-guideline",
+        "finalUrl": "https://cer.gov.au/document/trade-exposed-baseline-adjusted-determination-application-guideline",
+        "sha256": "ba4ea619d78ecf58919124d5bdd7073835e6460fba716ffa9d2da1ccb9dff3f3",
+        "bytes": 65536
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 2,
+    "processed": 2,
+    "duplicates": 0,
+    "skipped": 1,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 633,
+    "retryableBlocked": 78,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 2
+  }
+}

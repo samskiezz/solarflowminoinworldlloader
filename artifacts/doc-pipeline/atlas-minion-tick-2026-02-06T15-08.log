@@ -1,0 +1,24 @@
+MINION ATLAS Doc Pipeline Tick - 2026-02-06T15:08:38Z
+
+Mission: advance SolarFlow doc pipeline
+Status: BLOCKED - Rate Limited
+
+Details:
+- Offline tick blocked by host backoff: cer.gov.au until 2026-02-06T16:56:40.826Z (rate limited (429), lastStatus=429)
+- Pipeline correctly respecting rate limits to avoid 429 errors
+- 94 items blocked but properly handled
+- No new documents processed due to rate limiting protection
+
+Totals:
+- Seeded: 0
+- Discovered: 0  
+- Fetched: 0
+- Processed: 0
+- Duplicates: 0
+- Skipped: 0
+- Failed: 0
+- Blocked: 94
+
+Next Action: Pipeline will resume automatically when rate limit window expires (approximately 1h 48m from now)
+
+ATLAS Minion - Doc Pipeline Core Tick Complete ✓

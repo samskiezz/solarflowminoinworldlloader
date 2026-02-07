@@ -1,0 +1,38 @@
+{
+  "startedAt": "2026-02-06T05:10:42.754Z",
+  "finishedAt": "2026-02-06T05:10:42.754Z",
+  "ok": false,
+  "blocked": true,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 619
+  },
+  "errors": [
+    "ATLAS tick blocked by host backoff: cer.gov.au until 2026-02-06T06:44:11.606Z (rate limited (429), lastStatus=429). Non-CER sources already processed."
+  ],
+  "offlineRemediated": 0,
+  "nonCerStatus": {
+    "totalItems": 199,
+    "processed": 109,
+    "failed": 47,
+    "skipped": 32,
+    "blocked": 11
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "startedAt": "2026-02-06T00:17:55.750Z",
+  "finishedAt": "2026-02-06T00:17:57.000Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T00:17:55.996Z",
+      "finishedAt": "2026-02-06T00:17:56.134Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/voluntary-market-based-scope-2-emissions-guideline-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/voluntary-market-based-scope-2-emissions-guideline-0"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T00:17:56.134Z",
+      "finishedAt": "2026-02-06T00:17:56.250Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/harradine-report-july-december-2023",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 200,
+        "rangeStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/harradine-report-july-december-2023"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T00:17:56.250Z",
+      "finishedAt": "2026-02-06T00:17:56.996Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/harradine-report-july-december-2023-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 200,
+        "rangeStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/harradine-report-july-december-2023-0"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 3
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 636,
+    "retryableBlocked": 75,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

@@ -1,0 +1,9 @@
+MINION=ATLAS doc-pipeline tick at 17:20:34 UTC
+
+STATUS: BLOCKED by rate limits (cer.gov.au until 18:57 UTC)
+EXECUTION: Doc pipeline tick attempted but blocked by host backoff
+TOTALS: 97 URLs still blocked by rate limits
+RATE LIMIT: Active until 2026-02-06T18:57:06.881Z (1h 36m remaining)
+
+Despite rate limit blocking, pipeline tick was executed as requested.
+System remains stable and ready for next tick once rate limits expire.

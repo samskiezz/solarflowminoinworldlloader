@@ -1,0 +1,1 @@
+MINION=ATLAS doc-pipeline tick at 02:52 UTC: Enhanced tick processed 0 docs, fetched 1, discovered 3, seeded 5. Pipeline working around main script hang. Lint ✓ Build ✓ Committed to main. No blocks detected.

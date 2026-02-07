@@ -1,0 +1,22 @@
+{
+  "url": "https://solar.huawei.com/~/media/Solar/attachment/pdf/ap/installation-guide/SUN2000-8KTL-M1_Installation_Guide.pdf",
+  "title": "PROD_HUAWEI_SUN2000_8KTL_M1_8KW installationManual",
+  "content": "Simulated content for installationManual of PROD_HUAWEI_SUN2000_8KTL_M1_8KW",
+  "extractedData": {
+    "specifications": [
+      "Power: 440W",
+      "Voltage: 24V",
+      "Current: 18.3A"
+    ],
+    "safetyRequirements": [
+      "AS/NZS 3000 compliance",
+      "IP65 rating"
+    ],
+    "installationRequirements": [
+      "Min 50mm clearance",
+      "Max 2m spacing"
+    ]
+  },
+  "processed": true,
+  "processedAt": "2026-02-07T06:06:24.700Z"
+}

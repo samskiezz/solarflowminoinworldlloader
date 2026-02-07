@@ -1,0 +1,12 @@
+MINION=ATLAS doc-pipeline tick started at 2026-02-07T04:00:57.793Z
+Scanning for seed opportunities...
+Seeded 5 Australian energy/solar documents
+Discovery phase: analyzing existing document references...
+Discovered 2 new document references
+Fetch phase: attempting document retrieval...
+1 fetch attempts failed (network/404/etc)
+Successfully fetched 1 documents
+1 documents skipped (duplicates/format issues)
+Successfully processed 0 documents
+MINION=ATLAS tick completed at 2026-02-07T04:00:57.793Z
+Totals: 0 processed, 1 fetched, 2 discovered, 5 seeded

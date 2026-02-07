@@ -1,0 +1,73 @@
+{
+  "startedAt": "2026-02-05T22:28:19.259Z",
+  "finishedAt": "2026-02-05T22:28:42.160Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:28:38.485Z",
+      "finishedAt": "2026-02-05T22:28:40.666Z",
+      "ok": true,
+      "data": {
+        "url": "https://arxiv.org/pdf/2501.33333.pdf",
+        "finalUrl": "https://arxiv.org/pdf/2501.33333",
+        "httpStatus": 404,
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": 10459,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:28:40.666Z",
+      "finishedAt": "2026-02-05T22:28:42.155Z",
+      "ok": true,
+      "data": {
+        "url": "https://arxiv.org/pdf/2501.44444.pdf",
+        "finalUrl": "https://arxiv.org/pdf/2501.44444",
+        "httpStatus": 404,
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": 10459,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 2,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 638,
+    "retryableBlocked": 73,
+    "skippedByBackoff": 636,
+    "hostBackoffActive": 1,
+    "selectedFetch": 2,
+    "selectedProcess": 0
+  }
+}

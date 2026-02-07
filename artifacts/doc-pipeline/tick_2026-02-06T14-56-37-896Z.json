@@ -1,0 +1,85 @@
+{
+  "startedAt": "2026-02-06T14:56:37.896Z",
+  "finishedAt": "2026-02-06T14:56:40.830Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T14:56:38.168Z",
+      "finishedAt": "2026-02-06T14:56:38.282Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/public-consultation-paper-seeking-views-accu-scheme-stakeholders-audit-thresholds-instrument-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/public-consultation-paper-seeking-views-accu-scheme-stakeholders-audit-thresholds-instrument-0"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T14:56:38.282Z",
+      "finishedAt": "2026-02-06T14:56:38.529Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/reporting-transfer-certificates-guideline",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 200,
+        "rangeStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/reporting-transfer-certificates-guideline"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T14:56:38.529Z",
+      "finishedAt": "2026-02-06T14:56:40.826Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/reporting-transfer-certificates-guideline-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 200,
+        "rangeStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/reporting-transfer-certificates-guideline-0"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 3
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 607,
+    "retryableBlocked": 94,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "startedAt": "2026-02-07T04:26:27.346Z",
+  "finishedAt": "2026-02-07T04:27:44.906Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:26:28.769Z",
+      "finishedAt": "2026-02-07T04:26:28.884Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:26:28.884Z",
+      "finishedAt": "2026-02-07T04:26:53.887Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.energy.gov.au/publications/",
+        "failed": true,
+        "reason": "HEAD error: This operation was aborted"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:26:53.887Z",
+      "finishedAt": "2026-02-07T04:27:18.890Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.acma.gov.au/publications/",
+        "failed": true,
+        "reason": "HEAD error: This operation was aborted"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:27:18.890Z",
+      "finishedAt": "2026-02-07T04:27:19.879Z",
+      "ok": true,
+      "data": {
+        "url": "https://solarcitizens.org.au/resources/",
+        "failed": true,
+        "reason": "HEAD error: fetch failed"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:27:19.879Z",
+      "finishedAt": "2026-02-07T04:27:44.881Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.aer.gov.au/retail-markets/guidelines-reviews",
+        "failed": true,
+        "reason": "HEAD error: This operation was aborted"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:27:44.881Z",
+      "finishedAt": "2026-02-07T04:27:44.893Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method-docx",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method-docx"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:27:44.893Z",
+      "finishedAt": "2026-02-07T04:27:44.902Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/guide-to-estimating-sequestration-carbon-soil-using-default-values-method",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/guide-to-estimating-sequestration-carbon-soil-using-default-values-method"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 4,
+    "blocked": 3
+  },
+  "errors": [],
+  "offlineRemediated": 3,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 587,
+    "retryableBlocked": 106,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 7,
+    "selectedProcess": 0
+  }
+}

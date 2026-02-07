@@ -1,0 +1,30 @@
+{
+  "startedAt": "2026-02-07T02:08:44.669Z",
+  "finishedAt": "2026-02-07T02:08:45.000Z",
+  "ok": false,
+  "blocked": true,
+  "mode": "timeout_fallback",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [
+    "Doc pipeline tick script experienced timeout/hang. Preserving previous successful state."
+  ]
+}

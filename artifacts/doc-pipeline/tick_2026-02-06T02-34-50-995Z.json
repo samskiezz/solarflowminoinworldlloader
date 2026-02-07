@@ -1,0 +1,89 @@
+{
+  "startedAt": "2026-02-06T02:34:50.995Z",
+  "finishedAt": "2026-02-06T02:35:19.682Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 10,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:35:15.555Z",
+      "finishedAt": "2026-02-06T02:35:17.669Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/borrowing-adjustment-application-guideline-0",
+        "finalUrl": "https://cer.gov.au/document/borrowing-adjustment-application-guideline-0",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 690428,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:35:17.669Z",
+      "finishedAt": "2026-02-06T02:35:18.263Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/safeguard-mechanism-high-emissions-facility-audit-report-template",
+        "finalUrl": "https://cer.gov.au/document/safeguard-mechanism-high-emissions-facility-audit-report-template",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 709002,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:35:18.263Z",
+      "finishedAt": "2026-02-06T02:35:19.676Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/harradine-report-january-june-2024-0",
+        "finalUrl": "https://cer.gov.au/document/harradine-report-january-june-2024-0",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "contentLength": 13805,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 3,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 1,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 628,
+    "retryableBlocked": 78,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

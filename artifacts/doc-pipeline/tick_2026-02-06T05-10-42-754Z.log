@@ -1,0 +1,9 @@
+[2026-02-06T05:10:42.754Z] MINION=ATLAS doc-pipeline tick started
+[2026-02-06T05:10:42.754Z] Mode: offline (no Base44 credentials)
+[2026-02-06T05:10:42.754Z] Limit: 25 items per tick
+[2026-02-06T05:10:42.754Z] Host backoff check: cer.gov.au blocked until 2026-02-06T06:44:11.606Z
+[2026-02-06T05:10:42.754Z] All pending URLs (619) are from blocked host cer.gov.au
+[2026-02-06T05:10:42.754Z] Non-CER sources: 199 items (109 processed, 47 failed, 32 skipped, 11 blocked)
+[2026-02-06T05:10:42.754Z] No retryable items available from non-CER sources
+[2026-02-06T05:10:42.754Z] Offline tick blocked by host backoff: cer.gov.au until 2026-02-06T06:44:11.606Z (rate limited (429), lastStatus=429)
+[2026-02-06T05:10:42.754Z] DONE totals= {"seeded":0,"discovered":0,"fetched":0,"processed":0,"duplicates":0,"skipped":0,"failed":0,"blocked":619}

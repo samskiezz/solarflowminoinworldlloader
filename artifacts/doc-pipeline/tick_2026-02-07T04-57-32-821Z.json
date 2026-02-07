@@ -1,0 +1,211 @@
+{
+  "startedAt": "2026-02-07T04:57:32.821Z",
+  "finishedAt": "2026-02-07T04:57:32.825Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Datasheet-EN-2021-A.pdf",
+        "success": true,
+        "contentType": "application/pdf",
+        "size": 4347351,
+        "finalUrl": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Datasheet-EN-2021-A.pdf"
+      },
+      "error": null
+    },
+    {
+      "name": "processDocument",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Datasheet-EN-2021-A.pdf",
+        "processed": true,
+        "extractedData": {
+          "title": "Document from static.trinasolar.com",
+          "pages": 17,
+          "specifications": [
+            "Australian Standards Compliant",
+            "Solar Installation Ready"
+          ],
+          "extractedAt": "2026-02-07T04:57:32.825Z"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.jinkosolar.com/uploads/JinkoSolar_JKM365M-72H_EN.pdf",
+        "success": true,
+        "contentType": "application/pdf",
+        "size": 8687406,
+        "finalUrl": "https://www.jinkosolar.com/uploads/JinkoSolar_JKM365M-72H_EN.pdf"
+      },
+      "error": null
+    },
+    {
+      "name": "processDocument",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.jinkosolar.com/uploads/JinkoSolar_JKM365M-72H_EN.pdf",
+        "processed": true,
+        "extractedData": {
+          "title": "Document from www.jinkosolar.com",
+          "pages": 46,
+          "specifications": [
+            "Australian Standards Compliant",
+            "Solar Installation Ready"
+          ],
+          "extractedAt": "2026-02-07T04:57:32.825Z"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.fronius.com/~/downloads/Solar%20Energy/Installation%20Manual/42,0410,0903.pdf",
+        "success": true,
+        "contentType": "application/pdf",
+        "size": 3402004,
+        "finalUrl": "https://www.fronius.com/~/downloads/Solar%20Energy/Installation%20Manual/42,0410,0903.pdf"
+      },
+      "error": null
+    },
+    {
+      "name": "processDocument",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.fronius.com/~/downloads/Solar%20Energy/Installation%20Manual/42,0410,0903.pdf",
+        "processed": true,
+        "extractedData": {
+          "title": "Document from www.fronius.com",
+          "pages": 40,
+          "specifications": [
+            "Australian Standards Compliant",
+            "Solar Installation Ready"
+          ],
+          "extractedAt": "2026-02-07T04:57:32.825Z"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.solaredge.com/sites/default/files/se-single-phase-inverter-installation-guide.pdf",
+        "success": true,
+        "contentType": "application/pdf",
+        "size": 7042692,
+        "finalUrl": "https://www.solaredge.com/sites/default/files/se-single-phase-inverter-installation-guide.pdf"
+      },
+      "error": null
+    },
+    {
+      "name": "processDocument",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.solaredge.com/sites/default/files/se-single-phase-inverter-installation-guide.pdf",
+        "processed": true,
+        "extractedData": {
+          "title": "Document from www.solaredge.com",
+          "pages": 6,
+          "specifications": [
+            "Australian Standards Compliant",
+            "Solar Installation Ready"
+          ],
+          "extractedAt": "2026-02-07T04:57:32.825Z"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method",
+        "success": true,
+        "contentType": "application/pdf",
+        "size": 7300787,
+        "finalUrl": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method"
+      },
+      "error": null
+    },
+    {
+      "name": "processDocument",
+      "startedAt": "2026-02-07T04:57:32.825Z",
+      "finishedAt": "2026-02-07T04:57:32.825Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method",
+        "processed": true,
+        "extractedData": {
+          "title": "Document from cer.gov.au",
+          "pages": 23,
+          "specifications": [
+            "Australian Standards Compliant",
+            "Solar Installation Ready"
+          ],
+          "extractedAt": "2026-02-07T04:57:32.825Z"
+        }
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 5,
+    "fetched": 5,
+    "processed": 5,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 5,
+    "pending": 0,
+    "retryableBlocked": 0,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 0,
+    "selectedProcess": 5
+  }
+}
