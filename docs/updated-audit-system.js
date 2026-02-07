@@ -53,7 +53,16 @@ window.runCodeUIAudit = async function() {
         'adjustVolume', 'searchKnowledgeBase', 'runDiagnostics',
         
         // UI & Modal Functions
-        'showStatus', 'showError', 'closePanel', 'toggleView', 'updateDisplay'
+        'showStatus', 'showError', 'closePanel', 'toggleView', 'updateDisplay',
+        
+        // Performance & Testing Functions
+        'performanceTest', 'memoryTest', 'stressTest', 'integrationTest',
+        
+        // Activity Management Functions
+        'updateActivityFeed', 'logActivity', 'filterActivities', 'markActivityRead', 'generateActivityReport',
+        
+        // Compliance Functions
+        'checkCompliance', 'generateComplianceReport', 'validateStandards', 'auditSystem', 'exportComplianceData'
     ];
     
     // Check which functions are actually available
@@ -234,7 +243,27 @@ function getFunctionCategory(funcName) {
         'showError': 'UI',
         'closePanel': 'UI',
         'toggleView': 'UI',
-        'updateDisplay': 'UI'
+        'updateDisplay': 'UI',
+        
+        // Performance & Testing Functions
+        'performanceTest': 'Diagnostics',
+        'memoryTest': 'Diagnostics', 
+        'stressTest': 'Diagnostics',
+        'integrationTest': 'Diagnostics',
+        
+        // Activity Functions
+        'updateActivityFeed': 'Activity',
+        'logActivity': 'Activity',
+        'filterActivities': 'Activity',
+        'markActivityRead': 'Activity',
+        'generateActivityReport': 'Activity',
+        
+        // Compliance Functions
+        'checkCompliance': 'Compliance',
+        'generateComplianceReport': 'Compliance',
+        'validateStandards': 'Compliance',
+        'auditSystem': 'Compliance',
+        'exportComplianceData': 'Compliance'
     };
     
     return categoryMap[funcName] || 'Other';
