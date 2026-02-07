@@ -1,0 +1,22 @@
+{
+  "url": "https://www.fronius.com/~/downloads/Solar%20Energy/Datasheet/42,0410,0903,EN.pdf",
+  "title": "PROD_FRONIUS_PRIMO_5_0_1_5KW datasheet",
+  "content": "Simulated content for datasheet of PROD_FRONIUS_PRIMO_5_0_1_5KW",
+  "extractedData": {
+    "specifications": [
+      "Power: 440W",
+      "Voltage: 24V",
+      "Current: 18.3A"
+    ],
+    "safetyRequirements": [
+      "AS/NZS 3000 compliance",
+      "IP65 rating"
+    ],
+    "installationRequirements": [
+      "Min 50mm clearance",
+      "Max 2m spacing"
+    ]
+  },
+  "processed": true,
+  "processedAt": "2026-02-07T05:32:13.418Z"
+}
