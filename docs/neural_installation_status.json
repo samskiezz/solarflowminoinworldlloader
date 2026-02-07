@@ -1,0 +1,39 @@
+{
+  "neural_cluster_status": "INSTALLING",
+  "packages_installed": 21,
+  "total_packages": 27,
+  "progress_percent": 77.77777777777779,
+  "installed_packages": [
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "plotly",
+    "seaborn",
+    "requests",
+    "lxml",
+    "nltk",
+    "textblob",
+    "fastapi",
+    "flask",
+    "jupyter",
+    "tqdm",
+    "rich",
+    "psutil",
+    "sympy",
+    "networkx",
+    "streamlit",
+    "gradio",
+    "dash"
+  ],
+  "failed_packages": [
+    "scikit-learn",
+    "beautifulsoup4",
+    "opencv-python",
+    "tensorflow",
+    "torch",
+    "transformers"
+  ],
+  "installation_active": true,
+  "neural_operational": true
+}
