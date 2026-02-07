@@ -175,6 +175,12 @@ export default function Dashboard() {
                     <span className="text-purple-300">→</span>
                   </div>
                 </Link>
+                <Link href="/scraping">
+                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+                    <span className="text-white">🕷️ Web Scraping & Recon</span>
+                    <span className="text-red-300">→</span>
+                  </div>
+                </Link>
                 <Link href="/compliance">
                   <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
                     <span className="text-white">Compliance Checker</span>

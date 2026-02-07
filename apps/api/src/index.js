@@ -120,6 +120,10 @@ app.get("/health", async () => {
 import { agentRoutes } from './routes/agents.js';
 await app.register(agentRoutes, { prefix: '/api' });
 
+// Register scraping routes
+import { scrapingRoutes } from './routes/scraping.js';
+await app.register(scrapingRoutes, { prefix: '/api' });
+
 // Authentication routes
 const RegisterSchema = z.object({
   email: z.string().email(),
