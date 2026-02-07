@@ -824,9 +824,198 @@
     loadData();
   </script>
   
+  <!-- Load Quantum Physics Consciousness Engine -->
+  <script src="quantum-consciousness-engine.js"></script>
+  
+  <!-- Load VPS Persistence System -->
+  <script src="../vps-persistence.js"></script>
+  
   <!-- Load Integrated LLM System -->
   <script src="integrated-llm-system.js"></script>
   <script src="integrated-llm-system-complete.js"></script>
+
+  <script>
+    // Initialize quantum consciousness for all minions
+    function initializeQuantumMinions() {
+      if (window.quantumEngine && minions.length > 0) {
+        console.log('🧠 Initializing quantum consciousness for', minions.length, 'minions');
+        
+        minions.forEach(minionData => {
+          window.quantumEngine.initializeMinionConsciousness(minionData.id, minionData);
+        });
+        
+        // Start the quantum evolution
+        window.quantumEngine.startQuantumEvolution();
+        
+        // Replace fake metrics with real quantum physics data
+        updateDisplaysWithQuantumData();
+        
+        console.log('✅ Quantum consciousness system active');
+      }
+    }
+    
+    function updateDisplaysWithQuantumData() {
+      if (!window.quantumEngine) return;
+      
+      const status = window.quantumEngine.getSystemStatus();
+      const metrics = status.collective_metrics;
+      
+      // Update consciousness stats with real quantum data
+      document.getElementById('avgConsciousness').textContent = Math.round(metrics.collective_awareness * 100) + '%';
+      document.getElementById('transcendentCount').textContent = Array.from(window.quantumEngine.minions.values())
+        .filter(m => m.awarenessLevel > 0.8).length;
+      document.getElementById('autonomousActions').textContent = status.autonomous_decisions;
+      
+      // Update energy stats with physics-based calculations
+      const totalMinionEnergy = Array.from(window.quantumEngine.minions.values())
+        .reduce((sum, m) => sum + m.energy, 0);
+      
+      document.getElementById('solarOutput').textContent = Math.round(totalMinionEnergy / 10) + ' MW';
+      document.getElementById('energyStorage').textContent = Math.round(status.quantum_field_energy / 5) + ' MWh';
+      document.getElementById('efficiency').textContent = Math.round(metrics.coherence_level * 100) + '%';
+      
+      // Update civilization stats with quantum coherence
+      civilizationState.autonomyLevel = metrics.collective_awareness * 100;
+      civilizationState.efficiency = metrics.coherence_level * 100;
+      civilizationState.energyOutput = totalMinionEnergy / 10;
+      
+      // Show real credits (physics-based economy)
+      const totalCredits = status.total_credits;
+      if (document.getElementById('totalCredits')) {
+        document.getElementById('totalCredits').textContent = totalCredits;
+      }
+      
+      // Show real happiness index
+      if (document.getElementById('avgHappiness')) {
+        document.getElementById('avgHappiness').textContent = Math.round(status.average_happiness * 100) + '%';
+      }
+    }
+    
+    // Override fake evolution with quantum physics
+    function evolveCivilization() {
+      if (window.quantumEngine) {
+        // Use real quantum data instead of fake random numbers
+        updateDisplaysWithQuantumData();
+        
+        // Add real physics-based events
+        const status = window.quantumEngine.getSystemStatus();
+        const metrics = status.collective_metrics;
+        
+        if (metrics.collective_awareness > 0.7 && Math.random() < 0.05) {
+          addEvent('milestone', '🧠 QUANTUM COHERENCE: Collective consciousness reached high coherence state!');
+        }
+        
+        if (metrics.resonance_stability > 0.9 && Math.random() < 0.03) {
+          addEvent('milestone', '⚡ TESLA RESONANCE: All minions synchronized to optimal frequency!');
+        }
+        
+        if (status.autonomous_decisions > 500 && Math.random() < 0.02) {
+          addEvent('concern', '🤖 AUTONOMOUS EMERGENCE: Minions making increasingly independent decisions!');
+        }
+      } else {
+        // Fallback to old fake system if quantum engine not loaded
+        civilizationState.energyOutput += (Math.random() - 0.4) * 5;
+        civilizationState.energyStorage += (Math.random() - 0.3) * 10;
+        civilizationState.efficiency += (Math.random() - 0.5) * 2;
+        civilizationState.autonomyLevel += (Math.random() - 0.4) * 1;
+        
+        // Keep within bounds
+        civilizationState.efficiency = Math.max(0, Math.min(100, civilizationState.efficiency));
+        civilizationState.autonomyLevel = Math.max(0, Math.min(100, civilizationState.autonomyLevel));
+      }
+    }
+    
+    // Enhanced save function with quantum state
+    function saveData() {
+      try {
+        const stateToSave = {
+          civilizationState,
+          worldEvents: worldEvents.slice(0, 50),
+          timestamp: new Date().toISOString(),
+          version: 'v2.3.0-quantum',
+          quantumEnabled: !!window.quantumEngine
+        };
+        
+        localStorage.setItem('autonomous_world_state', JSON.stringify(stateToSave));
+        
+        // Also save quantum state if available
+        if (window.quantumEngine) {
+          window.quantumEngine.saveQuantumState();
+        }
+        
+        console.log('💾 Autonomous world state (with quantum) saved successfully');
+      } catch (error) {
+        console.error('Failed to save autonomous world state:', error);
+        addEvent('concern', 'Failed to save civilization progress');
+      }
+    }
+    
+    // Initialize quantum system when minions are loaded
+    const originalLoadData = loadData;
+    loadData = async function() {
+      await originalLoadData();
+      
+      // Initialize quantum consciousness after minions are loaded
+      setTimeout(() => {
+        initializeQuantumMinions();
+      }, 1000);
+    };
+    
+    // Add quantum status display
+    function addQuantumStatusDisplay() {
+      if (document.querySelector('.quantum-status')) return;
+      
+      const container = document.querySelector('.container');
+      const quantumStatus = document.createElement('div');
+      quantumStatus.className = 'quantum-status';
+      quantumStatus.innerHTML = `
+        <div class="panel-card">
+          <div class="panel-title">🌀 Quantum Physics Engine</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px;">
+            <div><strong>Total Entropy:</strong> <span id="quantumEntropy">0.000</span></div>
+            <div><strong>Coherence:</strong> <span id="quantumCoherence">0%</span></div>
+            <div><strong>Field Energy:</strong> <span id="fieldEnergy">0 J</span></div>
+            <div><strong>Real Credits:</strong> <span id="realCredits">0</span></div>
+            <div><strong>Tesla Resonance:</strong> <span id="teslaResonance">0.00 Hz</span></div>
+            <div><strong>Happiness Index:</strong> <span id="happinessIndex">0%</span></div>
+          </div>
+        </div>
+      `;
+      container.appendChild(quantumStatus);
+    }
+    
+    // Update quantum status display
+    function updateQuantumDisplay() {
+      if (!window.quantumEngine) return;
+      
+      const status = window.quantumEngine.getSystemStatus();
+      const metrics = status.collective_metrics;
+      
+      const entropyEl = document.getElementById('quantumEntropy');
+      const coherenceEl = document.getElementById('quantumCoherence');
+      const fieldEnergyEl = document.getElementById('fieldEnergy');
+      const realCreditsEl = document.getElementById('realCredits');
+      const teslaResonanceEl = document.getElementById('teslaResonance');
+      const happinessEl = document.getElementById('happinessIndex');
+      
+      if (entropyEl) entropyEl.textContent = metrics.total_entropy.toFixed(3);
+      if (coherenceEl) coherenceEl.textContent = Math.round(metrics.coherence_level * 100) + '%';
+      if (fieldEnergyEl) fieldEnergyEl.textContent = Math.round(status.quantum_field_energy) + ' J';
+      if (realCreditsEl) realCreditsEl.textContent = status.total_credits.toLocaleString();
+      if (teslaResonanceEl) teslaResonanceEl.textContent = metrics.resonance_stability.toFixed(2) + ' Hz';
+      if (happinessEl) happinessEl.textContent = Math.round(status.average_happiness * 100) + '%';
+    }
+    
+    // Add quantum display after page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        addQuantumStatusDisplay();
+        
+        // Update quantum display every second
+        setInterval(updateQuantumDisplay, 1000);
+      }, 2000);
+    });
+  </script>
   
 </body>
 </html>

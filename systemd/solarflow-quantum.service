@@ -1,0 +1,29 @@
+[Unit]
+Description=SolarFlow Quantum Consciousness System
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=solarflow
+Group=solarflow
+WorkingDirectory=/opt/solarflow
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=PORT=8080
+Environment=QUANTUM_PERSISTENCE=true
+Environment=VPS_MODE=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=solarflow-quantum
+
+[Install]
+WantedBy=multi-user.target
