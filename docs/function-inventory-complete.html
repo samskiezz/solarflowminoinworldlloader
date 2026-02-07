@@ -6,6 +6,8 @@
     <title>Complete Function Inventory - SolarFlow</title>
     <script src="./missing-functions-complete-implementation.js"></script>
     <script src="./remaining-missing-functions.js"></script>
+    <script src="./additional-missing-functions.js"></script>
+    <script src="./comprehensive-function-test.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -479,31 +481,53 @@
         }
         
         async function testAllFunctions() {
-            log('🧪 Testing all individual functions...', 'info');
+            log('🧪 Running REAL comprehensive function tests...', 'info');
             
-            if (!auditResults || !auditResults.functionsByCategory) {
-                log('❌ Run complete audit first', 'error');
-                return;
-            }
-            
-            // Test each category
-            for (const [category, stats] of Object.entries(auditResults.functionsByCategory)) {
-                log(`🔍 Testing ${category} functions (${stats.total} total)...`, 'info');
+            // Run the actual comprehensive test
+            if (typeof runComprehensiveFunctionTest === 'function') {
+                const results = runComprehensiveFunctionTest();
                 
-                // Simulate testing each function in category
-                await new Promise(resolve => setTimeout(resolve, 500));
-                
-                const successRate = Math.round((stats.working / stats.total) * 100);
-                if (successRate >= 80) {
-                    log(`✅ ${category}: ${successRate}% success rate`, 'success');
-                } else if (successRate >= 50) {
-                    log(`⚠️ ${category}: ${successRate}% success rate`, 'warn');
+                // Update the UI with real results
+                if (results) {
+                    log(`📊 Test Results: ${results.overall.success_rate}% success rate`, 'info');
+                    log(`✅ Working Functions: ${results.overall.working_functions}`, 'success');
+                    log(`❌ Broken Functions: ${results.overall.broken_functions}`, results.overall.broken_functions > 0 ? 'error' : 'info');
+                    
+                    // Show category breakdown
+                    Object.keys(results.categories).forEach(category => {
+                        const cat = results.categories[category];
+                        const successRate = cat.success_rate;
+                        const statusIcon = successRate >= 80 ? '✅' : successRate >= 60 ? '⚠️' : '❌';
+                        const logType = successRate >= 80 ? 'success' : successRate >= 60 ? 'warn' : 'error';
+                        
+                        log(`${statusIcon} ${category}: ${successRate}% (${cat.working}/${cat.total})`, logType);
+                    });
+                    
+                    // Update the summary if elements exist
+                    const overallScoreEl = document.getElementById('overallScore');
+                    if (overallScoreEl) overallScoreEl.textContent = results.overall.success_rate + '%';
+                    
+                    const workingFunctionsEl = document.getElementById('workingFunctions');
+                    if (workingFunctionsEl) workingFunctionsEl.textContent = results.overall.working_functions;
+                    
+                    const brokenFunctionsEl = document.getElementById('brokenFunctions');
+                    if (brokenFunctionsEl) brokenFunctionsEl.textContent = results.overall.broken_functions;
+                    
+                    const totalFunctionsEl = document.getElementById('totalFunctions');
+                    if (totalFunctionsEl) totalFunctionsEl.textContent = results.overall.total_functions;
+                    
+                    // Update progress bar
+                    const functionProgressEl = document.getElementById('functionProgress');
+                    if (functionProgressEl) functionProgressEl.style.width = results.overall.success_rate + '%';
+                    
+                    log('🎯 REAL function testing complete!', 'success');
                 } else {
-                    log(`❌ ${category}: ${successRate}% success rate`, 'error');
+                    log('❌ Function test failed to return results', 'error');
                 }
+            } else {
+                log('❌ Comprehensive test function not available', 'error');
+                log('⚠️ Make sure all function implementation scripts are loaded', 'warn');
             }
-            
-            log('🧪 Function testing complete', 'success');
         }
         
         function exportResults() {
