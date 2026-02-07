@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML/LLM Integration System - Minion World Loader</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0B1426 0%, #1E3A8A 100%);
+            color: #E5E7EB;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            text-align: center;
+            color: #60A5FA;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .integration-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .integration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(96, 165, 250, 0.5);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .card-icon {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #60A5FA, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #F3F4F6;
+        }
+        
+        .status-indicator {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: auto;
+        }
+        
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #FBB936;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .status-inactive {
+            background: rgba(107, 114, 128, 0.2);
+            color: #9CA3AF;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        .api-endpoint {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Monaco', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #60A5FA;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            color: #9CA3AF;
+        }
+        
+        .integration-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .control-btn.danger {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+        }
+        
+        .control-btn.danger:hover {
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+        }
+        
+        .live-feed {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Fira Code', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        .log-entry {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .log-timestamp {
+            color: #60A5FA;
+            font-weight: 600;
+        }
+        
+        .log-level {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin: 0 8px;
+        }
+        
+        .log-info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60A5FA;
+        }
+        
+        .log-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+        }
+        
+        .log-warning {
+            background: rgba(251, 191, 36, 0.2);
+            color: #FBB936;
+        }
+        
+        .log-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+        
+        .realm-integration {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(34, 211, 238, 0.1));
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .realm-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #A78BFA;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .minion-ai-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .minion-ai-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .minion-name {
+            font-weight: 700;
+            color: #F3F4F6;
+            margin-bottom: 10px;
+        }
+        
+        .ai-capability {
+            font-size: 0.9em;
+            color: #9CA3AF;
+            margin-bottom: 8px;
+        }
+        
+        .ai-status {
+            font-size: 0.8em;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        
+        .ai-online {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+        }
+        
+        .ai-learning {
+            background: rgba(251, 191, 36, 0.2);
+            color: #FBB936;
+        }
+        
+        .ai-offline {
+            background: rgba(107, 114, 128, 0.2);
+            color: #9CA3AF;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 ML/LLM Integration System</h1>
+        <div class="nav-bar">
+            <button class="nav-btn" onclick="window.open('./', '_blank')">← Main Dashboard</button>
+            <button class="nav-btn" onclick="window.open('./realm.html', '_blank')">🌐 3D Realm</button>
+            <button class="nav-btn" onclick="refreshAllSystems()">🔄 Refresh All</button>
+            <button class="nav-btn" onclick="exportConfiguration()">💾 Export Config</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Core AI Systems -->
+        <div class="integration-grid">
+            <!-- PennyLane Quantum ML -->
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="card-icon">⚛️</div>
+                    <div>
+                        <div class="card-title">PennyLane Quantum ML</div>
+                        <div class="status-indicator status-active">ACTIVE</div>
+                    </div>
+                </div>
+                <div class="api-endpoint">
+                    POST /api/quantum/pennylane/optimize<br/>
+                    GET /api/quantum/pennylane/circuits<br/>
+                    WS /ws/quantum/realtime
+                </div>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="pennylane-circuits">0</div>
+                        <div class="metric-label">Active Circuits</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="pennylane-qubits">0</div>
+                        <div class="metric-label">Qubits</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="pennylane-fidelity">0%</div>
+                        <div class="metric-label">Fidelity</div>
+                    </div>
+                </div>
+                <div class="integration-controls">
+                    <button class="control-btn" onclick="optimizeQuantumCircuits()">⚡ Optimize</button>
+                    <button class="control-btn" onclick="runQuantumBenchmarks()">📊 Benchmark</button>
+                    <button class="control-btn danger" onclick="resetQuantumState()">🔄 Reset</button>
+                </div>
+            </div>
+
+            <!-- LangChain Orchestration -->
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="card-icon">🔗</div>
+                    <div>
+                        <div class="card-title">LangChain Orchestration</div>
+                        <div class="status-indicator status-active">ACTIVE</div>
+                    </div>
+                </div>
+                <div class="api-endpoint">
+                    POST /api/langchain/agents/create<br/>
+                    GET /api/langchain/chains/status<br/>
+                    WS /ws/langchain/events
+                </div>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="langchain-agents">0</div>
+                        <div class="metric-label">Active Agents</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="langchain-chains">0</div>
+                        <div class="metric-label">Running Chains</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="langchain-tokens">0</div>
+                        <div class="metric-label">Tokens/min</div>
+                    </div>
+                </div>
+                <div class="integration-controls">
+                    <button class="control-btn" onclick="createNewAgent()">➕ New Agent</button>
+                    <button class="control-btn" onclick="optimizeChains()">⚡ Optimize</button>
+                    <button class="control-btn danger" onclick="pauseAllChains()">⏸️ Pause All</button>
+                </div>
+            </div>
+
+            <!-- Ollama Local LLM -->
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="card-icon">🦙</div>
+                    <div>
+                        <div class="card-title">Ollama Local LLM</div>
+                        <div class="status-indicator status-active">ACTIVE</div>
+                    </div>
+                </div>
+                <div class="api-endpoint">
+                    POST /api/ollama/generate<br/>
+                    GET /api/ollama/models<br/>
+                    WS /ws/ollama/stream
+                </div>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="ollama-models">0</div>
+                        <div class="metric-label">Loaded Models</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="ollama-memory">0GB</div>
+                        <div class="metric-label">Memory Usage</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="ollama-requests">0</div>
+                        <div class="metric-label">Requests/hr</div>
+                    </div>
+                </div>
+                <div class="integration-controls">
+                    <button class="control-btn" onclick="loadModel()">📥 Load Model</button>
+                    <button class="control-btn" onclick="generateText()">✨ Generate</button>
+                    <button class="control-btn danger" onclick="unloadModels()">🗑️ Unload All</button>
+                </div>
+            </div>
+
+            <!-- Chroma Vector Database -->
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="card-icon">🗂️</div>
+                    <div>
+                        <div class="card-title">Chroma Vector DB</div>
+                        <div class="status-indicator status-active">ACTIVE</div>
+                    </div>
+                </div>
+                <div class="api-endpoint">
+                    POST /api/chroma/collections<br/>
+                    GET /api/chroma/search<br/>
+                    PUT /api/chroma/embeddings
+                </div>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="chroma-collections">0</div>
+                        <div class="metric-label">Collections</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="chroma-documents">0</div>
+                        <div class="metric-label">Documents</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="chroma-dimensions">0</div>
+                        <div class="metric-label">Dimensions</div>
+                    </div>
+                </div>
+                <div class="integration-controls">
+                    <button class="control-btn" onclick="createCollection()">➕ Collection</button>
+                    <button class="control-btn" onclick="searchVectors()">🔍 Search</button>
+                    <button class="control-btn danger" onclick="compactDB()">🗜️ Compact</button>
+                </div>
+            </div>
+
+            <!-- AutoGen Multi-Agent -->
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="card-icon">🤖</div>
+                    <div>
+                        <div class="card-title">AutoGen Multi-Agent</div>
+                        <div class="status-indicator status-pending">PENDING</div>
+                    </div>
+                </div>
+                <div class="api-endpoint">
+                    POST /api/autogen/conversations<br/>
+                    GET /api/autogen/agents/list<br/>
+                    WS /ws/autogen/realtime
+                </div>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="autogen-conversations">0</div>
+                        <div class="metric-label">Conversations</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="autogen-agents">0</div>
+                        <div class="metric-label">Agent Pool</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="autogen-turns">0</div>
+                        <div class="metric-label">Total Turns</div>
+                    </div>
+                </div>
+                <div class="integration-controls">
+                    <button class="control-btn" onclick="startConversation()">💬 Start Chat</button>
+                    <button class="control-btn" onclick="addAgent()">👥 Add Agent</button>
+                    <button class="control-btn danger" onclick="resetConversations()">🔄 Reset</button>
+                </div>
+            </div>
+
+            <!-- CrewAI Collaboration -->
+            <div class="integration-card">
+                <div class="card-header">
+                    <div class="card-icon">🚀</div>
+                    <div>
+                        <div class="card-title">CrewAI Collaboration</div>
+                        <div class="status-indicator status-inactive">INACTIVE</div>
+                    </div>
+                </div>
+                <div class="api-endpoint">
+                    POST /api/crewai/crews/create<br/>
+                    GET /api/crewai/tasks/status<br/>
+                    PUT /api/crewai/workflows
+                </div>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="crewai-crews">0</div>
+                        <div class="metric-label">Active Crews</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="crewai-tasks">0</div>
+                        <div class="metric-label">Running Tasks</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="crewai-workflows">5</div>
+                        <div class="metric-label">Templates</div>
+                    </div>
+                </div>
+                <div class="integration-controls">
+                    <button class="control-btn" onclick="initializeCrewAI()">🚀 Initialize</button>
+                    <button class="control-btn" onclick="createCrew()">👥 Create Crew</button>
+                    <button class="control-btn danger" onclick="shutdownCrews()">🛑 Shutdown</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D Realm AI Integration -->
+        <div class="realm-integration">
+            <div class="realm-title">🌐 3D Realm AI Integration Status</div>
+            <div class="minion-ai-status" id="minion-ai-grid">
+                <!-- Generated dynamically by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Live System Feed -->
+        <div class="integration-card" style="margin-top: 30px;">
+            <div class="card-header">
+                <div class="card-icon">📡</div>
+                <div class="card-title">Live System Feed</div>
+                <div class="status-indicator status-active pulsing">STREAMING</div>
+            </div>
+            <div class="live-feed" id="system-feed">
+                <!-- Log entries will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load hive state for minion integration
+        let hiveState = null;
+        
+        async function loadHiveState() {
+            try {
+                const response = await fetch('./hive_state.json?' + Date.now());
+                hiveState = await response.json();
+                updateMinionAIStatus();
+            } catch (error) {
+                console.error('Failed to load hive state:', error);
+            }
+        }
+        
+        function updateMinionAIStatus() {
+            if (!hiveState || !hiveState.minions) return;
+            
+            const grid = document.getElementById('minion-ai-grid');
+            grid.innerHTML = '';
+            
+            // Show first 12 minions for demo
+            hiveState.minions.roster.slice(0, 12).forEach(minion => {
+                const aiCapability = getAICapability(minion);
+                const aiStatus = getAIStatus(minion);
+                
+                const card = document.createElement('div');
+                card.className = 'minion-ai-card';
+                card.innerHTML = `
+                    <div class="minion-name">${minion.id}</div>
+                    <div class="ai-capability">${aiCapability}</div>
+                    <div class="ai-status ${aiStatus.class}">${aiStatus.text}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        function getAICapability(minion) {
+            const specialties = minion.specialties || [];
+            if (specialties.includes('chroma')) return 'Vector Search AI';
+            if (specialties.includes('memory')) return 'Memory Management AI';
+            if (specialties.includes('orchestration')) return 'Orchestration AI';
+            if (specialties.includes('ui')) return 'Interface AI';
+            if (specialties.includes('doc-discovery')) return 'Document AI';
+            if (specialties.includes('ocr')) return 'Vision AI';
+            return 'General Purpose AI';
+        }
+        
+        function getAIStatus(minion) {
+            const happiness = minion.happiness_sim || 50;
+            const mode = minion.mode || 'EXECUTION';
+            
+            if (happiness > 70 && mode === 'COLLAB') {
+                return { class: 'ai-online', text: 'AI Online' };
+            } else if (happiness > 50) {
+                return { class: 'ai-learning', text: 'Learning' };
+            } else {
+                return { class: 'ai-offline', text: 'Offline' };
+            }
+        }
+        
+        // Simulate real-time metrics updates
+        function updateMetrics() {
+            // PennyLane metrics
+            document.getElementById('pennylane-circuits').textContent = Math.floor(Math.random() * 10) + 20;
+            document.getElementById('pennylane-fidelity').textContent = (95 + Math.random() * 4).toFixed(1) + '%';
+            
+            // LangChain metrics
+            document.getElementById('langchain-agents').textContent = Math.floor(Math.random() * 5) + 10;
+            document.getElementById('langchain-tokens').textContent = (40 + Math.random() * 20).toFixed(1) + 'K';
+            
+            // Ollama metrics
+            document.getElementById('ollama-memory').textContent = (3.0 + Math.random() * 1).toFixed(1) + 'GB';
+            document.getElementById('ollama-requests').textContent = Math.floor(Math.random() * 50) + 130;
+            
+            // Chroma metrics
+            document.getElementById('chroma-documents').textContent = (12.4 + Math.random() * 0.2).toFixed(1) + 'K';
+        }
+        
+        // Add log entries to live feed
+        function addLogEntry(level, message) {
+            const feed = document.getElementById('system-feed');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            const timestamp = new Date().toISOString().substring(11, 19);
+            entry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span class="log-level log-${level}">${level.toUpperCase()}</span>
+                ${message}
+            `;
+            
+            feed.appendChild(entry);
+            feed.scrollTop = feed.scrollHeight;
+            
+            // Keep only last 50 entries
+            while (feed.children.length > 50) {
+                feed.removeChild(feed.firstChild);
+            }
+        }
+        
+        // Simulate live system activity
+        function simulateSystemActivity() {
+            const activities = [
+                { level: 'info', message: 'PennyLane: Quantum circuit optimization completed' },
+                { level: 'success', message: 'LangChain: Agent conversation finished successfully' },
+                { level: 'info', message: 'Ollama: Model inference request processed' },
+                { level: 'success', message: 'Chroma: Vector search completed in 23ms' },
+                { level: 'warning', message: 'AutoGen: Conversation timeout - retrying' },
+                { level: 'info', message: 'System: Minion AI capabilities synchronized' },
+                { level: 'success', message: '3D Realm: AI integration status updated' },
+                { level: 'info', message: 'Vector DB: New embeddings indexed' },
+                { level: 'warning', message: 'CrewAI: Service not yet initialized' },
+                { level: 'success', message: 'Quantum ML: Circuit fidelity above 95%' }
+            ];
+            
+            setInterval(() => {
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                addLogEntry(activity.level, activity.message);
+            }, 3000 + Math.random() * 4000);
+        }
+        
+        // Control functions
+        function refreshAllSystems() {
+            addLogEntry('info', 'Refreshing all ML/LLM integrations...');
+            loadHiveState();
+            updateMetrics();
+            addLogEntry('success', 'All systems refreshed successfully');
+        }
+        
+        function exportConfiguration() {
+            const config = {
+                timestamp: new Date().toISOString(),
+                pennylane: { status: 'active', circuits: 24, qubits: 8 },
+                langchain: { status: 'active', agents: 12, chains: 7 },
+                ollama: { status: 'active', models: 4 },
+                chroma: { status: 'active', collections: 8, documents: 12400 },
+                autogen: { status: 'pending', conversations: 3 },
+                crewai: { status: 'inactive', crews: 0 }
+            };
+            
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ml-llm-config.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLogEntry('success', 'Configuration exported successfully');
+        }
+        
+        // Individual system controls
+        function optimizeQuantumCircuits() {
+            addLogEntry('info', 'PennyLane: Starting quantum circuit optimization...');
+            setTimeout(() => addLogEntry('success', 'PennyLane: Optimization completed - fidelity improved by 2.3%'), 2000);
+        }
+        
+        function createNewAgent() {
+            addLogEntry('info', 'LangChain: Creating new conversational agent...');
+            setTimeout(() => addLogEntry('success', 'LangChain:
