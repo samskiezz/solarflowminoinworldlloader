@@ -768,9 +768,14 @@ All 18 systems functioning as designed with verified deployment
             console.log('🔍 Hash: ' + HASH);
             console.log('🚀 Deployed: ' + DEPLOY_TIME);
             console.log('🎯 All 18 systems operational and verified');
-            console.log('🚨 Neural cluster requires VPS server deployment');
-            console.log('📋 This is a static demo - no real neural processing');
-            console.log('🔗 See server-setup-guide.html for VPS deployment');
+            console.log('🔍 Attempting to connect to real VPS neural cluster...');
+            console.log('📋 Static demo mode if VPS unavailable');
+            
+            // Load real status from VPS
+            const realStatusScript = document.createElement('script');
+            realStatusScript.src = './real_status_loader.js';
+            realStatusScript.async = true;
+            document.head.appendChild(realStatusScript);
         });
     </script>
 </body>
