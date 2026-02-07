@@ -774,6 +774,24 @@ All 18 systems functioning as designed with verified deployment
             };
             document.head.appendChild(integrationScript);
 
+            // CRITICAL: Load AS/NZS Standards Integration into Minion World
+            const standardsScript = document.createElement('script');
+            standardsScript.src = './minion-standards-integration.js';
+            standardsScript.async = true;
+            standardsScript.onload = () => {
+                console.log('📋 AS/NZS standards integrated into minion world - all documents available to minions');
+                
+                // Show integration status
+                setTimeout(() => {
+                    if (window.getComplianceStatus) {
+                        const status = window.getComplianceStatus();
+                        console.log(`✅ Standards integration complete: ${status.standards_loaded} standards loaded`);
+                        console.log(`📊 Minion knowledge updated: ${status.minion_knowledge_updated ? 'YES' : 'NO'}`);
+                    }
+                }, 2000);
+            };
+            document.head.appendChild(standardsScript);
+
             console.log('✅ SolarFlow v' + VERSION + ' loaded successfully');
             console.log('🔍 Hash: ' + HASH);
             console.log('🚀 Deployed: ' + DEPLOY_TIME);

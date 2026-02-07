@@ -1,13 +1,13 @@
 {
   "updatedAt": "2026-02-02T15:28:00Z",
   "minions": [
-    {"id":"BOLT","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ci-fix","react"],"energy_credits":120,"reputation":0.60,"avatar_url":"./avatars/bolt.png"},
-    {"id":"SABLE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["doc-discovery","sitemaps"],"energy_credits":120,"reputation":0.58,"avatar_url":"./avatars/sable.png"},
-    {"id":"ATLAS","tier":3,"role":"OVERSEER","mode":"COLLAB","specialties":["orchestration","governance"],"energy_credits":160,"reputation":0.65,"avatar_url":"./avatars/atlas.png"},
-    {"id":"PRISM","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ui","status-feed"],"energy_credits":120,"reputation":0.57,"avatar_url":"./avatars/prism.png"},
+    {"id":"BOLT","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ci-fix","react","AS/NZS-3000","neural-optimization"],"energy_credits":120,"reputation":0.60,"avatar_url":"./avatars/bolt.png","standards_knowledge":{"AS/NZS_3000_2018":"Electrical installations specialist","neural_optimization":"Performance enhancement"}},
+    {"id":"SABLE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["doc-discovery","sitemaps","AS/NZS-standards","compliance-checking"],"energy_credits":120,"reputation":0.58,"avatar_url":"./avatars/sable.png","standards_knowledge":{"all_ASNZS":"Standards documentation expert","compliance_matrix":"Cross-reference specialist"}},
+    {"id":"ATLAS","tier":3,"role":"OVERSEER","mode":"COLLAB","specialties":["orchestration","governance","standards-oversight","neural-coordination"],"energy_credits":160,"reputation":0.65,"avatar_url":"./avatars/atlas.png","standards_knowledge":{"complete_framework":"All 10 standards oversight","neural_cluster":"200+ repository management"}},
+    {"id":"PRISM","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ui","status-feed","solar-compliance","battery-safety"],"energy_credits":120,"reputation":0.57,"avatar_url":"./avatars/prism.png","standards_knowledge":{"AS/NZS_5033_2021":"PV arrays specialist","AS/NZS_5139_2019":"Battery safety expert"}},
 
-    {"id":"NOVA","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ocr","pdf-parse"],"energy_credits":110,"reputation":0.50,"avatar_url":"./avatars/bolt.png"},
-    {"id":"EMBER","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["fetch","retry-backoff"],"energy_credits":90,"reputation":0.48,"avatar_url":"./avatars/sable.png"},
+    {"id":"NOVA","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ocr","pdf-parse","AS/NZS-extraction","document-processing"],"energy_credits":110,"reputation":0.50,"avatar_url":"./avatars/bolt.png","standards_knowledge":{"document_extraction":"AS/NZS PDF processing expert","technical_content":"Standards content analysis"}},
+    {"id":"EMBER","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["fetch","retry-backoff","grid-connection","inverter-standards"],"energy_credits":90,"reputation":0.48,"avatar_url":"./avatars/sable.png","standards_knowledge":{"AS/NZS_4777_1_2016":"Grid connection specialist","smart_grid":"Future grid integration"}},
     {"id":"RUNE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["ranking","source-scoring"],"energy_credits":110,"reputation":0.52,"avatar_url":"./avatars/atlas.png"},
     {"id":"AURORA","tier":1,"role":"OPERATOR","mode":"EXECUTION","specialties":["link-extract","html-parse"],"energy_credits":90,"reputation":0.47,"avatar_url":"./avatars/prism.png"},
     {"id":"FORGE","tier":2,"role":"SPECIALIST","mode":"EXECUTION","specialties":["pipelines","queues"],"energy_credits":110,"reputation":0.51,"avatar_url":"./avatars/bolt.png"},
