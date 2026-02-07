@@ -1,0 +1,43 @@
+{
+  "startedAt": "2026-02-06T20:35:15.000Z",
+  "finishedAt": "2026-02-06T20:35:15.000Z",
+  "ok": false,
+  "blocked": true,
+  "mode": "maintenance",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    "git_pull_up_to_date",
+    "lint_pass",
+    "build_pass",
+    "progress_update"
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 595
+  },
+  "errors": [
+    "Maintenance tick - cer.gov.au rate limited until 2026-02-06T20:59:05.832Z. Found 595 non-CER pending URLs, but pipeline blocked by host backoff. Rate limit expires in 24 minutes."
+  ],
+  "maintenance": {
+    "git_pull": "up_to_date",
+    "lint": "PASS", 
+    "build": "PASS",
+    "non_cer_urls_pending": 595,
+    "rate_limit_expires": "2026-02-06T20:59:05.832Z",
+    "minutes_remaining": 24
+  }
+}

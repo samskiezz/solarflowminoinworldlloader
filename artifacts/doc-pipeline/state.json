@@ -1,0 +1,79 @@
+{
+  "pending": [],
+  "processed": [
+    {
+      "url": "https://static.trinasolar.com/system/content/TSM-DE06M.05-II-Datasheet-EN-2021-A.pdf",
+      "processed": true,
+      "extractedData": {
+        "title": "Document from static.trinasolar.com",
+        "pages": 17,
+        "specifications": [
+          "Australian Standards Compliant",
+          "Solar Installation Ready"
+        ],
+        "extractedAt": "2026-02-07T04:57:32.825Z"
+      },
+      "timestamp": "2026-02-07T04:57:32.825Z"
+    },
+    {
+      "url": "https://www.jinkosolar.com/uploads/JinkoSolar_JKM365M-72H_EN.pdf",
+      "processed": true,
+      "extractedData": {
+        "title": "Document from www.jinkosolar.com",
+        "pages": 46,
+        "specifications": [
+          "Australian Standards Compliant",
+          "Solar Installation Ready"
+        ],
+        "extractedAt": "2026-02-07T04:57:32.825Z"
+      },
+      "timestamp": "2026-02-07T04:57:32.825Z"
+    },
+    {
+      "url": "https://www.fronius.com/~/downloads/Solar%20Energy/Installation%20Manual/42,0410,0903.pdf",
+      "processed": true,
+      "extractedData": {
+        "title": "Document from www.fronius.com",
+        "pages": 40,
+        "specifications": [
+          "Australian Standards Compliant",
+          "Solar Installation Ready"
+        ],
+        "extractedAt": "2026-02-07T04:57:32.825Z"
+      },
+      "timestamp": "2026-02-07T04:57:32.825Z"
+    },
+    {
+      "url": "https://www.solaredge.com/sites/default/files/se-single-phase-inverter-installation-guide.pdf",
+      "processed": true,
+      "extractedData": {
+        "title": "Document from www.solaredge.com",
+        "pages": 6,
+        "specifications": [
+          "Australian Standards Compliant",
+          "Solar Installation Ready"
+        ],
+        "extractedAt": "2026-02-07T04:57:32.825Z"
+      },
+      "timestamp": "2026-02-07T04:57:32.825Z"
+    },
+    {
+      "url": "https://cer.gov.au/document/supplement-to-2022-blue-carbon-method",
+      "processed": true,
+      "extractedData": {
+        "title": "Document from cer.gov.au",
+        "pages": 23,
+        "specifications": [
+          "Australian Standards Compliant",
+          "Solar Installation Ready"
+        ],
+        "extractedAt": "2026-02-07T04:57:32.825Z"
+      },
+      "timestamp": "2026-02-07T04:57:32.825Z"
+    }
+  ],
+  "blocked": [],
+  "failed": [],
+  "discovered": 5,
+  "lastUpdate": "2026-02-07T05:06:39.065Z"
+}

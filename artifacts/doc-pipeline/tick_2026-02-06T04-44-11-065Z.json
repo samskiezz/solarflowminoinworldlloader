@@ -1,0 +1,84 @@
+{
+  "startedAt": "2026-02-06T04:44:11.065Z",
+  "finishedAt": "2026-02-06T04:44:11.611Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T04:44:11.352Z",
+      "finishedAt": "2026-02-06T04:44:11.578Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/cer-accu-003-request-to-be-considered-alternative-assurance-low-risk-plantation-forestry-project",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 200,
+        "rangeStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/cer-accu-003-request-to-be-considered-alternative-assurance-low-risk-plantation-forestry-project"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T04:44:11.578Z",
+      "finishedAt": "2026-02-06T04:44:11.595Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/2023-exemption-certificates-used-liable-entities",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/2023-exemption-certificates-used-liable-entities"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T04:44:11.595Z",
+      "finishedAt": "2026-02-06T04:44:11.606Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/2023-exemption-certificates-used-liable-entities-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/2023-exemption-certificates-used-liable-entities-0"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 3
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 622,
+    "retryableBlocked": 81,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

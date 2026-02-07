@@ -1,0 +1,163 @@
+{
+  "startedAt": "2026-02-05T23:42:45.991Z",
+  "finishedAt": "2026-02-05T23:42:51.445Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:46.230Z",
+      "finishedAt": "2026-02-05T23:42:47.559Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.aemo.com.au/-/media/files/electricity/nem/security_and_reliability/2024/engineering-framework.pdf",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://www.aemo.com.au/404"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:47.559Z",
+      "finishedAt": "2026-02-05T23:42:48.880Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.sa.gov.au/__data/assets/pdf_file/0006/90024/Solar-PV-Systems-Guide.pdf",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://www.sa.gov.au/__data/assets/pdf_file/0006/90024/Solar-PV-Systems-Guide.pdf"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:48.880Z",
+      "finishedAt": "2026-02-05T23:42:49.147Z",
+      "ok": true,
+      "data": {
+        "url": "https://dl.acm.org/doi/pdf/10.1145/3456797.3456819",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://dl.acm.org/doi/pdf/10.1145/3456797.3456819"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:49.147Z",
+      "finishedAt": "2026-02-05T23:42:49.696Z",
+      "ok": true,
+      "data": {
+        "url": "https://datatracker.ietf.org/doc/pdf/rfc9595",
+        "blocked": true,
+        "reason": "robots.txt disallow"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:49.696Z",
+      "finishedAt": "2026-02-05T23:42:50.575Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.aemo.com.au/-/media/files/electricity/nem/planning_and_forecasting/inputs-assumptions/2024/integrated-system-plan-2024.pdf",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://www.aemo.com.au/404"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:50.575Z",
+      "finishedAt": "2026-02-05T23:42:50.798Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.sa.gov.au/__data/assets/pdf_file/0006/1003428/home-battery-scheme-installation-guidelines.pdf",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://www.sa.gov.au/__data/assets/pdf_file/0006/1003428/home-battery-scheme-installation-guidelines.pdf"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:50.798Z",
+      "finishedAt": "2026-02-05T23:42:50.836Z",
+      "ok": true,
+      "data": {
+        "url": "https://dl.acm.org/doi/pdf/10.1145/3456798.3456820",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://dl.acm.org/doi/pdf/10.1145/3456798.3456820"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:50.836Z",
+      "finishedAt": "2026-02-05T23:42:50.836Z",
+      "ok": true,
+      "data": {
+        "url": "https://datatracker.ietf.org/doc/pdf/rfc9596",
+        "blocked": true,
+        "reason": "robots.txt disallow"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T23:42:50.836Z",
+      "finishedAt": "2026-02-05T23:42:51.441Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.aemo.com.au/-/media/files/major-publications/isp/2024/2024-integrated-system-plan.pdf",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://www.aemo.com.au/404"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 9
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 645,
+    "retryableBlocked": 75,
+    "skippedByBackoff": 636,
+    "hostBackoffActive": 1,
+    "selectedFetch": 9,
+    "selectedProcess": 0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "startedAt": "2026-02-05T13:19:27.778Z",
+  "finishedAt": "2026-02-05T13:19:57.603Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T13:19:55.497Z",
+      "finishedAt": "2026-02-05T13:19:56.023Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/sres-postcode-data-installations-2011-to-present-and-totals",
+        "finalUrl": "https://cer.gov.au/document/sres-postcode-data-installations-2011-to-present-and-totals",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "contentLength": 5917510,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T13:19:56.023Z",
+      "finishedAt": "2026-02-05T13:19:56.684Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/sgu-hydro-installations-2011-to-present-and-totals",
+        "finalUrl": "https://cer.gov.au/document/sgu-hydro-installations-2011-to-present-and-totals",
+        "httpStatus": 200,
+        "contentType": "text/csv; charset=UTF-8",
+        "contentLength": 1073,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T13:19:56.684Z",
+      "finishedAt": "2026-02-05T13:19:57.599Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/sgu-wind-installations-2011-to-present-and-totals",
+        "finalUrl": "https://cer.gov.au/document/sgu-wind-installations-2011-to-present-and-totals",
+        "httpStatus": 200,
+        "contentType": "text/csv; charset=UTF-8",
+        "contentLength": 27982,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 3,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 657,
+    "retryableBlocked": 63,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

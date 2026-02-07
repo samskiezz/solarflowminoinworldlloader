@@ -1,0 +1,31 @@
+{
+  "startedAt": "2026-02-07T02:25:37.468Z",
+  "finishedAt": "2026-02-07T02:25:37.468Z",
+  "ok": false,
+  "blocked": true,
+  "mode": "timeout_fallback",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 196,
+    "duplicates": 0,
+    "skipped": 78,
+    "failed": 446,
+    "blocked": 118
+  },
+  "errors": [
+    "Doc pipeline tick script experienced timeout/hang. Preserving previous successful state.",
+    "Emergency fallback summary created. Total items in state: 1428, Status counts: {\"pending\":585,\"skipped\":78,\"blocked\":118,\"processed\":196,\"failed\":446,\"seeded\":5}"
+  ]
+}

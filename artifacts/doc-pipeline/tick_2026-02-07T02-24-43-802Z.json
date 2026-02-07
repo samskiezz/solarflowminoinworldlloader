@@ -1,0 +1,135 @@
+{
+  "startedAt": "2026-02-07T02:24:43.802Z",
+  "finishedAt": "2026-02-07T02:25:39.104Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 5,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T02:24:45.474Z",
+      "finishedAt": "2026-02-07T02:24:46.828Z",
+      "ok": true,
+      "data": {
+        "url": "https://cleanenergycouncil.org.au/Cec/media/Background/Resources/Clean-Energy-Council-Power-Playbook.pdf",
+        "finalUrl": "https://cleanenergycouncil.org.au/cec/media/background/resources/clean-energy-council-power-playbook.pdf",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 4222249,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T02:24:46.828Z",
+      "finishedAt": "2026-02-07T02:24:47.519Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/understanding-your-blue-carbon-project-simple-method-guide",
+        "finalUrl": "https://cer.gov.au/document/understanding-your-blue-carbon-project-simple-method-guide",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 2227184,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T02:24:47.519Z",
+      "finishedAt": "2026-02-07T02:25:12.522Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.energy.gov.au/publications/",
+        "failed": true,
+        "reason": "HEAD error: This operation was aborted"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T02:25:12.522Z",
+      "finishedAt": "2026-02-07T02:25:37.524Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.acma.gov.au/publications/",
+        "failed": true,
+        "reason": "HEAD error: This operation was aborted"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-07T02:25:37.524Z",
+      "finishedAt": "2026-02-07T02:25:38.467Z",
+      "ok": true,
+      "data": {
+        "url": "https://solarcitizens.org.au/resources/",
+        "failed": true,
+        "reason": "HEAD error: fetch failed"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-07T02:25:38.467Z",
+      "finishedAt": "2026-02-07T02:25:39.089Z",
+      "ok": true,
+      "data": {
+        "url": "https://cleanenergycouncil.org.au/Cec/media/Background/Resources/Clean-Energy-Council-Power-Playbook.pdf",
+        "finalUrl": "https://cleanenergycouncil.org.au/cec/media/background/resources/clean-energy-council-power-playbook.pdf",
+        "sha256": "497be73691552a81bc647074f21385ec5e97c5bbaaed10dd97c48c00b76ce2ba",
+        "bytes": 65536
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-07T02:25:39.089Z",
+      "finishedAt": "2026-02-07T02:25:39.100Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/understanding-your-blue-carbon-project-simple-method-guide",
+        "finalUrl": "https://cer.gov.au/document/understanding-your-blue-carbon-project-simple-method-guide",
+        "sha256": "f14e807b7f16060ec7f270294b42449a3b4e87bd04ce16501548c9470bbf91b3",
+        "bytes": 441
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 2,
+    "processed": 2,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 3,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 4,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 589,
+    "retryableBlocked": 106,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 5,
+    "selectedProcess": 2
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "startedAt": "2026-02-05T22:52:55.514Z",
+  "finishedAt": "2026-02-05T22:53:06.604Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:52:59.607Z",
+      "finishedAt": "2026-02-05T22:52:59.861Z",
+      "ok": true,
+      "data": {
+        "url": "https://standards.ieee.org/wp-content/uploads/2024/01/2030_3-2024.pdf",
+        "finalUrl": "https://standards.ieee.org/wp-content/uploads/2024/01/2030_3-2024.pdf",
+        "httpStatus": 404,
+        "contentType": "text/html",
+        "contentLength": 0,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:52:59.861Z",
+      "finishedAt": "2026-02-05T22:53:00.114Z",
+      "ok": true,
+      "data": {
+        "url": "https://dl.acm.org/doi/pdf/10.1145/3456797.3456819",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://dl.acm.org/doi/pdf/10.1145/3456797.3456819"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:00.114Z",
+      "finishedAt": "2026-02-05T22:53:04.188Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.nist.gov/system/files/documents/2024/02/ir8459.pdf",
+        "finalUrl": "https://www.nist.gov/system/files/documents/2024/02/ir8459.pdf",
+        "httpStatus": 404,
+        "contentType": "text/html; charset=UTF-8",
+        "contentLength": 0,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:04.188Z",
+      "finishedAt": "2026-02-05T22:53:04.471Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.iso.org/files/live/sites/isoorg/files/store/en/PUB100427.pdf",
+        "finalUrl": "https://www.iso.org/files/live/sites/isoorg/files/store/en/PUB100427.pdf",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 1997242,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:04.471Z",
+      "finishedAt": "2026-02-05T22:53:05.240Z",
+      "ok": true,
+      "data": {
+        "url": "https://docs.python.org/3/reference/grammar.pdf",
+        "finalUrl": "https://docs.python.org/3/reference/grammar.pdf",
+        "httpStatus": 404,
+        "contentType": "text/html",
+        "contentLength": 1358,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:05.240Z",
+      "finishedAt": "2026-02-05T22:53:05.276Z",
+      "ok": true,
+      "data": {
+        "url": "https://tc39.es/ecma262/ecma-262.pdf",
+        "finalUrl": "https://tc39.es/ecma262/ecma-262.pdf",
+        "httpStatus": 404,
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": 5254,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:05.277Z",
+      "finishedAt": "2026-02-05T22:53:06.281Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.w3.org/TR/2024/WD-css-color-5-20240215/css-color-5.pdf",
+        "finalUrl": "https://www.w3.org/TR/2024/WD-css-color-5-20240215/css-color-5.pdf",
+        "httpStatus": 404,
+        "contentType": "text/html; charset=iso-8859-1",
+        "contentLength": 0,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:06.281Z",
+      "finishedAt": "2026-02-05T22:53:06.328Z",
+      "ok": true,
+      "data": {
+        "url": "https://datatracker.ietf.org/doc/pdf/rfc9595",
+        "blocked": true,
+        "reason": "robots.txt disallow"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:06.328Z",
+      "finishedAt": "2026-02-05T22:53:06.371Z",
+      "ok": true,
+      "data": {
+        "url": "https://dl.acm.org/doi/pdf/10.1145/3456798.3456820",
+        "blocked": true,
+        "reason": "forbidden (403)",
+        "httpStatus": 403,
+        "finalUrl": "https://dl.acm.org/doi/pdf/10.1145/3456798.3456820"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:53:06.371Z",
+      "finishedAt": "2026-02-05T22:53:06.371Z",
+      "ok": true,
+      "data": {
+        "url": "https://datatracker.ietf.org/doc/pdf/rfc9596",
+        "blocked": true,
+        "reason": "robots.txt disallow"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-05T22:53:06.371Z",
+      "finishedAt": "2026-02-05T22:53:06.598Z",
+      "ok": true,
+      "data": {
+        "url": "https://www.iso.org/files/live/sites/isoorg/files/store/en/PUB100427.pdf",
+        "finalUrl": "https://www.iso.org/files/live/sites/isoorg/files/store/en/PUB100427.pdf",
+        "sha256": "ff63b0145a1194a5cf39b71d7863864f53eedf06625e92cd2b28f49f0b17d403",
+        "bytes": 65536
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 10,
+    "fetched": 1,
+    "processed": 1,
+    "duplicates": 0,
+    "skipped": 5,
+    "failed": 0,
+    "blocked": 4
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 10,
+    "pending": 646,
+    "retryableBlocked": 75,
+    "skippedByBackoff": 636,
+    "hostBackoffActive": 1,
+    "selectedFetch": 10,
+    "selectedProcess": 1
+  }
+}

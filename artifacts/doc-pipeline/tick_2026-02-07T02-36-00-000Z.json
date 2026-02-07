@@ -1,0 +1,49 @@
+{
+  "startedAt": "2026-02-07T02:36:00.000Z",
+  "finishedAt": "2026-02-07T02:36:00.000Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "emergency_fallback",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "emergencyFallback",
+      "startedAt": "2026-02-07T02:36:00.000Z",
+      "finishedAt": "2026-02-07T02:36:00.000Z",
+      "ok": true,
+      "data": {
+        "reason": "Main script consistently hanging",
+        "preservedFrom": "2026-02-07T02:25:39.105Z",
+        "lintStatus": "PASS",
+        "buildStatus": "PASS"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 2,
+    "processed": 2,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 3,
+    "blocked": 0
+  },
+  "errors": [
+    "Main script doc_pipeline_tick.js consistently hangs - emergency fallback mode activated"
+  ],
+  "emergency": {
+    "reason": "Script hanging consistently",
+    "preservedFromTick": "2026-02-07T02:25:39.105Z",
+    "fallbackStats": true
+  }
+}

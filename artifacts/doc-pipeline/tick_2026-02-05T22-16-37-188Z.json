@@ -1,0 +1,85 @@
+{
+  "startedAt": "2026-02-05T22:16:37.188Z",
+  "finishedAt": "2026-02-05T22:16:39.781Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:16:37.404Z",
+      "finishedAt": "2026-02-05T22:16:37.518Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/estimating-emissions-and-energy-solid-waste-and-landfill-biogas-management-guideline",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/estimating-emissions-and-energy-solid-waste-and-landfill-biogas-management-guideline"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:16:37.518Z",
+      "finishedAt": "2026-02-05T22:16:39.768Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/estimating-emissions-and-energy-solid-waste-and-landfill-biogas-management-guideline-0",
+        "finalUrl": "https://cer.gov.au/document/estimating-emissions-and-energy-solid-waste-and-landfill-biogas-management-guideline-0",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 766039,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T22:16:39.768Z",
+      "finishedAt": "2026-02-05T22:16:39.777Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/application-to-vary-what-constitutes-power-station-form",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/application-to-vary-what-constitutes-power-station-form"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 1,
+    "failed": 0,
+    "blocked": 2
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 639,
+    "retryableBlocked": 73,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

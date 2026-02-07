@@ -1,0 +1,7 @@
+[2026-02-06T12:57:39.000Z] MINION=ATLAS doc-pipeline tick starting
+[2026-02-06T12:57:39.000Z] Offline tick blocked by host backoff: cer.gov.au until 2026-02-06T14:56:01.057Z (rate limited (429), lastStatus=429).
+[2026-02-06T12:57:39.000Z] Pipeline unable to process items due to cer.gov.au rate limiting
+[2026-02-06T12:57:39.000Z] Lint check: PASS
+[2026-02-06T12:57:39.000Z] Build check: PASS  
+[2026-02-06T12:57:39.000Z] ERRORS ["Offline tick blocked by host backoff: cer.gov.au until 2026-02-06T14:56:01.057Z (rate limited (429), lastStatus=429)."]
+[2026-02-06T12:57:39.000Z] DONE totals= {"seeded":0,"discovered":0,"fetched":0,"processed":0,"duplicates":0,"skipped":0,"failed":0,"blocked":91}

@@ -1,0 +1,84 @@
+{
+  "startedAt": "2026-02-05T20:16:31.462Z",
+  "finishedAt": "2026-02-05T20:16:32.546Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T20:16:32.398Z",
+      "finishedAt": "2026-02-05T20:16:32.405Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/estimating-emissions-and-energy-fuel-combustion-guideline-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/estimating-emissions-and-energy-fuel-combustion-guideline-0"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T20:16:32.405Z",
+      "finishedAt": "2026-02-05T20:16:32.533Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/defining-facility-national-greenhouse-and-energy-reporting-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 200,
+        "rangeStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/defining-facility-national-greenhouse-and-energy-reporting-0"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-05T20:16:32.533Z",
+      "finishedAt": "2026-02-05T20:16:32.543Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/defining-facility-national-greenhouse-and-energy-reporting",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/defining-facility-national-greenhouse-and-energy-reporting"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 3
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 642,
+    "retryableBlocked": 70,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}

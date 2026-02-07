@@ -1,0 +1,98 @@
+{
+  "startedAt": "2026-02-06T02:27:58.349Z",
+  "finishedAt": "2026-02-06T02:28:22.933Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:28:20.439Z",
+      "finishedAt": "2026-02-06T02:28:21.293Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/borrowing-adjustment-application-guideline",
+        "finalUrl": "https://cer.gov.au/document/borrowing-adjustment-application-guideline",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 829716,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:28:21.293Z",
+      "finishedAt": "2026-02-06T02:28:21.300Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/borrowing-adjustment-application-guideline-0",
+        "failed": true,
+        "reason": "HEAD error: fetch failed"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T02:28:21.300Z",
+      "finishedAt": "2026-02-06T02:28:22.251Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/safeguard-mechanism-trade-exposed-baseline-adjusted-facility-audit-report-template",
+        "finalUrl": "https://cer.gov.au/document/safeguard-mechanism-trade-exposed-baseline-adjusted-facility-audit-report-template",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 693209,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-06T02:28:22.251Z",
+      "finishedAt": "2026-02-06T02:28:22.927Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/borrowing-adjustment-application-guideline",
+        "finalUrl": "https://cer.gov.au/document/borrowing-adjustment-application-guideline",
+        "sha256": "ec0fa4ce5273e79e72652abeb62e771ac6c690c6bff551b0b154c953cf457611",
+        "bytes": 65536
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 1,
+    "processed": 1,
+    "duplicates": 0,
+    "skipped": 1,
+    "failed": 1,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 630,
+    "retryableBlocked": 78,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 1
+  }
+}

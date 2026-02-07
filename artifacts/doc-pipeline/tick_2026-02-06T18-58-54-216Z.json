@@ -1,0 +1,98 @@
+{
+  "startedAt": "2026-02-06T18:58:54.216Z",
+  "finishedAt": "2026-02-06T18:59:06.135Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T18:59:05.003Z",
+      "finishedAt": "2026-02-06T18:59:05.339Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/guide-to-alternative-waste-method",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/guide-to-alternative-waste-method"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T18:59:05.339Z",
+      "finishedAt": "2026-02-06T18:59:05.832Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/guide-to-avoided-clearing-method",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/guide-to-avoided-clearing-method"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T18:59:05.832Z",
+      "finishedAt": "2026-02-06T18:59:05.966Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/guidance-accu-scheme-participants-impacted-expiry-or-sunsetting-accu-scheme-method",
+        "finalUrl": "https://cer.gov.au/document/guidance-accu-scheme-participants-impacted-expiry-or-sunsetting-accu-scheme-method",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 605153,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-06T18:59:05.966Z",
+      "finishedAt": "2026-02-06T18:59:06.130Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/guidance-accu-scheme-participants-impacted-expiry-or-sunsetting-accu-scheme-method",
+        "finalUrl": "https://cer.gov.au/document/guidance-accu-scheme-participants-impacted-expiry-or-sunsetting-accu-scheme-method",
+        "sha256": "c6a71320a3bbc820374110de1e6a0be6ff26812b4e33ac61ce6471eca115a83c",
+        "bytes": 65536
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 1,
+    "processed": 1,
+    "duplicates": 0,
+    "skipped": 0,
+    "failed": 0,
+    "blocked": 2
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 598,
+    "retryableBlocked": 100,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 1
+  }
+}

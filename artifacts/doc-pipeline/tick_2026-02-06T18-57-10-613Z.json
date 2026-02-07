@@ -1,0 +1,103 @@
+{
+  "startedAt": "2026-02-06T18:57:10.613Z",
+  "finishedAt": "2026-02-06T18:57:11.829Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T18:57:10.791Z",
+      "finishedAt": "2026-02-06T18:57:11.145Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/reducing-risk-fire-and-preserving-sequestered-carbon-accu-scheme-projects-docx",
+        "finalUrl": "https://cer.gov.au/document/reducing-risk-fire-and-preserving-sequestered-carbon-accu-scheme-projects-docx",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 802336,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T18:57:11.145Z",
+      "finishedAt": "2026-02-06T18:57:11.397Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/independent-review-gateway-checks-december-2024-0",
+        "finalUrl": "https://cer.gov.au/document/independent-review-gateway-checks-december-2024-0",
+        "httpStatus": 200,
+        "contentType": "application/pdf",
+        "contentLength": 1321195,
+        "isPdf": true,
+        "status": "fetched"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T18:57:11.397Z",
+      "finishedAt": "2026-02-06T18:57:11.806Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/independent-review-gateway-checks-december-2024",
+        "finalUrl": "https://cer.gov.au/document/independent-review-gateway-checks-december-2024",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 6037162,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineProcess",
+      "startedAt": "2026-02-06T18:57:11.807Z",
+      "finishedAt": "2026-02-06T18:57:11.822Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/independent-review-gateway-checks-december-2024-0",
+        "finalUrl": "https://cer.gov.au/document/independent-review-gateway-checks-december-2024-0",
+        "sha256": "b65c3d7f2c0ac3be884d5070f7f737552bd8f3768f006e9e256c740e190bcf56",
+        "bytes": 65536
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 1,
+    "processed": 1,
+    "duplicates": 0,
+    "skipped": 2,
+    "failed": 0,
+    "blocked": 0
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "discoveryCrawlError": "fetch failed",
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 601,
+    "retryableBlocked": 100,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 1
+  }
+}

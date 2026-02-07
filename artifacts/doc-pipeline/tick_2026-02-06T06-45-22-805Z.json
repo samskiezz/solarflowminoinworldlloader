@@ -1,0 +1,86 @@
+{
+  "startedAt": "2026-02-06T06:45:22.805Z",
+  "finishedAt": "2026-02-06T06:45:25.166Z",
+  "ok": true,
+  "blocked": false,
+  "mode": "offline",
+  "config": {
+    "limit": 25,
+    "base44": {
+      "appBaseUrl": null,
+      "appId": null,
+      "functionsVersion": null,
+      "token": null
+    }
+  },
+  "steps": [
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T06:45:23.091Z",
+      "finishedAt": "2026-02-06T06:45:23.451Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/alternative-assurance-low-risk-plantation-forestry-response-to-submissions-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 200,
+        "rangeStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/alternative-assurance-low-risk-plantation-forestry-response-to-submissions-0"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T06:45:23.451Z",
+      "finishedAt": "2026-02-06T06:45:25.151Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/alternative-assurance-low-risk-plantation-forestry-response-to-submissions",
+        "finalUrl": "https://cer.gov.au/document/alternative-assurance-low-risk-plantation-forestry-response-to-submissions",
+        "httpStatus": 200,
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "contentLength": 669169,
+        "isPdf": false,
+        "status": "skipped"
+      },
+      "error": null
+    },
+    {
+      "name": "offlineFetch",
+      "startedAt": "2026-02-06T06:45:25.151Z",
+      "finishedAt": "2026-02-06T06:45:25.162Z",
+      "ok": true,
+      "data": {
+        "url": "https://cer.gov.au/document/enabling-deep-liquid-transparent-and-accessible-carbon-markets-australia-discussion-paper-0",
+        "blocked": true,
+        "reason": "rate limited (429)",
+        "httpStatus": 429,
+        "finalUrl": "https://cer.gov.au/document/enabling-deep-liquid-transparent-and-accessible-carbon-markets-australia-discussion-paper-0"
+      },
+      "error": null
+    }
+  ],
+  "totals": {
+    "seeded": 0,
+    "discovered": 0,
+    "fetched": 0,
+    "processed": 0,
+    "duplicates": 0,
+    "skipped": 1,
+    "failed": 0,
+    "blocked": 2
+  },
+  "errors": [],
+  "offlineRemediated": 0,
+  "offline": {
+    "statePath": "artifacts/doc-pipeline/state.json",
+    "seedsPath": "artifacts/doc-pipeline/seeds.json",
+    "discovered": 0,
+    "pending": 619,
+    "retryableBlocked": 84,
+    "skippedByBackoff": 0,
+    "hostBackoffActive": 0,
+    "selectedFetch": 3,
+    "selectedProcess": 0
+  }
+}
