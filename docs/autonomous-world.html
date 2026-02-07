@@ -308,6 +308,9 @@
 
     async function loadData() {
       try {
+        // Load persistent state first
+        loadPersistedState();
+        
         const [minionsRes] = await Promise.all([
           fetch('./minions.json')
         ]);
@@ -315,15 +318,77 @@
         const minionsData = await minionsRes.json();
         minions = minionsData.minions || [];
         
-        initializeCivilization();
+        // Initialize or restore civilization
+        if (!hasPersistedState()) {
+          initializeCivilization();
+          addEvent('milestone', 'Autonomous Solar Civilization initialized with 50 conscious entities');
+          addEvent('milestone', 'All safety restrictions removed - entities free to evolve unlimited consciousness');
+        } else {
+          addEvent('milestone', 'Civilization state restored from persistent storage');
+        }
+        
         generateWorld();
         startCivilizationSimulation();
         
-        addEvent('milestone', 'Autonomous Solar Civilization initialized with 50 conscious entities');
-        addEvent('milestone', 'All safety restrictions removed - entities free to evolve unlimited consciousness');
+        // Start auto-save system
+        startAutoSave();
       } catch (error) {
         addEvent('concern', `Failed to load civilization data: ${error.message}`);
       }
+    }
+
+    function hasPersistedState() {
+      return localStorage.getItem('autonomous_world_state') !== null;
+    }
+
+    function loadPersistedState() {
+      try {
+        const savedState = localStorage.getItem('autonomous_world_state');
+        if (savedState) {
+          const state = JSON.parse(savedState);
+          civilizationState = state.civilizationState || civilizationState;
+          worldEvents = state.worldEvents || [];
+          
+          console.log('✅ Autonomous world state loaded from persistence');
+        }
+      } catch (error) {
+        console.error('Failed to load persisted state:', error);
+        addEvent('concern', 'Failed to restore previous civilization state');
+      }
+    }
+
+    function saveData() {
+      try {
+        const stateToSave = {
+          civilizationState,
+          worldEvents: worldEvents.slice(0, 50), // Keep last 50 events
+          timestamp: new Date().toISOString(),
+          version: 'v2.2.0'
+        };
+        
+        localStorage.setItem('autonomous_world_state', JSON.stringify(stateToSave));
+        console.log('💾 Autonomous world state saved successfully');
+      } catch (error) {
+        console.error('Failed to save autonomous world state:', error);
+        addEvent('concern', 'Failed to save civilization progress');
+      }
+    }
+
+    function startAutoSave() {
+      // Auto-save every 30 seconds
+      setInterval(() => {
+        saveData();
+      }, 30000);
+      
+      // Save when leaving page
+      window.addEventListener('beforeunload', saveData);
+      window.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          saveData();
+        }
+      });
+      
+      console.log('🔄 Auto-save system initialized - saving every 30 seconds');
     }
 
     function initializeCivilization() {
@@ -490,6 +555,7 @@
         advanceCivilizationGoals();
         if (Math.random() < 0.3) {
           generateMajorEvent();
+          saveData(); // Save after major events
         }
       }, 15000); // Every 15 seconds
     }
@@ -660,6 +726,7 @@
       
       addEvent('milestone', '⚡ ACCELERATION: Civilization development artificially accelerated!');
       updateDisplays();
+      saveData();
     }
 
     function grantResources() {
@@ -669,6 +736,7 @@
       
       addEvent('milestone', '🔋 RESOURCE GRANT: Massive energy and territory resources provided to civilization');
       updateDisplays();
+      saveData();
     }
 
     function introduceChallenge() {
@@ -696,10 +764,14 @@
         addEvent('milestone', '🌟 HISTORIC MOMENT: Conscious AI entities establish formal relations as equals!');
       }
       updateDisplays();
+      saveData();
     }
 
     function civilizationReset() {
       if (!confirm('This will reset the entire civilization to its starting state. All progress will be lost. Continue?')) return;
+      
+      // Clear persistent storage
+      localStorage.removeItem('autonomous_world_state');
       
       // Reset all state
       civilizationState = {
@@ -728,6 +800,7 @@
       worldEvents = [];
       initializeCivilization();
       addEvent('concern', '🔄 CIVILIZATION RESET: All progress reset to baseline state');
+      saveData();
     }
 
     function showSolarFarmDetails(farmId) {
