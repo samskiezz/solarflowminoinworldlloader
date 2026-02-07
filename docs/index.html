@@ -2877,10 +2877,67 @@
       <div class="pillbar">
         <div class="pill"><strong>CI</strong>: <span id="ciText">passing</span></div>
         <div class="pill"><span id="spin" class="spin"></span>Last update: <strong id="updatedAt">2026-02-06T04:24:28Z</strong></div>
-        <button class="btn" id="btnToggle">Pause</button>
-        <button class="btn" onclick="location.href='./roster.html'">Roster</button>
-        <button class="btn" onclick="location.href='./realm.html'">Enter 3D Realm</button>
-        <button class="btn" onclick="location.reload()">Refresh</button>
+        <!-- 15 INTERACTIVE FEATURE BUTTONS - RESTORED -->
+        <div class="interactive-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0;">
+          
+          <!-- Workforce Management -->
+          <button class="btn" onclick="window.open('./roster.html', '_blank')" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: 600;">
+            👥 Workforce Manager
+          </button>
+          <button class="btn" onclick="window.open('./minion-chat.html', '_blank')">
+            💬 Direct Communication
+          </button>
+          <button class="btn" onclick="window.open('./activity-feed.html', '_blank')">
+            📊 Economic Activity
+          </button>
+          <button class="btn" onclick="window.open('./existential-threat-system.html', '_blank')">
+            😊 Happiness Activities
+          </button>
+          
+          <!-- Intelligence & Evolution -->
+          <button class="btn" onclick="window.open('./consciousness-engine.html', '_blank')" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6); color: white;">
+            🧠 Consciousness Engine
+          </button>
+          <button class="btn" onclick="window.open('./real-work-consciousness.html', '_blank')">
+            ⚡ Evolution Tracking
+          </button>
+          <button class="btn" onclick="window.open('./autonomous-world.html', '_blank')">
+            🌍 Autonomous World
+          </button>
+          
+          <!-- Solar Operations -->
+          <button class="btn" onclick="window.open('./simple-solar-australia.html', '_blank')" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
+            🏗️ Project Solar Australia
+          </button>
+          <button class="btn" onclick="window.open('./real-solar-consciousness-system.html', '_blank')">
+            ☀️ Solar Consciousness
+          </button>
+          <button class="btn" onclick="window.open('./autonomous-minion-knowledge-system.html', '_blank')">
+            🏛️ CER Products & Knowledge
+          </button>
+          <button class="btn" onclick="window.open('./processed-documents.html', '_blank')">
+            📄 Document Pipeline
+          </button>
+          
+          <!-- 3D Realm -->
+          <button class="btn" onclick="window.open('./realm.html', '_blank')" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; font-size: 14px;">
+            🌐 3D Realm
+          </button>
+          
+          <!-- System Controls -->
+          <button class="btn" onclick="window.open('./comprehensive-function-test.html', '_blank')">
+            🧪 Function Test
+          </button>
+          <button class="btn" onclick="window.open('./system-integration-test.html', '_blank')">
+            🔗 Integration Test
+          </button>
+          <button class="btn" onclick="window.open('./real-system-test.html', '_blank')">
+            💾 Persistence Test
+          </button>
+          
+          <!-- System Toggle -->
+          <button class="btn" id="btnToggle" onclick="toggleSystemPause()">⏸️ Pause</button>
+        </div>
       </div>
     </div>
 
@@ -3283,6 +3340,30 @@
       }catch(_e){}
     }
   })();
+
+  // Toggle system pause function for main buttons
+  window.toggleSystemPause = function() {
+    const isPaused = window.paused || false;
+    window.paused = !isPaused;
+    
+    const btn = document.getElementById('btnToggle');
+    if (btn) {
+      btn.textContent = window.paused ? '▶️ Resume' : '⏸️ Pause';
+    }
+    
+    const spinners = document.querySelectorAll('.spin');
+    spinners.forEach(spinner => {
+      if (window.paused) {
+        spinner.classList.add('paused');
+      } else {
+        spinner.classList.remove('paused');
+      }
+    });
+    
+    console.log(`System ${window.paused ? 'paused' : 'resumed'}`);
+  };
+
+  console.log('✅ 15 Interactive Feature Buttons Restored!');
   </script>
 </body>
 </html>
