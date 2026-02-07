@@ -1,0 +1,22 @@
+{
+  "url": "https://www.tesla.com/sites/default/files/pdfs/powerwall/Powerwall_2_AC_Installation_Manual.pdf",
+  "title": "PROD_TESLA_POWERWALL_2 installationManual",
+  "content": "Simulated content for installationManual of PROD_TESLA_POWERWALL_2",
+  "extractedData": {
+    "specifications": [
+      "Power: 440W",
+      "Voltage: 24V",
+      "Current: 18.3A"
+    ],
+    "safetyRequirements": [
+      "AS/NZS 3000 compliance",
+      "IP65 rating"
+    ],
+    "installationRequirements": [
+      "Min 50mm clearance",
+      "Max 2m spacing"
+    ]
+  },
+  "processed": true,
+  "processedAt": "2026-02-07T07:02:14.259Z"
+}
