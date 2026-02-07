@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Autonomous Solar Civilization</title>
+  <script src="./vps-integration.js"></script>
   <meta name="color-scheme" content="dark" />
   <style>
     :root{--bg1:#070A12;--bg2:#0B1530;--card:rgba(255,255,255,.08);--stroke:rgba(255,255,255,.14);--text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.62);--good:#22c55e;--warn:#f59e0b;--bad:#ef4444;--blue:#60a5fa;--purple:#a78bfa;--cyan:#22d3ee;--solar:#ffaa00;--energy:#44ff44;}
@@ -366,7 +367,23 @@
           version: 'v2.2.0'
         };
         
+        // Save to localStorage
         localStorage.setItem('autonomous_world_state', JSON.stringify(stateToSave));
+        
+        // Save to VPS if available
+        if (window.saveToVPS) {
+          window.saveToVPS('civilization', stateToSave)
+            .then(success => {
+              if (success) {
+                console.log('📡 Civilization state saved to VPS');
+                addEvent('achievement', 'Progress synchronized with VPS server');
+              }
+            })
+            .catch(error => {
+              console.warn('VPS save failed, using local storage only:', error);
+            });
+        }
+        
         console.log('💾 Autonomous world state saved successfully');
       } catch (error) {
         console.error('Failed to save autonomous world state:', error);

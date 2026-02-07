@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Solar Australia - ACTUALLY WORKING System</title>
+    <script src="./vps-integration.js"></script>
     <style>
         :root {
             --safety-red: #d32f2f;
@@ -459,6 +460,19 @@
                 };
                 
                 localStorage.setItem('projectSolarAustraliaState', JSON.stringify(persistentState));
+                
+                // Save to VPS if available
+                if (window.saveToVPS) {
+                    window.saveToVPS('compliance', persistentState)
+                        .then(success => {
+                            if (success) {
+                                log('📡 Compliance data saved to VPS server', 'success');
+                            }
+                        })
+                        .catch(error => {
+                            log('⚠️ VPS save failed, using local storage only', 'warning');
+                        });
+                }
                 
                 systemState.initialized = true;
                 document.getElementById('system-status').textContent = 'OPERATIONAL';

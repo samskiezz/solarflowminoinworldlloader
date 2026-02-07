@@ -1,0 +1,32 @@
+{
+  "name": "openclaw-solarflow-vps",
+  "version": "1.0.0",
+  "description": "VPS server for OpenClaw SolarFlow with real-time data persistence",
+  "main": "vps-server.js",
+  "scripts": {
+    "start": "node vps-server.js",
+    "dev": "nodemon vps-server.js",
+    "test": "node test-endpoints.js"
+  },
+  "keywords": [
+    "openclaw",
+    "solarflow", 
+    "vps",
+    "persistence",
+    "solar",
+    "battery",
+    "compliance"
+  ],
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "OpenClaw",
+  "license": "MIT"
+}
