@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Page Data Persistence Test</title>
+    <script src="./universal-bootloader.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: white; padding: 2rem; margin: 0; min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .test-card {
+            background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 16px;
+            margin: 1.5rem 0; border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+        .navigation { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; margin: 2rem 0;
+        }
+        .nav-btn {
+            background: linear-gradient(135deg, #1976d2, #1565c0);
+            color: white; border: none; padding: 1rem; border-radius: 12px;
+            cursor: pointer; font-weight: 600; transition: all 0.3s;
+            text-decoration: none; text-align: center;
+        }
+        .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(25,118,210,0.4); }
+        .data-display {
+            background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 12px;
+            font-family: monospace; font-size: 0.9rem; margin: 1rem 0;
+            white-space: pre-wrap; overflow-x: auto; max-height: 300px; overflow-y: auto;
+        }
+        .status { padding: 1rem; border-radius: 8px; margin: 1rem 0; font-weight: 600; }
+        .success { background: rgba(34,197,94,0.2); border: 1px solid #22c55e; color: #86efac; }
+        .warning { background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; }
+        .error { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; }
+        input, button {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 0.75rem 1rem; border-radius: 8px; margin: 0.25rem;
+        }
+        button { cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        button:hover { background: rgba(255,255,255,0.2); }
+        .back-home { background: #6b7280; }
+        .back-home:hover { background: #4b5563; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1>🔄 Cross-Page Data Persistence Test</h1>
+            <a href="./index.html" class="nav-btn back-home">← Back Home</a>
+        </div>
+
+        <div class="test-card">
+            <h2>🧪 Navigation Test</h2>
+            <p><strong>Instructions:</strong> Save some test data below, then navigate to other pages and come back. Your data should persist!</p>
+            
+            <div class="navigation">
+                <a href="./autonomous-world.html" class="nav-btn">🤖 Autonomous World</a>
+                <a href="./minion-chat.html" class="nav-btn">💬 Minion Chat</a>
+                <a href="./dominion-city.html" class="nav-btn">🏙️ Dominion City</a>
+                <a href="./roster.html" class="nav-btn">👥 Minion Roster</a>
+                <a href="./ultimate-3d-realm-llm.html" class="nav-btn">🌐 3D Realm</a>
+                <a href="./persistent-data-system.html" class="nav-btn">💾 Data System</a>
+            </div>
+        </div>
+
+        <div class="test-card">
+            <h2>💾 Test Data Management</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; margin: 1rem 0;">
+                <input type="text" id="testInput" placeholder="Enter test data to save..." style="flex: 1;">
+                <button onclick="saveTestData()">💾 Save Data</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                <button onclick="loadTestData()">📂 Load Data</button>
+                <button onclick="addTestActivity()">📝 Add Activity</button>
+                <button onclick="clearAllData()">🗑️ Clear All</button>
+            </div>
+
+            <div id="status" class="status warning">
+                ⏳ Waiting for bootloader...
+            </div>
+        </div>
+
+        <div class="test-card">
+            <h2>📊 Current State</h2>
+            <button onclick="refreshStateDisplay()">🔄 Refresh State</button>
+            <div id="stateDisplay" class="data-display">Loading...</div>
+        </div>
+
+        <div class="test-card">
+            <h2>📝 Recent Activities</h2>
+            <button onclick="refreshActivities()">🔄 Refresh Activities</button>
+            <div id="activitiesDisplay" class="data-display">Loading...</div>
+        </div>
+
+        <div class="test-card">
+            <h2>🔍 Page Visit History</h2>
+            <div id="pageVisitsDisplay" class="data-display">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        let testCounter = 0;
+
+        // Check bootloader status when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkBootloaderStatus, 1000);
+            setTimeout(refreshStateDisplay, 1500);
+            setTimeout(refreshActivities, 2000);
+            setTimeout(refreshPageVisits, 2500);
+            
+            // Auto-refresh displays
+            setInterval(() => {
+                if (window.SolarFlow) {
+                    refreshStateDisplay();
+                    refreshActivities();
+                    refreshPageVisits();
+                }
+            }, 10000); // Every 10 seconds
+        });
+
+        function checkBootloaderStatus() {
+            const statusEl = document.getElementById('status');
+            
+            if (window.SolarFlow && window.SolarFlow.bootloader) {
+                statusEl.className = 'status success';
+                statusEl.innerHTML = '✅ Universal Bootloader Active! Data will persist across page navigation.';
+                
+                // Load any existing test data
+                loadTestData();
+            } else {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '❌ Bootloader not found! Data will NOT persist across pages.';
+            }
+        }
+
+        function saveTestData() {
+            const input = document.getElementById('testInput');
+            const data = input.value.trim();
+            
+            if (!data) {
+                alert('Please enter some test data first');
+                return;
+            }
+
+            testCounter++;
+            const testData = {
+                message: data,
+                counter: testCounter,
+                timestamp: new Date().toISOString(),
+                savedFrom: 'cross-page-test'
+            };
+
+            if (window.SolarFlow) {
+                window.SolarFlow.saveState({ crossPageTestData: testData });
+                window.SolarFlow.addActivity({
+                    type: 'test',
+                    message: `Cross-page test data saved: "${data}"`,
+                    source: 'cross-page-test'
+                });
+                
+                document.getElementById('status').className = 'status success';
+                document.getElementById('status').innerHTML = '✅ Test data saved successfully! Navigate to other pages and come back.';
+                
+                input.value = '';
+                refreshStateDisplay();
+            } else {
+                document.getElementById('status').className = 'status error';
+                document.getElementById('status').innerHTML = '❌ Cannot save - bootloader not available!';
+            }
+        }
+
+        function loadTestData() {
+            if (!window.SolarFlow) {
+                document.getElementById('status').innerHTML = '⚠️ Bootloader not ready yet...';
+                return;
+            }
+
+            const state = window.SolarFlow.getState();
+            const testData = state.crossPageTestData;
+            
+            if (testData) {
+                document.getElementById('testInput').value = testData.message || '';
+                document.getElementById('status').className = 'status success';
+                document.getElementById('status').innerHTML = 
+                    `✅ Test data loaded! Saved at: ${new Date(testData.timestamp).toLocaleString()}`;
+            } else {
+                document.getElementById('status').className = 'status warning';
+                document.getElementById('status').innerHTML = '⚠️ No test data found. Save some data first.';
+            }
+        }
+
+        function addTestActivity() {
+            if (!window.SolarFlow) return;
+
+            const activity = {
+                type: 'test-activity',
+                message: `Test activity added from cross-page-test at ${new Date().toLocaleTimeString()}`,
+                source: 'cross-page-test',
+                testNumber: ++testCounter
+            };
+
+            window.SolarFlow.addActivity(activity);
+            
+            document.getElementById('status').className = 'status success';
+            document.getElementById('status').innerHTML = '✅ Test activity added to global activity feed!';
+            
+            setTimeout(refreshActivities, 500);
+        }
+
+        function clearAllData() {
+            if (!window.SolarFlow) return;
+            
+            if (confirm('Clear all test data? This will remove cross-page test data but keep other system data.')) {
+                const state = window.SolarFlow.getState();
+                delete state.crossPageTestData;
+                window.SolarFlow.saveState(state);
+                
+                document.getElementById('testInput').value = '';
+                document.getElementById('status').className = 'status warning';
+                document.getElementById('status').innerHTML = '🗑️ Test data cleared.';
+                
+                refreshStateDisplay();
+            }
+        }
+
+        function refreshStateDisplay() {
+            if (!window.SolarFlow) {
+                document.getElementById('stateDisplay').textContent = 'Bootloader not ready...';
+                return;
+            }
+
+            const state = window.SolarFlow.getState();
+            const displayState = {
+                version: state.version,
+                lastUpdate: new Date(state.lastUpdate).toLocaleString(),
+                sessionCount: state.sessionCount,
+                lastPage: state.lastPage,
+                lastSavedFrom: state.lastSavedFrom,
+                minionCount: state.minions?.length || 0,
+                activityCount: state.activities?.length || 0,
+                crossPageTestData: state.crossPageTestData || 'No test data',
+                autonomousState: state.autonomous ? 'Present' : 'Missing',
+                pageStatesCount: state.pageStates ? Object.keys(state.pageStates).length : 0
+            };
+            
+            document.getElementById('stateDisplay').textContent = JSON.stringify(displayState, null, 2);
+        }
+
+        function refreshActivities() {
+            if (!window.SolarFlow) {
+                document.getElementById('activitiesDisplay').textContent = 'Bootloader not ready...';
+                return;
+            }
+
+            const activities = window.SolarFlow.getActivities();
+            const recentActivities = activities.slice(0, 10); // Show last 10
+            
+            if (recentActivities.length === 0) {
+                document.getElementById('activitiesDisplay').textContent = 'No activities found.';
+                return;
+            }
+
+            const displayText = recentActivities.map(activity => {
+                const time = new Date(activity.timestamp).toLocaleTimeString();
+                const source = activity.source || activity.page || activity.minion || 'Unknown';
+                return `[${time}] (${source}): ${activity.message || activity.type}`;
+            }).join('\n');
+            
+            document.getElementById('activitiesDisplay').textContent = displayText;
+        }
+
+        function refreshPageVisits() {
+            if (!window.SolarFlow) {
+                document.getElementById('pageVisitsDisplay').textContent = 'Bootloader not ready...';
+                return;
+            }
+
+            const state = window.SolarFlow.getState();
+            const pageVisits = state.pageVisits || {};
+            
+            if (Object.keys(pageVisits).length === 0) {
+                document.getElementById('pageVisitsDisplay').textContent = 'No page visits recorded yet.';
+                return;
+            }
+
+            const visitText = Object.entries(pageVisits).map(([page, data]) => {
+                const lastVisit = new Date(data.lastVisit).toLocaleString();
+                const firstVisit = new Date(data.firstVisit).toLocaleString();
+                return `${page}: ${data.count} visits\n  First: ${firstVisit}\n  Last: ${lastVisit}\n`;
+            }).join('\n');
+            
+            document.getElementById('pageVisitsDisplay').textContent = visitText;
+        }
+    </script>
+</body>
+</html>
