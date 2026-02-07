@@ -18,11 +18,18 @@ class AutonomousMinionSystem {
     }
 
     async initializeSystem() {
-        // Load REAL minions from hive_state.json first
-        await this.loadRealMinions();
+        // Try to load saved state first
+        await this.loadSavedState();
         
-        // Load REAL CER products 
-        await this.loadRealCERProducts();
+        // Load REAL minions from hive_state.json first (if not already loaded)
+        if (!this.minions || this.minions.length === 0) {
+            await this.loadRealMinions();
+        }
+        
+        // Load REAL CER products (if not already loaded)
+        if (!this.products || this.products.length === 0) {
+            await this.loadRealCERProducts();
+        }
         
         // Initialize knowledge base with real data
         this.initializeKnowledgeBase();
@@ -34,8 +41,13 @@ class AutonomousMinionSystem {
         // Update real statistics
         this.updateRealStatistics();
         
-        // Generate real activity feed
-        this.generateRealActivityFeed();
+        // Generate real activity feed (if not already loaded)
+        if (!this.activityFeed || this.activityFeed.length === 0) {
+            this.generateRealActivityFeed();
+        }
+        
+        // Setup auto-save
+        this.setupAutoSave();
     }
 
     async loadRealMinions() {
@@ -1521,6 +1533,93 @@ class AutonomousMinionSystem {
         }
         return 'ATLAS';
     }
+    
+    // ============================================================================
+    // DATA PERSISTENCE METHODS - SAVE YOUR PROGRESS!
+    // ============================================================================
+    
+    async loadSavedState() {
+        try {
+            console.log('📂 Loading saved minion knowledge system state...');
+            
+            if (window.SOLARFLOW_WORKING_PERSISTENCE) {
+                const savedState = window.SOLARFLOW_WORKING_PERSISTENCE.load('minion-knowledge-system');
+                if (savedState) {
+                    // Restore minion states
+                    if (savedState.minions) {
+                        this.minions = savedState.minions;
+                        console.log('✅ Restored', this.minions.length, 'minions with their progress');
+                    }
+                    
+                    // Restore activity feed
+                    if (savedState.activityFeed) {
+                        this.activityFeed = savedState.activityFeed;
+                        console.log('✅ Restored', this.activityFeed.length, 'activities');
+                    }
+                    
+                    // Restore system state
+                    if (savedState.isRunning !== undefined) {
+                        this.isRunning = savedState.isRunning;
+                        console.log('✅ Restored system running state:', this.isRunning);
+                    }
+                    
+                    console.log('✅ MINION KNOWLEDGE SYSTEM STATE RESTORED');
+                    return true;
+                }
+            }
+            
+            console.log('⚠️ No saved state found, starting fresh');
+            return false;
+            
+        } catch (error) {
+            console.error('❌ Failed to load saved state:', error);
+            return false;
+        }
+    }
+    
+    async saveCurrentState() {
+        try {
+            if (!window.SOLARFLOW_WORKING_PERSISTENCE) {
+                console.log('⚠️ Working persistence not available');
+                return false;
+            }
+            
+            const stateToSave = {
+                minions: this.minions,
+                activityFeed: this.activityFeed.slice(0, 100), // Keep last 100 activities
+                isRunning: this.isRunning,
+                timestamp: Date.now(),
+                version: '2.3.0'
+            };
+            
+            const success = window.SOLARFLOW_WORKING_PERSISTENCE.autoSave('minion-knowledge-system', stateToSave);
+            if (success) {
+                console.log('✅ MINION KNOWLEDGE SYSTEM STATE SAVED');
+                return true;
+            } else {
+                console.error('❌ Failed to save state');
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('❌ Error saving state:', error);
+            return false;
+        }
+    }
+    
+    setupAutoSave() {
+        // Save state every 30 seconds
+        setInterval(() => {
+            this.saveCurrentState();
+        }, 30000);
+        
+        // Save state when page unloads
+        window.addEventListener('beforeunload', () => {
+            this.saveCurrentState();
+        });
+        
+        console.log('💾 Auto-save enabled for minion knowledge system');
+    }
 }
 
 // Tab switching functionality
@@ -1565,10 +1664,18 @@ function askMinions() {
 
 function startAutonomousWork() {
     window.minionSystem?.startAutonomousWork();
+    // Save state after starting work
+    setTimeout(() => {
+        window.minionSystem?.saveCurrentState();
+    }, 1000);
 }
 
 function pauseSystem() {
     window.minionSystem?.pauseSystem();
+    // Save state after pausing
+    setTimeout(() => {
+        window.minionSystem?.saveCurrentState();
+    }, 1000);
 }
 
 function resetKnowledge() {
