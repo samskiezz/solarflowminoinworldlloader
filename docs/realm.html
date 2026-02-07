@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate 3D Realm - AI-Integrated Minion Engine</title>
+    <title>SolarFlow 3D Realm - Advanced Futuristic Minion System</title>
+    <meta name="cache-bust" content="2026-02-07-fix-3">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -525,70 +526,27 @@
         }
         
         async function createMinions() {
-            console.log('🤖 Creating 50 individual humanoid minion avatars...');
-            
-            // Generate 50 unique minions instead of just 6
-            const minionNames = [];
-            for (let i = 1; i <= 50; i++) {
-                minionNames.push(`MINION-${String(i).padStart(2, '0')}`);
-            }
+            const minionNames = Object.keys(minionPersonalities);
             
             for (let i = 0; i < minionNames.length; i++) {
                 const name = minionNames[i];
-                // Create basic personality for generated minions
-                const personality = minionPersonalities[Object.keys(minionPersonalities)[i % Object.keys(minionPersonalities).length]];
+                const personality = minionPersonalities[name];
+                const angle = (i / minionNames.length) * Math.PI * 2;
+                const radius = 6;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
                 
-                // Arrange in multiple rings for 50 minions
-                const ring = Math.floor(i / 10); // 5 rings of 10 minions
-                const ringSize = 10;
-                const ringRadius = 6 + (ring * 4); // Rings at 6, 10, 14, 18, 22 radius
-                const angleInRing = ((i % ringSize) / ringSize) * Math.PI * 2;
-                
-                const radius = ringRadius;
-                const x = Math.cos(angleInRing) * radius;
-                const z = Math.sin(angleInRing) * radius;
-                
-                // Create humanoid minion geometry  
-                const bodyGeometry = new THREE.CapsuleGeometry(0.6, 1.8, 4, 8);
+                // Create minion geometry
+                // ADVANCED FUTURISTIC HUMANOID MINION (NOT MATRIX!)
+                const bodyGeometry = new THREE.CapsuleGeometry(0.8, 2.5, 4, 8);
                 const bodyMaterial = new THREE.MeshPhongMaterial({ 
-                    color: new THREE.Color().setHSL((i * 7) % 360 / 360, 0.8, 0.6), // Varied colors
+                    color: new THREE.Color().setHSL(i / minionNames.length, 0.8, 0.6),
                     shininess: 100
                 });
                 
                 const minionBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
-                minionBody.position.set(x, 1.2, z);
+                minionBody.position.set(x, 1.75, z);
                 minionBody.castShadow = true;
-                
-                // Add humanoid head
-                const headGeometry = new THREE.SphereGeometry(0.3, 8, 8);
-                const headMaterial = new THREE.MeshPhongMaterial({
-                    color: bodyMaterial.color.clone().multiplyScalar(1.2)
-                });
-                const head = new THREE.Mesh(headGeometry, headMaterial);
-                head.position.set(x, 2.2, z);
-                head.castShadow = true;
-                scene.add(head);
-                
-                // Add simple arms
-                for (let armIndex = 0; armIndex < 2; armIndex++) {
-                    const armGeometry = new THREE.CapsuleGeometry(0.15, 0.8, 2, 4);
-                    const arm = new THREE.Mesh(armGeometry, bodyMaterial);
-                    const armX = x + (armIndex === 0 ? -0.8 : 0.8);
-                    arm.position.set(armX, 1.5, z);
-                    arm.castShadow = true;
-                    scene.add(arm);
-                }
-                
-                // Add simple legs  
-                for (let legIndex = 0; legIndex < 2; legIndex++) {
-                    const legGeometry = new THREE.CapsuleGeometry(0.2, 0.9, 2, 4);
-                    const leg = new THREE.Mesh(legGeometry, bodyMaterial);
-                    const legX = x + (legIndex === 0 ? -0.3 : 0.3);
-                    leg.position.set(legX, 0.45, z);
-                    leg.castShadow = true;
-                    scene.add(leg);
-                }
-                
                 minionBody.userData = {
                     name: name,
                     role: personality.role,
