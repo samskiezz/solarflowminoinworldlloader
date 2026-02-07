@@ -286,7 +286,7 @@
         <div class="card" id="diagnosticCard" style="border: 2px solid var(--performance-orange); background: rgba(245, 158, 11, 0.1); margin-bottom: 2rem;">
             <h3 class="card-title">🔧 System Diagnostics</h3>
             <div id="diagnosticOutput">
-                <div>✅ System operational - All functions active</div>
+                <div>✅ System operational</div>
             </div>
         </div>
 
@@ -531,10 +531,12 @@
     </div>
 
     <!-- Include all system components -->
-    <!-- <script src="solar_compliance_engine.js"></script>
+    <!-- Temporarily disabled to fix initialization error:
+    <script src="solar_compliance_engine.js"></script>
     <script src="australian_data_processor.js"></script>
     <script src="court_safe_framework.js"></script>
-    <script src="complete_system_integration.js"></script> -->
+    <script src="complete_system_integration.js"></script>
+    -->
     
     <script>
         // Additional UI interaction functions specific to this page
@@ -797,26 +799,79 @@
         });
         
         // Enhanced initialization with detailed error reporting
-        // SIMPLIFIED WORKING INITIALIZATION - No external dependencies
-        window.addEventListener('load', function() {
-            console.log('✅ Project Solar Australia loading...');
+        function checkDependencies() {
+            const deps = {
+                'SolarComplianceEngine': typeof SolarComplianceEngine !== 'undefined',
+                'AustralianSolarDataProcessor': typeof AustralianSolarDataProcessor !== 'undefined', 
+                'CourtSafeFramework': typeof CourtSafeFramework !== 'undefined',
+                'ProjectSolarAustraliaComplete': typeof ProjectSolarAustraliaComplete !== 'undefined'
+            };
             
+            console.log('🔍 Dependency Check:', deps);
+            
+            // Update diagnostic display
+            const diagnosticEl = document.getElementById('diagnosticOutput');
+            if (diagnosticEl) {
+                let html = '<div><strong>Dependency Status:</strong></div>';
+                Object.entries(deps).forEach(([dep, loaded]) => {
+                    const status = loaded ? '✅' : '❌';
+                    const color = loaded ? '#388e3c' : '#d32f2f';
+                    html += `<div style="color: ${color};">${status} ${dep}: ${loaded ? 'Loaded' : 'Missing'}</div>`;
+                });
+                diagnosticEl.innerHTML = html;
+            }
+            
+            const missing = Object.keys(deps).filter(dep => !deps[dep]);
+            if (missing.length > 0) {
+                console.error('❌ Missing dependencies:', missing);
+                return false;
+            }
+            return true;
+        }
+
+        // Safe system initialization with detailed error handling
+        window.addEventListener('load', function() {
+            console.log('📦 Page loaded, initializing Project Solar Australia...');
+            
+            // Wait a bit for all scripts to fully load
             setTimeout(() => {
-                console.log('✅ System initialized successfully');
-                
-                // Create working system object
-                window.projectSolarAustralia = createRealtimeSystem();
-                
-                // Update UI to show operational status
-                const statusEl = document.querySelector('.status-indicator');
-                if (statusEl) {
-                    statusEl.style.background = 'var(--audit-green)';
-                    statusEl.title = 'System fully operational';
+                try {
+                    if (checkDependencies()) {
+                        console.log('✅ All dependencies loaded, initializing full system...');
+                        
+                        window.projectSolarAustralia = new ProjectSolarAustraliaComplete();
+                        console.log('🚀 Project Solar Australia system initialized successfully');
+                        
+                        // Show success message
+                        const statusEl = document.querySelector('.status-indicator');
+                        if (statusEl) {
+                            statusEl.style.background = 'var(--audit-green)';
+                            statusEl.title = 'System fully operational';
+                        }
+                        
+                        updateSystemMetrics();
+                        setInterval(updateSystemMetrics, 10000);
+                        
+                    } else {
+                        console.warn('⚠️ Dependencies missing, running in REAL mode with limited features...');
+                        window.projectSolarAustralia = createRealtimeSystem();
+                        updateSystemMetrics();
+                    }
+                } catch (error) {
+                    console.error('💥 System initialization error:', error);
+                    console.error('Stack:', error.stack);
+                    
+                    // Show error in UI
+                    const statusEl = document.querySelector('.status-indicator');
+                    if (statusEl) {
+                        statusEl.style.background = 'var(--safety-red)';
+                        statusEl.title = 'System error - check console';
+                    }
+                    
+                    window.projectSolarAustralia = createRealtimeSystem();
+                    updateSystemMetrics();
                 }
-                
-                updateSystemMetrics();
-                
-            }, 500);
+            }, 1000); // Give scripts 1 second to fully load
         });
         
         function createRealtimeSystem() {
@@ -905,46 +960,3 @@
                 }
             }
         }
-        
-        // QUICK FIX: Working initialization without external dependencies
-        console.log('🔧 Project Solar Australia - Initializing simplified system...');
-        
-        function runSystemTest() {
-            alert('✅ SYSTEM TEST PASSED\n\nProject Solar Australia is operational:\n• 500 functions active\n• Australian standards compliant\n• Safety protocols enabled\n• All systems green');
-        }
-        
-        function generateReport() {
-            alert('📋 COMPLIANCE REPORT\n\n✅ AS/NZS 5033:2021 - COMPLIANT\n✅ AS/NZS 4777.1:2016 - COMPLIANT\n✅ AS/NZS 5139:2019 - COMPLIANT\n✅ CER Standards - COMPLIANT\n\nSystem operational and court-safe.');
-        }
-        
-        function emergencyStop() {
-            if (confirm('🛑 EMERGENCY STOP\nHalt all operations?')) {
-                alert('🛑 Emergency stop activated. Refresh page to restart.');
-            }
-        }
-        
-        // Auto-update status on page load
-        setTimeout(() => {
-            console.log('✅ System initialization completed successfully');
-            
-            // Update diagnostics panel if it exists
-            const statusElements = document.querySelectorAll('.status-text');
-            statusElements.forEach(el => {
-                if (el.textContent.includes('Checking system initialization')) {
-                    el.innerHTML = '✅ System operational - All functions active';
-                    el.style.color = '#4CAF50';
-                }
-            });
-            
-            // Remove any error messages
-            const errorElements = document.querySelectorAll('[class*="error"], [style*="red"]');
-            errorElements.forEach(el => {
-                if (el.textContent.includes('initialization failed')) {
-                    el.remove();
-                }
-            });
-            
-        }, 1000);
-    </script>
-</body>
-</html>
