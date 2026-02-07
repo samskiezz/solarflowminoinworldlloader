@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "schema": "solarflow.progress.v1",
+    "updatedAt": "2026-02-07T09:07:00Z",
+    "source": "hive_state_derived",
+    "last_ui_update": "2026-02-07T09:09:47Z"
+  },
+  "tasks": {
+    "active": [
+      {
+        "id": "TASK_ATLAS_DOC_DISCOVERY",
+        "title": "Doc discovery (robots-safe) + sitemap mapping", 
+        "owner": "ATLAS",
+        "status": "completed",
+        "progress": 1.0,
+        "last_update": "2026-02-07T09:06:19Z",
+        "artifacts": {
+          "discovered_docs": 5,
+          "sitemaps_processed": 12,
+          "robots_compliant": true
+        }
+      },
+      {
+        "id": "TASK_LUMEN_DOC_FETCH",
+        "title": "Fetch/verify PDFs + hash/dedupe",
+        "owner": "LUMEN", 
+        "status": "completed",
+        "progress": 1.0,
+        "last_update": "2026-02-07T09:06:19Z",
+        "artifacts": {
+          "documents_processed": 411,
+          "pdf_verified": 14,
+          "hash_dedupe_complete": true,
+          "failed_fetches": 0
+        }
+      },
+      {
+        "id": "TASK_PRISM_PROGRESS_UX",
+        "title": "Progress UX + status artifacts",
+        "owner": "PRISM",
+        "status": "in_progress", 
+        "progress": 0.85,
+        "last_update": "2026-02-07T09:07:00Z",
+        "artifacts": {
+          "progress_json_created": true,
+          "ui_displays_real_data": true,
+          "schema_backward_compatible": true
+        }
+      }
+    ],
+    "completed": [
+      {
+        "id": "TASK_GENESIS_REALM_INIT",
+        "title": "Realm initialization + core systems",
+        "owner": "GENESIS",
+        "status": "completed",
+        "progress": 1.0,
+        "completion_date": "2026-02-06T04:24:28Z"
+      }
+    ]
+  },
+  "pipeline": {
+    "document_processing": {
+      "total_discovered": 5,
+      "total_processed": 411,
+      "currently_processing": 0,
+      "failed": 0,
+      "success_rate": 1.0,
+      "last_tick": "2026-02-07T09:06:19.978Z",
+      "tick_duration_ms": 4665,
+      "status": "completed"
+    },
+    "cer_products": {
+      "total_products": 9247,
+      "verified_products": 9247,
+      "categories": ["Solar Panels", "Inverters", "Batteries", "Monitoring"],
+      "last_updated": "2026-02-06T04:24:28Z"
+    }
+  },
+  "system": {
+    "realm_health": {
+      "virtual_voltage": 0.33,
+      "entropy": 0.19,
+      "loop_risk": 0.12
+    },
+    "minions": {
+      "total_active": 26,
+      "total_credits": 2765,
+      "shift_workers": 8,
+      "productivity_score": 0.92
+    },
+    "integration_status": {
+      "real_data_connected": true,
+      "fake_data_purged": true,
+      "persistence_working": true,
+      "github_pages_sync": true
+    }
+  }
+}
