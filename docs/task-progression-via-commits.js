@@ -26,7 +26,25 @@ class TaskProgressionSystem {
     
     async loadHiveState() {
         try {
-            console.log('📄 Loading hive_state.json...');
+            console.log('📄 Loading progress.json and hive_state.json...');
+            
+            // Try progress.json first (new format)
+            let progressResponse = null;
+            try {
+                progressResponse = await fetch('./progress.json');
+                if (progressResponse.ok) {
+                    const progressData = await progressResponse.json();
+                    if (progressData.meta && progressData.meta.schema === 'solarflow.progress.v1') {
+                        this.hiveState = this.convertProgressToHiveFormat(progressData);
+                        console.log('✅ Progress data loaded:', progressData.meta.updatedAt);
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.log('Progress.json not available, falling back to hive_state.json');
+            }
+            
+            // Fallback to hive_state.json
             const response = await fetch('./hive_state.json');
             if (!response.ok) {
                 throw new Error(`Failed to load hive_state.json: ${response.status}`);
@@ -39,6 +57,37 @@ class TaskProgressionSystem {
             console.error('❌ Failed to load hive state:', error);
             this.createFallbackData();
         }
+    }
+    
+    convertProgressToHiveFormat(progressData) {
+        // Convert progress.json format to hive_state.json format for backward compatibility
+        return {
+            meta: progressData.meta,
+            tasks: {
+                board: progressData.tasks.active || []
+            },
+            minions: {
+                roster: this.extractMinionsFromTasks(progressData.tasks.active || [])
+            }
+        };
+    }
+    
+    extractMinionsFromTasks(tasks) {
+        // Extract unique minion owners from tasks
+        const minionMap = new Map();
+        
+        tasks.forEach(task => {
+            if (task.owner && !minionMap.has(task.owner)) {
+                minionMap.set(task.owner, {
+                    id: task.owner,
+                    role: 'OVERSEER',
+                    tier: 3,
+                    mode: task.status === 'in_progress' ? 'FOCUS' : 'COLLAB'
+                });
+            }
+        });
+        
+        return Array.from(minionMap.values());
     }
     
     createFallbackData() {

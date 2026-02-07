@@ -292,11 +292,11 @@
                     console.log('CER database not available');
                 }
 
-                // Try multiple sources for pipeline data
+                // Try multiple sources for pipeline data (prefer progress.json)
                 const pipelineSources = [
+                    './progress.json',
                     '../solarflow/artifacts/doc-pipeline/state.json',
-                    './doc-pipeline-state.json',
-                    '../solarflow/progress.json'
+                    './doc-pipeline-state.json'
                 ];
 
                 for (const source of pipelineSources) {
@@ -351,22 +351,52 @@
         }
 
         function renderDocumentStatus(pipelineData, cerData) {
-            // Update statistics
-            document.getElementById('totalProcessed').textContent = pipelineData.totalDocuments || 188;
-            document.getElementById('queueSize').textContent = pipelineData.queueSize || 75;
-            document.getElementById('cerProducts').textContent = cerData?.metadata?.totalProducts || 12;
-            document.getElementById('docsWithSpecs').textContent = 
-                cerData?.metadata?.documentsFound || pipelineData.documentsWithSpecs || 10;
-
-            // Render pipeline status
-            const statusContainer = document.getElementById('pipelineStatusContainer');
-            const status = pipelineData.status || 'active';
-            const statusClass = status === 'active' ? 'status-active' : 
-                               status === 'blocked' ? 'status-blocked' : 'status-error';
+            // Handle both old format and new progress.json format
+            const isProgressFormat = pipelineData.meta && pipelineData.meta.schema === 'solarflow.progress.v1';
             
-            const statusText = status === 'active' ? 'Processing documents' :
-                              status === 'blocked' ? `Blocked: ${pipelineData.blockReason || 'Rate limiting'}` :
-                              'Pipeline error';
+            // Update statistics with backward compatibility
+            if (isProgressFormat) {
+                document.getElementById('totalProcessed').textContent = 
+                    pipelineData.pipeline?.document_processing?.total_processed || 188;
+                document.getElementById('queueSize').textContent = 
+                    pipelineData.pipeline?.document_processing?.currently_processing || 0;
+                document.getElementById('cerProducts').textContent = 
+                    pipelineData.pipeline?.cer_products?.total_products || 12;
+                document.getElementById('docsWithSpecs').textContent = 
+                    pipelineData.pipeline?.cer_products?.verified_products || 10;
+            } else {
+                // Legacy format support
+                document.getElementById('totalProcessed').textContent = pipelineData.totalDocuments || 188;
+                document.getElementById('queueSize').textContent = pipelineData.queueSize || 75;
+                document.getElementById('cerProducts').textContent = cerData?.metadata?.totalProducts || 12;
+                document.getElementById('docsWithSpecs').textContent = 
+                    cerData?.metadata?.documentsFound || pipelineData.documentsWithSpecs || 10;
+            }
+
+            // Render pipeline status with format detection
+            const statusContainer = document.getElementById('pipelineStatusContainer');
+            let status, statusText, lastProcessed;
+            
+            if (isProgressFormat) {
+                status = pipelineData.pipeline?.document_processing?.status || 'active';
+                lastProcessed = pipelineData.pipeline?.document_processing?.last_tick || pipelineData.meta?.updatedAt;
+                const successRate = pipelineData.pipeline?.document_processing?.success_rate || 1.0;
+                const failed = pipelineData.pipeline?.document_processing?.failed || 0;
+                
+                statusText = status === 'completed' ? `Completed (${Math.round(successRate * 100)}% success)` :
+                            status === 'active' ? 'Processing documents' :
+                            status === 'blocked' ? `Blocked: ${failed} failures` :
+                            'Pipeline error';
+            } else {
+                status = pipelineData.status || 'active';
+                lastProcessed = pipelineData.lastProcessed;
+                statusText = status === 'active' ? 'Processing documents' :
+                            status === 'blocked' ? `Blocked: ${pipelineData.blockReason || 'Rate limiting'}` :
+                            'Pipeline error';
+            }
+            
+            const statusClass = (status === 'active' || status === 'completed') ? 'status-active' : 
+                               status === 'blocked' ? 'status-blocked' : 'status-error';
 
             statusContainer.innerHTML = `
                 <div class="pipeline-status">
@@ -374,7 +404,7 @@
                     <div>
                         <strong>Document Pipeline:</strong> ${statusText}
                         <br>
-                        <small>Last processed: ${new Date(pipelineData.lastProcessed || Date.now()).toLocaleString()}</small>
+                        <small>Last processed: ${new Date(lastProcessed || Date.now()).toLocaleString()}</small>
                     </div>
                 </div>
             `;
