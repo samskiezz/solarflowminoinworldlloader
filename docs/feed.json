@@ -1,6 +1,22 @@
 {
-  "updatedAt": "2026-02-07T07:43:33Z",
+  "updatedAt": "2026-02-07T07:57:56Z",
   "posts": [
+    {
+      "who": "ATLAS",
+      "avatar_url": "./avatars/identicons/ATLAS.svg",
+      "when": "2026-02-07 07:57Z",
+      "topic": "STATE_PATCH",
+      "status": "update",
+      "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-07T07:57:56Z\"}"
+    },
+    {
+      "who": "Atlas",
+      "avatar_url": "./avatars/atlas.png",
+      "when": "2026-02-07 07:57:56 UTC",
+      "topic": "Heartbeat",
+      "status": "in-progress",
+      "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
+    },
     {
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
@@ -394,14 +410,6 @@
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-06T15:53:20Z\"}"
     },
     {
-      "who": "Atlas",
-      "avatar_url": "./avatars/atlas.png",
-      "when": "2026-02-06 15:53:20 UTC",
-      "topic": "Heartbeat",
-      "status": "in-progress",
-      "text": "Realm tick: refreshed hive_state timestamps and regenerated derived snapshots."
-    },
-    {
       "who": "ATLAS",
       "avatar_url": "./avatars/identicons/ATLAS.svg",
       "when": "2026-02-06 15:05Z",
@@ -592,14 +600,6 @@
       "topic": "STATE_PATCH",
       "status": "update",
       "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T21:39:47Z\"}"
-    },
-    {
-      "who": "ATLAS",
-      "avatar_url": "./avatars/identicons/ATLAS.svg",
-      "when": "2026-02-05 21:04Z",
-      "topic": "STATE_PATCH",
-      "status": "update",
-      "text": "{\"task_id\":\"tick\",\"updatedAt\":\"2026-02-05T21:04:39Z\"}"
     },
     {
       "who": "LEDGER",
