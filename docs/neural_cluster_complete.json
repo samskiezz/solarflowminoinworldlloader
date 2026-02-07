@@ -1,0 +1,10 @@
+{
+  "installation_complete": true,
+  "total_repos": 180,
+  "installed_count": 171,
+  "failed_count": 5,
+  "success_rate": 95.0,
+  "elapsed_seconds": 131.1272644996643,
+  "cluster_directory": "/home/node/.openclaw/workspace/solarflowminoinworldlloader/neural_cluster_200",
+  "neural_cluster_operational": true
+}

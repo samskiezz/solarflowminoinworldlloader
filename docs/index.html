@@ -770,11 +770,14 @@ All 18 systems functioning as designed with verified deployment
             console.log('🎯 All 18 systems operational and verified');
             console.log('🧠 Neural optimization engine loading...');
 
-            // Load neural status display for immediate visual feedback
-            const statusScript = document.createElement('script');
-            statusScript.src = './neural-status-display.js';
-            statusScript.async = true;
-            document.head.appendChild(statusScript);
+            // Load real neural integration when deployed on server
+            const realNeuralScript = document.createElement('script');
+            realNeuralScript.src = './real_neural_integration.js';
+            realNeuralScript.async = true;
+            realNeuralScript.onload = () => {
+                console.log('🧠 Real neural integration loaded - connecting to server API');
+            };
+            document.head.appendChild(realNeuralScript);
         });
     </script>
 </body>
