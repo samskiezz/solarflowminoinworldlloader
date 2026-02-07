@@ -108,12 +108,17 @@ app.get("/health", async () => {
       status: "healthy", 
       timestamp: new Date().toISOString(),
       database: "connected",
-      redis: "connected"
+      redis: "connected",
+      agents: "available"
     };
   } catch (error) {
     throw app.httpErrors.serviceUnavailable("Health check failed");
   }
 });
+
+// Register agent routes
+import { agentRoutes } from './routes/agents.js';
+await app.register(agentRoutes, { prefix: '/api' });
 
 // Authentication routes
 const RegisterSchema = z.object({

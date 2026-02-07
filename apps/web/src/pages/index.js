@@ -167,8 +167,14 @@ export default function Dashboard() {
             </div>
 
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-              <h3 className="text-lg font-medium text-white mb-4">Tools & Resources</h3>
+              <h3 className="text-lg font-medium text-white mb-4">AI Agents & Tools</h3>
               <div className="space-y-3">
+                <Link href="/agents">
+                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+                    <span className="text-white">🤖 AI Agent Management</span>
+                    <span className="text-purple-300">→</span>
+                  </div>
+                </Link>
                 <Link href="/compliance">
                   <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
                     <span className="text-white">Compliance Checker</span>
