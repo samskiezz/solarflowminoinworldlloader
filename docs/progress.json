@@ -66,8 +66,8 @@
       "currently_processing": 0,
       "failed": 0,
       "success_rate": 1.0,
-      "last_tick": "2026-02-07T09:06:19.978Z",
-      "tick_duration_ms": 4665,
+      "last_tick": "2026-02-07T09:32:14.182Z",
+      "tick_duration_ms": 4613,
       "status": "completed"
     },
     "cer_products": {
