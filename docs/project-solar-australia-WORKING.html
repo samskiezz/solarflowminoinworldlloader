@@ -290,32 +290,96 @@
             const grid = document.getElementById('functions-grid');
             grid.innerHTML = '';
             
-            workingFunctions.forEach(func => {
+            // Get REAL function status from compliance engine
+            if (window.realComplianceEngine) {
+                const realFunctions = window.realComplianceEngine.workingFunctions;
+                
+                realFunctions.forEach(func => {
+                    const card = document.createElement('div');
+                    card.className = 'function-card';
+                    
+                    // Use REAL status instead of fake "working"
+                    const status = func.status || 'unknown';
+                    const statusIcon = status === 'active' ? '✅' : 
+                                     status === 'error' ? '❌' : 
+                                     '⏳';
+                    const statusText = status === 'active' ? 'ACTIVE' :
+                                      status === 'error' ? 'ERROR' :
+                                      'LOADING';
+                    
+                    card.innerHTML = `
+                        <h4>${func.name}</h4>
+                        <div class="function-status status-${status}">
+                            ${statusIcon} ${func.category.toUpperCase()} - ${statusText}
+                        </div>
+                        ${func.lastTested ? `<small>Last tested: ${new Date(func.lastTested).toLocaleTimeString()}</small>` : ''}
+                        ${func.error ? `<div class="error-details" style="color:#f44336;font-size:12px;">Error: ${func.error}</div>` : ''}
+                    `;
+                    grid.appendChild(card);
+                });
+            } else {
+                // Fallback when real engine not available
                 const card = document.createElement('div');
                 card.className = 'function-card';
                 card.innerHTML = `
-                    <h4>${func.name}</h4>
-                    <div class="function-status status-${func.status}">
-                        ✅ ${func.category.toUpperCase()} - WORKING
+                    <h4>Real Compliance Engine</h4>
+                    <div class="function-status status-error">
+                        ❌ NOT LOADED - Real engine required
                     </div>
                 `;
                 grid.appendChild(card);
-            });
+            }
         }
         
         function populateStandards() {
             const list = document.getElementById('standards-list');
             list.innerHTML = '';
             
-            asNzsStandards.forEach(standard => {
+            // Get REAL standards status from compliance engine
+            if (window.realComplianceEngine) {
+                const realStandards = window.realComplianceEngine.realStandards;
+                
+                Object.entries(realStandards).forEach(([standardId, standard]) => {
+                    const item = document.createElement('div');
+                    item.className = 'compliance-tier';
+                    
+                    // Use REAL status instead of fake "LOADED"
+                    const status = standard.status || 'unknown';
+                    const statusIcon = status === 'active' ? '✅' : 
+                                      status === 'loaded' ? '📖' : 
+                                      status === 'error' ? '❌' : 
+                                      '⏳';
+                    const statusText = status === 'active' ? 'ACTIVE' :
+                                      status === 'loaded' ? 'LOADED' :
+                                      status === 'error' ? 'ERROR' :
+                                      'LOADING';
+                    
+                    item.innerHTML = `
+                        <strong>${standardId.replace(/_/g, '/')}</strong> - ${standard.title}
+                        <div class="function-status status-${status}">
+                            ${statusIcon} ${statusText}: ${standard.criticalRequirements.length} requirements
+                        </div>
+                        ${standard.loadedAt ? `<small>Loaded: ${new Date(standard.loadedAt).toLocaleString()}</small>` : ''}
+                        <div style="margin-top:8px;font-size:12px;opacity:0.8;">
+                            Critical Requirements:
+                            <ul style="margin:4px 0;padding-left:20px;">
+                                ${standard.criticalRequirements.slice(0,3).map(req => `<li>${req}</li>`).join('')}
+                                ${standard.criticalRequirements.length > 3 ? `<li>... and ${standard.criticalRequirements.length - 3} more</li>` : ''}
+                            </ul>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            } else {
+                // Fallback when real engine not available
                 const item = document.createElement('div');
                 item.className = 'compliance-tier';
                 item.innerHTML = `
-                    <strong>${standard.code}</strong> - ${standard.title}
-                    <div class="function-status status-working">✅ LOADED: Key requirements extracted</div>
+                    <strong>Real Standards Engine</strong>
+                    <div class="function-status status-error">❌ NOT LOADED - Real engine required</div>
                 `;
                 list.appendChild(item);
-            });
+            }
         }
         
         function initializeSystem() {
@@ -548,6 +612,235 @@ unlike the previous version which had only 0.6% working functionality.
         });
         
         console.log('✅ Project Solar Australia WORKING system loaded successfully');
+    </script>
+    
+    <!-- Load REAL Compliance Engine -->
+    <script src="real-compliance-engine.js"></script>
+    
+    <script>
+        // REAL FUNCTIONALITY INTEGRATION
+        function syncWithRealEngine() {
+            if (!window.realComplianceEngine) return;
+            
+            const realStatus = window.realComplianceEngine.getSystemStatus();
+            
+            // Update UI with REAL data (not fake animations)
+            systemState.initialized = realStatus.initialized;
+            systemState.activeFunctions = realStatus.activeFunctions;
+            systemState.complianceChecks = realStatus.complianceChecks;
+            systemState.safetyValidations = realStatus.safetyValidations;
+            systemState.standardsLoaded = realStatus.standardsLoaded;
+            systemState.processedDocuments = realStatus.processedDocuments;
+            systemState.complianceScore = realStatus.complianceScore;
+            systemState.safetyRating = realStatus.safetyRating;
+            
+            updateMetrics();
+            
+            // Update status text
+            document.getElementById('system-status').textContent = 
+                realStatus.initialized ? 'ACTIVE' : 'STARTING';
+        }
+        
+        // OVERRIDE FAKE FUNCTIONS WITH REAL ONES
+        async function initializeAllSystems() {
+            log('🔧 Initializing REAL compliance systems...', 'info');
+            
+            if (!window.realComplianceEngine) {
+                log('❌ Real compliance engine not available!', 'error');
+                return;
+            }
+            
+            try {
+                const result = await window.realComplianceEngine.initializeAllSystems();
+                
+                if (result.success) {
+                    log('✅ All REAL systems initialized successfully', 'success');
+                    log('📊 Court-safe operation now active', 'success');
+                    syncWithRealEngine();
+                } else {
+                    log('❌ System initialization failed', 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Initialization error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function runComplianceCheck() {
+            if (!window.realComplianceEngine || !window.realComplianceEngine.complianceState.initialized) {
+                log('❌ System not initialized. Run initialization first.', 'error');
+                return;
+            }
+            
+            log('📋 Running REAL AS/NZS compliance verification...', 'info');
+            
+            try {
+                const result = await window.realComplianceEngine.runComplianceCheck();
+                
+                if (result.success) {
+                    log(`✅ Compliance check complete: ${result.score}% overall compliance`, 'success');
+                    log(`📊 Verified ${result.standardsChecked} AS/NZS standards`, 'info');
+                    
+                    // Log individual standard results
+                    for (const [standardId, standardResult] of Object.entries(result.results)) {
+                        const status = standardResult.score >= 80 ? '✅' : '⚠️';
+                        log(`${status} ${standardId}: ${standardResult.score}%`, 
+                            standardResult.score >= 80 ? 'success' : 'warning');
+                    }
+                } else {
+                    log('❌ Compliance check failed', 'error');
+                }
+                
+                syncWithRealEngine();
+                
+            } catch (error) {
+                log(`❌ Compliance check error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function runSafetyAudit() {
+            if (!window.realComplianceEngine || !window.realComplianceEngine.complianceState.initialized) {
+                log('❌ System not initialized. Run initialization first.', 'error');
+                return;
+            }
+            
+            log('🛡️ Running REAL safety risk assessment...', 'info');
+            
+            try {
+                const result = await window.realComplianceEngine.assessSafetyRisks();
+                
+                log(`🛡️ Safety assessment complete: ${result.safetyScore}% safety rating`, 
+                    result.safetyScore >= 80 ? 'success' : 'warning');
+                
+                // Log individual risk assessments
+                result.assessments.forEach(assessment => {
+                    const status = assessment.status === 'ACCEPTABLE' ? '✅' : '⚠️';
+                    log(`${status} ${assessment.area}: Risk level ${assessment.riskLevel}`, 
+                        assessment.status === 'ACCEPTABLE' ? 'success' : 'warning');
+                    
+                    if (assessment.mitigations.length > 0) {
+                        log(`   Mitigations: ${assessment.mitigations.join(', ')}`, 'info');
+                    }
+                });
+                
+                syncWithRealEngine();
+                
+            } catch (error) {
+                log(`❌ Safety audit error: ${error.message}`, 'error');
+            }
+        }
+        
+        function generateReport() {
+            if (!window.realComplianceEngine || !window.realComplianceEngine.complianceState.initialized) {
+                log('❌ System not initialized. Run initialization first.', 'error');
+                return;
+            }
+            
+            log('📋 Generating REAL compliance report...', 'info');
+            
+            const auditTrail = window.realComplianceEngine.generateAuditTrail();
+            const citations = window.realComplianceEngine.generateCitations();
+            const status = window.realComplianceEngine.getSystemStatus();
+            
+            const report = `
+# PROJECT SOLAR AUSTRALIA - REAL COMPLIANCE REPORT
+Generated: ${new Date().toLocaleString()}
+
+## SYSTEM STATUS
+- Initialized: ${status.initialized ? 'YES' : 'NO'}
+- Active Functions: ${status.activeFunctions}/12
+- Compliance Score: ${status.complianceScore}%
+- Safety Rating: ${status.safetyRating}%
+- Standards Loaded: ${status.standardsLoaded}
+- Documents Processed: ${status.processedDocuments}
+- Compliance Checks: ${status.complianceChecks}
+- Safety Validations: ${status.safetyValidations}
+
+## AUDIT TRAIL SUMMARY
+Total Entries: ${auditTrail.totalEntries}
+Latest Entries:
+${auditTrail.auditTrail.slice(-5).map(entry => 
+    `${entry.timestamp} [${entry.level}] ${entry.action}: ${entry.details}`
+).join('\\n')}
+
+## AS/NZS STANDARDS COVERAGE
+${citations.citations.map(citation => 
+    `✅ ${citation.standard} - ${citation.title}`
+).join('\\n')}
+
+## COMPLIANCE VERIFICATION STATUS
+${status.complianceChecks > 0 ? 
+    `✅ VERIFIED - ${status.complianceChecks} compliance checks completed` : 
+    '⚠️ PENDING - No compliance checks run yet'}
+
+## SAFETY AUDIT STATUS  
+${status.safetyValidations > 0 ? 
+    `✅ VERIFIED - ${status.safetyValidations} safety audits completed` : 
+    '⚠️ PENDING - No safety audits run yet'}
+
+## COURT-SAFE CERTIFICATION
+This system provides REAL AS/NZS standards verification with:
+- Actual standard requirement checking
+- Real audit trail generation  
+- Genuine compliance scoring
+- Verifiable safety assessments
+
+Report generated by REAL Compliance Engine v1.0
+            `;
+            
+            const reportWindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=yes');
+            reportWindow.document.write(`
+                <html>
+                <head><title>Project Solar Australia - REAL Compliance Report</title>
+                <style>
+                    body{font-family:monospace;background:#000;color:#0f0;padding:20px;white-space:pre-wrap;line-height:1.4;}
+                    h1{color:#ff0;} h2{color:#0ff;} .success{color:#0f0;} .warning{color:#ff0;} .error{color:#f00;}
+                </style></head>
+                <body>${report}</body></html>
+            `);
+            
+            log('✅ REAL compliance report generated and opened', 'success');
+            syncWithRealEngine();
+        }
+        
+        function emergencyStop() {
+            if (!window.realComplianceEngine) {
+                log('❌ Real compliance engine not available!', 'error');
+                return;
+            }
+            
+            if (confirm('🛑 EMERGENCY STOP\\n\\nThis will halt all REAL compliance operations.\\nAre you sure?')) {
+                const result = window.realComplianceEngine.emergencyShutdown();
+                log(`🛑 ${result.message}`, 'error');
+                syncWithRealEngine();
+            }
+        }
+        
+        // Auto-sync with real engine every 10 seconds
+        setInterval(() => {
+            if (window.realComplianceEngine) {
+                syncWithRealEngine();
+            }
+        }, 10000);
+        
+        // Load existing state when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                if (window.realComplianceEngine) {
+                    log('[SYSTEM] Real compliance engine detected', 'success');
+                    
+                    const loadResult = window.realComplianceEngine.loadState();
+                    if (loadResult.success) {
+                        log('[SYSTEM] Previous compliance state restored', 'success');
+                        syncWithRealEngine();
+                    } else {
+                        log('[SYSTEM] No previous state - ready for first initialization', 'info');
+                    }
+                } else {
+                    log('[ERROR] Real compliance engine not loaded!', 'error');
+                }
+            }, 1000);
+        });
     </script>
 </body>
 </html>
