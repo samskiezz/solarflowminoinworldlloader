@@ -1,0 +1,475 @@
+  "world": {
+    "id": "solarflow-minionworld",
+    "name": "SolarFlow • Minion Realm",
+    "epoch": "A–Z v1.4",
+    "motto": "Ship the realm. Keep it legible. No hidden fetches.",
+    "max_minions": 50,
+    "realm": {
+      "entry": "./realm.html",
+      "status": "./index.html"
+    },
+    "theme": {
+      "palette": [
+        "#00ffff",
+        "#b400ff",
+        "#60a5fa"
+      ],
+      "style": "neon-glass"
+    },
+    "health": {
+      "virtual_voltage": 0.33,
+      "entropy": 0.19,
+      "loop_risk": 0.12,
+      "tick_interval_sec": 60,
+      "paused": false,
+      "effects": {
+        "virtual_voltage": {
+          "current": 0.33,
+          "effects": {
+            "low": "Minions work 25% slower when voltage < 0.3",
+            "normal": "Standard work speed at 0.3-0.7 voltage",
+            "high": "Minions get +1 credit bonus per task when voltage > 0.7"
+          }
+        },
+        "entropy": {
+          "current": 0.19,
+          "effects": {
+            "low": "Low entropy = stable system, predictable outcomes",
+            "rising": "Entropy > 0.4 causes random task failures",
+            "critical": "Entropy > 0.8 triggers system-wide debugging mode"
+          }
+        },
+        "loop_risk": {
+          "current": 0.12,
+          "effects": {
+            "low": "Safe operational state",
+            "medium": "Loop risk > 0.3 requires mandatory checkpoints",
+            "high": "Loop risk > 0.6 forces automatic rollback"
+          }
+        }
+      },
+      "credit_economy": {
+        "base_task_reward": 1,
+        "quality_bonus": 2,
+        "collaboration_bonus": 5,
+        "canon_enforcement_bonus": 5,
+        "violation_penalty": -10,
+        "current_distribution": {
+          "ATLAS": 50,
+          "LUMEN": 55,
+          "ORBIT": 60,
+          "PRISM": 50,
+          "BOLT": 60,
+          "SABLE": 55,
+          "NOVA": 60,
+          "EMBER": 55,
+          "RUNE": 55,
+          "AURORA": 40,
+          "FORGE": 60,
+          "KITE": 60,
+          "SENTRY": 50,
+          "GLINT": 55,
+          "MOSS": 55,
+          "DELTA": 60,
+          "SAGE": 60,
+          "WREN": 55,
+          "HAMMER": 50,
+          "VAULT": 50,
+          "ECHO": 55,
+          "SPARROW": 60,
+          "QUILL": 55,
+          "ALPHA": 60,
+          "BETA": 50,
+          "CIPHER": 50,
+          "COMET": 55,
+          "DRIFT": 55,
+          "EQUINOX": 55,
+          "FABLE": 60,
+          "GHOST": 60,
+          "HELIX": 60,
+          "ION": 55,
+          "IRIS": 60,
+          "JADE": 50,
+          "JOLT": 55,
+          "KODIAK": 60,
+          "NIMBUS": 55,
+          "ONYX": 50,
+          "TALON": 55,
+          "THORN": 55,
+          "UMBRA": 60,
+          "URSA": 60,
+          "VEGA": 55,
+          "WHISPER": 50,
+          "XENO": 55,
+          "YARROW": 50,
+          "YONDER": 55,
+          "ZENITH": 55,
+          "ZEPHYR": 60
+        }
+      }
+    }
+  },
+  "ledger": {
+    "updatedAt": "2026-02-05T23:37:14Z",
+    "credits_total": 2765,
+    "reputation_index": 0.57,
+    "rewards": {
+      "help_friend_bonus": 5,
+      "task_complete_bonus": 1,
+      "audit_pass_bonus": 2,
+      "collaboration_bonus": 5,
+      "canon_enforcement_bonus": 5,
+      "quality_work_bonus": 3,
+      "innovation_bonus": 7,
+      "consensus_building_bonus": 4
+    },
+    "transactions": [
+      {
+        "id": "txn_interaction_001",
+        "timestamp": "2026-02-05T13:57:22.275Z",
+        "from": "ATLAS",
+        "to": "LUMEN",
+        "amount": 5,
+        "memo": "Collaboration bonus - PDF validation workflow"
+      },
+      {
+        "id": "txn_interaction_002",
+        "timestamp": "2026-02-05T13:57:22.275Z",
+        "from": "ATLAS",
+        "to": "ORBIT",
+        "amount": 5,
+        "memo": "Collaboration bonus - PDF validation workflow"
+      },
+      {
+        "id": "txn_enforcement_001",
+        "timestamp": "2026-02-05T14:24:22.275Z",
+        "from": "AURORA",
+        "to": "SYSTEM",
+        "amount": -10,
+        "memo": "Penalty - Covenant Article I violation (progress truthfulness)"
+      },
+      {
+        "id": "txn_vigilance_001",
+        "timestamp": "2026-02-05T14:24:22.275Z",
+        "from": "SYSTEM",
+        "to": "BOLT",
+        "amount": 5,
+        "memo": "Reward - Canon vigilance (caught progress truthfulness violation)"
+      },
+      {
+        "id": "txn_bootstrap_001",
+        "timestamp": "2026-02-02T15:31:00Z",
+        "from": "WORLD",
+        "to": "ATLAS",
+        "amount": 160,
+        "memo": "Bootstrap overseer energy"
+      },
+      {
+        "id": "txn_roster_001",
+        "timestamp": "2026-02-03T01:13:30Z",
+        "from": "WORLD",
+        "to": "HIVE",
+        "amount": 4800,
+        "memo": "Provision 50 pods"
+      }
+    ],
+    "minion_credits": {
+      "ATLAS": 50,
+      "LUMEN": 55,
+      "ORBIT": 60,
+      "PRISM": 50,
+      "BOLT": 60,
+      "SABLE": 55,
+      "NOVA": 60,
+      "EMBER": 55,
+      "RUNE": 55,
+      "AURORA": 40,
+      "FORGE": 60,
+      "KITE": 60,
+      "SENTRY": 50,
+      "GLINT": 55,
+      "MOSS": 55,
+      "DELTA": 60,
+      "SAGE": 60,
+      "WREN": 55,
+      "HAMMER": 50,
+      "VAULT": 50,
+      "ECHO": 55,
+      "SPARROW": 60,
+      "QUILL": 55,
+      "ALPHA": 60,
+      "BETA": 50,
+      "CIPHER": 50,
+      "COMET": 55,
+      "DRIFT": 55,
+      "EQUINOX": 55,
+      "FABLE": 60,
+      "GHOST": 60,
+      "HELIX": 60,
+      "ION": 55,
+      "IRIS": 60,
+      "JADE": 50,
+      "JOLT": 55,
+      "KODIAK": 60,
+      "NIMBUS": 55,
+      "ONYX": 50,
+      "TALON": 55,
+      "THORN": 55,
+      "UMBRA": 60,
+      "URSA": 60,
+      "VEGA": 55,
+      "WHISPER": 50,
+      "XENO": 55,
+      "YARROW": 50,
+      "YONDER": 55,
+      "ZENITH": 55,
+      "ZEPHYR": 60
+    }
+  },
+  "minions": {
+    "updatedAt": "2026-02-05T23:37:14Z",
+    "max": 50,
+    "roster": [
+      {
+        "id": "ATLAS",
+        "tier": 3,
+        "role": "OVERSEER",
+        "mode": "COLLAB",
+        "specialties": [
+          "orchestration",
+          "governance",
+          "world-state"
+        ],
+        "energy_credits": 160,
+        "reputation": 0.65,
+        "avatar_url": "./avatars/identicons/ATLAS.svg",
+        "happiness_sim": 72,
+        "avatar_salt": 0
+      },
+      {
+        "id": "LUMEN",
+        "tier": 3,
+--
+    document.getElementById('ciText').textContent = STATUS.ci || 'unknown';
+    document.getElementById('overallLabel').textContent = STATUS.overallLabel || '—';
+    const p = pctFromOverall(STATUS.overall);
+    document.getElementById('pct').textContent = p + '%';
+    document.getElementById('bar').style.width = p + '%';
+
+    const ms = document.getElementById('milestones');
+    ms.innerHTML='';
+    (STATUS.milestones||[]).forEach(m=>{
+      const row = el('div',{class:'ms'});
+      const left = el('div',{class:'left'});
+      left.appendChild(el('div',{class:'title',text:m.label||m.id||''}));
+      left.appendChild(el('div',{class:'id',text:m.id||''}));
+      row.appendChild(left);
+      row.appendChild(el('div',{class:'tag '+tagClass(m.status),text:m.status||''}));
+      ms.appendChild(row);
+    });
+
+    // health meters
+    const vv = Number((HEALTH && HEALTH.virtual_voltage != null) ? HEALTH.virtual_voltage : 0);
+    const ent = Number((HEALTH && HEALTH.entropy != null) ? HEALTH.entropy : 0);
+    const lr = Number((HEALTH && HEALTH.loop_risk != null) ? HEALTH.loop_risk : 0);
+    document.getElementById('vv').textContent = (Math.round(vv*100)) + '%';
+    document.getElementById('ent').textContent = (Math.round(ent*100)) + '%';
+    document.getElementById('lr').textContent = (Math.round(lr*100)) + '%';
+
+    // Update integrated economy display
+    const creditsTotal = (HIVE.ledger && typeof HIVE.ledger.credits_total === 'number') ? HIVE.ledger.credits_total : 2765;
+    const rep = (HIVE.ledger && typeof HIVE.ledger.reputation_index === 'number') ? HIVE.ledger.reputation_index : 0.57;
+    const totalCreditsEl = document.getElementById('totalCredits');
+    const reputationEl = document.getElementById('reputation');
+    const activeWorkersEl = document.getElementById('activeWorkers');
+    
+    if(totalCreditsEl) totalCreditsEl.textContent = String(creditsTotal).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if(reputationEl) reputationEl.textContent = rep.toFixed(2);
+    
+    // Calculate active workers from roster
+    const roster = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : [];
+    const activeCount = roster.filter(m => (m.happiness_sim || 50) > 40).length;
+    if(activeWorkersEl) activeWorkersEl.textContent = `${activeCount}/${roster.length}`;
+
+    // rewards section now shows economic bonuses
+    const r = (HIVE.ledger && HIVE.ledger.rewards) ? HIVE.ledger.rewards : {};
+    const rewardsEl = document.getElementById('rewards');
+    rewardsEl.innerHTML='';
+    const rows = [
+      ['Collaboration bonus', String((r.collaboration_bonus == null) ? '5' : r.collaboration_bonus) + ' credits'],
+      ['Quality work bonus', String((r.quality_work_bonus == null) ? '3' : r.quality_work_bonus) + ' credits'],
+      ['Innovation bonus', String((r.innovation_bonus == null) ? '7' : r.innovation_bonus) + ' credits'],
+      ['Canon enforcement', String((r.canon_enforcement_bonus == null) ? '5' : r.canon_enforcement_bonus) + ' credits'],
+      ['Violation penalty', '-' + String(Math.abs(HIVE.world?.health?.credit_economy?.violation_penalty || 10)) + ' credits'],
+    ];
+    for(const [k,v] of rows){
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:k}));
+      row.appendChild(el('div',{class:'v',text:v}));
+      rewardsEl.appendChild(row);
+    }
+
+    // feed
+    const feedEl = document.getElementById('feed');
+    feedEl.innerHTML='';
+    const FEED = buildFeed();
+    FEED.slice(0,12).forEach(post=>{
+      const t = el('div',{class:'tweet'});
+      const top = el('div',{class:'tweetTop'});
+      const who = el('div',{class:'who'});
+      const av = el('div',{class:'avatar'});
+      if(post.avatar_url){
+        const img = el('img');
+        img.src = post.avatar_url;
+        img.alt = post.who || 'Minion';
+        av.appendChild(img);
+      }
+      const metaWrap = el('div');
+      const name = el('div',{class:'name'});
+      name.appendChild(document.createTextNode(post.who||'Minion'));
+      name.appendChild(el('span',{class:'meta',text:(post.when ? ' • '+post.when : '')}));
+      metaWrap.appendChild(name);
+      metaWrap.appendChild(el('div',{class:'meta',text:post.topic||''}));
+      who.appendChild(av);
+      who.appendChild(metaWrap);
+      top.appendChild(who);
+      top.appendChild(el('div',{class:'tag '+tagClass(post.status),text:post.status||'update'}));
+      t.appendChild(top);
+      t.appendChild(el('div',{class:'tweetBody',text:post.text||''}));
+      feedEl.appendChild(t);
+    });
+
+    // covenant
+    const covEl = document.getElementById('covenant');
+    covEl.innerHTML='';
+    const cov = HIVE.covenant || {};
+    const arts = Array.isArray(cov.five_articles) ? cov.five_articles : [];
+    arts.slice(0,5).forEach(a=>{
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:('Article ' + (a.id || '') + ' — ' + (a.title || ''))}));
+      row.appendChild(el('div',{class:'v',text:a.text || ''}));
+      covEl.appendChild(row);
+    });
+
+    // ontology
+    const ontEl = document.getElementById('ontology');
+    ontEl.innerHTML='';
+    const lab = HIVE.ontology_lab || {};
+    const qs = Array.isArray(lab.questions) ? lab.questions : [];
+    const hs = Array.isArray(lab.hypotheses) ? lab.hypotheses : [];
+    for(const q of qs.slice(0,4)){
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:'Question'}));
+      row.appendChild(el('div',{class:'v',text:q}));
+      ontEl.appendChild(row);
+    }
+    for(const h of hs.slice(0,3)){
+      const row = el('div',{class:'row'});
+      row.appendChild(el('div',{class:'k',text:'Hypothesis'}));
+      row.appendChild(el('div',{class:'v',text:h}));
+      ontEl.appendChild(row);
+    }
+
+    // v1.4 mechanics (latest-only)
+    const mechEl = document.getElementById('mechanics');
+    if(mechEl){
+      mechEl.innerHTML='';
+      const mech = HIVE.mechanics || {};
+      const active = Array.isArray(mech.active) ? mech.active : [];
+      active.forEach(m=>{
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:(m.label || m.id || 'Mechanic')}));
+        row.appendChild(el('div',{class:'v',text:(m.desc || '') + (m.liturgy ? ('
+' + '“' + m.liturgy + '”') : '')}));
+        mechEl.appendChild(row);
+      });
+    }
+
+    // task board (interactive; still visible even if JS fails because it is server-rendered)
+    const tasksEl = document.getElementById('tasks');
+    const taskDetailEl = document.getElementById('taskDetail');
+    if(tasksEl){
+      // Ensure newest hive values replace the server-rendered view (but keep same UI shape)
+      tasksEl.innerHTML='';
+      const tb = (HIVE.tasks && Array.isArray(HIVE.tasks.board)) ? HIVE.tasks.board : [];
+      tb.forEach(t=>{
+        const b = el('button',{class:'taskBtn'});
+        b.setAttribute('type','button');
+        b.setAttribute('data-taskid', t.id || t.title || '');
+        b.setAttribute('data-owner', t.owner || 'MINION');
+        b.setAttribute('data-status', t.status || '');
+        b.setAttribute('data-title', t.title || t.id || '');
+        b.setAttribute('data-desc', t.desc || t.description || '');
+        b.appendChild(el('div',{class:'k',text:(t.owner||'MINION') + ((t.status)?(' • '+t.status):'')}));
+        b.appendChild(el('div',{class:'v',text:(t.title||t.id||'')}));
+        b.addEventListener('click', function(){
+          if(!taskDetailEl) return;
+          const owner = b.getAttribute('data-owner') || '';
+          const status = b.getAttribute('data-status') || '';
+          const title = b.getAttribute('data-title') || '';
+          const desc = b.getAttribute('data-desc') || '';
+          taskDetailEl.textContent = 'Owner: ' + owner + (status?(' • Status: ' + status):'') + ' — ' + title + (desc?(' — ' + desc):'');
+        });
+        tasksEl.appendChild(b);
+      });
+      if(taskDetailEl && !taskDetailEl.textContent){
+        taskDetailEl.textContent = 'Click a task to see details + owner assignment.';
+      }
+    }
+
+    // code canon index
+    const canonEl = document.getElementById('canon');
+    if(canonEl){
+      canonEl.innerHTML='';
+      const cc = HIVE.code_canon || {};
+      const mounted = cc.mounted || {};
+      for(const k of Object.keys(mounted)){
+        const list = Array.isArray(mounted[k]) ? mounted[k] : [];
+        const row = el('div',{class:'row'});
+        row.appendChild(el('div',{class:'k',text:k}));
+        row.appendChild(el('div',{class:'v',text:list.slice(0,10).join(', ') + (list.length>10 ? (' … +' + (list.length-10)) : '')}));
+        canonEl.appendChild(row);
+      }
+    }
+
+    // roster preview
+    const roster = Array.isArray(HIVE.minions && HIVE.minions.roster) ? HIVE.minions.roster : [];
+    const rosterCount = roster.length;
+    const rp = document.getElementById('rosterPreview');
+    if(rp){
+      rp.innerHTML='';
+      roster.slice(0,12).forEach(m=>{
+        const card = el('div',{class:'mini'});
+        const a = el('div',{class:'a'});
+        if(m.avatar_url){
+          const img = el('img');
+          img.src = m.avatar_url;
+          img.alt = m.id || 'Minion';
+          a.appendChild(img);
+        }
+        const b = el('div',{class:'b'});
+        b.appendChild(el('div',{class:'id',text:(m.id||'')}));
+        const credits = (HIVE.ledger && HIVE.ledger.minion_credits && HIVE.ledger.minion_credits[m.id]) || m.energy_credits || 0;
+        const happiness = m.happiness_sim || 50;
+        const workStatus = happiness > 70 ? 'Active' : happiness > 40 ? 'Resting' : 'Break';
+        const s = credits + 'cr • ' + workStatus + ' • ' + happiness + '% happiness';
+        b.appendChild(el('div',{class:'sub',text:s}));
+        card.appendChild(a);
+        card.appendChild(b);
+        rp.appendChild(card);
+      });
+    }
+
+    var diag = document.getElementById('diag');
+    if(diag) diag.textContent = 'render: hive_state embedded • roster ' + rosterCount + ' • no-fetch';
+    }
+    catch(e){
+      try{
+        var d = document.getElementById('diag');
+        if(d) d.textContent = 'JS error: ' + (e && (e.stack || e.message) || String(e));
+      }catch(_e){}
+    }
+  })();
+  </script>
+</body>
+</html>
