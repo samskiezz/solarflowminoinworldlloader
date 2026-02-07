@@ -4,7 +4,186 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Autonomous Solar Civilization</title>
-  <script src="./universal-bootloader.js"></script>
+  <script>
+    // Embedded Universal Bootloader for immediate data persistence
+    if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
+        window.SOLARFLOW_BOOTLOADER_INITIALIZED = true;
+        
+        class EmbeddedSolarFlowBootloader {
+            constructor() {
+                this.version = '2.2.0';
+                this.initialized = false;
+                this.state = {};
+                this.autoSaveInterval = null;
+                this.pageName = 'autonomous-world';
+                console.log('🚀 Embedded SolarFlow Bootloader v' + this.version + ' starting on autonomous-world');
+                this.init();
+            }
+            
+            async init() {
+                try {
+                    await this.loadState();
+                    if (!this.state.initialized) {
+                        await this.initializeSystemData();
+                    }
+                    this.setupAutoSave();
+                    this.setupBeforeUnload();
+                    this.initialized = true;
+                    this.state.lastBootTime = Date.now();
+                    await this.saveState();
+                    console.log('✅ Embedded Bootloader ready! Data will persist.');
+                    
+                    window.dispatchEvent(new CustomEvent('solarflow-ready', { 
+                        detail: { bootloader: this, state: this.state }
+                    }));
+                } catch (error) {
+                    console.error('❌ Embedded Bootloader failed:', error);
+                }
+            }
+            
+            async loadState() {
+                try {
+                    const localData = localStorage.getItem('solarflow-state');
+                    if (localData) {
+                        this.state = JSON.parse(localData);
+                        console.log('📂 State loaded from localStorage');
+                        return;
+                    }
+                    this.state = this.getDefaultState();
+                    console.log('📂 Initialized empty state');
+                } catch (error) {
+                    console.error('⚠️ State loading error:', error);
+                    this.state = this.getDefaultState();
+                }
+            }
+            
+            getDefaultState() {
+                return {
+                    version: this.version,
+                    initialized: false,
+                    created: Date.now(),
+                    lastUpdate: Date.now(),
+                    minions: [],
+                    activities: [],
+                    autonomous: {
+                        population: 24,
+                        energyCredits: 2765,
+                        activeWorkers: 18,
+                        events: [],
+                        civilizationState: null
+                    }
+                };
+            }
+            
+            async initializeSystemData() {
+                try {
+                    if (!this.state.minions || this.state.minions.length === 0) {
+                        this.state.minions = await this.loadMinions();
+                    }
+                    if (!this.state.activities) {
+                        this.state.activities = [];
+                    }
+                    this.state.initialized = true;
+                    this.state.lastUpdate = Date.now();
+                } catch (error) {
+                    console.error('❌ System initialization failed:', error);
+                }
+            }
+            
+            async loadMinions() {
+                try {
+                    const response = await fetch('./minions.json');
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('👥 Loaded', data.minions?.length || 0, 'minions');
+                        return data.minions || [];
+                    }
+                } catch (error) {
+                    console.log('⚠️ Using default minions');
+                }
+                return [
+                    { id: 'ATLAS', tier: 'Alpha', specialty: 'Architecture', status: 'active', energy: 100 },
+                    { id: 'LUMEN', tier: 'Alpha', specialty: 'Illumination', status: 'active', energy: 95 },
+                    { id: 'NOVA', tier: 'Beta', specialty: 'Stellar', status: 'active', energy: 88 }
+                ];
+            }
+            
+            async saveState() {
+                try {
+                    this.state.lastUpdate = Date.now();
+                    localStorage.setItem('solarflow-state', JSON.stringify(this.state));
+                    console.log('💾 State saved from autonomous-world');
+                } catch (error) {
+                    console.error('❌ State save failed:', error);
+                }
+            }
+            
+            setupAutoSave() {
+                this.autoSaveInterval = setInterval(() => {
+                    if (this.initialized) {
+                        this.saveState();
+                    }
+                }, 30000);
+            }
+            
+            setupBeforeUnload() {
+                window.addEventListener('beforeunload', () => {
+                    if (this.initialized) {
+                        localStorage.setItem('solarflow-state', JSON.stringify(this.state));
+                    }
+                });
+            }
+            
+            getState() { return JSON.parse(JSON.stringify(this.state)); }
+            
+            async updateState(updates) {
+                Object.assign(this.state, updates);
+                await this.saveState();
+            }
+            
+            getMinions() { return this.state.minions || []; }
+            getActivities() { return this.state.activities || []; }
+            getAutonomousState() { return this.state.autonomous || {}; }
+            
+            async addActivity(activity) {
+                if (!this.state.activities) this.state.activities = [];
+                this.state.activities.unshift({
+                    id: 'activity-' + Date.now(),
+                    timestamp: Date.now(),
+                    page: 'autonomous-world',
+                    ...activity
+                });
+                if (this.state.activities.length > 100) {
+                    this.state.activities = this.state.activities.slice(0, 100);
+                }
+                await this.saveState();
+            }
+        }
+        
+        let EMBEDDED_BOOTLOADER = null;
+        
+        function initEmbeddedBootloader() {
+            if (EMBEDDED_BOOTLOADER) return;
+            EMBEDDED_BOOTLOADER = new EmbeddedSolarFlowBootloader();
+            
+            window.SolarFlow = {
+                bootloader: EMBEDDED_BOOTLOADER,
+                getState: () => EMBEDDED_BOOTLOADER.getState(),
+                saveState: (updates) => EMBEDDED_BOOTLOADER.updateState(updates),
+                addActivity: (activity) => EMBEDDED_BOOTLOADER.addActivity(activity),
+                getMinions: () => EMBEDDED_BOOTLOADER.getMinions(),
+                getActivities: () => EMBEDDED_BOOTLOADER.getActivities(),
+                getAutonomous: () => EMBEDDED_BOOTLOADER.getAutonomousState()
+            };
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initEmbeddedBootloader);
+        } else {
+            initEmbeddedBootloader();
+        }
+    }
+  </script>
   <script src="./vps-integration.js"></script>
   <meta name="color-scheme" content="dark" />
   <style>
