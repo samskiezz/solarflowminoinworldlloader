@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("installer")
+  orgId        String?
+  org          Organization? @relation(fields: [orgId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  projects     Project[]
+  sessions     Session[]
+  auditLogs    AuditLog[]
+}
+
+model Organization {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // installer, auditor, distributor
+  licenseKey  String?  // for CER access, standards access
+  createdAt   DateTime @default(now())
+  users       User[]
+  projects    Project[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  ipAddress String?
+  userAgent String?
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  name          String
+  siteAddress   String
+  coordinates   Json?    // lat, lng
+  systemType    String   // residential, commercial, industrial
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id])
+  orgId         String?
+  org           Organization? @relation(fields: [orgId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  assets        Asset[]
+  runs          ComplianceRun[]
+  documents     Document[]
+}
+
+model Asset {
+  id           String   @id @default(uuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id])
+  type         String   // inverter, panel, battery, meter
+  manufacturer String
+  model        String
+  serialNumber String?
+  cerListing   String?  // CER approval number
+  specs        Json     // technical specifications
+  location     String?  // roof, ground, shed
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  readings     Reading[]
+}
+
+model Reading {
+  id        String   @id @default(uuid())
+  assetId   String
+  asset     Asset    @relation(fields: [assetId], references: [id])
+  timestamp DateTime
+  values    Json     // voltage, current, power, energy, temperature
+  source    String   // manual, monitoring, meter
+  createdAt DateTime @default(now())
+  
+  @@index([assetId, timestamp])
+}
+
+model StandardsReference {
+  id          String   @id @default(uuid())
+  code        String   // AS/NZS 5033
+  edition     String   // 2021
+  title       String
+  clauses     Json     // [{clause: "4.3.2", title: "DC isolation", category: "safety"}]
+  tags        String[] // safety, installation, grid-connection
+  sourceUrl   String?  // official standards source
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([code, edition])
+}
+
+model ComplianceRun {
+  id        String   @id @default(uuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  runNumber Int      // sequential per project
+  standard  String   // AS/NZS 5033
+  edition   String   // 2021
+  runBy     String   // user ID who initiated
+  inputs    Json     // all input parameters
+  results   Json     // [{clause, status, reason, evidence, severity}]
+  summary   Json     // overall status, pass/fail counts, critical issues
+  evidence  Json     // file references, photos, certificates
+  createdAt DateTime @default(now())
+  
+  @@index([projectId, runNumber])
+  @@index([projectId, createdAt])
+  @@unique([projectId, runNumber])
+}
+
+model CERProduct {
+  id               String   @id @default(uuid())
+  manufacturer     String
+  model            String
+  productType      String   // inverter, panel, battery
+  cerNumber        String   @unique
+  approvalDate     DateTime
+  expiryDate       DateTime?
+  technicalSpecs   Json
+  testReports      Json     // references to test reports
+  limitations      String[] // installation limitations
+  source           String   // cer-api, manual-import, csv-upload
+  sourceVersion    String   // data version for audit
+  sourceChecksum   String   // data integrity check
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  @@index([manufacturer, model])
+  @@index([productType, approvalDate])
+}
+
+model Document {
+  id          String   @id @default(uuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  name        String
+  type        String   // certificate, report, photo, manual
+  fileUrl     String
+  fileSize    Int
+  mimeType    String
+  checksum    String   // file integrity
+  uploadedBy  String   // user ID
+  createdAt   DateTime @default(now())
+  
+  @@index([projectId, type])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String   // CREATE, UPDATE, DELETE, LOGIN, COMPLIANCE_RUN
+  resource   String   // users, projects, compliance_runs
+  resourceId String?
+  details    Json     // old/new values, IP, etc
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  
+  @@index([userId, createdAt])
+  @@index([resource, resourceId])
+  @@index([action, createdAt])
+}

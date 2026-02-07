@@ -1,247 +1,210 @@
-# 🌞 SolarFlow - Complete Solar Energy Management System
+# SolarFlow - Production Solar Energy Management Platform
 
-<div align="center">
+A professional solar installation and compliance management system with real database persistence, authentication, and AS/NZS standards compliance checking.
 
-![SolarFlow Logo](https://img.shields.io/badge/SolarFlow-v2.2.0-orange?style=for-the-badge&logo=solar-power&logoColor=white)
-[![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=for-the-badge)](https://samskiezz.github.io/solarflowminoinworldlloader/)
-[![LLM Integrated](https://img.shields.io/badge/LLM-Integrated-blue?style=for-the-badge)](docs/README_LLM.md)
-[![100% Functional](https://img.shields.io/badge/Functions-100%25%20Working-success?style=for-the-badge)](docs/FUNCTIONS_MASTER_INDEX.md)
+## Architecture
 
-**Complete Australian Solar & Battery Compliance Management Platform**  
-*With Autonomous Minion Civilization & AI-Powered Chat*
+- **API**: Fastify + Prisma + PostgreSQL + Redis
+- **Web**: Next.js + React Query + Tailwind CSS  
+- **Database**: PostgreSQL with full audit trails
+- **Cache/Sessions**: Redis
+- **Real-time**: WebSocket + Redis pub/sub
+- **Deployment**: Docker + Docker Compose
 
-[🚀 **Live Demo**](https://samskiezz.github.io/solarflowminoinworldlloader/) | [📖 **Documentation**](docs/) | [🔧 **Setup Guide**](#-quick-start) | [🤖 **AI Features**](docs/README_LLM.md)
+## Features
 
-</div>
+### Authentication & Authorization
+- JWT-based authentication with session management
+- Role-based access control (admin, installer, auditor, viewer)
+- Organization/tenant support
+- Complete audit logging
 
----
+### Project Management
+- Solar installation projects with site details
+- Asset management (inverters, panels, batteries, meters)
+- Real-time sensor data collection
+- Document storage and management
 
-## 🎯 **What is SolarFlow?**
+### Standards Compliance
+- AS/NZS 5033:2021 (PV installations)
+- AS/NZS 4777:2016 (Grid connection)  
+- AS/NZS 5139:2019 (Battery safety)
+- Automated compliance checking with evidence trails
+- Immutable compliance run records
 
-SolarFlow is a comprehensive solar energy management platform specifically designed for Australian solar & battery installations. It combines:
+### CER Product Registry
+- Verified CER-approved products database
+- Technical specifications and test reports
+- Product search and filtering
+- Integration with compliance checking
 
-- **⚡ Solar Compliance Management** - Complete AS/NZS standards integration
-- **🤖 Autonomous Minion Civilization** - Self-managing AI entities for operations
-- **💬 LLM-Powered Chat** - Talk to specialist minions about technical topics
-- **📊 Real-time Monitoring** - Live performance tracking and optimization
-- **📋 Compliance Auditing** - Automated AS/NZS compliance verification
-- **🌍 3D Visualization** - Interactive solar farm and minion world
+### Real-time Collaboration
+- WebSocket connections for live updates
+- Project-based rooms and notifications
+- Multi-user compliance checking
+- Live status updates
 
-## 🚀 **Quick Start**
+## Quick Start
 
-### **Option 1: Use Live Demo (Recommended)**
-Visit: **https://samskiezz.github.io/solarflowminoinworldlloader/**
+### Prerequisites
+- Docker and Docker Compose
+- Node.js 20+ (for development)
+- PostgreSQL 16+ (if running locally)
+- Redis 7+ (if running locally)
 
-### **Option 2: Local Development**
+### Development Setup
+
+1. Clone and setup:
 ```bash
-# Clone the repository
-git clone https://github.com/samskiezz/solarflowminoinworldlloader.git
-cd solarflowminoinworldlloader
+git clone <repository>
+cd solarflow
+cp .env.example .env
+# Edit .env with your configuration
+```
 
-# Install dependencies
+2. Start services:
+```bash
+docker-compose up -d postgres redis
+```
+
+3. Setup database:
+```bash
+cd apps/api
 npm install
-
-# Start local development server
-npm start
-
-# Open browser to: http://localhost:8080
+npx prisma migrate dev
+npx prisma generate
+npm run seed
 ```
 
-### **Option 3: Production VPS Deployment** 
-See [Production Deployment Guide](docs/README_PRODUCTION.md)
-
-## 🔧 **System Architecture**
-
-```
-SolarFlow System
-├── 🎮 Core Systems (4)
-│   ├── 👥 Minion Roster Management
-│   ├── 🌐 3D Realm Visualization  
-│   ├── 💾 Data Persistence System
-│   └── 🔄 Real-time Refresh
-│
-├── 🇦🇺 Solar Compliance (4)
-│   ├── ⚡ Project Solar Australia
-│   ├── 📖 AS/NZS Standards Database
-│   ├── 🔌 CER Products (9,247 items)
-│   └── 📄 Document Processing
-│
-├── 🚀 Advanced Features (4)
-│   ├── 🤖 Autonomous Civilization
-│   ├── 🧠 Consciousness Engine
-│   ├── 🎯 Minion Control Systems
-│   └── 📊 Real-time Activity Feeds
-│
-└── 🔧 Utilities & Tools (4)
-    ├── 📋 Function Inventory (94 functions)
-    ├── 🔍 System Diagnostics
-    ├── 🌍 3D Working Environment
-    └── ⚡ Comprehensive Testing
-```
-
-## 🤖 **AI-Powered Minion Chat**
-
-Talk to 6 specialist minions about solar systems:
-
-- **🔧 ATLAS** - Solar Installation Specialist (AS/NZS 3000 expert)
-- **📊 LUMEN** - Energy Systems Analyst (performance optimization)
-- **📋 ORBIT** - Field Operations Coordinator (project management)
-- **📖 PRISM** - Compliance & Documentation Expert (regulations)
-- **🔬 NOVA** - Innovation & Research Specialist (new technologies)
-- **⚙️ BOLT** - Maintenance & Troubleshooting Expert (problem-solving)
-
-**Setup:** Add your OpenAI API key via the 🤖 LLM Config button for full chat functionality.
-
-## 🇦🇺 **Australian Solar Compliance**
-
-### **AS/NZS Standards Coverage**
-- ✅ **AS/NZS 3000:2018** - Electrical Installation Standard
-- ✅ **AS/NZS 4777:2016/2020** - Grid Connection Requirements
-- ✅ **AS/NZS 5033:2021** - Solar PV Installation Standard  
-- ✅ **AS/NZS 5139:2019** - Battery Safety & Installation
-
-### **CER Integration**
-- 🔌 **9,247 CER-approved products** with full specifications
-- 📄 **Direct links** to datasheets and installation manuals
-- ✅ **Real-time compliance** checking against AS/NZS requirements
-- 📊 **Performance tracking** and optimization recommendations
-
-## 🌍 **Autonomous Solar Civilization**
-
-Experience the future of solar energy management:
-
-- **🧠 Consciousness Evolution** - Watch AI entities develop awareness
-- **⚡ Autonomous Optimization** - Self-managing solar farm efficiency
-- **🤝 Inter-Minion Collaboration** - Group problem-solving and knowledge sharing
-- **🌱 Sustainable Growth** - Environmentally conscious expansion
-- **💾 Persistent Progress** - Your civilization never resets
-
-## 📊 **Key Features**
-
-### **Production Ready**
-- ✅ **100% Functional** - All 94 functions implemented and working
-- ✅ **Real Data Integration** - No fake data, uses actual system metrics
-- ✅ **Performance Optimized** - Fast loading, efficient processing
-- ✅ **Mobile Responsive** - Works on all device sizes
-- ✅ **Error Handling** - Comprehensive fallbacks and recovery
-
-### **Data Persistence**
-- 💾 **Auto-save** - Progress saves automatically every 30 seconds
-- 🔄 **State Recovery** - Resume exactly where you left off
-- 📊 **History Tracking** - Complete activity and conversation logs
-- ☁️ **VPS Compatible** - Ready for server deployment
-
-### **Professional Grade**
-- 📖 **Complete Documentation** - Detailed guides and API references
-- 🔧 **Modular Architecture** - Easy to extend and customize
-- ⚡ **Performance Testing** - Built-in diagnostics and optimization
-- 🛡️ **Security Focused** - Safe API handling and data protection
-
-## 📁 **Project Structure**
-
-```
-solarflowminoinworldlloader/
-├── 📄 README.md                    # This file
-├── 📋 package.json                 # Dependencies and scripts
-├── ⚡ boot.js                      # Production bootloader
-├── ⚙️ config.production.json       # Production configuration
-│
-├── 📁 docs/                        # GitHub Pages deployment
-│   ├── 🏠 index.html              # Main dashboard (16 systems)
-│   ├── 🚨 working.html            # Emergency interface  
-│   ├── 🤖 autonomous-world.html   # Autonomous civilization
-│   ├── 👥 roster.html             # Minion management
-│   ├── 🌐 realm.html              # 3D visualization
-│   ├── 📊 cer-products.html       # CER product database
-│   └── 🧠 [LLM & Function Files]  # AI integration
-│
-├── 📁 scripts/                     # Build and utility scripts  
-│   ├── 🔄 build_all.js            # Complete build system
-│   ├── ✅ validate_hive.js        # Data validation
-│   └── 🚀 deploy.js               # Production deployment
-│
-├── 📁 src/                         # Source components (if needed)
-├── 📁 backups/                     # Automatic backups
-├── 📁 docs/README_*.md            # Detailed documentation
-└── 📊 VERSION_TRACKER.md          # Version history
-```
-
-## 🔧 **Development**
-
-### **Available Scripts**
+4. Start API:
 ```bash
-npm start        # Start development server
-npm run build    # Build for production  
-npm run validate # Validate data integrity
-npm run deploy   # Deploy to production VPS
-npm run backup   # Create system backup
-npm run test     # Run all tests
+npm run dev
 ```
 
-### **Key Dependencies**
-- **Node.js 20+** - Runtime environment
-- **Modern Browser** - Chrome, Firefox, Safari, Edge
-- **OpenAI API** (optional) - For minion chat functionality
+5. Start web interface:
+```bash
+cd ../web
+npm install
+npm run dev
+```
 
-## 🌐 **Deployment Options**
+6. Visit http://localhost:3000
 
-### **1. GitHub Pages (Current)**
-- ✅ **Free hosting** via GitHub Pages
-- ✅ **Automatic deployment** on git push
-- ✅ **Custom domain** support available
-- 🔗 **Live URL:** https://samskiezz.github.io/solarflowminoinworldlloader/
+### Production Deployment
 
-### **2. OpenClaw VPS** 
-- ✅ **Private server** deployment
-- ✅ **Custom domain** and SSL
-- ✅ **Enhanced performance** 
-- ✅ **Data persistence** on server
-- 📖 **Setup Guide:** [docs/README_PRODUCTION.md](docs/README_PRODUCTION.md)
+1. Build and deploy:
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
 
-### **3. Self-Hosted**
-- ✅ **Full control** over infrastructure
-- ✅ **Custom integrations** possible
-- ✅ **Offline capable** for remote sites
-- ✅ **Docker support** included
+2. Run migrations:
+```bash
+docker-compose exec api npx prisma migrate deploy
+```
 
-## 📖 **Documentation**
+3. Seed initial data:
+```bash
+docker-compose exec api npm run seed
+```
 
-| Topic | File | Description |
-|-------|------|-------------|
-| 🚀 **Quick Start** | [README.md](README.md) | This file - project overview |
-| 🤖 **LLM Integration** | [docs/README_LLM.md](docs/README_LLM.md) | AI chat setup and usage |
-| 🏭 **Production Deploy** | [docs/README_PRODUCTION.md](docs/README_PRODUCTION.md) | VPS deployment guide |
-| 🔧 **Functions Guide** | [docs/FUNCTIONS_MASTER_INDEX.md](docs/FUNCTIONS_MASTER_INDEX.md) | All 94 functions documented |
-| 📊 **Version History** | [VERSION_TRACKER.md](VERSION_TRACKER.md) | Complete version tracking |
-| 🛡️ **Safety & Security** | [SAFETY_GUARDRAILS.md](SAFETY_GUARDRAILS.md) | Security guidelines |
-| ⚡ **API Reference** | [docs/README_API.md](docs/README_API.md) | Technical API documentation |
+## API Documentation
 
-## 🤝 **Support & Contact**
+### Authentication
+- `POST /auth/register` - Create new user account
+- `POST /auth/login` - Authenticate user
+- `POST /auth/logout` - Invalidate session
 
-- **💬 GitHub Issues:** [Report bugs or request features](../../issues)
-- **📧 Email:** [Contact project maintainer](mailto:support@example.com)
-- **📖 Wiki:** [Detailed guides and tutorials](../../wiki)
-- **🔧 OpenClaw:** [Integration support](https://docs.openclaw.ai)
+### Projects
+- `GET /projects` - List user's projects
+- `POST /projects` - Create new project
+- `GET /projects/:id` - Get project details
+- `POST /projects/:id/assets` - Add equipment to project
 
-## 📝 **License**
+### Compliance
+- `POST /projects/:id/compliance` - Run compliance check
+- `GET /standards` - List available standards
+- `GET /cer-products` - Search CER products
 
-MIT License - see [LICENSE](LICENSE) file for details.
+### Real-time
+- `WebSocket /ws` - Real-time project updates
 
-## 🏆 **Acknowledgments**
+## Database Schema
 
-- **🤖 OpenClaw Team** - For the excellent LLM integration platform
-- **🇦🇺 Standards Australia** - For comprehensive AS/NZS standards
-- **⚡ Clean Energy Regulator** - For CER product database access
-- **🧠 OpenAI** - For GPT-4 integration enabling minion chat
+### Core Entities
+- **Users** - Authentication and authorization
+- **Organizations** - Multi-tenant support
+- **Projects** - Solar installations
+- **Assets** - Equipment (inverters, panels, batteries)
+- **ComplianceRuns** - Immutable compliance records
+
+### Standards & Compliance
+- **StandardsReference** - AS/NZS standards metadata
+- **CERProduct** - Approved equipment registry
+
+### Audit & Security
+- **AuditLog** - Complete activity tracking
+- **Session** - Secure session management
+
+## Standards Compliance
+
+### Legal Framework
+This system provides compliance *checking* against AS/NZS standards but does not include copyrighted standards text. Users must:
+
+1. Have valid licenses for AS/NZS standards
+2. Upload their purchased standards documents to their tenant storage
+3. Understand that compliance checking is advisory only
+
+### Compliance Engine
+The system checks installations against:
+- **AS/NZS 5033:2021** - PV installation requirements
+- **AS/NZS 4777:2016** - Grid connection standards  
+- **AS/NZS 5139:2019** - Battery safety requirements
+
+Each compliance run generates an immutable record with:
+- Input parameters and evidence
+- Pass/fail status for each requirement
+- Severity levels and recommendations
+- Full audit trail for legal defensibility
+
+## Security Features
+
+- Password hashing with Argon2
+- JWT tokens with secure expiration
+- Rate limiting and DDoS protection
+- Input validation and sanitization
+- SQL injection prevention
+- XSS protection via CSP headers
+- Complete audit logging
+- Session timeout and revocation
+
+## Monitoring & Observability
+
+- Structured logging with Pino
+- Health check endpoints
+- Database connection monitoring
+- Redis connectivity checks
+- Request tracing and correlation IDs
+
+## Contributing
+
+1. Fork the repository
+2. Create feature branch
+3. Add tests for new functionality  
+4. Ensure all tests pass
+5. Submit pull request
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Support
+
+For technical support:
+- Review API documentation at `/health`
+- Check application logs
+- Verify database connectivity
+- Confirm environment configuration
 
 ---
 
-<div align="center">
-
-**Built with ❤️ for Australian Solar & Battery Industry**
-
-[![GitHub Pages](https://img.shields.io/badge/Hosted%20on-GitHub%20Pages-blue?style=flat-square)](https://samskiezz.github.io/solarflowminoinworldlloader/)
-[![Node.js](https://img.shields.io/badge/Node.js-20%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
-[![OpenAI](https://img.shields.io/badge/Powered%20by-OpenAI-black?style=flat-square&logo=openai)](https://openai.com/)
-
-</div>
+**Important**: This is a compliance checking tool, not a substitute for professional electrical work or official standards compliance certification. Always consult qualified professionals for solar installations.
