@@ -1,0 +1,22 @@
+{
+  "url": "https://www.standards.org.au/standards-catalogue/sa-snz/electrotechnology/el-042/as-slash-nzs-4777-dot-1-colon-2016",
+  "title": "undefined standard",
+  "content": "Simulated content for standard of undefined",
+  "extractedData": {
+    "specifications": [
+      "Power: 440W",
+      "Voltage: 24V",
+      "Current: 18.3A"
+    ],
+    "safetyRequirements": [
+      "AS/NZS 3000 compliance",
+      "IP65 rating"
+    ],
+    "installationRequirements": [
+      "Min 50mm clearance",
+      "Max 2m spacing"
+    ]
+  },
+  "processed": true,
+  "processedAt": "2026-02-07T07:06:25.930Z"
+}
