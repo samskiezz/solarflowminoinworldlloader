@@ -1,0 +1,20 @@
+🔄 Starting doc pipeline tick at 2026-02-07T06:46:34.216Z
+📡 Discovery phase...
+   Found 0 new documents
+📥 Processing up to 14 documents
+   Processing: PROD_TRINA_SOLAR_TSM_DE06M_05_II__440W (datasheet)
+   Processing: PROD_TRINA_SOLAR_TSM_DE06M_05_II__440W (specsheet)
+   Processing: PROD_JINKOSOLAR_JKM365M_72H_365W (datasheet)
+   Processing: PROD_FRONIUS_PRIMO_5_0_1_5KW (installationManual)
+   Processing: PROD_FRONIUS_PRIMO_5_0_1_5KW (datasheet)
+   Processing: PROD_SOLAREDGE_SE7600H_AU_7_6KW (installationManual)
+   Processing: PROD_HUAWEI_SUN2000_8KTL_M1_8KW (installationManual)
+   Processing: PROD_TESLA_POWERWALL_2 (installationManual)
+   Processing: PROD_TESLA_POWERWALL_2 (userManual)
+   Processing: PROD_ENPHASE_IQ_BATTERY_10 (installationManual)
+   Processing: STD_AS_NZS_3000_2018 (standard)
+   Processing: STD_AS_NZS_4777_1_2016 (standard)
+   Processing: STD_AS_NZS_5033_2021 (standard)
+   Processing: STD_AS_NZS_5139_2019 (standard)
+✅ Doc pipeline tick completed successfully in 6031ms
+   📊 Processed: 14, Failed: 0, Total: 187/5
