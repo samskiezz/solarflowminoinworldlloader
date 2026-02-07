@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Autonomous Solar Civilization</title>
+  <script src="./universal-bootloader.js"></script>
   <script src="./vps-integration.js"></script>
   <meta name="color-scheme" content="dark" />
   <style>
@@ -309,15 +310,30 @@
 
     async function loadData() {
       try {
+        // Wait for bootloader to be ready
+        let attempts = 0;
+        while (!window.SolarFlow && attempts < 30) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          attempts++;
+        }
+        
         // Load persistent state first
         loadPersistedState();
         
-        const [minionsRes] = await Promise.all([
-          fetch('./minions.json')
-        ]);
-        
-        const minionsData = await minionsRes.json();
-        minions = minionsData.minions || [];
+        // Load minions from bootloader if available
+        if (window.SolarFlow) {
+          minions = window.SolarFlow.getMinions();
+          console.log('👥 Loaded', minions.length, 'minions from universal bootloader');
+        } else {
+          // Fallback to fetching minions.json
+          const [minionsRes] = await Promise.all([
+            fetch('./minions.json')
+          ]);
+          
+          const minionsData = await minionsRes.json();
+          minions = minionsData.minions || [];
+          console.log('👥 Loaded', minions.length, 'minions from minions.json (fallback)');
+        }
         
         // Initialize or restore civilization
         if (!hasPersistedState()) {
@@ -339,18 +355,35 @@
     }
 
     function hasPersistedState() {
+      if (window.SolarFlow) {
+        const state = window.SolarFlow.getState();
+        return !!(state.autonomous && state.autonomous.civilizationState);
+      }
       return localStorage.getItem('autonomous_world_state') !== null;
     }
 
     function loadPersistedState() {
       try {
+        if (window.SolarFlow) {
+          const state = window.SolarFlow.getState();
+          const autonomousData = state.autonomous;
+          
+          if (autonomousData && autonomousData.civilizationState) {
+            civilizationState = autonomousData.civilizationState || civilizationState;
+            worldEvents = autonomousData.worldEvents || [];
+            console.log('✅ Autonomous world state loaded from universal bootloader');
+            return;
+          }
+        }
+        
+        // Fallback to localStorage
         const savedState = localStorage.getItem('autonomous_world_state');
         if (savedState) {
           const state = JSON.parse(savedState);
           civilizationState = state.civilizationState || civilizationState;
           worldEvents = state.worldEvents || [];
           
-          console.log('✅ Autonomous world state loaded from persistence');
+          console.log('✅ Autonomous world state loaded from localStorage (fallback)');
         }
       } catch (error) {
         console.error('Failed to load persisted state:', error);
@@ -942,7 +975,7 @@
       }
     }
     
-    // Enhanced save function with quantum state
+    // Enhanced save function with universal bootloader integration
     function saveData() {
       try {
         const stateToSave = {
@@ -953,14 +986,24 @@
           quantumEnabled: !!window.quantumEngine
         };
         
-        localStorage.setItem('autonomous_world_state', JSON.stringify(stateToSave));
+        if (window.SolarFlow && window.SolarFlow.saveState) {
+          // Use universal bootloader for persistence across all pages
+          window.SolarFlow.saveState({ 
+            autonomous: stateToSave,
+            lastSavedFrom: 'autonomous-world'
+          });
+          console.log('💾 Autonomous world state saved via universal bootloader');
+        } else {
+          // Fallback to localStorage if bootloader not ready yet
+          localStorage.setItem('autonomous_world_state', JSON.stringify(stateToSave));
+          console.log('💾 Autonomous world state saved via localStorage (fallback)');
+        }
         
         // Also save quantum state if available
         if (window.quantumEngine) {
           window.quantumEngine.saveQuantumState();
         }
         
-        console.log('💾 Autonomous world state (with quantum) saved successfully');
       } catch (error) {
         console.error('Failed to save autonomous world state:', error);
         addEvent('concern', 'Failed to save civilization progress');
