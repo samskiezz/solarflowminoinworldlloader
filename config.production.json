@@ -1,0 +1,59 @@
+{
+  "server": {
+    "port": 3000,
+    "staticDir": "./docs",
+    "enableCompression": true,
+    "enableCORS": true,
+    "timeout": 30000,
+    "bodyLimit": "10mb"
+  },
+  "data": {
+    "autoSaveInterval": 30000,
+    "backupInterval": 300000,
+    "maxBackups": 48,
+    "compressionLevel": 6,
+    "validateOnSave": true
+  },
+  "llm": {
+    "enabled": true,
+    "provider": "openai",
+    "baseURL": "https://api.openai.com/v1",
+    "model": "gpt-4",
+    "maxTokens": 800,
+    "temperature": 0.7,
+    "rateLimitMs": 2000,
+    "fallbackEnabled": true
+  },
+  "monitoring": {
+    "healthCheckInterval": 60000,
+    "performanceMetrics": true,
+    "errorTracking": true,
+    "logLevel": "info",
+    "maxLogSize": "100MB",
+    "logRotation": true
+  },
+  "features": {
+    "autonomousWorld": true,
+    "minionChat": true,
+    "realTimeUpdates": true,
+    "complianceChecking": true,
+    "dataExport": true,
+    "systemDiagnostics": true
+  },
+  "security": {
+    "enableRateLimit": true,
+    "maxRequestsPerMinute": 100,
+    "enableCSP": true,
+    "enableHSTS": true,
+    "trustProxy": false
+  },
+  "openclaw": {
+    "vpsCompatible": true,
+    "dataDirectory": "/var/lib/solarflow",
+    "logDirectory": "/var/log/solarflow",
+    "enableSSL": false,
+    "domain": "localhost",
+    "enableBackups": true,
+    "backupSchedule": "0 */6 * * *"
+  }
+}
