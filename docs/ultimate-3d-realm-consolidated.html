@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate 3D Realm - Consolidated Advanced System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f1419, #1a1f2e, #2d1b69);
+            color: white;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; cursor: crosshair; }
+        
+        /* Advanced UI Panel System */
+        .ui-panel {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 255, 218, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            font-size: 13px;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .ui-panel:hover {
+            background: rgba(0, 0, 0, 0.95);
+            border-color: rgba(100, 255, 218, 0.6);
+            box-shadow: 0 20px 80px rgba(100, 255, 218, 0.1);
+        }
+        
+        /* Main HUD Panel */
+        #main-hud {
+            top: 20px; left: 20px;
+            width: 380px; max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        /* AI Chat Panel */
+        #ai-chat-panel {
+            top: 20px; right: 20px;
+            width: 340px; max-height: 400px;
+        }
+        
+        /* Minion Control Panel */
+        #minion-control-panel {
+            bottom: 20px; left: 20px;
+            width: 420px; max-height: 320px;
+        }
+        
+        /* System Status Panel */
+        #system-status-panel {
+            bottom: 20px; right: 20px;
+            width: 300px; max-height: 250px;
+        }
+        
+        /* Dominion City Living Simulation Panel */
+        #city-simulation-panel {
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 450px; max-height: 400px;
+            display: none; /* Initially hidden */
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            border: 2px solid #4CAF50;
+        }
+        
+        /* Enhanced Styling */
+        h3 {
+            color: #64ffda;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+            font-size: 16px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+        
+        .metric-label { color: #a0a0a0; }
+        .metric-value { color: #64ffda; font-weight: bold; }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 4px 2px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button.ai { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .button.danger { background: linear-gradient(135deg, #ff6b6b, #ee5a52); }
+        .button.city { background: linear-gradient(135deg, #4ecdc4, #44a08d); }
+        
+        /* Chat Interface */
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        .chat-message {
+            margin: 8px 0;
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .user-message {
+            background: rgba(102, 126, 234, 0.3);
+            margin-left: 20px;
+        }
+        
+        .ai-message {
+            background: rgba(17, 153, 142, 0.3);
+            margin-right: 20px;
+        }
+        
+        .chat-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+        
+        .chat-input::placeholder { color: #888; }
+        
+        /* Minion List */
+        .minion-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .minion-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 4px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            border-left: 3px solid #64ffda;
+        }
+        
+        .minion-name { font-weight: bold; color: #64ffda; }
+        .minion-status { font-size: 11px; color: #888; }
+        .minion-energy { 
+            background: linear-gradient(90deg, #11998e, #38ef7d);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        
+        /* City Simulation Styles */
+        .city-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .city-stat {
+            text-align: center;
+            padding: 8px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 6px;
+        }
+        
+        .city-stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .city-stat-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        /* Thought Bubble */
+        .thought-bubble {
+            position: absolute; z-index: 50;
+            background: white; color: #333;
+            border: 2px solid #333;
+            border-radius: 20px; padding: 8px 12px;
+            font-size: 11px; min-width: 80px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            pointer-events: none; opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .thought-bubble::before {
+            content: '';
+            position: absolute; bottom: -8px; left: 20px;
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid white;
+        }
+        
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; font-size: 18px; color: #64ffda;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .ui-panel { width: 280px !important; }
+            #main-hud { width: 320px; }
+            #ai-chat-panel { width: 280px; }
+            #minion-control-panel { width: 320px; }
+        }
+        
+        @media (max-width: 768px) {
+            .ui-panel { 
+                position: relative !important;
+                width: 100% !important;
+                margin: 10px 0;
+                max-height: none;
+            }
+            #container { height: auto; }
+            body { overflow: visible; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div>🌐 Loading Ultimate 3D Realm...</div>
+    </div>
+    
+    <div id="container">
+        <canvas id="canvas"></canvas>
+        
+        <!-- Main HUD Panel -->
+        <div id="main-hud" class="ui-panel">
+            <h3>🌐 Ultimate 3D Realm Control</h3>
+            
+            <div class="metric">
+                <span class="metric-label">System Status</span>
+                <span class="metric-value" id="system-status">INITIALIZING</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Active Minions</span>
+                <span class="metric-value" id="active-minions">0/50</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Consciousness Level</span>
+                <span class="metric-value" id="consciousness-level">0%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Energy Output</span>
+                <span class="metric-value" id="energy-output">0 MW</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">AI Integration</span>
+                <span class="metric-value" id="ai-integration">ACTIVE</span>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="initializeRealm()">🚀 Initialize Realm</button>
+                <button class="button ai" onclick="toggleAIMode()">🤖 Toggle AI Mode</button>
+                <button class="button city" onclick="toggleCitySimulation()">🏙️ City Simulation</button>
+                <button class="button danger" onclick="resetRealm()">🔄 Reset Realm</button>
+            </div>
+            
+            <h3 style="margin-top: 25px;">⚡ Quick Actions</h3>
+            <button class="button" onclick="spawnMinion()">➕ Spawn Minion</button>
+            <button class="button" onclick="optimizeEnergy()">⚡ Optimize Energy</button>
+            <button class="button" onclick="upgradeConsciousness()">🧠 Upgrade Consciousness</button>
+            <button class="button ai" onclick="runDiagnostics()">🔍 Run Diagnostics</button>
+        </div>
+        
+        <!-- AI Chat Panel -->
+        <div id="ai-chat-panel" class="ui-panel">
+            <h3>🤖 AI Minion Chat</h3>
+            
+            <select id="minion-select" style="width: 100%; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(100,255,218,0.3); padding: 6px; border-radius: 4px; margin-bottom: 10px;">
+                <option value="">Select a minion...</option>
+                <option value="ATLAS">ATLAS - System Orchestrator</option>
+                <option value="LUMEN">LUMEN - Data Fetcher</option>
+                <option value="ORBIT">ORBIT - Validator</option>
+                <option value="PRISM">PRISM - Progress Tracker</option>
+                <option value="NOVA">NOVA - Innovation Catalyst</option>
+                <option value="BOLT">BOLT - Speed Optimizer</option>
+            </select>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="ai-message">
+                    🤖 AI system ready. Select a minion to start chatting!
+                </div>
+            </div>
+            
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type your message..." onkeypress="handleChatInput(event)">
+            <button class="button ai" onclick="sendMessage()" style="width: 100%; margin-top: 8px;">Send Message</button>
+        </div>
+        
+        <!-- Minion Control Panel -->
+        <div id="minion-control-panel" class="ui-panel">
+            <h3>👥 Minion Management</h3>
+            
+            <div class="minion-list" id="minion-list">
+                <div class="minion-item">
+                    <div>
+                        <div class="minion-name">ATLAS</div>
+                        <div class="minion-status">System Orchestrator • Active</div>
+                    </div>
+                    <div class="minion-energy">95%</div>
+                </div>
+                <div class="minion-item">
+                    <div>
+                        <div class="minion-name">LUMEN</div>
+                        <div class="minion-status">Data Fetcher • Processing</div>
+                    </div>
+                    <div class="minion-energy">87%</div>
+                </div>
+                <div class="minion-item">
+                    <div>
+                        <div class="minion-name">ORBIT</div>
+                        <div class="minion-status">Validator • Analyzing</div>
+                    </div>
+                    <div class="minion-energy">92%</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <button class="button" onclick="selectAllMinions()">✅ Select All</button>
+                <button class="button" onclick="assignTask()">📋 Assign Task</button>
+                <button class="button ai" onclick="optimizeMinions()">🔧 Optimize</button>
+                <button class="button city" onclick="viewMinionDetails()">📊 Details</button>
+            </div>
+        </div>
+        
+        <!-- System Status Panel -->
+        <div id="system-status-panel" class="ui-panel">
+            <h3>📊 System Status</h3>
+            
+            <div class="metric">
+                <span class="metric-label">CPU Usage</span>
+                <span class="metric-value" id="cpu-usage">0%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Memory</span>
+                <span class="metric-value" id="memory-usage">0 MB</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Network</span>
+                <span class="metric-value" id="network-status">CONNECTED</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">3D Engine</span>
+                <span class="metric-value" id="engine-status">READY</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">WebGL</span>
+                <span class="metric-value" id="webgl-status">SUPPORTED</span>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <div style="font-size: 11px; color: #888; margin-bottom: 8px;">Performance Metrics:</div>
+                <div class="metric" style="font-size: 11px;">
+                    <span>FPS</span>
+                    <span id="fps-counter">60</span>
+                </div>
+                <div class="metric" style="font-size: 11px;">
+                    <span>Objects</span>
+                    <span id="object-count">0</span>
+                </div>
+                <div class="metric" style="font-size: 11px;">
+                    <span>Triangles</span>
+                    <span id="triangle-count">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- City Simulation Panel (Hidden by default) -->
+        <div id="city-simulation-panel" class="ui-panel">
+            <h3>🏙️ Dominion City - Living Simulation</h3>
+            
+            <div class="city-stats">
+                <div class="city-stat">
+                    <div class="city-stat-value" id="city-population">42</div>
+                    <div class="city-stat-label">Population</div>
+                </div>
+                <div class="city-stat">
+                    <div class="city-stat-value" id="city-happiness">78%</div>
+                    <div class="city-stat-label">Happiness</div>
+                </div>
+                <div class="city-stat">
+                    <div class="city-stat-value" id="city-productivity">92%</div>
+                    <div class="city-stat-label">Productivity</div>
+                </div>
+            </div>
+            
+            <div style="margin: 15px 0; font-size: 12px; color: #666;">
+                <strong>Active Simulations:</strong><br>
+                • Minion social interactions<br>
+                • Resource management<br>
+                • Building construction<br>
+                • Weather simulation<br>
+                • Economic modeling
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <button class="button city" onclick="pauseSimulation()">⏸️ Pause</button>
+                <button class="button city" onclick="speedUpSimulation()">⏩ Speed Up</button>
+                <button class="button city" onclick="addBuilding()">🏗️ Add Building</button>
+                <button class="button city" onclick="viewCityMap()">🗺️ City Map</button>
+            </div>
+            
+            <button class="button" onclick="toggleCitySimulation()" style="width: 100%; margin-top: 10px;">Close Simulation</button>
+        </div>
+    </div>
+
+    <!-- Load THREE.js from CDN (No ES6 modules) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // Ultimate 3D Realm - Consolidated System
+        let scene, camera, renderer;
+        let minions = [];
+        let aiMode = false;
+        let citySimulationActive = false;
+        let systemInitialized = false;
+        
+        // AI Personalities (from ultimate-3d-realm-llm.html)
+        const minionPersonalities = {
+            'ATLAS': { role: 'System Orchestrator', style: 'methodical and authoritative' },
+            'LUMEN': { role: 'Data Fetcher', style: 'enthusiastic and detailed' },
+            'ORBIT': { role: 'Validator', style: 'cautious and thorough' },
+            'PRISM': { role: 'Progress Tracker', style: 'systematic and clear' },
+            'NOVA': { role: 'Innovation Catalyst', style: 'imaginative and inspiring' },
+            'BOLT': { role: 'Speed Optimizer', style: 'rapid and action-oriented' }
+        };
+        
+        // City Simulation State (from dominion-city.html)
+        let cityState = {
+            population: 42,
+            happiness: 78,
+            productivity: 92,
+            buildings: [],
+            weather: 'sunny',
+            timeOfDay: 12
+        };
+        
+        // System Performance Monitoring
+        let performanceStats = {
+            fps: 60,
+            objectCount: 0,
+            triangleCount: 0,
+            cpuUsage: 0,
+            memoryUsage: 0
+        };
+
+        function initializeRealm() {
+            console.log('🚀 Initializing Ultimate 3D Realm...');
+            
+            // Initialize THREE.js scene
+            initThreeJS();
+            
+            // Create minions in 3D space
+            createMinions();
+            
+            // Start city simulation
+            initCitySimulation();
+            
+            // Enable AI systems
+            initAISystem();
+            
+            // Update UI
+            updateSystemStatus('OPERATIONAL');
+            updateActiveMinions(6);
+            updateConsciousnessLevel(85);
+            updateEnergyOutput(247);
+            
+            systemInitialized = true;
+            document.getElementById('loading-overlay').style.display = 'none';
+            
+            // Start animation loop
+            animate();
+            
+            logMessage('✅ Ultimate 3D Realm initialized successfully');
+        }
+
+        function initThreeJS() {
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+            
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 5, 10);
+            
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('canvas'),
+                antialias: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            
+            // Ground
+            const groundGeometry = new THREE.PlaneGeometry(50, 50);
+            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Grid lines
+            const gridHelper = new THREE.GridHelper(50, 50, 0x64ffda, 0x444444);
+            scene.add(gridHelper);
+            
+            logMessage('🎮 3D Engine initialized with advanced lighting and shadows');
+        }
+
+        function createMinions() {
+            const minionNames = ['ATLAS', 'LUMEN', 'ORBIT', 'PRISM', 'NOVA', 'BOLT'];
+            
+            minionNames.forEach((name, index) => {
+                // Create minion geometry
+                const geometry = new THREE.SphereGeometry(0.5, 16, 16);
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: Math.random() * 0xffffff,
+                    shininess: 100
+                });
+                
+                const minion = new THREE.Mesh(geometry, material);
+                minion.position.set(
+                    (Math.random() - 0.5) * 20,
+                    0.5,
+                    (Math.random() - 0.5) * 20
+                );
+                minion.castShadow = true;
+                minion.userData = {
+                    name: name,
+                    energy: Math.random() * 20 + 80,
+                    consciousness: Math.random() * 30 + 70,
+                    activity: 'idle',
+                    thoughtBubble: null
+                };
+                
+                scene.add(minion);
+                minions.push(minion);
+            });
+            
+            performanceStats.objectCount = minions.length;
+            updateObjectCount();
+            
+            logMessage(`👥 Created ${minions.length} conscious minions in 3D space`);
+        }
+
+        function initCitySimulation() {
+            // Create buildings
+            for (let i = 0; i < 8; i++) {
+                const height = Math.random() * 3 + 1;
+                const geometry = new THREE.BoxGeometry(1, height, 1);
+                const material = new THREE.MeshLambertMaterial({ 
+                    color: 0x666666 + Math.random() * 0x333333 
+                });
+                
+                const building = new THREE.Mesh(geometry, material);
+                building.position.set(
+                    (Math.random() - 0.5) * 15,
+                    height / 2,
+                    (Math.random() - 0.5) * 15
+                );
+                building.castShadow = true;
+                building.receiveShadow = true;
+                
+                scene.add(building);
+                cityState.buildings.push(building);
+            }
+            
+            logMessage('🏙️ City simulation initialized with procedural buildings');
+        }
+
+        function initAISystem() {
+            // AI system initialization
+            aiMode = true;
+            
+            // Start AI thinking cycles
+            setInterval(() => {
+                if (aiMode && systemInitialized) {
+                    triggerMinionThoughts();
+                }
+            }, 5000);
+            
+            logMessage('🤖 AI system activated - minions now have autonomous thoughts');
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (systemInitialized) {
+                // Animate minions
+                minions.forEach(minion => {
+                    // Gentle floating animation
+                    minion.position.y = 0.5 + Math.sin(Date.now() * 0.001 + minion.position.x) * 0.1;
+                    
+                    // Random movement
+                    if (Math.random() < 0.01) {
+                        minion.position.x += (Math.random() - 0.5) * 0.1;
+                        minion.position.z += (Math.random() - 0.5) * 0.1;
+                    }
+                });
+                
+                // Update city simulation
+                if (citySimulationActive) {
+                    updateCitySimulation();
+                }
+                
+                // Update performance stats
+                updatePerformanceStats();
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        function triggerMinionThoughts() {
+            if (minions.length === 0) return;
+            
+            const randomMinion = minions[Math.floor(Math.random() * minions.length)];
+            const thoughts = [
+                'Optimizing solar panel efficiency...',
+                'Processing consciousness upgrade...',
+                'Analyzing system performance...',
+                'Sharing knowledge with cluster...',
+                'Planning territory expansion...',
+                'Monitoring threat vectors...',
+                'Synthesizing new insights...'
+            ];
+            
+            const thought = thoughts[Math.floor(Math.random() * thoughts.length)];
+            showThoughtBubble(randomMinion, thought);
+        }
+
+        function showThoughtBubble(minion, thought) {
+            // Create thought bubble
+            const bubble = document.createElement('div');
+            bubble.className = 'thought-bubble';
+            bubble.textContent = thought;
+            bubble.style.opacity = '1';
+            
+            // Position near minion
+            const vector = new THREE.Vector3();
+            vector.setFromMatrixPosition(minion.matrixWorld);
+            vector.project(camera);
+            
+            const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+            const y = -(vector.y * 0.5 - 0.5) * window.innerHeight;
+            
+            bubble.style.left = (x + 20) + 'px';
+            bubble.style.top = (y - 40) + 'px';
+            
+            document.body.appendChild(bubble);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                bubble.style.opacity = '0';
+                setTimeout(() => {
+                    if (bubble.parentNode) {
+                        bubble.parentNode.removeChild(bubble);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // AI Chat Functions
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const minionSelect = document.getElementById('minion-select');
+            const messages = document.getElementById('chat-messages');
+            
+            const message = input.value.trim();
+            const selectedMinion = minionSelect.value;
+            
+            if (!message || !selectedMinion) {
+                alert('Please select a minion and enter a message');
+                return;
+            }
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user-message';
+            userMsg.textContent = `You: ${message}`;
+            messages.appendChild(userMsg);
+            
+            // Clear input
+            input.value = '';
+            
+            // Generate AI response
+            setTimeout(() => {
+                const aiResponse = generateAIResponse(selectedMinion, message);
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-message ai-message';
+                aiMsg.textContent = `${selectedMinion}: ${aiResponse}`;
+                messages.appendChild(aiMsg);
+                
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+            
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function generateAIResponse(minionId, userMessage) {
+            const personality = minionPersonalities[minionId];
+            const responses = {
+                'ATLAS': [
+                    'System analysis indicates optimal performance parameters.',
+                    'Orchestrating realm-wide operations as requested.',
+                    'All systems operating within normal parameters.'
+                ],
+                'LUMEN': [
+                    'Data fetch complete! Found interesting patterns in the metrics.',
+                    'Processing information at maximum efficiency!',
+                    'Knowledge acquisition protocols are running smoothly.'
+                ],
+                'ORBIT': [
+                    'Validation checks in progress... standby for results.',
+                    'Quality assurance protocols confirm system integrity.',
+                    '
