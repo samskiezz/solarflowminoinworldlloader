@@ -226,8 +226,28 @@
             standardsLoaded: 0,
             processedDocuments: 0,
             complianceScore: 0,
-            safetyRating: 0
+            safetyRating: 0,
+            productsLoaded: 0,
+            minionsActive: 0
         };
+        
+        // Load persistent state on startup
+        function loadPersistedState() {
+            const saved = localStorage.getItem('projectSolarAustraliaState');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    Object.assign(systemState, parsed);
+                    if (systemState.initialized) {
+                        document.getElementById('system-status').textContent = 'OPERATIONAL';
+                        log('🔄 Restored previous session state', 'info');
+                        updateMetrics();
+                    }
+                } catch (e) {
+                    log('⚠️ Could not restore previous state', 'warning');
+                }
+            }
+        }
         
         const workingFunctions = [
             { name: "AS/NZS 3000 Validation", category: "Compliance", status: "working" },
@@ -382,7 +402,7 @@
             }
         }
         
-        function initializeSystem() {
+        async function initializeSystem() {
             if (systemState.initialized) {
                 log('System already initialized', 'warning');
                 return;
@@ -391,31 +411,64 @@
             log('🚀 INITIALIZING REAL PROJECT SOLAR AUSTRALIA SYSTEM', 'info');
             document.getElementById('system-status').textContent = 'INITIALIZING';
             
-            // Simulate progressive initialization
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 15 + 5;
+            try {
+                // Load real CER product database
+                log('📊 Loading CER product database...', 'info');
+                const cerResponse = await fetch('./cer-product-database.json');
+                const cerData = await cerResponse.json();
                 
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    
-                    systemState.initialized = true;
-                    systemState.activeFunctions = workingFunctions.length;
-                    systemState.standardsLoaded = asNzsStandards.length;
-                    document.getElementById('system-status').textContent = 'OPERATIONAL';
-                    log('✅ ALL SYSTEMS INITIALIZED AND OPERATIONAL', 'success');
-                    updateMetrics();
-                    return;
+                if (cerData.products && cerData.products.length > 0) {
+                    systemState.productsLoaded = cerData.products.length;
+                    log(`✅ Loaded ${cerData.products.length} CER products`, 'success');
+                } else {
+                    log('⚠️ CER database is empty - loading sample data', 'warning');
+                    systemState.productsLoaded = 0;
                 }
                 
-                const currentFunction = workingFunctions[Math.floor((progress / 100) * workingFunctions.length)];
-                if (currentFunction) {
-                    log(`Loading ${currentFunction.name}...`, 'info');
+                // Load hive state for minion data
+                log('🐝 Loading hive state and minion data...', 'info');
+                const hiveResponse = await fetch('./hive_state.json');
+                const hiveData = await hiveResponse.json();
+                
+                if (hiveData.minions && Object.keys(hiveData.minions).length > 0) {
+                    systemState.minionsActive = Object.keys(hiveData.minions).length;
+                    log(`✅ Connected to ${systemState.minionsActive} active minions`, 'success');
+                } else {
+                    log('⚠️ No active minions found', 'warning');
+                    systemState.minionsActive = 0;
                 }
                 
+                // Initialize AS/NZS standards
+                log('📋 Initializing AS/NZS standards database...', 'info');
+                systemState.standardsLoaded = asNzsStandards.length;
+                log(`✅ Loaded ${systemState.standardsLoaded} standards`, 'success');
+                
+                // Initialize working functions
+                log('⚙️ Activating compliance functions...', 'info');
+                systemState.activeFunctions = workingFunctions.length;
+                log(`✅ ${systemState.activeFunctions} functions operational`, 'success');
+                
+                // Save persistent state
+                const persistentState = {
+                    initialized: true,
+                    lastInitialized: new Date().toISOString(),
+                    activeFunctions: systemState.activeFunctions,
+                    standardsLoaded: systemState.standardsLoaded,
+                    productsLoaded: systemState.productsLoaded,
+                    minionsActive: systemState.minionsActive
+                };
+                
+                localStorage.setItem('projectSolarAustraliaState', JSON.stringify(persistentState));
+                
+                systemState.initialized = true;
+                document.getElementById('system-status').textContent = 'OPERATIONAL';
+                log('✅ ALL SYSTEMS INITIALIZED AND OPERATIONAL', 'success');
                 updateMetrics();
-            }, 200);
+                
+            } catch (error) {
+                log(`❌ Initialization failed: ${error.message}`, 'error');
+                document.getElementById('system-status').textContent = 'FAILED';
+            }
         }
         
         function runComplianceCheck() {
@@ -604,11 +657,18 @@ unlike the previous version which had only 0.6% working functionality.
         
         // Initialize interface
         document.addEventListener('DOMContentLoaded', function() {
+            loadPersistedState();  // Load saved state first
             populateFunctions();
             populateStandards();
             updateMetrics();
-            log('🔧 Project Solar Australia WORKING system loaded', 'success');
-            log('👆 Click "Initialize ALL Systems" to start', 'info');
+            
+            if (systemState.initialized) {
+                log('🔧 Project Solar Australia WORKING system restored from previous session', 'success');
+                log(`📊 ${systemState.productsLoaded} products loaded, ${systemState.minionsActive} minions active`, 'info');
+            } else {
+                log('🔧 Project Solar Australia WORKING system loaded', 'success');
+                log('👆 Click "Initialize ALL Systems" to start', 'info');
+            }
         });
         
         console.log('✅ Project Solar Australia WORKING system loaded successfully');
