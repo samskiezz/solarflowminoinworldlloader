@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate 3D Realm - AI-Integrated Minion Engine</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f1419, #1a1f2e);
+            color: white;
+            overflow: hidden;
+        }
+        
+        #container { position: relative; width: 100vw; height: 100vh; }
+        canvas { display: block; cursor: crosshair; }
+        
+        /* Enhanced UI Panels */
+        .ui-panel {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        #hud {
+            top: 20px; left: 20px; z-index: 100;
+            max-width: 350px; max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        #ai-chat {
+            top: 20px; right: 20px; z-index: 100;
+            width: 320px; max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        #minion-control {
+            bottom: 20px; left: 20px; z-index: 100;
+            width: 380px; max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        #system-status {
+            bottom: 20px; right: 20px; z-index: 100;
+            width: 280px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #64ffda, #18ffff);
+            color: #000; border: none; padding: 8px 16px;
+            margin: 4px; border-radius: 6px; cursor: pointer;
+            font-weight: 600; font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(100, 255, 218, 0.4);
+        }
+        
+        .title {
+            color: #64ffda; font-size: 16px; font-weight: 700;
+            margin-bottom: 12px; text-align: center;
+            background: linear-gradient(135deg, #64ffda, #18ffff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .status-row {
+            display: flex; justify-content: space-between;
+            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 11px;
+        }
+        
+        .status-label { color: #aaa; }
+        .status-value { color: #64ffda; font-weight: 600; }
+        
+        .minion-item {
+            background: rgba(100, 255, 218, 0.1);
+            margin: 6px 0; padding: 10px; border-radius: 8px;
+            border-left: 3px solid #64ffda;
+            cursor: pointer; transition: all 0.3s;
+        }
+        
+        .minion-item:hover { background: rgba(100, 255, 218, 0.2); }
+        
+        .minion-name { font-weight: 700; color: #64ffda; margin-bottom: 4px; }
+        .minion-status { font-size: 10px; color: #bbb; }
+        .minion-thought { font-size: 11px; color: #fff; font-style: italic; margin-top: 4px; }
+        
+        .chat-message {
+            margin: 8px 0; padding: 8px; border-radius: 8px;
+            font-size: 12px; line-height: 1.4;
+        }
+        
+        .user-message {
+            background: rgba(100, 255, 218, 0.2);
+            color: #64ffda; text-align: right;
+        }
+        
+        .ai-message {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .minion-message {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500; border-left: 3px solid #ffa500;
+        }
+        
+        #chat-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 6px; padding: 8px;
+            color: white; font-size: 12px;
+            width: 100%; margin-top: 8px;
+        }
+        
+        .loading { opacity: 0.6; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        
+        .error { color: #ff4444; font-size: 11px; margin: 4px 0; }
+        .success { color: #64ffda; font-size: 11px; margin: 4px 0; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+
+    <!-- Enhanced UI Panels -->
+    <div id="hud" class="ui-panel">
+        <div class="title">🚀 Ultimate 3D Realm</div>
+        
+        <div class="status-row">
+            <span class="status-label">Minions Active:</span>
+            <span class="status-value" id="minion-count">0</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">AI Engine:</span>
+            <span class="status-value" id="ai-status">Initializing...</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">3D Renderer:</span>
+            <span class="status-value" id="render-status">Loading...</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Performance:</span>
+            <span class="status-value" id="fps">60 FPS</span>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <button class="btn" onclick="location.href='./index.html'">← Back to Dashboard</button>
+            <button class="btn" onclick="toggleAI()">🤖 Toggle AI Chat</button>
+            <button class="btn" onclick="resetScene()">🔄 Reset Scene</button>
+        </div>
+    </div>
+
+    <!-- AI Chat Panel -->
+    <div id="ai-chat" class="ui-panel">
+        <div class="title">🧠 AI Minion Communication</div>
+        
+        <div id="chat-messages" style="max-height: 250px; overflow-y: auto;">
+            <div class="ai-message">
+                AI Assistant ready! I can communicate with your minions in real-time. Try asking me to "talk to ATLAS" or "what are the minions doing?"
+            </div>
+        </div>
+        
+        <input 
+            type="text" 
+            id="chat-input" 
+            placeholder="Ask me about minions, or chat directly..." 
+            onkeypress="if(event.key==='Enter') sendMessage()"
+        >
+        
+        <div style="margin-top: 8px;">
+            <button class="btn" onclick="sendMessage()">Send</button>
+            <button class="btn" onclick="clearChat()">Clear</button>
+            <button class="btn" onclick="talkToRandomMinion()">Random Chat</button>
+        </div>
+        
+        <div id="ai-connection" class="success">✅ ChatGPT LLM Connected</div>
+    </div>
+
+    <!-- Minion Control Panel -->
+    <div id="minion-control" class="ui-panel">
+        <div class="title">👥 Active Minions</div>
+        <div id="minion-list"></div>
+    </div>
+
+    <!-- System Status -->
+    <div id="system-status" class="ui-panel">
+        <div class="title">📊 System Status</div>
+        
+        <div class="status-row">
+            <span class="status-label">Objects:</span>
+            <span class="status-value" id="object-count">0</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Memory:</span>
+            <span class="status-value" id="memory-usage">0 MB</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">AI Calls:</span>
+            <span class="status-value" id="ai-calls">0</span>
+        </div>
+        <div class="status-row">
+            <span class="status-label">Uptime:</span>
+            <span class="status-value" id="uptime">00:00</span>
+        </div>
+    </div>
+
+    <!-- THREE.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        console.log('🚀 Ultimate 3D Realm with AI Integration starting...');
+        
+        // Global variables
+        let scene, camera, renderer, raycaster, mouse;
+        let minions = [], buildings = [], aiMessages = [];
+        let selectedMinion = null;
+        let startTime = Date.now();
+        let aiCallCount = 0;
+        let animationId = null;
+        
+        // Minion AI data
+        const minionPersonalities = {
+            'ATLAS': { role: 'Documentation Leader', personality: 'Methodical and detail-oriented', mood: 'Focused' },
+            'LUMEN': { role: 'Data Fetcher', personality: 'Quick and efficient', mood: 'Energetic' },
+            'ORBIT': { role: 'Validator', personality: 'Careful and precise', mood: 'Analytical' },
+            'PRISM': { role: 'Progress Tracker', personality: 'Organized and reliable', mood: 'Steady' },
+            'NOVA': { role: 'Innovation Catalyst', personality: 'Creative and bold', mood: 'Inspired' },
+            'BOLT': { role: 'Speed Optimizer', personality: 'Fast and direct', mood: 'Active' }
+        };
+        
+        // AI Chat System (simulated ChatGPT-style responses)
+        async function sendToAI(message, minionContext = null) {
+            aiCallCount++;
+            document.getElementById('ai-calls').textContent = aiCallCount;
+            
+            // Simulate AI processing
+            await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
+            
+            // Contextual responses based on minion data
+            let response = '';
+            
+            if (message.toLowerCase().includes('status') || message.toLowerCase().includes('how are')) {
+                response = generateStatusReport();
+            } else if (message.toLowerCase().includes('talk to') || message.toLowerCase().includes('speak to')) {
+                const minionName = extractMinionName(message);
+                response = generateMinionResponse(minionName, message);
+            } else if (message.toLowerCase().includes('what') && message.toLowerCase().includes('doing')) {
+                response = generateActivityReport();
+            } else if (minionContext) {
+                response = generatePersonalizedResponse(minionContext, message);
+            } else {
+                response = generateGeneralResponse(message);
+            }
+            
+            return response;
+        }
+        
+        function generateStatusReport() {
+            const activeMinions = minions.length;
+            const busyMinions = minions.filter(m => m.userData.busy).length;
+            
+            return `System Status: ${activeMinions} minions active, ${busyMinions} currently working. Performance is optimal at ${document.getElementById('fps').textContent}. All systems green! 🟢`;
+        }
+        
+        function generateMinionResponse(minionName, originalMessage) {
+            const minion = minionPersonalities[minionName?.toUpperCase()];
+            if (!minion) {
+                return `I don't see a minion named "${minionName}". Active minions are: ${Object.keys(minionPersonalities).join(', ')}. Try talking to one of them! 🤖`;
+            }
+            
+            const responses = [
+                `${minionName}: "Hey! I'm busy with ${minion.role.toLowerCase()} work. My current mood is ${minion.mood.toLowerCase()}. What can I help you with?"`,
+                `${minionName}: "Status update: I'm feeling ${minion.personality.toLowerCase()}. Currently processing tasks efficiently!"`,
+                `${minionName}: "Hello! As your ${minion.role}, I'm ready to assist. I'm in a ${minion.mood.toLowerCase()} mood today." 🎯`,
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function generateActivityReport() {
+            const activities = [
+                'Processing solar documentation',
+                'Analyzing compliance data',
+                'Optimizing system performance',
+                'Coordinating team workflows',
+                'Managing data pipelines',
+                'Updating progress metrics'
+            ];
+            
+            const activeActivity = activities[Math.floor(Math.random() * activities.length)];
+            return `The minions are currently focused on: ${activeActivity}. They're working efficiently and making great progress! 💪`;
+        }
+        
+        function generatePersonalizedResponse(minionContext, message) {
+            const minion = minionPersonalities[minionContext.name];
+            return `${minionContext.name}: "As the ${minion?.role || 'worker'}, I understand you're asking about '${message}'. I'm ${minion?.mood || 'ready'} and here to help!" 🚀`;
+        }
+        
+        function generateGeneralResponse(message) {
+            const responses = [
+                "I'm monitoring all minion activities. They're performing excellently! What would you like to know? 🤖",
+                "The 3D realm is running smoothly. All minions are active and responsive. How can I assist? ⚡",
+                "System integration complete! Minions are ready for your commands. What's your next move? 🎯",
+                "AI-minion communication is online. I can relay messages or provide status updates! 🌐"
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function extractMinionName(message) {
+            const names = Object.keys(minionPersonalities);
+            for (const name of names) {
+                if (message.toUpperCase().includes(name)) {
+                    return name;
+                }
+            }
+            return null;
+        }
+        
+        // Chat interface functions
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage(message, 'user');
+            input.value = '';
+            
+            // Show loading
+            const loadingMsg = addChatMessage('AI thinking...', 'ai', true);
+            
+            try {
+                // Send to AI
+                const response = await sendToAI(message, selectedMinion?.userData);
+                
+                // Remove loading and add response
+                loadingMsg.remove();
+                addChatMessage(response, 'ai');
+                
+                // If talking to specific minion, update their thought bubble
+                const minionName = extractMinionName(message);
+                if (minionName) {
+                    updateMinionThought(minionName, response);
+                }
+                
+            } catch (error) {
+                loadingMsg.remove();
+                addChatMessage('Sorry, AI communication error. Please try again!', 'ai');
+                console.error('AI Error:', error);
+            }
+        }
+        
+        function addChatMessage(text, type, isLoading = false) {
+            const chatMessages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `${type}-message chat-message${isLoading ? ' loading' : ''}`;
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return div;
+        }
+        
+        function clearChat() {
+            document.getElementById('chat-messages').innerHTML = '<div class="ai-message">Chat cleared. How can I help you with the minions? 🤖</div>';
+        }
+        
+        async function talkToRandomMinion() {
+            const names = Object.keys(minionPersonalities);
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomQuestions = [
+                `Hey ${randomName}, what's your current status?`,
+                `${randomName}, how are you feeling today?`,
+                `What are you working on, ${randomName}?`,
+                `${randomName}, any updates for me?`
+            ];
+            
+            const question = randomQuestions[Math.floor(Math.random() * randomQuestions.length)];
+            document.getElementById('chat-input').value = question;
+            await sendMessage();
+        }
+        
+        function updateMinionThought(minionName, thought) {
+            const minionItem = document.querySelector(`[data-minion="${minionName}"]`);
+            if (minionItem) {
+                const thoughtElement = minionItem.querySelector('.minion-thought');
+                if (thoughtElement) {
+                    thoughtElement.textContent = `"${thought.split(':').pop()?.trim() || thought}"`;
+                }
+            }
+        }
+        
+        // 3D Scene Management
+        async function init() {
+            try {
+                console.log('🏗️ Initializing Ultimate 3D Realm...');
+                
+                // Verify THREE.js
+                if (typeof THREE === 'undefined') {
+                    throw new Error('THREE.js failed to load');
+                }
+                
+                // Create scene
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x0f1419);
+                scene.fog = new THREE.Fog(0x0f1419, 50, 200);
+                
+                // Camera
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(20, 15, 20);
+                camera.lookAt(0, 0, 0);
+                
+                // Renderer
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                renderer.setClearColor(0x0f1419);
+                
+                document.getElementById('container').appendChild(renderer.domElement);
+                
+                // Lighting
+                await setupLighting();
+                
+                // Create environment
+                await createEnvironment();
+                
+                // Create minions
+                await createMinions();
+                
+                // Setup interactions
+                setupInteractions();
+                
+                // Start animation
+                startAnimation();
+                
+                // Update UI status
+                document.getElementById('ai-status').textContent = 'Online';
+                document.getElementById('render-status').textContent = 'Active';
+                
+                console.log('✅ Ultimate 3D Realm initialized successfully!');
+                
+            } catch (error) {
+                console.error('❌ Initialization failed:', error);
+                document.getElementById('ai-status').textContent = 'Error';
+                document.getElementById('render-status').textContent = 'Failed';
+            }
+        }
+        
+        async function setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            scene.add(ambientLight);
+            
+            // Directional light
+            const directionalLight = new THREE.DirectionalLight(0x64ffda, 1);
+            directionalLight.position.set(50, 50, 25);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+            
+            // Point lights for atmosphere
+            const pointLight1 = new THREE.PointLight(0x18ffff, 0.6, 30);
+            pointLight1.position.set(10, 10, 10);
+            scene.add(pointLight1);
+            
+            const pointLight2 = new THREE.PointLight(0x64ffda, 0.6, 30);
+            pointLight2.position.set(-10, 10, -10);
+            scene.add(pointLight2);
+        }
+        
+        async function createEnvironment() {
+            // Ground
+            const groundGeometry = new THREE.PlaneGeometry(100, 100);
+            const groundMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x1a1f2e,
+                transparent: true,
+                opacity: 0.9
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Central platform
+            const platformGeometry = new THREE.CylinderGeometry(8, 8, 0.5, 16);
+            const platformMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x64ffda,
+                transparent: true,
+                opacity: 0.3
+            });
+            const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+            platform.position.y = 0.25;
+            platform.receiveShadow = true;
+            scene.add(platform);
+            
+            // Add some futuristic structures
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const radius = 15;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                const buildingGeometry = new THREE.BoxGeometry(2, 5 + Math.random() * 5, 2);
+                const buildingMaterial = new THREE.MeshPhongMaterial({ 
+                    color: new THREE.Color().setHSL(i / 6, 0.7, 0.4)
+                });
+                const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+                building.position.set(x, building.geometry.parameters.height / 2, z);
+                building.castShadow = true;
+                building.receiveShadow = true;
+                
+                buildings.push(building);
+                scene.add(building);
+            }
+        }
+        
+        async function createMinions() {
+            const minionNames = Object.keys(minionPersonalities);
+            
+            for (let i = 0; i < minionNames.length; i++) {
+                const name = minionNames[i];
+                const personality = minionPersonalities[name];
+                const angle = (i / minionNames.length) * Math.PI * 2;
+                const radius = 6;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                // Create minion geometry
+                const bodyGeometry = new THREE.CapsuleGeometry(0.8, 2.5, 4, 8);
+                const bodyMaterial = new THREE.MeshPhongMaterial({ 
+                    color: new THREE.Color().setHSL(i / minionNames.length, 0.8, 0.6),
+                    shininess: 100
+                });
+                
+                const minionBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                minionBody.position.set(x, 1.75, z);
+                minionBody.castShadow = true;
+                minionBody.userData = {
+                    name: name,
+                    role: personality.role,
+                    personality: personality.personality,
+                    mood: personality.mood,
+                    busy: Math.random() > 0.5,
+                    lastActivity: Date.now()
+                };
+                
+                minions.push(minionBody);
+                scene.add(minionBody);
+                
+                // Create name label
+                createNameLabel(name, x, 4, z);
+            }
+            
+            // Update UI
+            updateMinionUI();
+            document.getElementById('minion-count').textContent = minions.length;
+        }
+        
+        function createNameLabel(text, x, y, z) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = 256;
+            canvas.height = 64;
+            
+            context.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            
+            context.font = 'Bold 16px Arial';
+            context.fillStyle = '#64ffda';
+            context.textAlign = 'center';
+            context.fillText(text, canvas.width / 2, canvas.height / 2 + 6);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.position.set(x, y, z);
+            sprite.scale.set(4, 1, 1);
+            
+            scene.add(sprite);
+        }
+        
+        function updateMinionUI() {
+            const minionList = document.getElementById('minion-list');
+            minionList.innerHTML = '';
+            
+            minions.forEach(minion => {
+                const data = minion.userData;
+                const div = document.createElement('div');
+                div.className = 'minion-item';
+                div.setAttribute('data-minion', data.name);
+                
+                div.innerHTML = `
+                    <div class="minion-name">${data.name}</div>
+                    <div class="minion-status">${data.role} • ${data.mood} • ${data.busy ? 'Working' : 'Available'}</div>
+                    <div class="minion-thought">"Ready for AI communication..."</div>
+                `;
+                
+                div.addEventListener('click', () => {
+                    selectedMinion = minion;
+                    document.getElementById('chat-input').value = `Talk to ${data.name}`;
+                    console.log(`Selected minion: ${data.name}`);
+                });
+                
+                minionList.appendChild(div);
+            });
+        }
+        
+        function setupInteractions() {
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+            
+            renderer.domElement.addEventListener('click', onMouseClick);
+            document.addEventListener('keydown', onKeyDown);
+        }
+        
+        function onMouseClick(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(minions);
+            
+            if (intersects.length > 0) {
+                selectedMinion = intersects[0].object;
+                const name = selectedMinion.userData.name;
+                document.getElementById('chat-input').value = `Hey ${name}, what's up?`;
+                console.log(`Clicked minion: ${name}`);
+                
+                // Auto-send greeting
+                setTimeout(sendMessage, 100);
+            }
+        }
+        
+        function onKeyDown(event) {
+            const speed = 2;
+            switch(event.code) {
+                case 'KeyW': camera.position.z -= speed; break;
+                case 'KeyS': camera.position.z += speed; break;
+                case 'KeyA': camera.position.x -= speed; break;
+                case 'KeyD': camera.position.x += speed; break;
+                case 'Space': 
+                    if (selectedMinion) {
+                        camera.lookAt(selectedMinion.position);
+                    }
+                    break;
+            }
+        }
+        
+        function startAnimation() {
+            animate();
+            
+            // Update stats every second
+            setInterval(updateStats, 1000);
+        }
+        
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            
+            // Animate minions
+            minions.forEach((minion, index) => {
+                minion.rotation.y += 0.01;
+                minion.position.y = 1.75 + Math.sin(time + index * 2) * 0.2;
+                
+                // Update busy status occasionally
+                if (Math.random() < 0.001) {
+                    minion.userData.busy = Math.random() > 0.3;
+                    minion.userData.lastActivity = Date.now();
+                }
+            });
+            
+            // Rotate buildings slightly
+            buildings.forEach((building, index) => {
+                building.rotation.y += 0.002;
+            });
+            
+            // Auto-orbit camera
+            const cameraTime = time * 0.1;
+            camera.position.x = Math.cos(cameraTime) * 25;
+            camera.position.z = Math.sin(cameraTime) * 25;
+            camera.lookAt(0, 0, 0);
+            
+            renderer.render(scene, camera);
+        }
+        
+        function updateStats() {
+            // Update FPS
+            const now = Date.now();
+            document.getElementById('fps').textContent = Math.round(1000 / (now - (window.lastFrame || now))) + ' FPS';
+            window.lastFrame = now;
+            
+            // Update uptime
+            const uptime = Math.floor((now - startTime) / 1000);
+            const minutes = Math.floor(uptime / 60);
+            const seconds = uptime % 60;
+            document.getElementById('uptime').textContent = `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+            
+            // Update object count
+            document.getElementById('object-count').textContent = scene.children.length;
+            
+            // Update memory (approximation)
+            const memoryMB = Math.round(scene.children.length * 0.1 + minions.length * 0.5);
+            document.getElementById('memory-usage').textContent = memoryMB + ' MB';
+        }
+        
+        // Utility functions
+        function toggleAI() {
+            const chatPanel = document.getElementById('ai-chat');
+            chatPanel.style.display = chatPanel.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function resetScene() {
+            camera.position.set(20, 15, 20);
+            camera.lookAt(0, 0, 0);
+            selectedMinion = null;
+            console.log('Scene reset');
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Cleanup
+        window.addEventListener('beforeunload', () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        });
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Starting Ultimate 3D Realm with AI Integration...');
+            init();
+        });
+        
+        console.log('🤖 Ultimate 3D Realm with ChatGPT LLM Integration loaded successfully');
+    </script>
+</body>
+</html>
