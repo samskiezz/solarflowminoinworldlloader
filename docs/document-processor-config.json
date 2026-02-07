@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "supportedFormats": [
+    "pdf",
+    "docx",
+    "html",
+    "txt"
+  ],
+  "processingQueue": [],
+  "maxConcurrentProcessing": 3,
+  "autoProcessingEnabled": true,
+  "ocrEnabled": true,
+  "lastProcessingRun": null
+}

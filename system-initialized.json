@@ -1,0 +1,112 @@
+{
+  "fullyInitialized": true,
+  "firstInitialized": "2026-02-07T13:16:09.806Z",
+  "features": {
+    "scrapers.cerProductScraper": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.808Z",
+      "config": {
+        "initialized": false,
+        "autoControl": true,
+        "interval": 86400000
+      }
+    },
+    "scrapers.standardsScraper": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.808Z",
+      "config": {
+        "initialized": false,
+        "autoControl": true,
+        "interval": 604800000
+      }
+    },
+    "scrapers.documentProcessor": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.808Z",
+      "config": {
+        "initialized": false,
+        "autoControl": true,
+        "interval": 3600000
+      }
+    },
+    "engines.quantumConsciousness": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.809Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    },
+    "engines.realProgressSystem": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.809Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    },
+    "engines.llmIntegration": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.809Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    },
+    "dataStores.minionsDatabase": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.809Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    },
+    "dataStores.hiveMind": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.809Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    },
+    "interfaces.roster": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.810Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    },
+    "interfaces.autonomousWorld": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.810Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    },
+    "interfaces.realms3D": {
+      "initialized": true,
+      "initializedAt": "2026-02-07T13:16:09.810Z",
+      "config": {
+        "initialized": false,
+        "persistent": true
+      }
+    }
+  },
+  "initializationSteps": [
+    "✅ scrapers.cerProductScraper",
+    "✅ scrapers.standardsScraper",
+    "✅ scrapers.documentProcessor",
+    "✅ engines.quantumConsciousness",
+    "✅ engines.realProgressSystem",
+    "✅ engines.llmIntegration",
+    "✅ dataStores.minionsDatabase",
+    "✅ dataStores.hiveMind",
+    "❌ dataStores.economySystem: fs.existsExists is not a function",
+    "✅ interfaces.roster",
+    "✅ interfaces.autonomousWorld",
+    "✅ interfaces.realms3D"
+  ],
+  "completedAt": "2026-02-07T13:16:09.810Z"
+}

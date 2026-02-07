@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "sources": [
+    "standards.org.au",
+    "saiglobal.com",
+    "engineering.standards"
+  ],
+  "targetStandards": [
+    "AS/NZS 3000",
+    "AS/NZS 4777",
+    "AS/NZS 5033",
+    "AS/NZS 5139"
+  ],
+  "lastScrape": null,
+  "nextScrape": "2026-02-14T13:16:09.808Z",
+  "autoScrapeEnabled": true
+}
