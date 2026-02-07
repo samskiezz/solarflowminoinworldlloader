@@ -1,0 +1,652 @@
+{
+  "generated": "2026-02-07T11:53:43.822Z",
+  "total_strategies": 1846,
+  "target_standards": [
+    "AS/NZS 3000:2018",
+    "AS/NZS 3000:2007",
+    "AS/NZS 3000",
+    "AS/NZS 5033:2021",
+    "AS/NZS 5033:2014",
+    "AS/NZS 5033",
+    "AS/NZS 5139:2019",
+    "AS/NZS 5139:2017",
+    "AS/NZS 5139",
+    "AS/NZS 4777.1:2016",
+    "AS/NZS 4777.2:2020",
+    "AS/NZS 4777",
+    "AS/NZS 1768",
+    "AS/NZS 1170",
+    "AS/NZS 3008",
+    "AS/NZS 3012",
+    "AS 3000",
+    "AS 5033",
+    "AS 5139",
+    "AS 4777",
+    "AS 1768",
+    "AS 1170"
+  ],
+  "public_sources": [
+    "gov.au",
+    "cleanenergyregulator.gov.au",
+    "acma.gov.au",
+    "aemo.com.au",
+    "esv.vic.gov.au",
+    "energysafe.vic.gov.au",
+    "safework.nsw.gov.au",
+    "worksafe.qld.gov.au",
+    "worksafe.wa.gov.au",
+    "safework.sa.gov.au",
+    "worksafe.tas.gov.au",
+    "comcare.gov.au",
+    "workcover.nt.gov.au",
+    "edu.au",
+    "unsw.edu.au",
+    "usyd.edu.au",
+    "unimelb.edu.au",
+    "monash.edu.au",
+    "uts.edu.au",
+    "qut.edu.au",
+    "griffith.edu.au",
+    "uq.edu.au",
+    "adelaide.edu.au",
+    "flinders.edu.au",
+    "unisa.edu.au",
+    "murdoch.edu.au",
+    "curtin.edu.au",
+    "uwa.edu.au",
+    "deakin.edu.au",
+    "latrobe.edu.au",
+    "rmit.edu.au",
+    "tafensw.edu.au",
+    "tafe.qld.edu.au",
+    "tafesa.edu.au",
+    "polytechnic.wa.edu.au",
+    "tafeqld.edu.au",
+    "tafensw.edu.au",
+    "southmetrotafe.wa.edu.au",
+    "cleanenergycouncil.org.au",
+    "saa.org.au",
+    "standards.org.au",
+    "neca.asn.au",
+    "masterelectricians.com.au",
+    "solar.org.au",
+    "csiro.au",
+    "arena.gov.au",
+    "cefc.com.au",
+    "ata.org.au",
+    "fire.nsw.gov.au",
+    "cfa.vic.gov.au",
+    "qfes.qld.gov.au",
+    "dfes.wa.gov.au",
+    "safecom.sa.gov.au",
+    "fire.tas.gov.au",
+    "esa.act.gov.au",
+    "abcb.gov.au",
+    "planning.org.au",
+    "aibs.com.au",
+    "aia.com.au",
+    "engineersaustralia.org.au",
+    "iea.org.au",
+    "ieaust.org.au"
+  ],
+  "search_patterns": {
+    "direct_standards": [
+      "\"AS/NZS 3000\" electrical installation requirements",
+      "\"AS/NZS 5033\" solar PV installation",
+      "\"AS/NZS 5139\" battery storage safety",
+      "\"AS/NZS 4777\" grid connection inverter",
+      "\"AS 3000\" wiring rules requirements",
+      "\"AS 5033\" photovoltaic installation",
+      "\"AS 5139\" battery system safety",
+      "\"AS 4777\" grid connection"
+    ],
+    "educational_content": [
+      "electrical installation standards australia university course",
+      "solar PV installation training TAFE australia",
+      "electrical safety AS/NZS training materials",
+      "wiring rules course materials australia",
+      "battery storage safety training australia",
+      "grid connection standards course australia"
+    ],
+    "government_guidance": [
+      "electrical safety installation requirements government",
+      "solar installation safety guidelines australia",
+      "battery storage location requirements australia",
+      "grid connection approval process australia",
+      "electrical contractor licensing requirements",
+      "solar installer accreditation australia"
+    ],
+    "industry_guidelines": [
+      "clean energy council installation guidelines",
+      "electrical safety standards industry australia",
+      "solar installation best practice australia",
+      "battery storage industry guidelines",
+      "NECA electrical installation standards",
+      "master electricians installation requirements"
+    ],
+    "technical_documents": [
+      "electrical installation specification australia",
+      "solar PV system design guidelines",
+      "battery energy storage system requirements",
+      "inverter grid connection procedures",
+      "electrical safety inspection checklist",
+      "solar installation compliance checklist"
+    ],
+    "public_consultations": [
+      "AS/NZS standards public consultation",
+      "electrical safety regulation consultation australia",
+      "solar installation standards review",
+      "battery storage safety consultation",
+      "grid connection standards consultation"
+    ]
+  },
+  "prioritized_strategies": [
+    {
+      "type": "educational",
+      "query": "site:edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unsw.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on unsw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:usyd.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on usyd.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unimelb.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on unimelb.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:monash.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on monash.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uts.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on uts.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:qut.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on qut.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:griffith.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on griffith.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uq.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on uq.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:adelaide.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on adelaide.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:flinders.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on flinders.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unisa.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on unisa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:murdoch.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on murdoch.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:curtin.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on curtin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uwa.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on uwa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:deakin.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on deakin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:latrobe.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on latrobe.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:rmit.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on rmit.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafe.qld.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on tafe.qld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafesa.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on tafesa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:polytechnic.wa.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on polytechnic.wa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafeqld.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on tafeqld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:southmetrotafe.wa.edu.au electrical installation standards australia university course",
+      "description": "Educational search: electrical installation standards australia university course on southmetrotafe.wa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unsw.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on unsw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:usyd.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on usyd.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unimelb.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on unimelb.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:monash.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on monash.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uts.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on uts.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:qut.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on qut.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:griffith.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on griffith.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uq.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on uq.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:adelaide.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on adelaide.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:flinders.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on flinders.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unisa.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on unisa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:murdoch.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on murdoch.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:curtin.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on curtin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uwa.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on uwa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:deakin.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on deakin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:latrobe.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on latrobe.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:rmit.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on rmit.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafe.qld.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on tafe.qld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafesa.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on tafesa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:polytechnic.wa.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on polytechnic.wa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafeqld.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on tafeqld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:southmetrotafe.wa.edu.au solar PV installation training TAFE australia",
+      "description": "Educational search: solar PV installation training TAFE australia on southmetrotafe.wa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unsw.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on unsw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:usyd.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on usyd.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unimelb.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on unimelb.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:monash.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on monash.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uts.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on uts.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:qut.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on qut.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:griffith.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on griffith.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uq.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on uq.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:adelaide.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on adelaide.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:flinders.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on flinders.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unisa.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on unisa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:murdoch.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on murdoch.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:curtin.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on curtin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uwa.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on uwa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:deakin.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on deakin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:latrobe.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on latrobe.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:rmit.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on rmit.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafe.qld.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on tafe.qld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafesa.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on tafesa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:polytechnic.wa.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on polytechnic.wa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafeqld.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on tafeqld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:southmetrotafe.wa.edu.au electrical safety AS/NZS training materials",
+      "description": "Educational search: electrical safety AS/NZS training materials on southmetrotafe.wa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unsw.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on unsw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:usyd.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on usyd.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unimelb.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on unimelb.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:monash.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on monash.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uts.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on uts.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:qut.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on qut.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:griffith.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on griffith.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uq.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on uq.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:adelaide.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on adelaide.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:flinders.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on flinders.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:unisa.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on unisa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:murdoch.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on murdoch.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:curtin.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on curtin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:uwa.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on uwa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:deakin.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on deakin.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:latrobe.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on latrobe.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:rmit.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on rmit.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafe.qld.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on tafe.qld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafesa.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on tafesa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:polytechnic.wa.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on polytechnic.wa.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafeqld.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on tafeqld.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:tafensw.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on tafensw.edu.au"
+    },
+    {
+      "type": "educational",
+      "query": "site:southmetrotafe.wa.edu.au wiring rules course materials australia",
+      "description": "Educational search: wiring rules course materials australia on southmetrotafe.wa.edu.au"
+    }
+  ],
+  "strategy_breakdown": {
+    "educational": 150,
+    "government": 126,
+    "domain_standard": 1364,
+    "industry": 30,
+    "filetype": 176
+  }
+}

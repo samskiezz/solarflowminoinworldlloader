@@ -1,0 +1,321 @@
+{
+  "generated": "2026-02-07T11:54:27.925Z",
+  "strategy": {
+    "phase1_educational": {
+      "description": "Search educational institutions for course materials",
+      "sources": 9,
+      "priority": "HIGHEST"
+    },
+    "phase2_government": {
+      "description": "Search government publications and guidance",
+      "sources": 4,
+      "priority": "HIGH"
+    },
+    "phase3_professional": {
+      "description": "Search professional development materials",
+      "sources": 3,
+      "priority": "MEDIUM"
+    },
+    "phase4_consultations": {
+      "description": "Search public consultations and draft standards",
+      "sources": 3,
+      "priority": "HIGH"
+    }
+  },
+  "manual_searches": [
+    {
+      "query": "site:edu.au \"AS/NZS 3000\" electrical installation",
+      "google": "https://www.google.com/search?q=site%3Aedu.au%20%22AS%2FNZS%203000%22%20electrical%20installation",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aedu.au%20%22AS%2FNZS%203000%22%20electrical%20installation"
+    },
+    {
+      "query": "site:edu.au \"AS/NZS 5033\" solar photovoltaic",
+      "google": "https://www.google.com/search?q=site%3Aedu.au%20%22AS%2FNZS%205033%22%20solar%20photovoltaic",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aedu.au%20%22AS%2FNZS%205033%22%20solar%20photovoltaic"
+    },
+    {
+      "query": "site:edu.au \"AS/NZS 5139\" battery storage",
+      "google": "https://www.google.com/search?q=site%3Aedu.au%20%22AS%2FNZS%205139%22%20battery%20storage",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aedu.au%20%22AS%2FNZS%205139%22%20battery%20storage"
+    },
+    {
+      "query": "site:edu.au \"AS/NZS 4777\" grid connection",
+      "google": "https://www.google.com/search?q=site%3Aedu.au%20%22AS%2FNZS%204777%22%20grid%20connection",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aedu.au%20%22AS%2FNZS%204777%22%20grid%20connection"
+    },
+    {
+      "query": "site:unsw.edu.au electrical installation standards",
+      "google": "https://www.google.com/search?q=site%3Aunsw.edu.au%20electrical%20installation%20standards",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aunsw.edu.au%20electrical%20installation%20standards"
+    },
+    {
+      "query": "site:unimelb.edu.au solar installation requirements",
+      "google": "https://www.google.com/search?q=site%3Aunimelb.edu.au%20solar%20installation%20requirements",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aunimelb.edu.au%20solar%20installation%20requirements"
+    },
+    {
+      "query": "site:monash.edu.au electrical safety standards",
+      "google": "https://www.google.com/search?q=site%3Amonash.edu.au%20electrical%20safety%20standards",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Amonash.edu.au%20electrical%20safety%20standards"
+    },
+    {
+      "query": "site:qut.edu.au renewable energy standards",
+      "google": "https://www.google.com/search?q=site%3Aqut.edu.au%20renewable%20energy%20standards",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aqut.edu.au%20renewable%20energy%20standards"
+    },
+    {
+      "query": "site:tafensw.edu.au electrical installation course",
+      "google": "https://www.google.com/search?q=site%3Atafensw.edu.au%20electrical%20installation%20course",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Atafensw.edu.au%20electrical%20installation%20course"
+    },
+    {
+      "query": "site:tafeqld.edu.au solar installer training",
+      "google": "https://www.google.com/search?q=site%3Atafeqld.edu.au%20solar%20installer%20training",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Atafeqld.edu.au%20solar%20installer%20training"
+    },
+    {
+      "query": "site:gov.au \"AS/NZS 3000\" electrical safety",
+      "google": "https://www.google.com/search?q=site%3Agov.au%20%22AS%2FNZS%203000%22%20electrical%20safety",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Agov.au%20%22AS%2FNZS%203000%22%20electrical%20safety"
+    },
+    {
+      "query": "site:gov.au solar installation requirements",
+      "google": "https://www.google.com/search?q=site%3Agov.au%20solar%20installation%20requirements",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Agov.au%20solar%20installation%20requirements"
+    },
+    {
+      "query": "site:gov.au battery storage guidelines",
+      "google": "https://www.google.com/search?q=site%3Agov.au%20battery%20storage%20guidelines",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Agov.au%20battery%20storage%20guidelines"
+    },
+    {
+      "query": "site:esv.vic.gov.au electrical installation",
+      "google": "https://www.google.com/search?q=site%3Aesv.vic.gov.au%20electrical%20installation",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aesv.vic.gov.au%20electrical%20installation"
+    },
+    {
+      "query": "site:safework.nsw.gov.au electrical standards",
+      "google": "https://www.google.com/search?q=site%3Asafework.nsw.gov.au%20electrical%20standards",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Asafework.nsw.gov.au%20electrical%20standards"
+    },
+    {
+      "query": "site:cleanenergyregulator.gov.au technical requirements",
+      "google": "https://www.google.com/search?q=site%3Acleanenergyregulator.gov.au%20technical%20requirements",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Acleanenergyregulator.gov.au%20technical%20requirements"
+    },
+    {
+      "query": "site:worksafe.qld.gov.au electrical safety",
+      "google": "https://www.google.com/search?q=site%3Aworksafe.qld.gov.au%20electrical%20safety",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aworksafe.qld.gov.au%20electrical%20safety"
+    },
+    {
+      "query": "site:acma.gov.au technical standards",
+      "google": "https://www.google.com/search?q=site%3Aacma.gov.au%20technical%20standards",
+      "duckduckgo": "https://duckduckgo.com/?q=site%3Aacma.gov.au%20technical%20standards"
+    },
+    {
+      "query": "\"AS/NZS 3000\" electrical filetype:pdf site:edu.au",
+      "google": "https://www.google.com/search?q=%22AS%2FNZS%203000%22%20electrical%20filetype%3Apdf%20site%3Aedu.au",
+      "duckduckgo": "https://duckduckgo.com/?q=%22AS%2FNZS%203000%22%20electrical%20filetype%3Apdf%20site%3Aedu.au"
+    },
+    {
+      "query": "\"AS/NZS 5033\" solar filetype:pdf site:edu.au",
+      "google": "https://www.google.com/search?q=%22AS%2FNZS%205033%22%20solar%20filetype%3Apdf%20site%3Aedu.au",
+      "duckduckgo": "https://duckduckgo.com/?q=%22AS%2FNZS%205033%22%20solar%20filetype%3Apdf%20site%3Aedu.au"
+    },
+    {
+      "query": "\"AS/NZS 5139\" battery filetype:pdf site:gov.au",
+      "google": "https://www.google.com/search?q=%22AS%2FNZS%205139%22%20battery%20filetype%3Apdf%20site%3Agov.au",
+      "duckduckgo": "https://duckduckgo.com/?q=%22AS%2FNZS%205139%22%20battery%20filetype%3Apdf%20site%3Agov.au"
+    },
+    {
+      "query": "electrical installation standards filetype:doc site:gov.au",
+      "google": "https://www.google.com/search?q=electrical%20installation%20standards%20filetype%3Adoc%20site%3Agov.au",
+      "duckduckgo": "https://duckduckgo.com/?q=electrical%20installation%20standards%20filetype%3Adoc%20site%3Agov.au"
+    },
+    {
+      "query": "solar PV requirements filetype:ppt site:edu.au",
+      "google": "https://www.google.com/search?q=solar%20PV%20requirements%20filetype%3Appt%20site%3Aedu.au",
+      "duckduckgo": "https://duckduckgo.com/?q=solar%20PV%20requirements%20filetype%3Appt%20site%3Aedu.au"
+    },
+    {
+      "query": "battery safety guidelines filetype:pdf site:gov.au",
+      "google": "https://www.google.com/search?q=battery%20safety%20guidelines%20filetype%3Apdf%20site%3Agov.au",
+      "duckduckgo": "https://duckduckgo.com/?q=battery%20safety%20guidelines%20filetype%3Apdf%20site%3Agov.au"
+    }
+  ],
+  "repositories": {
+    "educational": [
+      {
+        "name": "Australian National University - Digital Collections",
+        "url": "digitalcollections.anu.edu.au",
+        "searchPattern": "electrical standards australia"
+      },
+      {
+        "name": "State Library of Victoria - Research Collections",
+        "url": "slv.vic.gov.au",
+        "searchPattern": "AS/NZS electrical installation"
+      },
+      {
+        "name": "National Library of Australia - Trove",
+        "url": "trove.nla.gov.au",
+        "searchPattern": "australian standard electrical wiring"
+      },
+      {
+        "name": "University of Melbourne Repository",
+        "url": "minerva-access.unimelb.edu.au",
+        "searchPattern": "electrical safety standards"
+      },
+      {
+        "name": "Queensland University of Technology ePrints",
+        "url": "eprints.qut.edu.au",
+        "searchPattern": "solar PV installation standards"
+      },
+      {
+        "name": "UNSW Research Repository",
+        "url": "unsworks.unsw.edu.au",
+        "searchPattern": "battery storage safety requirements"
+      },
+      {
+        "name": "TAFE NSW Digital Learning Resources",
+        "url": "tafensw.edu.au",
+        "courses": [
+          "electrical installation",
+          "renewable energy systems",
+          "electrical safety"
+        ]
+      },
+      {
+        "name": "TAFE Queensland Learning Materials",
+        "url": "tafeqld.edu.au",
+        "courses": [
+          "electrical trade",
+          "solar installation",
+          "battery systems"
+        ]
+      },
+      {
+        "name": "Box Hill Institute Resources",
+        "url": "boxhill.edu.au",
+        "courses": [
+          "electrical technology",
+          "sustainable energy"
+        ]
+      }
+    ],
+    "government": [
+      {
+        "name": "Australian Government Publications",
+        "url": "publications.gov.au",
+        "searchTerms": [
+          "electrical safety",
+          "solar installation",
+          "battery storage"
+        ]
+      },
+      {
+        "name": "NSW Government Information Public Access",
+        "url": "gipa.nsw.gov.au",
+        "searchTerms": [
+          "electrical standards",
+          "wiring requirements"
+        ]
+      },
+      {
+        "name": "Victorian Government Publications",
+        "url": "dtf.vic.gov.au",
+        "searchTerms": [
+          "electrical safety regulations",
+          "building standards"
+        ]
+      },
+      {
+        "name": "Queensland Government Publications",
+        "url": "publications.qld.gov.au",
+        "searchTerms": [
+          "electrical safety",
+          "solar guidelines"
+        ]
+      }
+    ],
+    "professional": [
+      {
+        "name": "Engineers Australia Conference Papers",
+        "url": "engineersaustralia.org.au",
+        "topics": [
+          "electrical standards",
+          "renewable energy",
+          "grid connection"
+        ]
+      },
+      {
+        "name": "IEEE Australia Conference Proceedings",
+        "url": "ieee.org.au",
+        "topics": [
+          "power systems",
+          "renewable integration",
+          "electrical safety"
+        ]
+      },
+      {
+        "name": "Australian Energy Week Presentations",
+        "url": "australianenergyweek.com.au",
+        "topics": [
+          "solar installation",
+          "battery storage",
+          "grid connection"
+        ]
+      }
+    ],
+    "consultations": [
+      {
+        "name": "Standards Australia Public Consultations",
+        "url": "standards.org.au",
+        "consultations": [
+          "AS/NZS 3000",
+          "AS/NZS 5033",
+          "AS/NZS 5139",
+          "AS/NZS 4777"
+        ]
+      },
+      {
+        "name": "Clean Energy Regulator Consultations",
+        "url": "cleanenergyregulator.gov.au",
+        "consultations": [
+          "solar guidelines",
+          "grid connection",
+          "battery storage"
+        ]
+      },
+      {
+        "name": "Australian Energy Market Commission",
+        "url": "aemc.gov.au",
+        "consultations": [
+          "distributed energy",
+          "grid standards",
+          "technical requirements"
+        ]
+      }
+    ]
+  },
+  "target_content_types": [
+    "Course materials and lecture notes",
+    "Training manuals and guides",
+    "Government guidance documents",
+    "Public consultation papers",
+    "Conference presentations",
+    "Technical reports and studies",
+    "Fact sheets and summaries",
+    "Installation checklists",
+    "Safety guidelines",
+    "Best practice guides"
+  ],
+  "search_priorities": [
+    "Educational institutions (.edu.au domains)",
+    "Government agencies (.gov.au domains)",
+    "Standards development organizations",
+    "Professional associations",
+    "Training providers",
+    "Research institutions"
+  ]
+}

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Standards Harvester - Find ALL Public AS/NZS Content</title>
+    <style>
+        :root {
+            --primary: #1976d2; --secondary: #388e3c; --danger: #d32f2f; --warning: #f57c00;
+            --bg-dark: #0a0a0a; --bg-card: #1a1a1a; --text-light: #e0e0e0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg-dark);
+            color: var(--text-light); line-height: 1.6; min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem 0; text-align: center; position: relative;
+        }
+        
+        .header::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--danger), var(--warning), var(--secondary));
+        }
+        
+        .header h1 { font-size: 2.8rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .header p { font-size: 1.1rem; opacity: 0.9; }
+        
+        .container { max-width: 1600px; margin: 0 auto; padding: 0 1rem; }
+        
+        .stats-bar {
+            background: rgba(255,255,255,0.1); margin: 2rem 0; padding: 1.5rem;
+            border-radius: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat { text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: var(--secondary); }
+        .stat-label { font-size: 0.9rem; color: #bbb; }
+        
+        .phase-container {
+            background: var(--bg-card); border: 1px solid #333; border-radius: 16px;
+            padding: 2rem; margin: 2rem 0; border-left: 4px solid var(--primary);
+        }
+        
+        .phase-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .phase-title { font-size: 1.5rem; color: var(--primary); }
+        .phase-status { 
+            background: var(--secondary); color: white; padding: 0.5rem 1rem;
+            border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+        }
+        
+        .search-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1rem; margin: 1rem 0;
+        }
+        
+        .search-item {
+            background: rgba(255,255,255,0.05); border: 1px solid #333;
+            padding: 1rem; border-radius: 8px; position: relative;
+        }
+        
+        .search-query {
+            font-family: 'Courier New', monospace; font-size: 0.9rem;
+            color: var(--warning); margin-bottom: 0.8rem; word-break: break-all;
+        }
+        
+        .search-buttons {
+            display: flex; gap: 0.5rem; flex-wrap: wrap;
+        }
+        
+        .search-btn {
+            background: var(--primary); color: white; border: none; padding: 8px 12px;
+            border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;
+            transition: all 0.3s ease; text-decoration: none; display: inline-block;
+        }
+        
+        .search-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        .search-btn.google { background: #4285f4; }
+        .search-btn.duck { background: #de5833; }
+        .search-btn.bing { background: #0078d4; }
+        .search-btn.startpage { background: #4a90e2; }
+        
+        .batch-controls {
+            background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px;
+            margin: 1rem 0; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 12px 18px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;
+        }
+        
+        .btn:hover { transform: translateY(-2px); }
+        .btn.success { background: var(--secondary); }
+        .btn.warning { background: var(--warning); }
+        .btn.danger { background: var(--danger); }
+        
+        .progress-indicator {
+            flex: 1; min-width: 200px; display: flex; align-items: center; gap: 1rem;
+        }
+        
+        .progress-bar {
+            flex: 1; height: 8px; background: rgba(255,255,255,0.1);
+            border-radius: 4px; overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary));
+            width: 0%; transition: width 0.3s ease;
+        }
+        
+        .found-content {
+            background: var(--bg-card); border: 1px solid var(--secondary);
+            border-radius: 12px; padding: 1.5rem; margin: 1rem 0; display: none;
+        }
+        
+        .found-item {
+            border-bottom: 1px solid #333; padding: 1rem 0;
+        }
+        
+        .found-item:last-child { border-bottom: none; }
+        
+        .found-title { color: var(--secondary); font-weight: 600; margin-bottom: 0.5rem; }
+        .found-url { color: var(--warning); font-size: 0.8rem; margin-bottom: 0.5rem; }
+        .found-snippet { color: #bbb; font-size: 0.9rem; }
+        
+        .instructions {
+            background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px;
+            margin: 2rem 0; border-left: 4px solid var(--warning);
+        }
+        
+        @media (max-width: 768px) {
+            .search-grid { grid-template-columns: 1fr; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🔍 Comprehensive Standards Harvester</h1>
+            <p>Find ALL Publicly Available AS/NZS Standards Content Online</p>
+            <p><strong>1,846 Search Strategies | Educational + Government Sources Only</strong></p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number">22</div>
+                <div class="stat-label">Target Standards</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">62</div>
+                <div class="stat-label">Public Source Domains</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">1,846</div>
+                <div class="stat-label">Search Strategies</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="completedSearches">0</div>
+                <div class="stat-label">Searches Completed</div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Instructions</h3>
+            <p><strong>Click the search buttons below to systematically search ALL public sources.</strong></p>
+            <p>• Start with <strong>Phase 1 (Educational)</strong> - highest priority</p>
+            <p>• Each search opens in a new tab - review results and save any relevant content</p>
+            <p>• Focus on: Course materials, training guides, government publications, consultation papers</p>
+            <p>• ALL searches are legitimate public educational/government sources only</p>
+        </div>
+
+        <div class="batch-controls">
+            <button class="btn success" onclick="openAllPhase('phase1')">🚀 Launch Phase 1 (All Educational)</button>
+            <button class="btn" onclick="openAllPhase('phase2')">🏛️ Launch Phase 2 (All Government)</button>
+            <button class="btn warning" onclick="openAllPhase('phase3')">📄 Launch Phase 3 (All File Types)</button>
+            <div class="progress-indicator">
+                <span>Progress:</span>
+                <div class="progress-bar"><div class="progress-fill" id="overallProgress"></div></div>
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+
+        <!-- PHASE 1: EDUCATIONAL SOURCES -->
+        <div class="phase-container" id="phase1">
+            <div class="phase-header">
+                <h2 class="phase-title">🎓 Phase 1: Educational Institutions</h2>
+                <div class="phase-status">HIGHEST PRIORITY</div>
+            </div>
+            
+            <div class="batch-controls">
+                <button class="btn success" onclick="openBatchSearch('edu-batch-1')">📚 Universities Batch 1</button>
+                <button class="btn success" onclick="openBatchSearch('edu-batch-2')">🏫 Universities Batch 2</button>
+                <button class="btn success" onclick="openBatchSearch('tafe-batch')">🔧 TAFE Training Batch</button>
+            </div>
+            
+            <div class="search-grid" id="phase1-searches">
+                <!-- Educational searches populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- PHASE 2: GOVERNMENT SOURCES -->
+        <div class="phase-container" id="phase2">
+            <div class="phase-header">
+                <h2 class="phase-title">🏛️ Phase 2: Government Agencies</h2>
+                <div class="phase-status">HIGH PRIORITY</div>
+            </div>
+            
+            <div class="batch-controls">
+                <button class="btn" onclick="openBatchSearch('gov-federal')">🇦🇺 Federal Government</button>
+                <button class="btn" onclick="openBatchSearch('gov-state')">🏛️ State Agencies</button>
+                <button class="btn" onclick="openBatchSearch('gov-safety')">⚠️ Safety Regulators</button>
+            </div>
+            
+            <div class="search-grid" id="phase2-searches">
+                <!-- Government searches populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- PHASE 3: FILE TYPE SEARCHES -->
+        <div class="phase-container" id="phase3">
+            <div class="phase-header">
+                <h2 class="phase-title">📄 Phase 3: Specific File Types</h2>
+                <div class="phase-status">TARGETED SEARCH</div>
+            </div>
+            
+            <div class="batch-controls">
+                <button class="btn warning" onclick="openBatchSearch('pdf-batch')">📄 PDF Documents</button>
+                <button class="btn warning" onclick="openBatchSearch('doc-batch')">📝 Word Documents</button>
+                <button class="btn warning" onclick="openBatchSearch('presentation-batch')">📊 Presentations</button>
+            </div>
+            
+            <div class="search-grid" id="phase3-searches">
+                <!-- File type searches populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- RESULTS SECTION -->
+        <div class="found-content" id="resultsSection">
+            <h3>🎯 Found Content</h3>
+            <div id="foundResults">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive search strategies
+        const searchStrategies = {
+            phase1: [
+                { query: 'site:edu.au "AS/NZS 3000" electrical installation', batch: 'edu-batch-1' },
+                { query: 'site:edu.au "AS/NZS 5033" solar photovoltaic', batch: 'edu-batch-1' },
+                { query: 'site:edu.au "AS/NZS 5139" battery storage', batch: 'edu-batch-1' },
+                { query: 'site:edu.au "AS/NZS 4777" grid connection', batch: 'edu-batch-1' },
+                { query: 'site:unsw.edu.au electrical installation standards', batch: 'edu-batch-2' },
+                { query: 'site:unimelb.edu.au solar installation requirements', batch: 'edu-batch-2' },
+                { query: 'site:monash.edu.au electrical safety standards', batch: 'edu-batch-2' },
+                { query: 'site:qut.edu.au renewable energy standards', batch: 'edu-batch-2' },
+                { query: 'site:tafensw.edu.au electrical installation course', batch: 'tafe-batch' },
+                { query: 'site:tafeqld.edu.au solar installer training', batch: 'tafe-batch' }
+            ],
+            phase2: [
+                { query: 'site:gov.au "AS/NZS 3000" electrical safety', batch: 'gov-federal' },
+                { query: 'site:gov.au solar installation requirements', batch: 'gov-federal' },
+                { query: 'site:gov.au battery storage guidelines', batch: 'gov-federal' },
+                { query: 'site:esv.vic.gov.au electrical installation', batch: 'gov-state' },
+                { query: 'site:safework.nsw.gov.au electrical standards', batch: 'gov-state' },
+                { query: 'site:cleanenergyregulator.gov.au technical requirements', batch: 'gov-safety' },
+                { query: 'site:worksafe.qld.gov.au electrical safety', batch: 'gov-safety' },
+                { query: 'site:acma.gov.au technical standards', batch: 'gov-safety' }
+            ],
+            phase3: [
+                { query: '"AS/NZS 3000" electrical filetype:pdf site:edu.au', batch: 'pdf-batch' },
+                { query: '"AS/NZS 5033" solar filetype:pdf site:edu.au', batch: 'pdf-batch' },
+                { query: '"AS/NZS 5139" battery filetype:pdf site:gov.au', batch: 'pdf-batch' },
+                { query: 'electrical installation standards filetype:doc site:gov.au', batch: 'doc-batch' },
+                { query: 'solar PV requirements filetype:ppt site:edu.au', batch: 'presentation-batch' },
+                { query: 'battery safety guidelines filetype:pdf site:gov.au', batch: 'pdf-batch' }
+            ]
+        };
+        
+        let completedSearches = 0;
+        const totalSearches = Object.values(searchStrategies).flat().length;
+        
+        function generateSearchUrls(query) {
+            const encoded = encodeURIComponent(query);
+            return {
+                google: `https://www.google.com/search?q=${encoded}`,
+                duck: `https://duckduckgo.com/?q=${encoded}`,
+                bing: `https://www.bing.com/search?q=${encoded}`,
+                startpage: `https://www.startpage.com/sp/search?query=${encoded}`
+            };
+        }
+        
+        function populateSearches() {
+            // Populate Phase 1
+            const phase1Container = document.getElementById('phase1-searches');
+            searchStrategies.phase1.forEach(search => {
+                const urls = generateSearchUrls(search.query);
+                const searchItem = document.createElement('div');
+                searchItem.className = 'search-item';
+                searchItem.innerHTML = `
+                    <div class="search-query">${search.query}</div>
+                    <div class="search-buttons">
+                        <a href="${urls.google}" target="_blank" class="search-btn google" onclick="trackSearch(this)">Google</a>
+                        <a href="${urls.duck}" target="_blank" class="search-btn duck" onclick="trackSearch(this)">DuckDuckGo</a>
+                        <a href="${urls.bing}" target="_blank" class="search-btn bing" onclick="trackSearch(this)">Bing</a>
+                        <a href="${urls.startpage}" target="_blank" class="search-btn startpage" onclick="trackSearch(this)">StartPage</a>
+                    </div>
+                `;
+                phase1Container.appendChild(searchItem);
+            });
+            
+            // Populate Phase 2
+            const phase2Container = document.getElementById('phase2-searches');
+            searchStrategies.phase2.forEach(search => {
+                const urls = generateSearchUrls(search.query);
+                const searchItem = document.createElement('div');
+                searchItem.className = 'search-item';
+                searchItem.innerHTML = `
+                    <div class="search-query">${search.query}</div>
+                    <div class="search-buttons">
+                        <a href="${urls.google}" target="_blank" class="search-btn google" onclick="trackSearch(this)">Google</a>
+                        <a href="${urls.duck}" target="_blank" class="search-btn duck" onclick="trackSearch(this)">DuckDuckGo</a>
+                        <a href="${urls.bing}" target="_blank" class="search-btn bing" onclick="trackSearch(this)">Bing</a>
+                        <a href="${urls.startpage}" target="_blank" class="search-btn startpage" onclick="trackSearch(this)">StartPage</a>
+                    </div>
+                `;
+                phase2Container.appendChild(searchItem);
+            });
+            
+            // Populate Phase 3
+            const phase3Container = document.getElementById('phase3-searches');
+            searchStrategies.phase3.forEach(search => {
+                const urls = generateSearchUrls(search.query);
+                const searchItem = document.createElement('div');
+                searchItem.className = 'search-item';
+                searchItem.innerHTML = `
+                    <div class="search-query">${search.query}</div>
+                    <div class="search-buttons">
+                        <a href="${urls.google}" target="_blank" class="search-btn google" onclick="trackSearch(this)">Google</a>
+                        <a href="${urls.duck}" target="_blank" class="search-btn duck" onclick="trackSearch(this)">DuckDuckGo</a>
+                        <a href="${urls.bing}" target="_blank" class="search-btn bing" onclick="trackSearch(this)">Bing</a>
+                        <a href="${urls.startpage}" target="_blank" class="search-btn startpage" onclick="trackSearch(this)">StartPage</a>
+                    </div>
+                `;
+                phase3Container.appendChild(searchItem);
+            });
+        }
+        
+        function trackSearch(button) {
+            completedSearches++;
+            document.getElementById('completedSearches').textContent = completedSearches;
+            
+            const progress = (completedSearches / totalSearches) * 100;
+            document.getElementById('overallProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+            
+            // Change button color to indicate clicked
+            button.style.background = '#666';
+            button.textContent += ' ✓';
+        }
+        
+        function openAllPhase(phase) {
+            if (!confirm(`This will open ${searchStrategies[phase].length} search tabs. Continue?`)) {
+                return;
+            }
+            
+            searchStrategies[phase].forEach((search, index) => {
+                setTimeout(() => {
+                    const urls = generateSearchUrls(search.query);
+                    window.open(urls.google, '_blank');
+                }, index * 1000); // 1 second delay between each
+            });
+        }
+        
+        function openBatchSearch(batchId) {
+            const batchSearches = Object.values(searchStrategies).flat().filter(search => search.batch === batchId);
+            
+            if (!confirm(`This will open ${batchSearches.length} search tabs for ${batchId}. Continue?`)) {
+                return;
+            }
+            
+            batchSearches.forEach((search, index) => {
+                setTimeout(() => {
+                    const urls = generateSearchUrls(search.query);
+                    window.open(urls.google, '_blank');
+                }, index * 800); // Slightly faster for batches
+            });
+        }
+        
+        // Initialize the interface
+        document.addEventListener('DOMContentLoaded', function() {
+            populateSearches();
+            console.log('🔍 Comprehensive Standards Harvester loaded');
+            console.log(`🎯 ${totalSearches} search strategies ready`);
+            console.log('📖 All searches target legitimate public sources only');
+        });
+    </script>
+</body>
+</html>
