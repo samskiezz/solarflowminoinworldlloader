@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Autonomous Solar Civilization</title>
+  <script src="./working-persistence.js"></script>
   <script>
     // Embedded Universal Bootloader for immediate data persistence
     if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
@@ -543,30 +544,55 @@
 
     function loadPersistedState() {
       try {
-        if (window.SolarFlow) {
-          const state = window.SolarFlow.getState();
-          const autonomousData = state.autonomous;
-          
-          if (autonomousData && autonomousData.civilizationState) {
-            civilizationState = autonomousData.civilizationState || civilizationState;
-            worldEvents = autonomousData.worldEvents || [];
-            console.log('✅ Autonomous world state loaded from universal bootloader');
-            return;
+        console.log('📂 LOADING AUTONOMOUS WORLD STATE...');
+        
+        let loaded = false;
+        
+        // Try working persistence first
+        if (window.SOLARFLOW_WORKING_PERSISTENCE) {
+          const savedData = window.SOLARFLOW_WORKING_PERSISTENCE.load('autonomous-world');
+          if (savedData && savedData.civilizationState) {
+            civilizationState = savedData.civilizationState;
+            worldEvents = savedData.worldEvents || [];
+            console.log('✅ LOADED FROM WORKING PERSISTENCE');
+            addEvent('milestone', '📂 Civilization state restored successfully');
+            loaded = true;
           }
         }
         
-        // Fallback to localStorage
-        const savedState = localStorage.getItem('autonomous_world_state');
-        if (savedState) {
-          const state = JSON.parse(savedState);
-          civilizationState = state.civilizationState || civilizationState;
-          worldEvents = state.worldEvents || [];
-          
-          console.log('✅ Autonomous world state loaded from localStorage (fallback)');
+        // Fallback to direct localStorage
+        if (!loaded) {
+          const savedState = localStorage.getItem('autonomous_world_state');
+          if (savedState) {
+            const state = JSON.parse(savedState);
+            civilizationState = state.civilizationState || civilizationState;
+            worldEvents = state.worldEvents || [];
+            console.log('✅ LOADED FROM LOCALSTORAGE FALLBACK');
+            addEvent('milestone', '📂 Previous session restored from backup');
+            loaded = true;
+          }
         }
+        
+        // Try emergency backup
+        if (!loaded) {
+          const emergencyState = localStorage.getItem('autonomous_world_emergency');
+          if (emergencyState) {
+            const state = JSON.parse(emergencyState);
+            civilizationState = state.civilizationState || civilizationState;
+            console.log('🚨 LOADED FROM EMERGENCY BACKUP');
+            addEvent('concern', '🚨 Restored from emergency backup - some data may be missing');
+            loaded = true;
+          }
+        }
+        
+        if (!loaded) {
+          console.log('⚠️ NO SAVED STATE FOUND - STARTING FRESH');
+          addEvent('milestone', '🆕 New civilization starting - no previous state found');
+        }
+        
       } catch (error) {
-        console.error('Failed to load persisted state:', error);
-        addEvent('concern', 'Failed to restore previous civilization state');
+        console.error('❌ LOAD FAILED:', error);
+        addEvent('concern', '❌ Failed to restore civilization state: ' + error.message);
       }
     }
 
@@ -1154,28 +1180,30 @@
       }
     }
     
-    // Enhanced save function with universal bootloader integration
+    // SIMPLE WORKING SAVE FUNCTION - NO BULLSHIT
     function saveData() {
       try {
         const stateToSave = {
           civilizationState,
           worldEvents: worldEvents.slice(0, 50),
           timestamp: new Date().toISOString(),
-          version: 'v2.3.0-quantum',
+          version: 'v2.3.0-WORKING',
           quantumEnabled: !!window.quantumEngine
         };
         
-        if (window.SolarFlow && window.SolarFlow.saveState) {
-          // Use universal bootloader for persistence across all pages
-          window.SolarFlow.saveState({ 
-            autonomous: stateToSave,
-            lastSavedFrom: 'autonomous-world'
-          });
-          console.log('💾 Autonomous world state saved via universal bootloader');
+        // Use the WORKING persistence system
+        if (window.SOLARFLOW_WORKING_PERSISTENCE) {
+          const success = window.SOLARFLOW_WORKING_PERSISTENCE.autoSave('autonomous-world', stateToSave);
+          if (success) {
+            console.log('✅ AUTONOMOUS WORLD STATE SAVED SUCCESSFULLY');
+            addEvent('milestone', '💾 Civilization progress saved automatically');
+          } else {
+            throw new Error('Working persistence failed');
+          }
         } else {
-          // Fallback to localStorage if bootloader not ready yet
+          // Direct localStorage if working persistence not available
           localStorage.setItem('autonomous_world_state', JSON.stringify(stateToSave));
-          console.log('💾 Autonomous world state saved via localStorage (fallback)');
+          console.log('💾 Autonomous world state saved to localStorage directly');
         }
         
         // Also save quantum state if available
@@ -1184,8 +1212,19 @@
         }
         
       } catch (error) {
-        console.error('Failed to save autonomous world state:', error);
-        addEvent('concern', 'Failed to save civilization progress');
+        console.error('❌ SAVE FAILED:', error);
+        // Try emergency localStorage save
+        try {
+          localStorage.setItem('autonomous_world_emergency', JSON.stringify({
+            civilizationState,
+            timestamp: Date.now()
+          }));
+          console.log('🚨 Emergency save completed');
+          addEvent('concern', 'Emergency save activated - main save failed');
+        } catch (emergencyError) {
+          console.error('❌ EMERGENCY SAVE ALSO FAILED:', emergencyError);
+          addEvent('concern', 'CRITICAL: All save methods failed!');
+        }
       }
     }
     
