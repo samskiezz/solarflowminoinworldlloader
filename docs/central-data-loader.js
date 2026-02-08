@@ -60,7 +60,10 @@ class CentralDataLoader {
             // Validate each minion
             data.minions.forEach((minion, index) => {
                 if (!minion.id) throw new Error(`Minion at index ${index} missing id`);
-                if (!minion.name) throw new Error(`Minion ${minion.id} missing name`);
+                // Use id as name if name not provided
+                if (!minion.name) {
+                    minion.name = minion.id;
+                }
                 if (minion.tier === undefined) throw new Error(`Minion ${minion.id} missing tier`);
             });
             
