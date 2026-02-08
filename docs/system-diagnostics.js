@@ -383,45 +383,8 @@ ${icon} ${testName.toUpperCase()}: ${result.status}`;
     
     // Create sample test data
     async createSampleData() {
-        const dataStore = window.coreSystem?.dataStore;
-        if (!dataStore) return false;
-        
-        console.log('🌱 Creating sample test data...');
-        
-        try {
-            // Sample minions
-            const sampleMinions = [
-                { id: 'SAMPLE_ALPHA', name: 'Alpha Test', role: 'TESTER', energy_credits: 100 },
-                { id: 'SAMPLE_BETA', name: 'Beta Test', role: 'VALIDATOR', energy_credits: 150 }
-            ];
-            
-            for (const minion of sampleMinions) {
-                await dataStore.create('minions', minion);
-            }
-            
-            // Sample messages
-            await dataStore.create('messages', {
-                from: 'SAMPLE_ALPHA',
-                to: 'SAMPLE_BETA',
-                message: 'Test communication established',
-                timestamp: Date.now()
-            });
-            
-            // Sample solar data
-            await dataStore.create('solarMetrics', {
-                timestamp: Date.now(),
-                powerOutput: 5.2,
-                efficiency: 92.5,
-                batteryLevel: 85,
-                gridConnection: 'stable'
-            });
-            
-            console.log('✅ Sample data created successfully');
-            return true;
-        } catch (error) {
-            console.error('❌ Failed to create sample data:', error);
-            return false;
-        }
+        console.log('❌ Sample data creation removed - use real data only');
+        return false;
     }
 }
 

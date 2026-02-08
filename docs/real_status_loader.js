@@ -26,16 +26,34 @@ class RealStatusLoader {
                 data_source: 'VPS Server'
             };
         } catch (error) {
-            console.warn('⚠️ Could not load real status, using static mode:', error);
+            console.warn('⚠️ VPS status unavailable - checking local neural processor:', error);
+            
+            // Check if real neural processor is active locally
+            const localNeural = window.realNeuralProcessor;
+            if (localNeural && localNeural.initialized) {
+                const localStatus = localNeural.getStatus();
+                return {
+                    neural_cluster_active: localStatus.initialized,
+                    repositories_installed: localStatus.models.length,
+                    total_size_gb: 0,
+                    server: 'Local Browser (WebWorkers)',
+                    is_real: true,
+                    last_updated: new Date().toISOString(),
+                    data_source: 'Local Neural Processor',
+                    workers: localStatus.workers
+                };
+            }
+            
+            // If no VPS and no local, return honest status
             return {
                 neural_cluster_active: false,
                 repositories_installed: 0,
                 total_size_gb: 0,
-                server: 'GitHub Pages (Static)',
+                server: 'Not Available',
                 is_real: false,
                 last_updated: new Date().toISOString(),
-                data_source: 'Static Demo',
-                error: 'VPS status unavailable'
+                data_source: 'No Neural System',
+                error: 'VPS and local neural processor both unavailable'
             };
         }
     }
@@ -56,7 +74,7 @@ class RealStatusLoader {
                 statusElement.style.borderColor = 'rgba(0,255,0,0.3)';
             } else {
                 statusElement.innerHTML = `
-                    <div style="font-size: 1rem; margin-bottom: 5px;">⚡ <span style="color: #ffaa00;">Static Demo Mode</span></div>
+                    <div style="font-size: 1rem; margin-bottom: 5px;">⚡ <span style="color: #ffaa00;">Local Mode (Browser-Based)</span></div>
                     <div style="font-size: 0.9rem; opacity: 0.9;">
                         ✅ 18 Core Systems | ✅ 9,247 CER Products | ✅ AS/NZS Standards | ⚠️ Neural cluster requires VPS deployment
                     </div>
@@ -81,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (status.is_real && status.neural_cluster_active) {
             console.log('✅ Real neural cluster connected:', status);
         } else {
-            console.log('📋 Static demo mode - VPS status unavailable');
+            console.log('📋 Local mode - VPS status unavailable, using browser systems');
         }
     });
     

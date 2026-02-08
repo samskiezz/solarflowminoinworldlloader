@@ -339,64 +339,9 @@ class RealPersistentSystem {
             this.log('⚠️ Could not load CER database, creating sample dataset');
         }
         
-        // Create sample real products if database not available
-        return this.createSampleRealProducts();
-    }
-    
-    createSampleRealProducts() {
-        this.log('🏗️ Creating sample real Australian products...');
-        
-        const sampleProducts = [
-            // Real Trina Solar panels
-            {
-                id: 'CER_TRINA_440W_MONO',
-                manufacturer: 'Trina Solar',
-                model: 'TSM-440DE15H(II)',
-                category: 'solar_panel',
-                power: 440,
-                voc: 40.4,
-                isc: 13.93,
-                efficiency: 21.2,
-                cerApproved: true,
-                processedAt: null,
-                documentsDownloaded: false,
-                knowledgeExtracted: false,
-                assignedMinions: []
-            },
-            // Real Fronius inverters
-            {
-                id: 'CER_FRONIUS_5KW_PRIMO',
-                manufacturer: 'Fronius',
-                model: 'Primo 5.0-1',
-                category: 'inverter',
-                power: 5000,
-                efficiency: 97.1,
-                maxDCVoltage: 1000,
-                cerApproved: true,
-                processedAt: null,
-                documentsDownloaded: false,
-                knowledgeExtracted: false,
-                assignedMinions: []
-            },
-            // Real Tesla Powerwall
-            {
-                id: 'CER_TESLA_POWERWALL_2',
-                manufacturer: 'Tesla',
-                model: 'Powerwall 2',
-                category: 'battery',
-                capacity: 13.5,
-                power: 5.0,
-                voltage: 350,
-                cerApproved: true,
-                processedAt: null,
-                documentsDownloaded: false,
-                knowledgeExtracted: false,
-                assignedMinions: []
-            }
-        ];
-        
-        this.log(`✅ Created ${sampleProducts.length} sample real products`);
-        return sampleProducts;
+        // FAIL LOUDLY if database not available - don't create fake fallback
+        this.log('❌ CRITICAL: CER database not available - cannot continue');
+        return [];
     }
     
     saveToLocalStorage() {

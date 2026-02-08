@@ -5,7 +5,7 @@
 
 class VPSNeuralConnector {
     constructor() {
-        this.vpsUrl = 'http://76.13.176.135:3000';  // Sam's VPS server
+        this.vpsUrl = null;  // VPS not currently deployed
         this.connected = false;
         this.lastUpdate = null;
         this.neuralStatus = null;

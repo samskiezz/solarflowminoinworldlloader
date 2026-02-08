@@ -362,12 +362,12 @@ class WorkConsciousnessBridge {
     const insightTypes = {
       solar_irradiance_analysis: [
         {
-          text: `Discovered correlation between ${currentData} W/m² irradiance and panel angle optimization - could increase efficiency by ${(Math.random() * 3 + 1).toFixed(1)}%`,
+          text: `Analyzing correlation between ${currentData} W/m² irradiance and panel angle optimization`,
           impactValue: 10,
           type: 'efficiency_optimization'
         },
         {
-          text: `Identified cloud pattern that reduces irradiance predictably - enabling 15-minute generation forecasting with 94% accuracy`,
+          text: `Identified cloud pattern that reduces irradiance predictably - enabling 15-minute generation forecasting`,
           impactValue: 15,
           type: 'prediction_improvement'
         }
@@ -386,12 +386,12 @@ class WorkConsciousnessBridge {
       ],
       battery_optimization: [
         {
-          text: `Optimal battery strategy for current conditions: ${currentData}% efficiency suggests ${Math.random() < 0.5 ? 'charging' : 'discharging'} at maximum rate`,
+          text: `Analyzing battery strategy for current conditions: ${currentData}% state of charge`,
           impactValue: 20,
           type: 'operational_optimization'
         },
         {
-          text: `Battery degradation analysis reveals charging at ${Math.round(Math.random() * 30 + 70)}% capacity extends lifespan by ${Math.round(Math.random() * 5 + 2)} years`,
+          text: `Battery degradation analysis in progress - monitoring cycle count and temperature patterns`,
           impactValue: 30,
           type: 'longevity_optimization'
         }

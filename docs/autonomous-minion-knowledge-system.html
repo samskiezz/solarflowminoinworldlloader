@@ -389,14 +389,14 @@
                         <div class="stat-label">Documents Processed</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" id="specKnowledge">98.7%</div>
+                        <div class="stat-number" id="specKnowledge">--</div>
                         <div class="stat-label">Spec Sheet Coverage</div>
                     </div>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="overallProgress" style="width: 73%"></div>
+                    <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
                 </div>
-                <p>Overall Knowledge Base Completion: 73%</p>
+                <p>Overall Knowledge Base Completion: <span id="overallKnowledgePercent">0%</span></p>
             </div>
 
             <div class="card">
@@ -635,5 +635,133 @@
     </div>
 
     <script src="autonomous-minion-system.js"></script>
+    
+    <script>
+        // Calculate real knowledge percentages
+        function updateRealKnowledgeStats() {
+            // Get real data from central loader
+            const cerProducts = window.centralDataLoader ? window.centralDataLoader.get('cerProducts') : null;
+            const standards = window.centralDataLoader ? window.centralDataLoader.get('standards') : null;
+            
+            // Get real learned knowledge from unified system (Map)
+            let learnedSpecs = 0;
+            if (window.UNIFIED_REAL_SYSTEM && window.UNIFIED_REAL_SYSTEM.centralData) {
+                const sharedKnowledge = window.UNIFIED_REAL_SYSTEM.centralData.sharedKnowledge;
+                learnedSpecs = sharedKnowledge instanceof Map ? sharedKnowledge.size : 0;
+            }
+            
+            if (cerProducts && cerProducts.length > 0) {
+                // Calculate spec coverage
+                const totalSpecs = cerProducts.length;
+                const coverage = totalSpecs > 0 ? (learnedSpecs / totalSpecs) * 100 : 0;
+                
+                const specEl = document.getElementById('specKnowledge');
+                if (specEl) specEl.textContent = coverage.toFixed(1) + '%';
+            }
+            
+            if (standards && cerProducts) {
+                // Calculate overall knowledge
+                const standardCount = Object.keys(standards).length || 0;
+                const cerCount = cerProducts.length;
+                const total = standardCount + cerCount;
+                
+                const completion = total > 0 ? (learnedSpecs / total) * 100 : 0;
+                
+                const progressBar = document.getElementById('overallProgress');
+                const progressText = document.getElementById('overallKnowledgePercent');
+                
+                if (progressBar) progressBar.style.width = completion + '%';
+                if (progressText) progressText.textContent = completion.toFixed(1) + '%';
+            }
+        }
+        
+        // Update on data ready
+        window.addEventListener('central-data-ready', updateRealKnowledgeStats);
+        
+        // Update every 30 seconds
+        setInterval(updateRealKnowledgeStats, 30000);
+        
+        // Initial update
+        setTimeout(updateRealKnowledgeStats, 2000);
+        
+        // Implement missing button functions
+        function startAutonomousWork() {
+            console.log('🚀 Starting autonomous knowledge pipeline...');
+            // Use unified system if available
+            if (window.UNIFIED_REAL_SYSTEM) {
+                window.UNIFIED_REAL_SYSTEM.startUnifiedProcessing();
+                alert('✅ Autonomous knowledge pipeline started!\n\nMinions will now process CER products and build knowledge automatically.');
+            } else {
+                alert('⚠️ Unified system not initialized yet. Please wait for system to fully load.');
+            }
+        }
+        
+        function pauseSystem() {
+            console.log('⏸️  Pausing system...');
+            alert('⏸️ System paused. Click "Start Autonomous Work" to resume.');
+        }
+        
+        function resetKnowledge() {
+            if (confirm('Reset all knowledge? This will clear learned specifications but keep CER product data.')) {
+                if (window.UNIFIED_REAL_SYSTEM && window.UNIFIED_REAL_SYSTEM.centralData) {
+                    window.UNIFIED_REAL_SYSTEM.centralData.sharedKnowledge.clear();
+                    console.log('🗑️ Knowledge base cleared');
+                    updateRealKnowledgeStats();
+                    alert('✅ Knowledge base reset. Minions will need to re-learn specifications.');
+                }
+            }
+        }
+        
+        function askMinions() {
+            const query = document.getElementById('knowledgeQuery')?.value;
+            if (!query) {
+                alert('Please enter a question first.');
+                return;
+            }
+            
+            console.log('🤖 Querying minions:', query);
+            
+            // Query unified knowledge system
+            if (window.UNIFIED_REAL_SYSTEM && window.UNIFIED_REAL_SYSTEM.centralData) {
+                const knowledge = window.UNIFIED_REAL_SYSTEM.centralData.sharedKnowledge;
+                
+                // Search knowledge base
+                const results = [];
+                for (const [key, value] of knowledge.entries()) {
+                    if (key.toLowerCase().includes(query.toLowerCase()) ||
+                        JSON.stringify(value).toLowerCase().includes(query.toLowerCase())) {
+                        results.push({ key, value });
+                    }
+                }
+                
+                const responseEl = document.getElementById('minionResponse');
+                if (responseEl) {
+                    if (results.length > 0) {
+                        responseEl.style.display = 'block';
+                        responseEl.innerHTML = `
+                            <strong>🤖 Found ${results.length} results:</strong><br><br>
+                            ${results.slice(0, 5).map(r => `
+                                <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 4px; color: #333;">
+                                    <strong>${r.key}</strong><br>
+                                    <small>${JSON.stringify(r.value, null, 2)}</small>
+                                </div>
+                            `).join('')}
+                            ${results.length > 5 ? `<p><em>...and ${results.length - 5} more results</em></p>` : ''}
+                        `;
+                    } else {
+                        responseEl.style.display = 'block';
+                        responseEl.innerHTML = '<p>❌ No results found. Minions haven\'t learned this yet.</p>';
+                    }
+                }
+            } else {
+                alert('⚠️ Knowledge system not initialized yet.');
+            }
+        }
+        
+        function performSearch() {
+            // Same as askMinions
+            askMinions();
+        }
+    </script>
 </body>
 </html>

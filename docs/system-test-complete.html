@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarFlow Complete System Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 { color: #00ff00; }
+        h2 { color: #00aaff; margin-top: 30px; }
+        
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .pass { color: #00ff00; }
+        .fail { color: #ff0000; }
+        .warn { color: #ffaa00; }
+        .info { color: #00aaff; }
+        
+        .test-result {
+            margin: 5px 0;
+            padding: 5px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+        
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #1565c0;
+        }
+        
+        #results {
+            margin-top: 20px;
+        }
+        
+        .summary {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 SolarFlow Complete System Test</h1>
+    <p>Comprehensive testing of all modules, data loading, and integration.</p>
+    
+    <div>
+        <button onclick="runAllTests()">▶️ Run All Tests</button>
+        <button onclick="clearResults()">🗑️ Clear Results</button>
+        <button onclick="location.reload()">🔄 Reload Page</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <!-- Load all modules in correct order -->
+    <script src="./error-handler.js"></script>
+    <script src="./security-utils.js"></script>
+    <script src="./performance-monitor.js"></script>
+    <script src="./central-data-loader.js"></script>
+    <script src="./unified-credit-system.js"></script>
+    <script src="./init-orchestrator.js"></script>
+    <script src="./real-health-monitor.js"></script>
+    <script src="./real-neural-processor.js"></script>
+    <script src="./real-compliance-engine.js"></script>
+    
+    <script>
+        const results = [];
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            results.push({ timestamp, message, type });
+            updateDisplay();
+        }
+        
+        function updateDisplay() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = results.map(r => 
+                `<div class="test-result ${r.type}">[${r.timestamp}] ${r.message}</div>`
+            ).join('');
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+        
+        function clearResults() {
+            results.length = 0;
+            updateDisplay();
+        }
+        
+        async function runAllTests() {
+            clearResults();
+            log('🚀 Starting comprehensive system test...', 'info');
+            log('', 'info');
+            
+            const testResults = {
+                passed: 0,
+                failed: 0,
+                warnings: 0
+            };
+            
+            // Test 1: Module Loading
+            log('=== Test 1: Module Loading ===', 'info');
+            await testModuleLoading(testResults);
+            
+            // Test 2: Init Orchestrator
+            log('', 'info');
+            log('=== Test 2: Init Orchestrator ===', 'info');
+            await testInitOrchestrator(testResults);
+            
+            // Test 3: Data Loading
+            log('', 'info');
+            log('=== Test 3: Data Loading ===', 'info');
+            await testDataLoading(testResults);
+            
+            // Test 4: Data Structure Validation
+            log('', 'info');
+            log('=== Test 4: Data Structure Validation ===', 'info');
+            await testDataStructures(testResults);
+            
+            // Test 5: Security System
+            log('', 'info');
+            log('=== Test 5: Security System ===', 'info');
+            await testSecuritySystem(testResults);
+            
+            // Test 6: Credit System
+            log('', 'info');
+            log('=== Test 6: Credit System ===', 'info');
+            await testCreditSystem(testResults);
+            
+            // Test 7: Performance Monitoring
+            log('', 'info');
+            log('=== Test 7: Performance Monitoring ===', 'info');
+            await testPerformanceMonitoring(testResults);
+            
+            // Test 8: Error Handling
+            log('', 'info');
+            log('=== Test 8: Error Handling ===', 'info');
+            await testErrorHandling(testResults);
+            
+            // Test 9: Integration
+            log('', 'info');
+            log('=== Test 9: System Integration ===', 'info');
+            await testIntegration(testResults);
+            
+            // Summary
+            log('', 'info');
+            log('=== SUMMARY ===', 'info');
+            log(`✅ Passed: ${testResults.passed}`, 'pass');
+            log(`❌ Failed: ${testResults.failed}`, 'fail');
+            log(`⚠️  Warnings: ${testResults.warnings}`, 'warn');
+            log(`📊 Total: ${testResults.passed + testResults.failed}`, 'info');
+            
+            const passRate = ((testResults.passed / (testResults.passed + testResults.failed)) * 100).toFixed(1);
+            log(`📈 Pass Rate: ${passRate}%`, passRate >= 90 ? 'pass' : 'warn');
+        }
+        
+        async function testModuleLoading(results) {
+            const modules = [
+                'errorHandler',
+                'securityUtils',
+                'performanceMonitor',
+                'centralDataLoader',
+                'unifiedCreditSystem',
+                'initOrchestrator'
+            ];
+            
+            modules.forEach(module => {
+                if (window[module]) {
+                    log(`✅ ${module} loaded`, 'pass');
+                    results.passed++;
+                } else {
+                    log(`❌ ${module} NOT loaded`, 'fail');
+                    results.failed++;
+                }
+            });
+        }
+        
+        async function testInitOrchestrator(results) {
+            if (!window.initOrchestrator) {
+                log('❌ Init orchestrator not available', 'fail');
+                results.failed++;
+                return;
+            }
+            
+            const status = window.initOrchestrator.getStatus();
+            
+            if (status.initialized) {
+                log(`✅ Orchestrator initialized`, 'pass');
+                log(`  Modules: ${status.totalModules}`, 'info');
+                results.passed++;
+            } else {
+                log(`⚠️  Orchestrator not yet initialized`, 'warn');
+                results.warnings++;
+            }
+            
+            if (status.errors.length > 0) {
+                log(`❌ Orchestrator has ${status.errors.length} errors`, 'fail');
+                status.errors.forEach(err => log(`  - ${err.message}`, 'fail'));
+                results.failed++;
+            } else {
+                log(`✅ No initialization errors`, 'pass');
+                results.passed++;
+            }
+        }
+        
+        async function testDataLoading(results) {
+            if (!window.centralDataLoader) {
+                log('❌ Central data loader not available', 'fail');
+                results.failed++;
+                return;
+            }
+            
+            const status = window.centralDataLoader.getStatus();
+            
+            if (status.initialized) {
+                log(`✅ Data loader initialized`, 'pass');
+                results.passed++;
+            } else {
+                log(`❌ Data loader not initialized`, 'fail');
+                results.failed++;
+            }
+            
+            // Check each data source
+            const dataSources = ['minions', 'cerProducts', 'standards', 'hiveState', 'progress'];
+            
+            for (const source of dataSources) {
+                const data = window.centralDataLoader.get(source);
+                
+                if (data) {
+                    const count = Array.isArray(data) ? data.length : Object.keys(data).length;
+                    log(`✅ ${source}: ${count} items loaded`, 'pass');
+                    results.passed++;
+                } else {
+                    log(`❌ ${source}: NOT loaded`, 'fail');
+                    results.failed++;
+                }
+            }
+        }
+        
+        async function testDataStructures(results) {
+            // Test minions structure
+            const minions = window.centralDataLoader?.get('minions');
+            if (minions && Array.isArray(minions) && minions.length > 0) {
+                const firstMinion = minions[0];
+                if (firstMinion.id && firstMinion.name && firstMinion.tier !== undefined) {
+                    log(`✅ Minions structure valid (${minions.length} minions)`, 'pass');
+                    results.passed++;
+                } else {
+                    log(`❌ Minion structure invalid - missing fields`, 'fail');
+                    results.failed++;
+                }
+            } else {
+                log(`❌ Minions not loaded or empty`, 'fail');
+                results.failed++;
+            }
+            
+            // Test CER products structure
+            const products = window.centralDataLoader?.get('cerProducts');
+            if (products && Array.isArray(products) && products.length > 0) {
+                log(`✅ CER products loaded (${products.length} products)`, 'pass');
+                results.passed++;
+                
+                const firstProduct = products[0];
+                if (firstProduct.manufacturer && firstProduct.model) {
+                    log(`✅ Product structure valid`, 'pass');
+                    results.passed++;
+                } else {
+                    log(`❌ Product structure invalid`, 'fail');
+                    results.failed++;
+                }
+            } else {
+                log(`❌ CER products not loaded or empty`, 'fail');
+                results.failed++;
+            }
+            
+            // Test standards structure
+            const standards = window.centralDataLoader?.get('standards');
+            if (standards && typeof standards === 'object' && Object.keys(standards).length > 0) {
+                log(`✅ Standards loaded (${Object.keys(standards).length} standards)`, 'pass');
+                results.passed++;
+            } else {
+                log(`❌ Standards not loaded or empty`, 'fail');
+                results.failed++;
+            }
+        }
+        
+        async function testSecuritySystem(results) {
+            if (!window.securityUtils) {
+                log('❌ Security utils not loaded', 'fail');
+                results.failed++;
+                return;
+            }
+            
+            // Test validators
+            const validId = window.securityUtils.validateMinionId('ATLAS');
+            const invalidId = window.securityUtils.validateMinionId('invalid id!');
+            
+            if (validId && !invalidId) {
+                log('✅ Minion ID validation working', 'pass');
+                results.passed++;
+            } else {
+                log('❌ Minion ID validation broken', 'fail');
+                results.failed++;
+            }
+            
+            // Test credit validation
+            const validCredits = window.securityUtils.validateCreditAmount(100);
+            const invalidCredits = window.securityUtils.validateCreditAmount(-50);
+            
+            if (validCredits && !invalidCredits) {
+                log('✅ Credit validation working', 'pass');
+                results.passed++;
+            } else {
+                log('❌ Credit validation broken', 'fail');
+                results.failed++;
+            }
+            
+            // Test rate limiters
+            if (window.rateLimiters) {
+                log('✅ Rate limiters created', 'pass');
+                results.passed++;
+            } else {
+                log('❌ Rate limiters not created', 'fail');
+                results.failed++;
+            }
+        }
+        
+        async function testCreditSystem(results) {
+            if (!window.unifiedCreditSystem) {
+                log('❌ Credit system not loaded', 'fail');
+                results.failed++;
+                return;
+            }
+            
+            if (window.unifiedCreditSystem.initialized) {
+                log('✅ Credit system initialized', 'pass');
+                results.passed++;
+            } else {
+                log('❌ Credit system not initialized', 'fail');
+                results.failed++;
+            }
+            
+            // Test credit award
+            const testResult = window.unifiedCreditSystem.awardCredits(
+                'TEST_MINION',
+                10,
+                'System Test',
+                { test: true }
+            );
+            
+            if (testResult) {
+                log('✅ Credit award working', 'pass');
+                results.passed++;
+                
+                // Verify it was saved
+                const credits = window.unifiedCreditSystem.getMinionCredits('TEST_MINION');
+                if (credits === 10) {
+                    log('✅ Credit persistence working', 'pass');
+                    results.passed++;
+                } else {
+                    log(`❌ Credits not saved correctly (got ${credits}, expected 10)`, 'fail');
+                    results.failed++;
+                }
+            } else {
+                log('❌ Credit award failed', 'fail');
+                results.failed++;
+            }
+        }
+        
+        async function testPerformanceMonitoring(results) {
+            if (!window.performanceMonitor) {
+                log('❌ Performance monitor not loaded', 'fail');
+                results.failed++;
+                return;
+            }
+            
+            if (window.performanceMonitor.initialized) {
+                log('✅ Performance monitor initialized', 'pass');
+                results.passed++;
+            } else {
+                log('❌ Performance monitor not initialized', 'fail');
+                results.failed++;
+            }
+            
+            const summary = window.performanceMonitor.getSummary();
+            
+            if (summary && summary.pageLoad) {
+                log(`✅ Page load metrics: ${summary.pageLoad.fullLoad}ms`, 'pass');
+                results.passed++;
+            } else {
+                log('❌ Page load metrics missing', 'fail');
+                results.failed++;
+            }
+        }
+        
+        async function testErrorHandling(results) {
+            if (!window.errorHandler) {
+                log('❌ Error handler not loaded', 'fail');
+                results.failed++;
+                return;
+            }
+            
+            if (window.errorHandler.initialized) {
+                log('✅ Error handler initialized', 'pass');
+                results.passed++;
+            } else {
+                log('❌ Error handler not initialized', 'fail');
+                results.failed++;
+            }
+            
+            // Test error capture
+            try {
+                throw new Error('Test error for capture');
+            } catch (error) {
+                window.errorHandler.handleError(error, { type: 'test' });
+            }
+            
+            const errors = window.errorHandler.getErrors(1);
+            if (errors.length > 0 && errors[0].message.includes('Test error')) {
+                log('✅ Error capture working', 'pass');
+                results.passed++;
+            } else {
+                log('❌ Error capture not working', 'fail');
+                results.failed++;
+            }
+        }
+        
+        async function testIntegration(results) {
+            log('Testing system integration...', 'info');
+            
+            // Test data flows from loader to credit system
+            const minions = window.centralDataLoader?.get('minions');
+            if (minions && minions.length > 0) {
+                const testMinionId = minions[0].id;
+                
+                // Award credits
+                const awarded = window.unifiedCreditSystem?.awardCredits(
+                    testMinionId,
+                    5,
+                    'Integration Test'
+                );
+                
+                if (awarded) {
+                    log(`✅ Data flow: Loader → Credit system working`, 'pass');
+                    results.passed++;
+                } else {
+                    log(`❌ Data flow broken`, 'fail');
+                    results.failed++;
+                }
+            }
+            
+            // Test health monitor metrics available
+            if (window.realHealthMonitor) {
+                const metrics = window.realHealthMonitor.getCurrentMetrics();
+                if (metrics && metrics.overallHealth) {
+                    log(`✅ Health monitor providing metrics: ${metrics.overallHealth.score}%`, 'pass');
+                    results.passed++;
+                } else {
+                    log(`❌ Health monitor not providing metrics`, 'fail');
+                    results.failed++;
+                }
+            }
+        }
+        
+        // Wait for orchestrator before testing
+        window.addEventListener('solarflow-ready', () => {
+            log('✅ SolarFlow system ready event received', 'pass');
+        });
+        
+        // Show ready state
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                log('📋 System test ready - click "Run All Tests" to begin', 'info');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

@@ -153,10 +153,12 @@
         // Initialize minion states
         minions.forEach(minion => {
           if (!minion.controlState) {
+            // Load real progress from localStorage or start at 0
+            const savedProgress = localStorage.getItem(`minion-progress-${minion.id}`);
             minion.controlState = {
               status: minion.mode === 'active' ? 'active' : 'paused',
               currentTask: `TASK_${minion.id}_${minion.role}`,
-              progress: Math.floor(Math.random() * 80) + 10,
+              progress: savedProgress ? parseInt(savedProgress) : 0,
               logs: []
             };
           }
@@ -383,8 +385,17 @@
     function optimizePerformance() {
       minions.forEach(minion => {
         if (minion.controlState.status === 'active') {
-          minion.controlState.progress = Math.min(100, minion.controlState.progress + Math.floor(Math.random() * 15) + 5);
-          addMinionLog(minion.id, 'success', 'Performance optimization applied');
+          // Real optimization: increment by fixed amount based on health
+          const healthMetrics = window.realHealthMonitor ? window.realHealthMonitor.getCurrentMetrics() : null;
+          const optimizationBoost = healthMetrics && healthMetrics.overallHealth ? 
+            Math.floor(healthMetrics.overallHealth.score / 10) : 5;
+          
+          minion.controlState.progress = Math.min(100, minion.controlState.progress + optimizationBoost);
+          
+          // Save progress to localStorage
+          localStorage.setItem(`minion-progress-${minion.id}`, minion.controlState.progress.toString());
+          
+          addMinionLog(minion.id, 'success', `Performance optimization applied (+${optimizationBoost}%)`);
         }
       });
       addLog('success', 'Performance optimization completed for all active minions');
@@ -438,27 +449,56 @@
 
     function startPeriodicUpdates() {
       setInterval(() => {
-        // Simulate progress updates for active minions
+        // Real progress updates - only increment if minion has actual work
         minions.forEach(minion => {
-          if (minion.controlState.status === 'active' && Math.random() < 0.4) {
-            const oldProgress = minion.controlState.progress;
-            minion.controlState.progress = Math.min(100, oldProgress + Math.floor(Math.random() * 5) + 1);
+          if (minion.controlState.status === 'active') {
+            // Check if there's real work to do
+            const hasRealWork = checkMinionHasWork(minion.id);
             
-            if (minion.controlState.progress === 100 && oldProgress < 100) {
-              addMinionLog(minion.id, 'success', 'Task completed!');
-              // Auto-assign new task
-              setTimeout(() => assignTask(minion.id), 2000);
+            if (hasRealWork) {
+              const oldProgress = minion.controlState.progress;
+              // Fixed increment rate: 2% per update cycle
+              minion.controlState.progress = Math.min(100, oldProgress + 2);
+              
+              // Save progress
+              localStorage.setItem(`minion-progress-${minion.id}`, minion.controlState.progress.toString());
+              
+              if (minion.controlState.progress === 100 && oldProgress < 100) {
+                addMinionLog(minion.id, 'success', 'Task completed!');
+                // Reset progress for new task
+                minion.controlState.progress = 0;
+                localStorage.setItem(`minion-progress-${minion.id}`, '0');
+                // Auto-assign new task
+                setTimeout(() => assignTask(minion.id), 2000);
+              }
             }
           }
         });
         
         updateSystemState();
         
-        // Only re-render if not too frequent
-        if (Math.random() < 0.3) {
-          renderMinions();
-        }
+        // Always render updates - removed random throttling
+        renderMinions();
       }, 3000); // Update every 3 seconds
+    }
+    
+    function checkMinionHasWork(minionId) {
+      // Check if minion has real work assigned
+      const state = JSON.parse(localStorage.getItem(`minion-state-${minionId}`) || '{}');
+      
+      // Has work if:
+      // 1. Has current task assigned
+      if (state.workStatus && state.workStatus.currentTask) {
+        return true;
+      }
+      
+      // 2. Check unified system if available
+      if (window.UNIFIED_REAL_SYSTEM && window.UNIFIED_REAL_SYSTEM.centralData) {
+        const minion = window.UNIFIED_REAL_SYSTEM.centralData.minions.find(m => m.id === minionId);
+        return minion && minion.workStatus && minion.workStatus.currentTask !== null;
+      }
+      
+      return false;
     }
 
     // Initialize

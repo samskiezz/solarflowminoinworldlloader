@@ -213,18 +213,24 @@
     function generateNewActivity() {
       if (minions.length === 0) return;
 
-      const minion = minions[Math.floor(Math.random() * minions.length)];
-      const activityTypes = ['work', 'chat', 'system', 'achievement'];
-      const type = activityTypes[Math.floor(Math.random() * activityTypes.length)];
+      // REMOVED: Random activity generation
+      // Activities now only come from real events
+      console.log('Random activity generation disabled - use addRealActivity() for real events');
+    }
+    
+    function addRealActivity(minionId, type, content, details = {}) {
+      // New function for adding REAL activities only
+      const minion = minions.find(m => m.id === minionId);
+      if (!minion) return;
       
       const activity = {
-        id: Date.now() + Math.random(),
+        id: Date.now(),
         minionId: minion.id,
         minion: minion,
         timestamp: new Date().toISOString(),
         type: type,
-        content: generateActivityContent(minion, type),
-        details: generateActivityDetails(type),
+        content: content,
+        details: details,
         isNew: true
       };
 
@@ -279,18 +285,33 @@
       const details = {};
       
       if (type === 'work') {
-        details.progress = Math.floor(Math.random() * 40) + 60;
-        details.status = ['active', 'completed', 'optimizing'][Math.floor(Math.random() * 3)];
+        // Get real work progress from localStorage
+        const state = JSON.parse(localStorage.getItem('solarflow-state') || '{}');
+        const activeWorkers = state.minions?.filter(m => m.status === 'active').length || 0;
+        details.progress = activeWorkers > 0 ? Math.min(100, activeWorkers * 5) : 0;
+        details.status = activeWorkers > 0 ? 'active' : 'idle';
       }
       
       if (type === 'achievement') {
-        details.creditsEarned = Math.floor(Math.random() * 25) + 5;
-        details.experienceGained = Math.floor(Math.random() * 100) + 50;
+        // Get real credits from actual work
+        const state = JSON.parse(localStorage.getItem('solarflow-state') || '{}');
+        const recentCredits = state.recentCreditsEarned || 0;
+        details.creditsEarned = recentCredits;
+        details.experienceGained = 0; // Remove fake experience system
       }
       
       if (type === 'system') {
-        details.systemLoad = Math.floor(Math.random() * 30) + 10;
-        details.responseTime = Math.floor(Math.random() * 500) + 50;
+        // Get real system metrics
+        const healthMetrics = window.realHealthMonitor ? window.realHealthMonitor.getCurrentMetrics() : null;
+        if (healthMetrics) {
+          details.systemLoad = healthMetrics.performance && healthMetrics.performance.memory ? 
+            Math.round(healthMetrics.performance.memory.usagePercent) : 0;
+          details.responseTime = healthMetrics.network && healthMetrics.network.latency > 0 ? 
+            Math.round(healthMetrics.network.latency) : 0;
+        } else {
+          details.systemLoad = 0;
+          details.responseTime = 0;
+        }
       }
 
       return details;

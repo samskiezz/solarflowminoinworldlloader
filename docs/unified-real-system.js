@@ -347,75 +347,10 @@ class UnifiedRealSystem {
                 throw new Error(`Failed to load CER database: ${response.status}`);
             }
         } catch (error) {
-            this.log('⚠️ Could not load CER database, creating sample data:', error);
-            this.createSampleCERData();
+            this.log('❌ CRITICAL: CER database failed to load', error);
+            this.centralData.cerProducts = [];
+            throw new Error('CER database required: ' + error.message);
         }
-    }
-    
-    createSampleCERData() {
-        this.centralData.cerProducts = [
-            {
-                id: 'CER_TRINA_440W',
-                manufacturer: 'Trina Solar',
-                model: 'TSM-440DE15H(II)',
-                category: 'solar_panel',
-                specifications: {
-                    power: 440,
-                    voc: 40.4,
-                    isc: 13.93,
-                    efficiency: 21.2,
-                    clearances: {
-                        top: '300mm minimum',
-                        sides: '200mm minimum',
-                        bottom: '200mm minimum'
-                    }
-                },
-                processingStatus: {
-                    documentsDownloaded: false,
-                    ocrCompleted: false,
-                    knowledgeExtracted: false,
-                    assignedMinions: [],
-                    processedBy: [],
-                    contributedToKnowledge: false
-                },
-                timestamps: {
-                    added: new Date().toISOString(),
-                    lastProcessed: null,
-                    lastUpdated: null
-                }
-            },
-            {
-                id: 'CER_FRONIUS_5KW',
-                manufacturer: 'Fronius',
-                model: 'Primo 5.0-1',
-                category: 'inverter',
-                specifications: {
-                    power: 5000,
-                    efficiency: 97.1,
-                    maxDCVoltage: 1000,
-                    clearances: {
-                        top: '300mm minimum',
-                        sides: '300mm minimum',
-                        front: '600mm service access'
-                    }
-                },
-                processingStatus: {
-                    documentsDownloaded: false,
-                    ocrCompleted: false,
-                    knowledgeExtracted: false,
-                    assignedMinions: [],
-                    processedBy: [],
-                    contributedToKnowledge: false
-                },
-                timestamps: {
-                    added: new Date().toISOString(),
-                    lastProcessed: null,
-                    lastUpdated: null
-                }
-            }
-        ];
-        
-        this.log(`✅ Created ${this.centralData.cerProducts.length} sample CER products`);
     }
     
     startUnifiedProcessing() {

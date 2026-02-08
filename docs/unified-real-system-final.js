@@ -110,6 +110,49 @@ class UnifiedRealSystem {
         this.broadcastSystemReady();
     }
     
+    async loadRealMinions() {
+        // Use central data loader if available
+        if (window.centralDataLoader) {
+            const minions = await window.centralDataLoader.loadMinions();
+            if (!minions || minions.length === 0) {
+                throw new Error('No minions loaded from central data loader');
+            }
+            return minions;
+        }
+        
+        // Fallback: load directly (with validation)
+        try {
+            const response = await fetch('./minions.json');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (!data.minions || !Array.isArray(data.minions) || data.minions.length === 0) {
+                throw new Error('Invalid or empty minions.json');
+            }
+            
+            return data.minions;
+        } catch (error) {
+            console.error('❌ Failed to load minions.json:', error);
+            throw error; // Don't return empty array, fail properly
+        }
+    }
+    
+    loadMinionState(minionId) {
+        // Load individual minion state from localStorage
+        const stateKey = `minion-state-${minionId}`;
+        const saved = localStorage.getItem(stateKey);
+        return saved ? JSON.parse(saved) : null;
+    }
+    
+    saveMinionState(minionId, state) {
+        // Save individual minion state
+        const stateKey = `minion-state-${minionId}`;
+        localStorage.setItem(stateKey, JSON.stringify(state));
+    }
+    
     async loadUnifiedData() {
         this.log('📂 Loading unified real data...');
         
@@ -215,45 +258,40 @@ class UnifiedRealSystem {
         const usedNames = new Set();
         this.centralData.minions = [];
         
-        for (let i = 0; i < 100; i++) {
-            let name;
-            do {
-                const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-                const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-                name = `${prefix}-${suffix}`;
-            } while (usedNames.has(name));
-            usedNames.add(name);
-            
-            const specialty = specialties[i];
-            const tier = Math.floor(i / 20) + 1; // 5 tiers, 20 minions each
+        // Load real minions from minions.json instead of generating random ones
+        const realMinions = await this.loadRealMinions();
+        
+        for (let i = 0; i < realMinions.length; i++) {
+            const realMinion = realMinions[i];
+            const tier = realMinion.tier || Math.floor(i / 20) + 1;
             
             const minion = {
-                // Core identity
-                id: name,
-                name: name,
+                // Core identity - USE REAL DATA
+                id: realMinion.id,
+                name: realMinion.name,
                 tier: tier,
-                specialty: specialty,
-                role: this.getRole(tier),
+                specialty: realMinion.specialty,
+                role: realMinion.role || this.getRole(tier),
                 
-                // Unified state (shared across ALL systems)
-                unifiedState: {
-                    credits: 50 + (tier * 20) + Math.floor(Math.random() * 50),
-                    documentsProcessed: Math.floor(Math.random() * 20),
+                // Unified state - LOAD FROM localStorage, don't randomize
+                unifiedState: this.loadMinionState(realMinion.id) || {
+                    credits: 50 + (tier * 20), // Base credits, no random
+                    documentsProcessed: 0, // Start at 0, increment only when work done
                     knowledgeContributed: 0,
                     tasksCompleted: 0,
-                    hoursWorked: Math.random() * 100,
-                    reputation: 0.5 + (Math.random() * 0.5),
-                    happiness: 0.7 + (Math.random() * 0.3)
+                    hoursWorked: 0, // Start at 0, track real time
+                    reputation: 0.5, // Start neutral
+                    happiness: 0.8 // Start happy
                 },
                 
-                // Work status (synchronized across all interfaces)
+                // Work status - CHECK REAL STATUS
                 workStatus: {
                     currentShift: this.assignShift(i),
-                    isWorking: Math.random() > 0.2,
-                    onBreak: Math.random() < 0.15,
+                    isWorking: false, // Default false, set true when task assigned
+                    onBreak: false, // Default false
                     currentTask: null,
-                    currentSystem: null, // Which system is this minion working in
-                    productivity: 0.5 + Math.random() * 0.5
+                    currentSystem: null,
+                    productivity: 1.0 // Start at 100%, decrease only if tasks fail
                 },
                 
                 // SHARED Australian knowledge (accessible by ALL systems)
@@ -347,75 +385,10 @@ class UnifiedRealSystem {
                 throw new Error(`Failed to load CER database: ${response.status}`);
             }
         } catch (error) {
-            this.log('⚠️ Could not load CER database, creating sample data:', error);
-            this.createSampleCERData();
+            this.log('❌ CRITICAL: CER database failed to load - system cannot function without it', error);
+            this.centralData.cerProducts = [];
+            throw new Error('CER database required but failed to load: ' + error.message);
         }
-    }
-    
-    createSampleCERData() {
-        this.centralData.cerProducts = [
-            {
-                id: 'CER_TRINA_440W',
-                manufacturer: 'Trina Solar',
-                model: 'TSM-440DE15H(II)',
-                category: 'solar_panel',
-                specifications: {
-                    power: 440,
-                    voc: 40.4,
-                    isc: 13.93,
-                    efficiency: 21.2,
-                    clearances: {
-                        top: '300mm minimum',
-                        sides: '200mm minimum',
-                        bottom: '200mm minimum'
-                    }
-                },
-                processingStatus: {
-                    documentsDownloaded: false,
-                    ocrCompleted: false,
-                    knowledgeExtracted: false,
-                    assignedMinions: [],
-                    processedBy: [],
-                    contributedToKnowledge: false
-                },
-                timestamps: {
-                    added: new Date().toISOString(),
-                    lastProcessed: null,
-                    lastUpdated: null
-                }
-            },
-            {
-                id: 'CER_FRONIUS_5KW',
-                manufacturer: 'Fronius',
-                model: 'Primo 5.0-1',
-                category: 'inverter',
-                specifications: {
-                    power: 5000,
-                    efficiency: 97.1,
-                    maxDCVoltage: 1000,
-                    clearances: {
-                        top: '300mm minimum',
-                        sides: '300mm minimum',
-                        front: '600mm service access'
-                    }
-                },
-                processingStatus: {
-                    documentsDownloaded: false,
-                    ocrCompleted: false,
-                    knowledgeExtracted: false,
-                    assignedMinions: [],
-                    processedBy: [],
-                    contributedToKnowledge: false
-                },
-                timestamps: {
-                    added: new Date().toISOString(),
-                    lastProcessed: null,
-                    lastUpdated: null
-                }
-            }
-        ];
-        
-        this.log(`✅ Created ${this.centralData.cerProducts.length} sample CER products`);
     }
     
     startUnifiedProcessing() {
@@ -488,11 +461,24 @@ class UnifiedRealSystem {
         minion.unifiedState.tasksCompleted++;
         minion.unifiedState.hoursWorked += 0.5;
         
-        // Earn credits
-        const creditsEarned = 10 + (minion.tier * 3) + Math.floor(Math.random() * 15);
-        minion.unifiedState.credits += creditsEarned;
-        this.centralData.globalEconomy.totalCredits += creditsEarned;
-        this.centralData.globalEconomy.creditsEarned += creditsEarned;
+        // Earn credits using unified credit system
+        const creditsEarned = window.unifiedCreditSystem ? 
+            window.unifiedCreditSystem.calculateDocumentProcessingCredits(minion, product) :
+            10 + (minion.tier * 5); // Fallback if unified system not loaded
+        
+        if (window.unifiedCreditSystem) {
+            window.unifiedCreditSystem.awardCredits(
+                minion.id,
+                creditsEarned,
+                'Document Processing',
+                { product: `${product.manufacturer} ${product.model}` }
+            );
+        } else {
+            // Manual update if unified system not available
+            minion.unifiedState.credits += creditsEarned;
+            this.centralData.globalEconomy.totalCredits += creditsEarned;
+            this.centralData.globalEconomy.creditsEarned += creditsEarned;
+        }
         
         // Learn knowledge from product
         this.extractKnowledgeFromProduct(minion, product);
@@ -508,6 +494,12 @@ class UnifiedRealSystem {
         // Update unified progress
         this.centralData.unifiedProgress.documentsProcessed++;
         this.centralData.unifiedProgress.tasksCompleted++;
+        
+        // SAVE minion state to localStorage
+        this.saveMinionState(minion.id, minion.unifiedState);
+        
+        // Save unified data
+        this.saveUnifiedData();
     }
     
     extractKnowledgeFromProduct(minion, product) {

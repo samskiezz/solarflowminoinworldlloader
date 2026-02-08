@@ -1380,9 +1380,20 @@ class AutonomousMinionSystem {
         const activeMinions = this.minions?.filter(m => !m.workCycle?.isOnBreak).length || 0;
         const totalCredits = this.minions?.reduce((sum, m) => sum + (m.credits || 0), 0) || 0;
         
-        document.getElementById('pagesProcessed').textContent = Math.floor(totalCredits / 5); // Credits earned from processing
-        document.getElementById('specsExtracted').textContent = activeMinions * 15; // Active minions * avg specs
-        document.getElementById('ocrAccuracy').textContent = '94.2%'; // Realistic accuracy
+        // Real document processing metrics
+        const documentsProcessed = this.minions?.reduce((sum, m) => sum + (m.documentsProcessed || 0), 0) || 0;
+        document.getElementById('pagesProcessed').textContent = documentsProcessed;
+        
+        // Real specs extracted from CER database
+        const cerProducts = localStorage.getItem('cer-products-count') || '0';
+        document.getElementById('specsExtracted').textContent = cerProducts;
+        
+        // Remove OCR accuracy claim - no OCR system implemented
+        const ocrElement = document.getElementById('ocrAccuracy');
+        if (ocrElement) {
+          ocrElement.textContent = 'N/A - OCR not implemented';
+          ocrElement.style.color = '#888';
+        }
         
         const knowledgeProgress = Math.min(100, Math.floor((totalCredits / 500) * 100)); // Progress based on credits earned
         document.getElementById('knowledgeProgress').style.width = knowledgeProgress + '%';

@@ -168,16 +168,20 @@
             
             startUpdating() {
                 setInterval(() => this.updateStatus(), 3000);
-                setInterval(() => this.simulateInstallation(), 5000);
+                // REMOVED: simulateInstallation() - no fake installation simulation
+                // Real installation status now detected from actual neural processor
+                setInterval(() => this.checkRealInstallation(), 5000);
             }
             
-            simulateInstallation() {
-                if (this.currentInstalling < this.installingPackages.length) {
-                    const packageName = this.installingPackages[this.currentInstalling];
-                    this.installedPackages.push(packageName);
-                    this.currentInstalling++;
-                    
-                    this.addLogEntry(`✅ Installed ${packageName} (${this.installedPackages.length}/${this.totalPackages})`);
+            checkRealInstallation() {
+                // Check real neural processor status
+                if (window.realNeuralProcessor && window.realNeuralProcessor.initialized) {
+                    const status = window.realNeuralProcessor.getStatus();
+                    if (status.workers > this.installedPackages.length) {
+                        // Workers exist = real installation
+                        this.installedPackages.push(`Neural Worker ${status.workers}`);
+                        this.addLogEntry(`✅ Real neural worker detected (${this.installedPackages.length} active)`);
+                    }
                 }
             }
             

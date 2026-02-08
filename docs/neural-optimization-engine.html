@@ -351,7 +351,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="dataProgress" style="width: 85%"></div>
                     </div>
-                    <p>Processing efficiency: <span id="dataEfficiency">94.2%</span></p>
+                    <p>Processing efficiency: <span id="dataEfficiency">Calculating...</span></p>
                 </div>
 
                 <div class="processing-unit">
@@ -367,7 +367,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="patternProgress" style="width: 92%"></div>
                     </div>
-                    <p>Pattern accuracy: <span id="patternAccuracy">96.8%</span></p>
+                    <p>Pattern accuracy: <span id="patternAccuracy">--</span></p>
                 </div>
 
                 <div class="processing-unit">
@@ -375,7 +375,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="predictProgress" style="width: 88%"></div>
                     </div>
-                    <p>Prediction quality: <span id="predictQuality">91.5%</span></p>
+                    <p>Prediction quality: <span id="predictQuality">--</span></p>
                 </div>
             </div>
 
@@ -486,7 +486,7 @@
                     <div class="engine-icon">📊</div>
                     <div>
                         <div class="engine-title">Predictive Analytics</div>
-                        <div class="engine-status">Forecasting - 91.5% confidence</div>
+                        <div class="engine-status">Forecasting - confidence: <span id="forecastConfidence">--</span></div>
                     </div>
                 </div>
                 <div class="engine-content">
@@ -496,7 +496,7 @@
                             <div class="metric-label">Predictions</div>
                         </div>
                         <div class="metric">
-                            <div class="metric-value" id="confidence">91.5%</div>
+                            <div class="metric-value" id="confidence">--</div>
                             <div class="metric-label">Confidence</div>
                         </div>
                     </div>
@@ -585,7 +585,7 @@
                 </div>
                 <div class="log-entry log-success">
                     <span class="log-timestamp">[21:55:47]</span>
-                    Predictive analytics model loaded: 91.5% accuracy
+                    Predictive analytics model loaded
                 </div>
             </div>
         </div>
@@ -701,30 +701,8 @@
                     { type: 'success', message: 'System performance optimized' }
                 ];
 
-                setInterval(() => {
-                    if (!this.isRunning) return;
-
-                    const container = document.getElementById('logContainer');
-                    const message = logMessages[Math.floor(Math.random() * logMessages.length)];
-                    const timestamp = new Date().toLocaleTimeString();
-                    
-                    const logEntry = document.createElement('div');
-                    logEntry.className = `log-entry log-${message.type}`;
-                    logEntry.innerHTML = `
-                        <span class="log-timestamp">[${timestamp}]</span>
-                        ${message.message}
-                    `;
-                    
-                    container.appendChild(logEntry);
-                    
-                    // Keep only last 20 entries
-                    while (container.children.length > 20) {
-                        container.removeChild(container.firstChild);
-                    }
-                    
-                    // Scroll to bottom
-                    container.scrollTop = container.scrollHeight;
-                }, 3000 + Math.random() * 2000);
+                // REMOVED: Random log generation
+                // Logs now only added via addLogEntry() when real events occur
             }
 
             addLogEntry(type, message) {
@@ -829,6 +807,25 @@
             // Update metrics with real data
             engine.updateElement('recordsProcessed', progress.installedCount.toLocaleString());
             engine.updateElement('processingSpeed', Math.floor(progress.percentage * 10) + '/s');
+            
+            // Update efficiency with real calculation
+            updateRealEfficiency();
+        }
+        
+        function updateRealEfficiency() {
+            // Calculate real processing efficiency
+            const neuralProcessor = window.realNeuralProcessor;
+            if (neuralProcessor && neuralProcessor.getMetrics) {
+                const metrics = neuralProcessor.getMetrics();
+                const efficiency = metrics.successRate || 0;
+                engine.updateElement('dataEfficiency', efficiency.toFixed(1) + '%');
+            } else {
+                // Use health monitor as fallback
+                const healthMetrics = window.realHealthMonitor ? window.realHealthMonitor.getCurrentMetrics() : null;
+                if (healthMetrics && healthMetrics.overallHealth) {
+                    engine.updateElement('dataEfficiency', healthMetrics.overallHealth.score + '%');
+                }
+            }
         }
 
         function updateRealStatus() {
@@ -840,16 +837,24 @@
                 if (status.optimizationActive) {
                     document.querySelector('.dashboard-title').textContent = 'Neural Cluster - FULLY OPERATIONAL';
                     
-                    // Update with real data
-                    engine.updateElement('recordsProcessed', status.installedCount.toLocaleString());
-                    engine.updateElement('processingSpeed', '847/s');
-                    engine.updateElement('patternsFound', Object.keys(status.categories).length * 47);
-                    engine.updateElement('predictions', status.installedCount * 6);
+                    // Update with real data from neural processor
+                    const neuralMetrics = window.realNeuralProcessor ? window.realNeuralProcessor.getMetrics() : null;
+                    
+                    if (neuralMetrics) {
+                        engine.updateElement('recordsProcessed', neuralMetrics.processedDocuments || 0);
+                        engine.updateElement('processingSpeed', neuralMetrics.averageProcessingTime ? 
+                            Math.round(1000 / neuralMetrics.averageProcessingTime) + '/s' : '--');
+                        engine.updateElement('patternAccuracy', neuralMetrics.successRate ? 
+                            neuralMetrics.successRate.toFixed(1) + '%' : '--');
+                        engine.updateElement('predictQuality', neuralMetrics.cacheHits && neuralMetrics.totalRequests ? 
+                            ((neuralMetrics.cacheHits / neuralMetrics.totalRequests) * 100).toFixed(1) + '%' : '--');
+                    }
                     
                     // Show real categories being processed
                     const categories = Object.keys(status.categories);
                     if (categories.length > 0) {
-                        engine.addLogEntry('success', `Processing ${categories[Math.floor(Math.random() * categories.length)]} optimization algorithms`);
+                        const category = categories[0]; // Use first, not random
+                        engine.addLogEntry('success', `Processing ${category} optimization algorithms`);
                     }
                 } else if (status.isInstalling) {
                     document.querySelector('.dashboard-title').textContent = `Installing Neural Repositories... ${status.progress.toFixed(1)}%`;
