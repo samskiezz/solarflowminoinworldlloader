@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPS Neural Dashboard - Live Monitoring</title>
+    <style>
+        :root {
+            --primary: #1976d2; --success: #388e3c; --warning: #f57c00; --danger: #d32f2f;
+            --bg-dark: #0a0a0a; --bg-light: #1a1a1a; --text: #ffffff; --text-muted: #b0b0b0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+            color: var(--text); min-height: 100vh; padding: 1rem;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        .header {
+            text-align: center; margin-bottom: 2rem; padding: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        
+        .dashboard-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem; margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(10px);
+        }
+        
+        .card h3 {
+            font-size: 1.2rem; margin-bottom: 1rem; display: flex;
+            align-items: center; gap: 0.5rem;
+        }
+        
+        .status-indicator {
+            width: 12px; height: 12px; border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-online { background: var(--success); }
+        .status-offline { background: var(--danger); }
+        .status-warning { background: var(--warning); }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        .metric { 
+            display: flex; justify-content: space-between; 
+            padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .metric:last-child { border-bottom: none; }
+        
+        .value { font-weight: 600; color: var(--success); }
+        
+        .controls {
+            display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;
+        }
+        
+        .btn {
+            background: var(--primary); color: white; border: none;
+            padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;
+            font-size: 0.9rem; transition: all 0.3s ease;
+        }
+        
+        .btn:hover { background: #1565c0; transform: translateY(-1px); }
+        .btn:disabled { background: #666; cursor: not-allowed; transform: none; }
+        
+        .logs {
+            background: #000; color: #0f0; padding: 1rem; border-radius: 8px;
+            font-family: 'Courier New', monospace; font-size: 0.8rem;
+            max-height: 300px; overflow-y: auto; border: 1px solid #333;
+        }
+        
+        .back-link {
+            color: var(--primary); text-decoration: none; 
+            font-size: 0.9rem; margin-bottom: 1rem; display: inline-block;
+        }
+        
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to SolarFlow Dashboard</a>
+        
+        <div class="header">
+            <h1>🖥️ VPS Neural Dashboard</h1>
+            <p>Live monitoring of neural cluster on 76.13.176.135:3000</p>
+            <div class="version-info">Real-time Connection Status</div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Connection Status -->
+            <div class="card">
+                <h3>
+                    <span class="status-indicator" id="connection-status"></span>
+                    VPS Connection
+                </h3>
+                <div class="metric">
+                    <span>Server Status</span>
+                    <span class="value" id="server-status">Checking...</span>
+                </div>
+                <div class="metric">
+                    <span>Last Update</span>
+                    <span class="value" id="last-update">Never</span>
+                </div>
+                <div class="metric">
+                    <span>Response Time</span>
+                    <span class="value" id="response-time">N/A</span>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="testConnection()">Test Connection</button>
+                    <button class="btn" onclick="refreshStatus()">Refresh</button>
+                </div>
+            </div>
+            
+            <!-- Neural Status -->
+            <div class="card">
+                <h3>
+                    <span class="status-indicator" id="neural-status"></span>
+                    Neural Cluster
+                </h3>
+                <div class="metric">
+                    <span>Active</span>
+                    <span class="value" id="neural-active">Unknown</span>
+                </div>
+                <div class="metric">
+                    <span>Repositories</span>
+                    <span class="value" id="neural-repos">0</span>
+                </div>
+                <div class="metric">
+                    <span>ML Packages</span>
+                    <span class="value" id="neural-packages">0</span>
+                </div>
+                <div class="metric">
+                    <span>Optimization</span>
+                    <span class="value" id="neural-optimization">0%</span>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="triggerOptimization()">Optimize</button>
+                    <button class="btn" onclick="viewRepositories()">View Repos</button>
+                </div>
+            </div>
+            
+            <!-- Standards Database -->
+            <div class="card">
+                <h3>📋 AS/NZS Standards</h3>
+                <div class="metric">
+                    <span>Standards Loaded</span>
+                    <span class="value" id="standards-count">0</span>
+                </div>
+                <div class="metric">
+                    <span>Database Size</span>
+                    <span class="value" id="standards-size">0 KB</span>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="loadStandards()">Load Standards</button>
+                    <button class="btn" onclick="viewStandards()">View All</button>
+                </div>
+            </div>
+            
+            <!-- CER Products -->
+            <div class="card">
+                <h3>⚡ CER Products</h3>
+                <div class="metric">
+                    <span>Products Available</span>
+                    <span class="value" id="cer-count">0</span>
+                </div>
+                <div class="metric">
+                    <span>Database Status</span>
+                    <span class="value" id="cer-status">Not Loaded</span>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="loadCERProducts()">Load Products</button>
+                    <button class="btn" onclick="viewProducts()">View Database</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Logs -->
+        <div class="card">
+            <h3>📊 System Logs</h3>
+            <div class="logs" id="system-logs">
+                Waiting for VPS connection...<br>
+                Initializing neural dashboard monitoring...<br>
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="clearLogs()">Clear Logs</button>
+                <button class="btn" onclick="downloadLogs()">Download</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="vps-neural-integration.js"></script>
+    <script>
+        let statusUpdateInterval;
+        let logs = [];
+        
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            logs.push(logEntry);
+            
+            const logsElement = document.getElementById('system-logs');
+            logsElement.innerHTML = logs.slice(-20).join('<br>'); // Keep last 20 logs
+            logsElement.scrollTop = logsElement.scrollHeight;
+        }
+        
+        function updateConnectionStatus(connected, data = null) {
+            const statusElement = document.getElementById('connection-status');
+            const serverStatus = document.getElementById('server-status');
+            const lastUpdate = document.getElementById('last-update');
+            
+            if (connected) {
+                statusElement.className = 'status-indicator status-online';
+                serverStatus.textContent = 'Online';
+                lastUpdate.textContent = new Date().toLocaleTimeString();
+            } else {
+                statusElement.className = 'status-indicator status-offline';
+                serverStatus.textContent = 'Offline';
+            }
+        }
+        
+        function updateNeuralStatus(neuralData) {
+            const statusElement = document.getElementById('neural-status');
+            const active = document.getElementById('neural-active');
+            const repos = document.getElementById('neural-repos');
+            const packages = document.getElementById('neural-packages');
+            const optimization = document.getElementById('neural-optimization');
+            
+            if (neuralData) {
+                statusElement.className = neuralData.active ? 'status-indicator status-online' : 'status-indicator status-warning';
+                active.textContent = neuralData.active ? 'Yes' : 'No';
+                repos.textContent = neuralData.repositories || 0;
+                packages.textContent = neuralData.packages || 0;
+                optimization.textContent = `${(neuralData.optimization_level || 0).toFixed(1)}%`;
+            } else {
+                statusElement.className = 'status-indicator status-offline';
+                active.textContent = 'Unknown';
+            }
+        }
+        
+        async function testConnection() {
+            addLog('Testing VPS connection...');
+            
+            if (window.vpsNeuralConnector) {
+                const health = await window.vpsNeuralConnector.checkConnection();
+                if (health) {
+                    addLog('✅ VPS connection successful');
+                    updateConnectionStatus(true, health);
+                } else {
+                    addLog('❌ VPS connection failed');
+                    updateConnectionStatus(false);
+                }
+            } else {
+                addLog('❌ VPS connector not initialized');
+            }
+        }
+        
+        async function refreshStatus() {
+            addLog('Refreshing all status...');
+            await testConnection();
+            
+            if (window.vpsNeuralConnector && window.vpsNeuralConnector.isConnected()) {
+                const neuralStatus = await window.vpsNeuralConnector.getNeuralStatus();
+                if (neuralStatus) {
+                    updateNeuralStatus(neuralStatus.neural);
+                    addLog('✅ Neural status updated');
+                }
+                
+                const standards = await window.vpsNeuralConnector.getStandards();
+                if (standards) {
+                    document.getElementById('standards-count').textContent = standards.count || 0;
+                    addLog(`📋 ${standards.count} standards loaded`);
+                }
+                
+                const cer = await window.vpsNeuralConnector.getCERProducts();
+                if (cer) {
+                    document.getElementById('cer-count').textContent = cer.count || 0;
+                    document.getElementById('cer-status').textContent = cer.success ? 'Loaded' : 'Error';
+                    addLog(`⚡ ${cer.count} CER products loaded`);
+                }
+            }
+        }
+        
+        async function triggerOptimization() {
+            addLog('Triggering neural optimization...');
+            
+            if (window.vpsNeuralConnector) {
+                const result = await window.vpsNeuralConnector.triggerOptimization();
+                if (result) {
+                    addLog(`🔧 ${result.message}`);
+                } else {
+                    addLog('❌ Optimization failed');
+                }
+            }
+        }
+        
+        function viewRepositories() {
+            addLog('Opening repository status...');
+            // Could open a modal or navigate to a detailed view
+            alert('Repository detailed view would open here');
+        }
+        
+        function loadStandards() {
+            addLog('Loading AS/NZS standards...');
+            refreshStatus(); // This will load standards as part of status refresh
+        }
+        
+        function viewStandards() {
+            addLog('Opening standards library...');
+            window.open('EMERGENCY-STANDARDS-ACCESS.html', '_blank');
+        }
+        
+        function loadCERProducts() {
+            addLog('Loading CER products...');
+            refreshStatus(); // This will load CER products as part of status refresh
+        }
+        
+        function viewProducts() {
+            addLog('Opening CER products database...');
+            window.open('cer-products.html', '_blank');
+        }
+        
+        function clearLogs() {
+            logs = [];
+            document.getElementById('system-logs').innerHTML = 'Logs cleared.';
+        }
+        
+        function downloadLogs() {
+            const logText = logs.join('\n');
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `solarflow-vps-logs-${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('VPS Neural Dashboard initialized');
+            
+            // Start monitoring when VPS connector is ready
+            const checkConnector = () => {
+                if (window.vpsNeuralConnector) {
+                    addLog('VPS connector detected - starting monitoring');
+                    refreshStatus();
+                    
+                    // Set up periodic refresh
+                    statusUpdateInterval = setInterval(refreshStatus, 30000); // Every 30 seconds
+                } else {
+                    setTimeout(checkConnector, 1000); // Check again in 1 second
+                }
+            };
+            
+            checkConnector();
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (statusUpdateInterval) {
+                clearInterval(statusUpdateInterval);
+            }
+        });
+    </script>
+</body>
+</html>

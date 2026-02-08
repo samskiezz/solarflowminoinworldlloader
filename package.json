@@ -9,7 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "build": "npm run build:client && npm run build:docs",
+    "build": "npm run build:docs",
     "build:client": "webpack --mode production",
     "build:docs": "node scripts/build-docs.js",
     "lint": "eslint src/ --ext .js,.jsx",
@@ -92,7 +92,9 @@
       "es6": true,
       "jest": true
     },
-    "extends": ["eslint:recommended"],
+    "extends": [
+      "eslint:recommended"
+    ],
     "parserOptions": {
       "ecmaVersion": 2022,
       "sourceType": "module"

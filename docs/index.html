@@ -134,6 +134,7 @@
     </style>
 </head>
 <body>
+<div id="live-status" style="padding:12px;font-family:system-ui;">Status: loading...</div>
     <div class="container">
         <header class="header">
             <h1>🌞 SolarFlow Minion World Loader</h1>
@@ -687,7 +688,8 @@ All 18 systems functioning as designed with verified deployment
                 <html>
                 <head><title>SolarFlow System Report v${VERSION}</title>
                 <style>body{font-family:monospace;background:#000;color:#0f0;padding:20px;white-space:pre-wrap;}</style></head>
-                <body>${report}</body></html>
+                <body>${report}<script src="/bundle.js"></script>
+</body></html>
             `);
         }
 
@@ -771,6 +773,16 @@ All 18 systems functioning as designed with verified deployment
             console.log('🔍 Attempting to connect to real VPS neural cluster...');
             console.log('📋 Static demo mode if VPS unavailable');
             
+            // Load VPS neural integration
+            const vpsScript = document.createElement('script');
+            vpsScript.src = './vps-neural-integration.js';
+            vpsScript.async = true;
+            vpsScript.onload = () => {
+                console.log('🌐 VPS Neural Integration loaded - connecting to 76.13.176.135:3000');
+                console.log('📊 Live neural cluster status monitoring active');
+            };
+            document.head.appendChild(vpsScript);
+            
             // Load real status from VPS
             const realStatusScript = document.createElement('script');
             realStatusScript.src = './real_status_loader.js';
@@ -778,5 +790,6 @@ All 18 systems functioning as designed with verified deployment
             document.head.appendChild(realStatusScript);
         });
     </script>
+<script src="/bundle.js"></script>
 </body>
 </html>

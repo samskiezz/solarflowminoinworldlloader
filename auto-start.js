@@ -45,7 +45,7 @@ class AutoStartSystem {
             
         } catch (error) {
             console.error('❌ Auto-start initialization failed:', error.message);
-            process.exit(1);
+            throw error; // Let caller handle the exit decision
         }
     }
     

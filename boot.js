@@ -85,7 +85,7 @@ class SolarFlowBootloader {
             
         } catch (error) {
             this.log(`❌ Initialization failed: ${error.message}`, 'error');
-            process.exit(1);
+            throw error; // Let caller handle the exit decision
         }
     }
     
@@ -433,7 +433,7 @@ class SolarFlowBootloader {
                 
             } catch (error) {
                 this.log(`❌ Shutdown error: ${error.message}`, 'error');
-                process.exit(1);
+                // Don't exit(1) during shutdown - already shutting down
             }
         };
         
@@ -463,7 +463,7 @@ async function checkAndInstallDependencies() {
             console.log('✅ Dependencies installed successfully');
         } catch (error) {
             console.error('❌ Failed to install dependencies:', error.message);
-            process.exit(1);
+            throw error; // Let main() handle the failure
         }
     }
 }
@@ -480,7 +480,12 @@ async function main() {
         
     } catch (error) {
         console.error(`❌ SolarFlow startup failed: ${error.message}`);
-        process.exit(1);
+        // Only exit if this is the main module (direct execution)
+        if (require.main === module) {
+            process.exit(1);
+        } else {
+            throw error; // Let parent module handle
+        }
     }
 }
 

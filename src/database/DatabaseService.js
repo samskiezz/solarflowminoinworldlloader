@@ -14,7 +14,7 @@ class DatabaseService {
             ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
         });
         
-        this.initializeTables();
+        // Don't call initializeTables() in constructor - let server control when this happens
     }
 
     async initializeTables() {

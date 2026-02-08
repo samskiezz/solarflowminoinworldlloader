@@ -1,6 +1,6 @@
 /**
- * PRODUCTION SERVER - CLEAN VERSION
- * Fixed initialization issues and cleaned syntax
+ * PRODUCTION SERVER - REPLACES STATIC HOSTING
+ * Addresses Problems 8, 9, 13, 14, 17, 19, 20
  */
 
 const express = require('express');
@@ -109,13 +109,13 @@ class SolarFlowServer {
                 }
                 
                 try {
-                    const authResult = await this.db.authenticateUser(email, password);
+                    const result = await this.db.authenticateUser(email, password);
                     this.security.clearFailedAttempts(ip, email);
                     
                     res.json({
                         success: true,
-                        token: authResult.token,
-                        user: authResult.user
+                        token: result.token,
+                        user: result.user
                     });
                 } catch (authError) {
                     this.security.recordFailedAttempt(ip, email);
@@ -150,7 +150,7 @@ class SolarFlowServer {
                     return res.status(503).json({ error: "Database unavailable" });
                 }
                 
-                const saveResult = await this.db.saveData(req.params.key, req.body, req.user.userId);
+                const result = await this.db.saveData(req.params.key, req.body, req.user.userId);
                 
                 // Broadcast to WebSocket clients
                 this.broadcast({
@@ -160,7 +160,7 @@ class SolarFlowServer {
                     timestamp: new Date().toISOString()
                 });
                 
-                res.json(saveResult);
+                res.json(result);
             } catch (error) {
                 logger.error('Data save failed:', error);
                 res.status(500).json({ error: 'Data save failed' });
@@ -204,8 +204,8 @@ class SolarFlowServer {
         // Standards API
         this.app.get('/api/standards', async (req, res) => {
             try {
-                const standardsList = await this.standards.getLocalStandards();
-                res.json({ success: true, standards: standardsList });
+                const standards = await this.standards.getLocalStandards();
+                res.json({ success: true, standards });
             } catch (error) {
                 logger.error('Standards retrieval failed:', error);
                 res.status(500).json({ error: 'Failed to retrieve standards' });
@@ -214,8 +214,8 @@ class SolarFlowServer {
 
         this.app.post('/api/standards/refresh', auth, async (req, res) => {
             try {
-                const refreshedStandards = await this.standards.fetchPublicStandardsContent();
-                res.json({ success: true, standards: refreshedStandards, message: 'Standards refreshed successfully' });
+                const standards = await this.standards.fetchPublicStandardsContent();
+                res.json({ success: true, standards, message: 'Standards refreshed successfully' });
             } catch (error) {
                 logger.error('Standards refresh failed:', error);
                 res.status(500).json({ error: 'Failed to refresh standards' });
@@ -231,20 +231,20 @@ class SolarFlowServer {
                     return res.status(400).json({ error: 'Missing installation_data or standard_code' });
                 }
                 
-                const complianceResult = await this.standards.checkCompliance(installation_data, standard_code);
+                const result = await this.standards.checkCompliance(installation_data, standard_code);
                 
                 // Record compliance check
                 if (installation_data.product_id) {
                     await this.db.recordComplianceCheck(
                         standard_code,
                         installation_data.product_id,
-                        complianceResult.overall_status,
-                        complianceResult,
+                        result.overall_status,
+                        result,
                         req.user.email
                     );
                 }
                 
-                res.json({ success: true, compliance: complianceResult });
+                res.json({ success: true, compliance: result });
             } catch (error) {
                 logger.error('Compliance check failed:', error);
                 res.status(500).json({ error: error.message });
@@ -254,13 +254,13 @@ class SolarFlowServer {
         // Audit log API
         this.app.get('/api/audit', auth, this.security.middleware().requireRole('admin'), async (req, res) => {
             try {
-                const auditFilters = {
+                const filters = {
                     userId: req.query.userId,
                     action: req.query.action,
                     startDate: req.query.startDate
                 };
                 
-                const logs = await this.db.getAuditLog(auditFilters);
+                const logs = await this.db.getAuditLog(filters);
                 res.json({ success: true, logs, count: logs.length });
             } catch (error) {
                 logger.error('Audit log retrieval failed:', error);
@@ -446,9 +446,7 @@ class SolarFlowServer {
         });
         
         // Close database connection
-        if (this.db && this.db.close) {
-            await this.db.close();
-        }
+        await this.db.close();
         
         // Close HTTP server
         this.server.close(() => {
