@@ -5,9 +5,9 @@
 
 class RealVPSIntegration {
     constructor() {
-        // VPS endpoints - currently not deployed
-        this.vpsEndpoint = null; // Set when VPS is actually deployed
-        this.fallbackEndpoint = null;
+        // VPS endpoints - Hostinger VPS on port 3000
+        this.vpsEndpoint = 'http://76.13.176.135:3000/api';
+        this.fallbackEndpoint = 'http://76.13.176.135:3000';
         this.connected = false;
         this.realData = {};
         this.connectionAttempts = 0;
