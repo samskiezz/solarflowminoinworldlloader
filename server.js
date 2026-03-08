@@ -167,6 +167,41 @@ class SolarFlowServer {
             }
         });
 
+
+        // Public app state bootstrap routes
+        this.app.get('/api/state', async (req, res) => {
+            try {
+                if (!this.db) {
+                    return res.status(503).json({ error: 'Database unavailable' });
+                }
+
+                const state = await this.db.getData('public_state', null);
+                res.json(state || {});
+            } catch (error) {
+                logger.error('State retrieval failed:', error);
+                res.status(500).json({ error: 'Failed to retrieve state' });
+            }
+        });
+
+        this.app.post('/api/state', async (req, res) => {
+            try {
+                if (!this.db) {
+                    return res.status(503).json({ error: 'Database unavailable' });
+                }
+
+                const statePayload = this.security.validateAndSanitize(
+                    { value: req.body || {} },
+                    this.security.getSchemas().systemDataState
+                );
+
+                await this.db.saveData('public_state', statePayload.value, null);
+                res.json({ success: true });
+            } catch (error) {
+                logger.error('State save failed:', error);
+                res.status(400).json({ error: error.message });
+            }
+        });
+
         // CER Products API
         this.app.get('/api/cer-products', async (req, res) => {
             try {

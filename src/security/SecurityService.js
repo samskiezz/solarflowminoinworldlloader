@@ -177,7 +177,31 @@ class SecurityService {
                     break;
 
                 case 'boolean':
-                    value = Boolean(value);
+                    if (typeof value === 'boolean') {
+                        // keep original boolean
+                    } else if (typeof value === 'string') {
+                        const normalized = value.trim().toLowerCase();
+                        if (normalized === 'true') {
+                            value = true;
+                        } else if (normalized === 'false') {
+                            value = false;
+                        } else {
+                            errors.push(`${field} must be a boolean`);
+                            continue;
+                        }
+                    } else if (typeof value === 'number') {
+                        if (value === 1) {
+                            value = true;
+                        } else if (value === 0) {
+                            value = false;
+                        } else {
+                            errors.push(`${field} must be a boolean`);
+                            continue;
+                        }
+                    } else {
+                        errors.push(`${field} must be a boolean`);
+                        continue;
+                    }
                     break;
 
                 case 'array':
@@ -321,6 +345,10 @@ class SecurityService {
 
             systemData: {
                 key: { type: 'string', required: true, maxLength: 255 },
+                value: { type: 'object', required: true }
+            },
+
+            systemDataState: {
                 value: { type: 'object', required: true }
             },
 
