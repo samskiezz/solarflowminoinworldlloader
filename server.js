@@ -315,8 +315,12 @@ class SolarFlowServer {
         }));
         app.post('/api/business/import', businessAuth, requireRole('admin'), modify, asyncRoute(async (req, res) => {
             if (!req.body || typeof req.body !== 'object') return res.status(400).json({ error: 'JSON body required' });
-            const model = await this.business.build(req.body);
-            res.json({ generatedAt: model.generatedAt, jobs: model.jobs.length, sites: model.sites.length, findings: model.insights.length });
+            let model; try { model = await this.business.build(req.body); } catch (error) { if (error.status && error.status < 500) return res.status(error.status).json({ error: error.message }); throw error; }
+            return res.json({ generatedAt: model.generatedAt, jobs: model.jobs.length, sites: model.sites.length, findings: model.insights.length });
+        }));
+        app.post('/api/business/social/publish', businessAuth, requireRole('admin'), modify, asyncRoute(async (req, res) => {
+            try { res.json(await this.business.publishSocial(req.body || {})); }
+            catch (error) { if (error.status && error.status < 500) return res.status(error.status).json({ error: error.message }); throw error; }
         }));
         app.get('/api/business/raw/:source', businessAuth, requireRole('admin'), asyncRoute(async (req, res) => {
             const data = await this.business.raw(req.params.source);

@@ -21,7 +21,11 @@ export function createNpcs(engine, overlay, { ctx, town, obstacles = () => [] })
             chibi.position.set(n.pos.x, 0, n.pos.z); chibi.userData.agentId = agent.id; engine.scene.add(chibi); npcs.set(agent.id, n);
             overlay.add(`np:${agent.id}`, { el: nameplate({ name: agent.name, sub: agent.role, colour: agent.meta && agent.meta.hired === false ? '#cfd6e6' : '#ffd166', portrait: agent.meta && agent.meta.avatarUrl, tier: agent.tier, cls: agent.meta && agent.meta.hired === false ? 'townsfolk' : 'crew' }), anchor: chibi, offsetY: 2.1, maxDistance: 60 });
         }
-        n.agent = agent; n.index = index; return n;
+        n.agent = agent; n.index = index;
+        // Children are small and grow; looks follow the genes (height), elders stoop a little.
+        const stage = agent.meta && agent.meta.stage; const base = { infant: 0.45, child: 0.6, adolescent: 0.82, elder: 0.95 }[stage] || 1; const height = (agent.meta && agent.meta.appearance && agent.meta.appearance.height) || 1;
+        n.chibi.scale.setScalar(base * height);
+        return n;
     }
     const api = {
         npcs, placeHook: null,

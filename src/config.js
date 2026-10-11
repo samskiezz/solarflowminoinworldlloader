@@ -113,7 +113,13 @@ const config = {
             oauthClientId: env.GOOGLE_OAUTH_CLIENT_ID || '', oauthClientSecret: env.GOOGLE_OAUTH_CLIENT_SECRET || '', oauthRefreshToken: env.GOOGLE_OAUTH_REFRESH_TOKEN || '',
             handoverFolderId: env.GOOGLE_HANDOVER_FOLDER_ID || '', calendarId: env.GOOGLE_CALENDAR_ID || 'primary', mailQuery: env.GOOGLE_MAIL_QUERY || 'newer_than:365d -category:promotions -category:social', mailMaxThreads: int(env.GOOGLE_MAIL_MAX_THREADS, 2000)
         },
-        bank: { feedUrl: env.BANK_FEED_URL || '', feedToken: env.BANK_FEED_TOKEN || '' }
+        bank: { feedUrl: env.BANK_FEED_URL || '', feedToken: env.BANK_FEED_TOKEN || '' },
+        meta: {
+            accessToken: env.META_ACCESS_TOKEN || '', // long-lived user or system-user token
+            pageIds: list(env.META_PAGE_IDS, []), igUserIds: list(env.META_IG_USER_IDS, []),
+            maxPosts: int(env.META_MAX_POSTS, 200), maxCommentPosts: int(env.META_MAX_COMMENT_POSTS, 40), maxInsightPosts: int(env.META_MAX_INSIGHT_POSTS, 30),
+            allowPublish: bool(env.META_ALLOW_PUBLISH, false) // publishing needs this AND an admin's approval of a draft
+        }
     },
 
     websocket: {

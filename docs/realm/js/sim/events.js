@@ -57,7 +57,10 @@ export const ACHIEVEMENTS = [
     { id: 'scholar', title: 'Codex reader', description: 'Open twenty standard clauses.', check: (s) => (s.clausesViewed || 0) >= 20 },
     { id: 'mentor', title: 'Guild master', description: 'Raise a crew member to Expert.', check: (s) => (s.expertAgents || 0) >= 1 },
     { id: 'economy', title: 'Quartermaster', description: 'Buy three upgrades.', check: (s) => (s.upgradesOwned || 0) >= 3 },
-    { id: 'reflective', title: 'Inner voice', description: 'A crew member writes its first reflection.', check: (s) => (s.reflections || 0) >= 1 }
+    { id: 'reflective', title: 'Inner voice', description: 'A crew member writes its first reflection.', check: (s) => (s.reflections || 0) >= 1 },
+    { id: 'first_birth', title: 'New light', description: 'A child is born in Solarhaven.', check: (s) => (s.births || 0) >= 1 },
+    { id: 'dynasty', title: 'Dynasty', description: 'Five children born to the crew\'s families.', check: (s) => (s.births || 0) >= 5 },
+    { id: 'fixer', title: 'Fixer', description: 'Resolve ten findings the minions raised about the real business.', check: (s) => (s.findingsResolved || 0) >= 10 }
 ];
 
 export function evaluateAchievements(stats = {}, unlocked = []) {
@@ -75,5 +78,5 @@ export const FEATURES = [
     { id: 'events.catalogue', title: 'World event catalogue', test: () => WORLD_EVENTS.length === 7 && WORLD_EVENTS.every((e) => e.note) },
     { id: 'events.questsForJob', title: 'Quest generated from job stage', test: () => { const q = questsForJob({ id: 'J1', customer: 'Ann', stage: 'design', tasks: { 'design:a': true, 'design:b': false, 'lead:c': true } }); return q.objectives.length === 2 && q.progress === 50 && q.title.startsWith('Forge'); } },
     { id: 'events.achievements', title: 'Achievement evaluation', test: () => { const r = evaluateAchievements({ jobsCreated: 1, checklistsPassed: 1 }, ['first_job']); return r.newly.includes('first_pass') && !r.newly.includes('first_job') && r.unlocked.length === 2; } },
-    { id: 'events.achievementCatalogue', title: 'Achievement catalogue (12)', test: () => ACHIEVEMENTS.length === 12 }
+    { id: 'events.achievementCatalogue', title: 'Achievement catalogue (15)', test: () => ACHIEVEMENTS.length === 15 }
 ];

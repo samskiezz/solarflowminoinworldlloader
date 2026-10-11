@@ -2,7 +2,11 @@
 /**
  * Build the business model from connector exports on disk.
  *
- *   node scripts/business-snapshot.mjs [rawDir] [outFile]
+ *   node scripts/business-snapshot.mjs [rawDir] [outFile] [--encrypt]
+ *
+ * --encrypt seals the model with AES-256-GCM under SNAPSHOT_PASSPHRASE (env)
+ * so it can travel through Drive or email; import it in the game with the
+ * same passphrase (Settings › Business) – it never leaves the browser.
  *
  * rawDir (default data/business/raw) may hold either the server's per-source
  * files (servicem8.json, xero.json, google.json, bank.json) or hand-collected
@@ -19,6 +23,7 @@
  *   drive.json                 { root, folders, files }
  *   calendar.json              { calendars, events }
  *   bank.json                  { banks, accounts, transactions }
+ *   meta.json                  { accounts: [facebook pages / instagram accounts] }
  *   market.json                assumption overrides
  *
  * The output (default data/business/model.json) is private: keep it out of
@@ -30,10 +35,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const rawDir = path.resolve(process.argv[2] || path.join(ROOT, 'data/business/raw'));
-const outFile = path.resolve(process.argv[3] || path.join(ROOT, 'data/business/model.json'));
+const args = process.argv.slice(2).filter((a) => !a.startsWith('--')); const encrypt = process.argv.includes('--encrypt');
+const rawDir = path.resolve(args[0] || path.join(ROOT, 'data/business/raw'));
+const outFile = path.resolve(args[1] || path.join(ROOT, encrypt ? 'data/business/model.enc.json' : 'data/business/model.json'));
 
 const { buildModel, modelDigest } = await import(path.join(ROOT, 'docs/realm/js/business/model.js'));
+const { encryptJson, isModel } = { ...(await import(path.join(ROOT, 'docs/realm/js/business/crypto.js'))), ...(await import(path.join(ROOT, 'docs/realm/js/business/model.js'))) };
 
 const read = (f) => JSON.parse(fs.readFileSync(path.join(rawDir, f), 'utf8'));
 const files = fs.existsSync(rawDir) ? fs.readdirSync(rawDir).filter((f) => f.endsWith('.json')).sort() : [];
@@ -58,12 +65,16 @@ else {
     if (files.includes('calendar.json')) raw.calendar = read('calendar.json');
 }
 if (files.includes('bank.json')) raw.bank = read('bank.json');
+if (files.includes('meta.json')) raw.meta = read('meta.json');
 if (files.includes('market.json')) raw.market = read('market.json');
 
-if (!Object.keys(raw).filter((k) => k !== 'company').length) { console.error(`No connector exports found in ${rawDir}`); process.exit(1); }
-const model = buildModel(raw, { now: new Date() });
+const modelFile = files.includes('model.json') ? path.join(rawDir, 'model.json') : null;
+let model;
+if (!Object.keys(raw).filter((k) => k !== 'company').length) { if (modelFile && isModel(read('model.json'))) model = read('model.json'); else { console.error(`No connector exports found in ${rawDir}`); process.exit(1); } }
+else model = buildModel(raw, { now: new Date() });
 fs.mkdirSync(path.dirname(outFile), { recursive: true });
-fs.writeFileSync(outFile, JSON.stringify(model));
+if (encrypt) { const pass = process.env.SNAPSHOT_PASSPHRASE; if (!pass || pass.length < 8) { console.error('--encrypt needs SNAPSHOT_PASSPHRASE (8+ characters) in the environment'); process.exit(1); } fs.writeFileSync(outFile, JSON.stringify(await encryptJson(model, pass))); console.log('sealed with AES-256-GCM; keep the passphrase'); }
+else fs.writeFileSync(outFile, JSON.stringify(model));
 const d = modelDigest(model);
 console.log(`model written to ${outFile} (${(fs.statSync(outFile).size / 1024).toFixed(0)} KB)`);
 console.log(JSON.stringify(d));

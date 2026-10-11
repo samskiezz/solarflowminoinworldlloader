@@ -12,7 +12,7 @@ export function link(label, url) { return url ? h('a', { href: url, target: '_bl
 /** Shown by every business window until a model is loaded. */
 export function needsModel(ctx, body) {
     if (ctx.business.model) return false;
-    body.append(section('No business data loaded yet', h('p', { class: 'muted' }, 'The business windows read the model built from ServiceM8, Xero, Gmail, Drive, Calendar and the bank feed. Connect the server (Settings › Business) or import a snapshot file.'),
+    body.append(section('No business data loaded yet', h('p', { class: 'muted' }, 'The business windows read the model built from ServiceM8, Xero, Gmail, Drive, Calendar, the bank feed and Facebook/Instagram. Connect the server (Settings › Business) or import a snapshot file.'),
         row(button('Open Settings › Business', () => ctx.open('settings', { tab: 'business' }), { kind: 'primary', small: true }), button('Load the example business', () => { ctx.business.setModel(SAMPLE_RAW()); ctx.refresh(); }, { small: true }), button('Try the server now', async () => { try { const m = await ctx.business.pullServer(); if (!m) throw new Error('No model on the server yet'); ctx.refresh(); } catch (e) { const { toast } = await import('../core/ui.js'); toast(e.message, { kind: 'warn' }); } }, { small: true }))));
     return true;
 }

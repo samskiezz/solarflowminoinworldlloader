@@ -6,11 +6,14 @@ import { Agent } from './agent.js';
 import { rollEvent, mulberry32, evaluateAchievements, questsForJob, ACHIEVEMENTS } from './events.js';
 import { createLedger, earn, effects as upgradeEffects } from './economy.js';
 import { createJob, completeTask, stageTasks } from '../domain/jobs.js';
+import { ensureGenes, lifeStage, capability, socialise, maybePartner, canBreed, makeChild, linkFamily, determineDeath, partnerOf, familyTree, POPULATION_CAP, DAY } from './lifecycle.js';
+import { trait } from './genetics.js';
+import { epochProgress, companyIndex, epochInputs } from './epochs.js';
 
 export const HOURS_PER_DAY = 24;
 
 export class World {
-    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked } = {}) {
+    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked, population = null, memorial = [] } = {}) {
         this.seed = seed;
         this.random = mulberry32(seed);
         this.time = startTime; // ms
@@ -19,7 +22,11 @@ export class World {
         for (const a of this.agents) a.now = () => this.time;
         this.jobs = jobs;
         this.ledger = ledger || createLedger(100);
-        this.stats = { jobsCreated: jobs.length, checklistsPassed: 0, checklistStreak: 0, commissioningPassed: 0, stcReady: 0, highVoltageDesigns: 0, batteryAssessmentsPassed: 0, clausesViewed: 0, expertAgents: 0, upgradesOwned: 0, reflections: 0, ...(stats || {}) };
+        this.stats = { jobsCreated: jobs.length, checklistsPassed: 0, checklistStreak: 0, commissioningPassed: 0, stcReady: 0, highVoltageDesigns: 0, batteryAssessmentsPassed: 0, clausesViewed: 0, expertAgents: 0, upgradesOwned: 0, reflections: 0, births: 0, deaths: 0, findingsResolved: 0, ...(stats || {}) };
+        // Lifecycle: population cap, counters and the pacing accumulators; the memorial remembers the dead (and lends their souls to the newborn).
+        this.population = { cap: POPULATION_CAP, births: 0, deaths: 0, generation: 0, mortality: true, breeding: true, hoursSinceSocial: 0, hoursSinceDaily: 0, ...(population || {}) };
+        this.memorial = memorial || [];
+        for (const a of this.agents) ensureGenes(a);
         this.unlocked = unlocked || [];
         this.activeEvent = null;
         this.eventEndsAt = 0;
@@ -43,7 +50,8 @@ export class World {
 
     addAgent(spec) {
         const agent = spec instanceof Agent ? spec : new Agent({ ...spec, now: () => this.time });
-        agent.now = () => this.time;
+        agent.now = () => this.time; ensureGenes(agent);
+        agent.capability = capability(lifeStage(agent, this.time));
         this.agents.push(agent);
         return agent;
     }
@@ -55,6 +63,7 @@ export class World {
     recruit(id, cost = 0) {
         const agent = this.agent(id); if (!agent) return { ok: false, reason: 'Unknown minion' };
         if (agent.meta.hired !== false) return { ok: false, reason: 'Already in the crew' };
+        if ((agent.capability ?? 1) < 1 && lifeStage(agent, this.time) !== 'elder') return { ok: false, reason: `${agent.name} is still ${lifeStage(agent, this.time) === 'infant' ? 'an' : 'a'} ${lifeStage(agent, this.time)} – too young to work` };
         if (this.ledger.balance < cost) return { ok: false, reason: `Need ${cost - this.ledger.balance} more credits` };
         if (cost) { this.ledger.balance -= cost; this.ledger.entries.push({ at: this.time, type: 'recruit', amount: -cost, balance: this.ledger.balance, ref: agent.id }); }
         agent.meta.hired = true; agent.remember('Joined the crew', { tags: ['social', 'assignment'], importance: 6 });
@@ -77,7 +86,7 @@ export class World {
     assignNextTask(agentId, jobId, { tag = null, hours = 2, difficulty = 5 } = {}) {
         const agent = this.agent(agentId);
         const job = this.job(jobId);
-        if (!agent || !job) return null;
+        if (!agent || !job || (agent.capability ?? 1) < 0.5) return null;
         const next = stageTasks(job).find((t) => !t.done);
         if (!next) return null;
         const inferredTag = tag || inferTag(next.title, job.stage);
@@ -113,12 +122,82 @@ export class World {
             for (const event of result.events) this.handleAgentEvent(agent, event);
             summary.push({ agentId: agent.id, events: result.events, mood: result.mood });
         }
+        this.tickLife(hours);
         this.stats.expertAgents = this.agents.filter((a) => Object.keys(a.skills).some((k) => a.level(k) >= 10)).length;
         this.stats.reflections = this.agents.reduce((n, a) => n + a.stats.reflections, 0);
         this.stats.upgradesOwned = this.ledger.owned.length;
         this.checkAchievements();
         return summary;
     }
+
+    /** Ageing, friendships, partners, births and deaths. Social encounters every 6 simulated hours, the daily roll once a day. */
+    tickLife(hours = 1) {
+        const p = this.population;
+        for (const a of this.agents) { const stage = lifeStage(a, this.time); a.capability = capability(stage); if (a.meta.stage !== stage) { const was = a.meta.stage; a.meta.stage = stage; if (was && stage === 'adult') this.emit({ type: 'grown', agentId: a.id, text: `${a.name} is grown up and can be recruited` }); if (stage === 'elder') { a.meta.elder = true; this.emit({ type: 'elder', agentId: a.id, text: `${a.name} has become an elder of Solarhaven` }); } } }
+        p.hoursSinceSocial += hours;
+        while (p.hoursSinceSocial >= 6) {
+            p.hoursSinceSocial -= 6;
+            const pool = this.agents.filter((a) => (a.capability ?? 1) >= 0.3);
+            const pairs = Math.max(1, Math.ceil(pool.length / 4));
+            for (let i = 0; i < pairs && pool.length > 1; i++) {
+                const a = pool[Math.floor(this.random() * pool.length)]; const b = pool[Math.floor(this.random() * pool.length)]; if (a === b) continue;
+                const before = (a.relationships[b.id] || {}).kind; const r = socialise(a, b, { now: this.time });
+                if (r && r.kind !== before && r.kind === 'rival') this.emit({ type: 'rivalry', agentId: a.id, text: `${a.name} and ${b.name} have fallen out` });
+                if (r && r.kind === 'friend' && maybePartner(a, b, this.agents, { now: this.time, random: this.random })) this.emit({ type: 'partnered', agentId: a.id, text: `${a.name} and ${b.name} are now partners` });
+            }
+        }
+        p.hoursSinceDaily += hours;
+        while (p.hoursSinceDaily >= 24) {
+            p.hoursSinceDaily -= 24;
+            if (p.breeding !== false) {
+                const seen = new Set();
+                for (const a of this.agents) {
+                    const b = partnerOf(a, this.agents); if (!b || seen.has(b.id)) continue; seen.add(a.id);
+                    if (!canBreed(a, b, { now: this.time, agents: this.agents, cap: p.cap })) continue;
+                    const chance = 0.05 + 0.1 * ((trait(a.dna, 'empathy') + trait(b.dna, 'empathy')) / 2);
+                    if (this.random() < chance) this.birth(a, b);
+                }
+            }
+            if (p.mortality !== false) for (const a of [...this.agents]) { const cause = determineDeath(a, { now: this.time, random: this.random }); if (cause) this.die(a, cause); }
+        }
+    }
+    birth(a, b) {
+        const soul = this.memorial.find((m) => !m.soulTaken) || null;
+        const child = this.addAgent(makeChild(a, b, { now: this.time, random: this.random, taken: new Set(this.agents.map((x) => x.id)), soul }));
+        linkFamily(child, a, b, this.agents, this.time);
+        if (soul) soul.soulTaken = true;
+        this.population.births++; this.stats.births++; this.population.generation = Math.max(this.population.generation, child.generation);
+        child.remember(`Born to ${a.name} and ${b.name}`, { tags: ['family'], importance: 8 }); a.remember(`${child.name} was born`, { tags: ['family'], importance: 9 }); b.remember(`${child.name} was born`, { tags: ['family'], importance: 9 });
+        this.emit({ type: 'birth', agentId: child.id, text: `${a.name} and ${b.name} welcome ${child.name} ${child.surname || ''} (generation ${child.generation})${soul ? `, who carries the soul of ${soul.name}` : ''}` });
+        this.checkAchievements();
+        return child;
+    }
+    die(agent, cause = 'old age') {
+        const idx = this.agents.indexOf(agent); if (idx < 0) return null;
+        this.agents.splice(idx, 1);
+        for (const j of this.jobs) if (j.assignedTo === agent.id) j.assignedTo = null;
+        for (const other of this.agents) if (other.relationships[agent.id]) delete other.relationships[agent.id];
+        const entry = { id: agent.id, name: agent.name, surname: agent.surname, generation: agent.generation, parents: agent.parents, relationships: agent.relationships, born: agent.born, died: this.time, ageDays: agent.born == null ? null : Math.round((this.time - agent.born) / DAY), cause, title: agent.meta.title || agent.role, skills: { ...agent.skills }, tasksDone: agent.stats.tasksDone, soulTaken: false };
+        this.memorial.push(entry); if (this.memorial.length > 200) this.memorial.splice(0, this.memorial.length - 200);
+        this.population.deaths++; this.stats.deaths++;
+        this.emit({ type: 'death', agentId: agent.id, text: `${agent.name} (${entry.title}) died of ${cause}${entry.ageDays ? ` at ${Math.round(entry.ageDays)} days` : ''} – remembered at the memorial` });
+        return entry;
+    }
+    /** The player arranges a match between two adults (credits). */
+    arrangeMatch(aId, bId, cost = 60) {
+        const a = this.agent(aId); const b = this.agent(bId); if (!a || !b || a === b) return { ok: false, reason: 'Pick two different minions' };
+        if (lifeStage(a, this.time) !== 'adult' || lifeStage(b, this.time) !== 'adult') return { ok: false, reason: 'Both must be adults' };
+        if (partnerOf(a, this.agents) || partnerOf(b, this.agents)) return { ok: false, reason: 'One of them already has a partner' };
+        if (['parent', 'child', 'sibling'].includes((a.relationships[b.id] || {}).kind)) return { ok: false, reason: 'They are family' };
+        if (this.ledger.balance < cost) return { ok: false, reason: `Need ${cost} credits` };
+        this.ledger.balance -= cost; this.ledger.entries.push({ at: this.time, type: 'match', amount: -cost, balance: this.ledger.balance, ref: `${a.id}+${b.id}` });
+        a.relationships[b.id] = { kind: 'partner', strength: 0.7, since: this.time }; b.relationships[a.id] = { kind: 'partner', strength: 0.7, since: this.time };
+        this.emit({ type: 'partnered', agentId: a.id, text: `${a.name} and ${b.name} are now partners (arranged)` });
+        return { ok: true };
+    }
+    family() { return familyTree(this.agents, this.memorial); }
+    /** Where the company stands on the epoch ladder (pass the business model when one is loaded). */
+    epoch(model = null) { return epochProgress(companyIndex(epochInputs(this, model))); }
 
     handleAgentEvent(agent, event) {
         if (event.type === 'task_complete') {
@@ -163,11 +242,11 @@ export class World {
     quests() { return this.jobs.filter((j) => j.stage !== 'complete').map(questsForJob); }
 
     toJSON() {
-        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100) };
+        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100), population: this.population, memorial: this.memorial };
     }
 
     static fromJSON(data) {
-        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked });
+        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked, population: data.population, memorial: data.memorial });
         world.hour = data.hour || 0;
         world.activeEvent = data.activeEvent || null;
         world.eventEndsAt = data.eventEndsAt || 0;
@@ -199,5 +278,9 @@ export const FEATURES = [
     { id: 'world.quests', title: 'Quests derived from open jobs', test: () => { const w = new World(); w.addJob({ customer: 'Q' }); return w.quests().length === 1 && w.quests()[0].objectives.length === 3; } },
     { id: 'world.recordResults', title: 'Checklist/commissioning results earn credits and achievements', test: () => { const w = new World(); w.recordChecklistResult('PASS'); w.recordCommissioning('PASS'); return w.ledger.balance === 150 && w.unlocked.includes('first_pass') && w.unlocked.includes('commissioned'); } },
     { id: 'world.serialise', title: 'World round-trips through JSON', test: () => { const w = new World({ seed: 2 }); w.addAgent({ id: 'nova' }); w.addJob({ customer: 'S' }); w.tick(1); const b = World.fromJSON(JSON.parse(JSON.stringify(w.toJSON()))); return b.agents.length === 1 && b.jobs.length === 1 && b.hour === 1 && b.agent('nova').memory.records.length >= 1; } },
+    { id: 'world.lifecycle', title: 'Over time minions befriend each other, pair up and have children who grow, inherit and can be recruited when grown', test: () => { const w = new World({ seed: 11 }); for (let i = 0; i < 12; i++) w.addAgent({ id: `M${i}`, needs: { energy: 100, focus: 100, morale: 90, social: 90, mastery: 90, safety: 90 } }); for (let i = 0; i < 400 && !w.population.births; i++) w.tick(6); const child = w.agents.find((a) => a.generation === 1); const young = child ? w.recruit(child.id, 0) : { ok: false }; const townsfolk = child && child.meta.hired === false; for (let i = 0; i < 70 * 4; i++) w.tick(6); const grown = child ? w.recruit(child.id, 0) : { ok: false }; const fam = w.family(); return w.population.births >= 1 && child && child.parents.length === 2 && townsfolk && !young.ok && /too young/.test(young.reason) && grown.ok && child.capability === 1 && fam.find((f) => f.id === child.id).parents.length === 2 && w.feed.some((f) => f.type === 'birth') && w.feed.some((f) => f.type === 'partnered'); } },
+    { id: 'world.death', title: 'The old die and are remembered at the memorial; the next child born carries their soul and a share of their skills', test: () => { const w = new World({ seed: 4 }); const old = w.addAgent({ id: 'OLD', name: 'Old', born: w.time - 5000 * DAY, skills: { pv_arrays: 2000 } }); const a = w.addAgent({ id: 'A' }); const b = w.addAgent({ id: 'B' }); w.arrangeMatch('A', 'B', 0); for (let i = 0; i < 40 && w.agents.includes(old); i++) w.tick(24); const gone = !w.agents.includes(old) && w.memorial[0].cause === 'old age'; const child = w.birth(a, b); const copy = World.fromJSON(JSON.parse(JSON.stringify(w.toJSON()))); return gone && child.meta.soulOf === 'Old' && child.skills.pv_arrays >= 300 && w.memorial[0].soulTaken && copy.memorial.length === 1 && copy.population.births === 1 && copy.agent(child.id).parents.includes('A'); } },
+    { id: 'world.arrangeMatch', title: 'The player can arrange a match between two adults for credits; family and the already-partnered are refused', test: () => { const w = new World({ seed: 2 }); w.addAgent({ id: 'A' }); w.addAgent({ id: 'B' }); w.addAgent({ id: 'C' }); const poor = w.arrangeMatch('A', 'B', 999); const ok = w.arrangeMatch('A', 'B', 50); const taken = w.arrangeMatch('A', 'C', 50); return !poor.ok && ok.ok && w.ledger.balance === 50 && !taken.ok && /partner/.test(taken.reason) && w.agent('A').relationships.B.kind === 'partner'; } },
+    { id: 'world.epoch', title: 'The world reports its company epoch from installed work, crew and resolved findings', test: () => { const w = new World({ seed: 1 }); const e0 = w.epoch(); w.addJob({ customer: 'X', systemKw: 10 }).stage = 'complete'; w.recordStat('findingsResolved', 20); const e1 = w.epoch(); return e0.id === 'first_quote' && e1.index > e0.index && e1.next && e1.total === 24; } },
     { id: 'world.inferTag', title: 'Task title → skill tag inference', test: () => inferTag('String sizing and array voltage check', 'design') === 'design' && inferTag('Battery installed', 'install') === 'battery' && inferTag('STC entitlement calculated', 'quote') === 'stc' }
 ];

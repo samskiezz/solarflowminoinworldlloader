@@ -15,13 +15,14 @@ const servicem8 = require('./adapters/servicem8');
 const xero = require('./adapters/xero');
 const google = require('./adapters/google');
 const bank = require('./adapters/bank');
+const meta = require('./adapters/meta');
 
-const ADAPTERS = { servicem8: { adapter: servicem8, cfg: () => config.business.servicem8 }, xero: { adapter: xero, cfg: () => config.business.xero }, google: { adapter: google, cfg: () => config.business.google }, bank: { adapter: bank, cfg: () => config.business.bank } };
+const ADAPTERS = { servicem8: { adapter: servicem8, cfg: () => config.business.servicem8 }, xero: { adapter: xero, cfg: () => config.business.xero }, google: { adapter: google, cfg: () => config.business.google }, bank: { adapter: bank, cfg: () => config.business.bank }, meta: { adapter: meta, cfg: () => config.business.meta } };
 const SOURCES = Object.keys(ADAPTERS);
 
 class BusinessService {
-    constructor({ dir = path.join(config.dataDir, 'business'), fetchFn = globalThis.fetch, adapters = ADAPTERS, modelPath = path.join(config.rootDir, 'docs/realm/js/business/model.js') } = {}) {
-        this.dir = dir; this.rawDir = path.join(dir, 'raw'); this.fetchFn = fetchFn; this.adapters = adapters; this.modelPath = modelPath;
+    constructor({ dir = path.join(config.dataDir, 'business'), fetchFn = globalThis.fetch, adapters = ADAPTERS, modelPath = path.join(config.rootDir, 'docs/realm/js/business/model.js'), cryptoPath = path.join(config.rootDir, 'docs/realm/js/business/crypto.js') } = {}) {
+        this.dir = dir; this.rawDir = path.join(dir, 'raw'); this.fetchFn = fetchFn; this.adapters = adapters; this.modelPath = modelPath; this.cryptoPath = cryptoPath;
         this.running = null; this.last = null; this.timer = null; this.builder = null;
     }
     async init() { await fsp.mkdir(this.rawDir, { recursive: true }); return this; }
@@ -59,22 +60,35 @@ class BusinessService {
         try { return await this.running; } finally { this.running = null; }
     }
 
-    /** Build the model from the raw files (or a supplied payload) with the game's own builder. */
+    /** Build the model from the raw files (or a supplied payload, or an encrypted snapshot + passphrase) with the game's own builder. */
     async build(payload = null) {
         if (!this.builder) this.builder = await import(pathToFileURL(this.modelPath).href);
+        if (payload && payload.snapshot && payload.passphrase) { const cr = await import(pathToFileURL(this.cryptoPath).href); if (!cr.isEncrypted(payload.snapshot)) { const e = new Error('snapshot is not an encrypted envelope'); e.status = 400; throw e; } try { payload = await cr.decryptJson(payload.snapshot, String(payload.passphrase)); } catch (error) { const e = new Error(error.message); e.status = 400; throw e; } }
         const raw = payload || await this.rawPayload();
         const model = this.builder.isModel(raw) ? raw : this.builder.buildModel(raw, { now: new Date() });
         await this.writeJson(this.modelFile(), model);
         return model;
     }
     async rawPayload() {
-        const [sm8, xr, gg, bk] = await Promise.all(SOURCES.map((id) => this.raw(id)));
+        const [sm8, xr, gg, bk, mt] = await Promise.all(SOURCES.map((id) => this.raw(id)));
         const market = await this.readJson(path.join(this.dir, 'market.json'));
         const payload = { company: { name: config.business.company.name, domains: config.business.company.domains, timezone: config.business.company.timezone } };
         if (sm8) payload.servicem8 = sm8; if (xr) payload.xero = xr; if (bk) payload.bank = bk; if (market) payload.market = market;
+        if (mt) payload.meta = { ...mt, allowPublish: Boolean(config.business.meta.allowPublish) };
         if (gg) { if (gg.gmail) payload.gmail = { syncedAt: gg.syncedAt, pages: gg.gmail.pages }; if (gg.drive) payload.drive = gg.drive; if (gg.calendar) payload.calendar = gg.calendar; }
         if (!payload.company.name) delete payload.company.name; if (!payload.company.domains.length) delete payload.company.domains;
         return payload;
+    }
+
+    /** Publish an approved social draft through Meta (requires META_ALLOW_PUBLISH). Keeps a log in DATA_DIR/business/social-log.json. */
+    async publishSocial(draft) {
+        const { adapter, cfg } = this.adapters.meta || {}; if (!adapter) throw new Error('meta adapter missing');
+        if (!adapter.isConfigured(cfg())) { const e = new Error('Meta is not configured on the server'); e.status = 400; throw e; }
+        if (!cfg().allowPublish) { const e = new Error('Publishing is disabled on the server (META_ALLOW_PUBLISH=false)'); e.status = 403; throw e; }
+        if (!draft || typeof draft.text !== 'string' || !draft.text.trim()) { const e = new Error('Draft text required'); e.status = 400; throw e; }
+        const result = await adapter.publish(cfg(), { id: String(draft.id || ''), text: draft.text.slice(0, 5000), platforms: Array.isArray(draft.platforms) ? draft.platforms.filter((p) => ['facebook', 'instagram'].includes(p)) : ['facebook'], imageUrl: typeof draft.imageUrl === 'string' && /^https?:\/\//.test(draft.imageUrl) ? draft.imageUrl : null, link: typeof draft.link === 'string' && /^https?:\/\//.test(draft.link) ? draft.link : null, pageId: draft.pageId ? String(draft.pageId) : null }, { fetchFn: this.fetchFn, log: (m) => logger.info(`[business] ${m}`) });
+        const file = path.join(this.dir, 'social-log.json'); const log = (await this.readJson(file)) || []; log.push({ at: result.publishedAt, id: draft.id || null, text: draft.text.slice(0, 200), results: result.results }); await this.writeJson(file, log.slice(-500));
+        return result;
     }
 
     schedule() {

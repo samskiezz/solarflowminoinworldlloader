@@ -14,6 +14,7 @@ import { importGmail, DEFAULT_DOMAINS } from './gmail.js';
 import { importDrive } from './drive.js';
 import { importCalendar } from './calendar.js';
 import { importBank, buildPayeeRules } from './bank.js';
+import { importSocial, draftPosts, SAMPLE_SOCIAL } from './social.js';
 import { importStaff, contractorFromAccount } from './staff.js';
 import { marketModel } from './market.js';
 import { runInsights, summarise } from './insights.js';
@@ -43,8 +44,10 @@ export function buildModel(raw = {}, { now = new Date() } = {}) {
     const staff = importStaff({ staff: sm8.staff, pnlExpenses: model.finance.pnl?.expenses || [], weeklyPayments: weekly, jobs: model.jobs }, { months: model.finance.kpis?.months || 12 });
     model.staff = staff.people;
     model.market = marketModel(raw.market || {}); if (cal.stats.funnel) model.market.funnel = cal.stats.funnel;
+    const social = importSocial(raw.meta || raw.social || {}, { now });
+    model.social = { accounts: social.accounts, posts: social.posts, comments: social.comments, conversations: social.conversations, allowPublish: Boolean((raw.meta || raw.social || {}).allowPublish), drafts: draftPosts({ jobs: model.jobs, sites: model.sites, posts: social.posts, market: model.market, stats: social.stats, now }) };
 
-    model.stats = { jobs: sm8.stats, finance: xero.kpis, inbox: gmail.stats, documents: drive.stats, calendar: cal.stats, bank: bank.stats, staff: staff.stats };
+    model.stats = { jobs: sm8.stats, finance: xero.kpis, inbox: gmail.stats, documents: drive.stats, calendar: cal.stats, bank: bank.stats, staff: staff.stats, social: social.stats };
     model.sources = sources(raw, model);
     model.insights = runInsights(model, { now }); model.insightSummary = summarise(model.insights);
     return model;
@@ -83,13 +86,14 @@ function sources(raw, model) {
     if (raw.drive) s.drive = { syncedAt: raw.drive.syncedAt || at, count: model.packs.length, label: 'Drive handover packs' };
     if (raw.calendar) s.calendar = { syncedAt: raw.calendar.syncedAt || at, count: model.events.length, label: 'Calendar events' };
     if (raw.bank) s.bank = { syncedAt: raw.bank.syncedAt || at, count: model.bank.accounts.length, label: 'Bank accounts and transactions' };
+    const meta = raw.meta || raw.social; if (meta) { const fb = (meta.accounts || []).filter((a) => a.platform === 'facebook'); const ig = (meta.accounts || []).filter((a) => a.platform === 'instagram'); if (fb.length) s.facebook = { syncedAt: meta.syncedAt || at, count: model.social.posts.filter((p) => p.platform === 'facebook').length, label: `Facebook: ${fb.length} page(s), posts, comments, inbox` }; if (ig.length) s.instagram = { syncedAt: meta.syncedAt || at, count: model.social.posts.filter((p) => p.platform === 'instagram').length, label: `Instagram: ${ig.length} account(s), media, comments, insights` }; }
     return s;
 }
 
 /** A compact, non-identifying summary for dashboards and tests. */
 export function modelDigest(model) {
     if (!model) return null;
-    return { generatedAt: model.generatedAt, company: model.company.name, sources: Object.keys(model.sources || {}), jobs: model.jobs.length, sites: model.sites.length, installedSites: model.sites.filter((s) => s.installed).length, invoices: model.invoices.length, threads: model.threads.length, packs: (model.packs || []).length, events: model.events.length, staff: model.staff.length, findings: model.insights?.length || 0, health: model.insightSummary?.score ?? null, impact: model.insightSummary?.impact ?? null, revenue: model.finance?.kpis?.revenue ?? null, cash: model.finance?.kpis?.cash ?? null };
+    return { generatedAt: model.generatedAt, company: model.company.name, sources: Object.keys(model.sources || {}), jobs: model.jobs.length, sites: model.sites.length, installedSites: model.sites.filter((s) => s.installed).length, invoices: model.invoices.length, threads: model.threads.length, packs: (model.packs || []).length, events: model.events.length, staff: model.staff.length, findings: model.insights?.length || 0, health: model.insightSummary?.score ?? null, impact: model.insightSummary?.impact ?? null, revenue: model.finance?.kpis?.revenue ?? null, cash: model.finance?.kpis?.cash ?? null, posts: model.social?.posts?.length || 0, followers: model.stats?.social?.followers || 0 };
 }
 
 /** Is this JSON a built model or a raw connector payload? */
@@ -112,11 +116,12 @@ export const SAMPLE_RAW = () => ({
     gmail: { pages: [{ threads: [{ id: 't1', messages: [{ id: 'm1', date: '2026-09-24T21:35:11Z', sender: 'admin@law.test', toRecipients: ['info@example-solar.test'], subject: 'Solar System installed at 1 Far St, Eastwood', snippet: 'We act for the owner', labelIds: ['INBOX'] }] }, { id: 't2', messages: [{ id: 'm2', date: '2026-09-30T00:00:00Z', sender: 'jane@example.test', toRecipients: ['info@example-solar.test'], subject: 'Question about my battery', snippet: 'Hi, quick question', labelIds: ['INBOX', 'UNREAD'] }] }, { id: 't3', messages: [{ id: 'm3', date: '2026-09-22T10:46:27Z', sender: 'noreply@builder.test', toRecipients: ['info@example-solar.test'], subject: 'Quote Request - Solar/PV System', snippet: 'Request for quote', labelIds: ['INBOX'] }, { id: 'm4', date: '2026-09-23T03:22:38Z', sender: 'info@example-solar.test', toRecipients: ['noreply@builder.test'], subject: 'Re', snippet: 'Attached', labelIds: ['SENT'] }] }] }] },
     drive: { root: { id: 'root', url: 'https://drive.google.com/drive/folders/root' }, folders: [{ id: 'f1', title: 'Jane Example', mimeType: 'application/vnd.google-apps.folder', createdTime: '2026-10-06T02:42:14Z' }], files: { f1: [{ title: 'CCEW.pdf' }, { title: 'Commissioning.pdf' }] } },
     calendar: { events: [{ id: 'w', recurring: true, summary: 'Weekly Jobs Alignment', start: '2026-09-02T15:00:00+08:00', end: '2026-09-02T16:00:00+08:00', occurrences: ['2026-09-30', '2026-10-07', '2026-10-14'], attendees: [{ email: 'info@example-solar.test', status: 'accepted', organizer: true }, { email: 'a@partner.test', status: 'needsAction' }, { email: 'b@partner.test', status: 'needsAction' }, { email: 'c@partner.test', status: 'needsAction' }] }, { id: 's', summary: 'Digital Strategy Session', start: '2026-10-01T11:00:00+08:00', end: '2026-10-01T11:15:00+08:00', organizer: 'meetings@agency.test', description: 'Spending 6k per week for a lead farm. 70 leads per week 40% pickup rate. 28% close rate on pickups CPA around 600' }] },
+    meta: SAMPLE_SOCIAL(),
     bank: { banks: [{ id: 'b1', name: 'Example Bank', consentExpires: '2027-10-08T00:00:00Z' }], accounts: [{ id: 'a1', bankId: 'b1', name: 'Business Account', type: 'checking', balance: 12850.94 }, { id: 'a2', bankId: 'b1', name: 'Savings', type: 'savings', balance: 345.19 }], transactions: [{ date: '2026-10-06', amount: -2030.77, description: 'Labour Co' }, { date: '2026-10-07', amount: 14500, description: 'J Customer' }] }
 });
 
 export const FEATURES = [
-    { id: 'biz.model.build', title: 'The whole model builds from raw connector payloads with every source present', test: () => { const m = buildModel(SAMPLE_RAW(), { now: new Date('2026-10-12') }); return m.jobs.length === 5 && m.sites.length === 4 && m.invoices.length === 2 && m.threads.length === 3 && m.packs.length === 1 && m.events.length === 4 && m.staff.length >= 2 && Object.keys(m.sources).length === 6 && m.company.name === 'Example Solar Co'; } },
+    { id: 'biz.model.build', title: 'The whole model builds from raw connector payloads with every source present', test: () => { const m = buildModel(SAMPLE_RAW(), { now: new Date('2026-10-12') }); return m.jobs.length === 5 && m.sites.length === 4 && m.invoices.length === 2 && m.threads.length === 3 && m.packs.length === 1 && m.events.length === 4 && m.staff.length >= 2 && Object.keys(m.sources).length === 8 && m.social.posts.length === 3 && m.social.drafts.length >= 2 && m.sources.instagram.count === 1 && m.company.name === 'Example Solar Co'; } },
     { id: 'biz.model.linkInvoices', title: 'Invoices link to jobs and sites by the SM8 reference; overdue amounts land on the site', test: () => { const m = buildModel(SAMPLE_RAW(), { now: new Date('2026-10-12') }); const j1 = m.jobs.find((j) => j.number === '1001'); const s = m.sites.find((x) => x.customer === 'Jane Example'); const j3 = m.jobs.find((j) => j.number === '1003'); return j1.invoice.number === 'INV-0534' && j1.stage === 'handover' && s.revenue === 20700 && s.overdue === 20700 && j3.stage === 'complete' && j3.paid === 3905; } },
     { id: 'biz.model.linkThreads', title: 'Email threads attach to sites by customer email or address and count waiting customers', test: () => { const m = buildModel(SAMPLE_RAW(), { now: new Date('2026-10-12') }); const s = m.sites.find((x) => x.customer === 'Jane Example'); const t = m.threads.find((x) => x.id === 't2'); return t.siteId === s.id && s.threads === 1 && s.waiting === 1 && s.packId === 'f1'; } },
     { id: 'biz.model.insights', title: 'The built model carries ranked findings and a health score', test: () => { const m = buildModel(SAMPLE_RAW(), { now: new Date('2026-10-12') }); const ids = m.insights.map((f) => f.id); return m.insights.length >= 10 && ids.includes('finance.netLoss') && ids.some((i) => i.startsWith('inbox.legal')) && ids.includes('jobs.unscheduled:1002') && ids.includes('marketing.funnel') && m.insightSummary.score < 70 && modelDigest(m).findings === m.insights.length; } },

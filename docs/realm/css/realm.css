@@ -295,3 +295,16 @@ table.connectors tr.missing td { color: var(--muted); }
 .data-table tr.bad td { color: var(--bad); } .data-table td.num { text-align: right; } .bad { color: var(--bad); } .ok { color: var(--ok); }
 .benchmark-out { margin: 8px 0; }
 .suburb-label { position: absolute; transform: translate(-50%, -50%); color: #fff; background: rgba(10,14,24,.55); border: 1px solid rgba(255,255,255,.25); border-radius: 4px; padding: 2px 8px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; pointer-events: none; white-space: nowrap; }
+
+/* Family: genes */
+.genes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; }
+.gene { display: grid; grid-template-columns: 130px 1fr 32px; align-items: center; gap: 8px; font-size: 12px; }
+.gene .skill-name { text-transform: capitalize; }
+
+/* Social media window */
+.social-inbox, .social-drafts { display: flex; flex-direction: column; gap: 10px; }
+.social-item.lead { border-left: 3px solid var(--bad); }
+.social-body { margin: 6px 0; font-size: 14px; }
+.social-draft textarea.draft-text { width: 100%; font-family: inherit; margin: 6px 0; }
+.social-draft.status-published { opacity: 0.8; }
+.social-draft.status-dismissed { opacity: 0.6; }

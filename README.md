@@ -11,7 +11,7 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## SolarFlow Realm – the game (new in 2.5.0, now on your real business in 2.6.0)
+## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0)
 
 `docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
 third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
@@ -64,7 +64,15 @@ the suburbs of Solarhaven, and the minions run 34 rules over it to find mistakes
 packs, cash runway, labour share, lead-farm economics…). Findings become quests. Nothing is written
 back and no customer data enters the repo or the public site. Setup, windows and the API are in
 `docs/realm/BUSINESS.md`; `node scripts/business-snapshot.mjs` builds the model from exports without
-the server.
+the server (`--encrypt` seals it with a passphrase).
+
+### Families, epochs and social media (2.7.0)
+
+Minions carry digital DNA, make friends and rivals, pair up and have children who inherit genes, looks and
+skills, grow up in town, become elders and are remembered at the memorial (Crew › Family). The company
+climbs 24 real solar-business epochs. Facebook Pages and Instagram Business are read like the other
+connectors: the crew finds unanswered enquiries, drafts posts from real installs and waits for your
+approval before anything is published (Social, Shift+J).
 
 ## What the data is (and is not)
 

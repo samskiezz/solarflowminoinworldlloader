@@ -9,13 +9,19 @@ import { traitsFromSeed, decayModifiers, errorRateMultiplier, speedMultiplier, x
 import { createSkills, awardXp, levelFromXp, skillForTask, successChance, rank } from './skills.js';
 import { MemoryStream } from './memory.js';
 import { chooseAction, BASE_ACTIONS } from './planner.js';
+import { isDna, dnaFromSeed, aptitudes } from './genetics.js';
 
 export const AUTONOMY_LEVELS = ['observe', 'suggest', 'semi', 'full'];
 
 export class Agent {
-    constructor({ id, name, tier = 1, role = 'OPERATOR', traits, needs, skills, memory, autonomy = 'semi', avatar = null, meta = null, now = () => Date.now() } = {}) {
+    constructor({ id, name, tier = 1, role = 'OPERATOR', traits, needs, skills, memory, autonomy = 'semi', avatar = null, meta = null, dna = null, born = null, generation = 0, parents = [], surname = null, relationships = null, lineage = null, now = () => Date.now() } = {}) {
         this.id = String(id || name || 'MINION').toUpperCase();
         this.name = name || this.id;
+        // Digital DNA and family (see genetics.js / lifecycle.js). Founders get stable genes from their name.
+        this.dna = isDna(dna) ? dna : dnaFromSeed(this.id);
+        this.born = born ?? null; this.generation = generation || 0; this.parents = parents || []; this.surname = surname || null;
+        this.relationships = relationships || {}; this.lineage = lineage || { births: 0, lastBirth: null };
+        this.capability = 1; this.apt = aptitudes(this.dna);
         this.tier = tier;
         this.role = role;
         this.avatar = avatar;
@@ -34,7 +40,9 @@ export class Agent {
     }
 
     get mood() { return mood(this.needs); }
-    get efficiency() { return Math.round(efficiency(this.needs) * speedMultiplier(this.traits) * 100) / 100; }
+    get efficiency() { return Math.round(efficiency(this.needs) * speedMultiplier(this.traits) * (this.capability ?? 1) * 100) / 100; }
+    /** XP multiplier for a skill: genetic aptitude, and a good upbringing while young. */
+    aptitude(skillKey) { return (this.apt[skillKey] || 1) * (this.capability < 1 && this.meta.upbringing ? this.meta.upbringing : 1); }
     level(skillKey) { return levelFromXp(this.skills[skillKey] ?? 0); }
     rankOf(skillKey) { return rank(this.level(skillKey)); }
     bestSkill() { return Object.entries(this.skills).sort((a, b) => b[1] - a[1])[0]; }
@@ -70,7 +78,7 @@ export class Agent {
                 const skill = skillForTask(this.currentTask.tag);
                 const chance = successChance(this.level(skill), this.currentTask.difficulty ?? 5, errorRateMultiplier(this.traits));
                 const success = random() < chance;
-                const xp = awardXp(this.skills, skill, success ? 20 + (this.currentTask.difficulty ?? 5) * 2 : 8, xpMultiplier(this.traits) * (m.moodlets.some((x) => x.id === 'inspired') ? 1.2 : 1) * (1 + (context.xpBonus || 0)));
+                const xp = awardXp(this.skills, skill, success ? 20 + (this.currentTask.difficulty ?? 5) * 2 : 8, xpMultiplier(this.traits) * this.aptitude(skill) * (m.moodlets.some((x) => x.id === 'inspired') ? 1.2 : 1) * (1 + (context.xpBonus || 0)));
                 this.skills = xp.skills;
                 if (xp.levelUp) events.push({ type: 'level_up', ...xp.levelUp });
                 this.stats[success ? 'tasksDone' : 'tasksFailed']++;
@@ -90,7 +98,7 @@ export class Agent {
                 this.hoursWorked += choice.action.durationH || 1;
                 if (choice.action.xp) {
                     const skill = skillForTask(choice.action.tags[0]);
-                    const xp = awardXp(this.skills, skill, choice.action.xp, xpMultiplier(this.traits) * (1 + (context.xpBonus || 0)));
+                    const xp = awardXp(this.skills, skill, choice.action.xp, xpMultiplier(this.traits) * this.aptitude(skill) * (1 + (context.xpBonus || 0)));
                     this.skills = xp.skills;
                     if (xp.levelUp) events.push({ type: 'level_up', ...xp.levelUp });
                 }
@@ -114,7 +122,7 @@ export class Agent {
     }
 
     toJSON() {
-        return { id: this.id, name: this.name, tier: this.tier, role: this.role, avatar: this.avatar, meta: this.meta, traits: this.traits, needs: this.needs, skills: this.skills, memory: this.memory.toJSON(), autonomy: this.autonomy, currentTask: this.currentTask, lastActions: this.lastActions, hoursWorked: this.hoursWorked, stats: this.stats };
+        return { id: this.id, name: this.name, tier: this.tier, role: this.role, avatar: this.avatar, meta: this.meta, traits: this.traits, needs: this.needs, skills: this.skills, memory: this.memory.toJSON(), autonomy: this.autonomy, currentTask: this.currentTask, lastActions: this.lastActions, hoursWorked: this.hoursWorked, stats: this.stats, dna: this.dna, born: this.born, generation: this.generation, parents: this.parents, surname: this.surname, relationships: this.relationships, lineage: this.lineage };
     }
 
     static fromJSON(data, options = {}) {
@@ -136,5 +144,6 @@ export const FEATURES = [
     { id: 'agent.meta', title: 'Agents carry roster metadata (title, specialties, hired flag)', test: () => { const a = new Agent({ id: 'm', meta: { title: 'T', specialties: ['x'], hired: false } }); const b = Agent.fromJSON(JSON.parse(JSON.stringify(a.toJSON()))); return a.meta.hired === false && b.meta.title === 'T' && new Agent({ id: 'n' }).meta.hired === true; } },
     { id: 'agent.serialise', title: 'Agent round-trips through JSON', test: () => { const a = new Agent({ id: 'kite', now: () => 0 }); a.remember('hello'); const b = Agent.fromJSON(JSON.parse(JSON.stringify(a.toJSON())), { now: () => 0 }); return b.id === 'KITE' && b.memory.records.length === 1 && JSON.stringify(b.traits) === JSON.stringify(a.traits); } },
     { id: 'agent.efficiency', title: 'Efficiency combines needs and traits', test: () => new Agent({ id: 'z', traits: ['sprinter'], needs: { energy: 100, focus: 100, morale: 50, social: 50, mastery: 50, safety: 50 } }).efficiency === 1.3 },
+    { id: 'agent.genes', title: 'Agents carry DNA, family fields and skill aptitudes that scale XP; all of it round-trips', test: () => { const a = new Agent({ id: 'kite', now: () => 0 }); const b = Agent.fromJSON(JSON.parse(JSON.stringify(a.toJSON())), { now: () => 0 }); const child = new Agent({ id: 'c', dna: a.dna, born: 5, generation: 1, parents: ['KITE', 'X'], surname: 'Kite', meta: { upbringing: 1.4 } }); child.capability = 0.3; return a.dna.length === 768 && b.dna === a.dna && a.generation === 0 && a.born === null && Object.keys(a.apt).length === 8 && child.aptitude('customer') === a.apt.customer * 1.4 && child.efficiency < a.efficiency && b.relationships && b.lineage.births === 0; } },
     { id: 'agent.installBlocked', title: 'Storm blocks install tasks', test: () => { const a = new Agent({ id: 'q', needs: { energy: 100, focus: 100, morale: 50, social: 50, mastery: 50, safety: 50 }, now: () => 0 }); a.assign({ id: 'I', label: 'Install', tag: 'install', hours: 2 }); a.step(1, { installBlocked: true }); return a.currentTask.remainingH === 2; } }
 ];

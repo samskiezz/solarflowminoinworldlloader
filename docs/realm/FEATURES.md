@@ -5,11 +5,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **698** |
-| Verified in Node (this run) | 383 passed, 0 failed |
-| Browser-verified (DOM) features | 315 |
-| Modules | 109 |
-| Generated | 2026-10-11T14:34:07.407Z |
+| Registered features | **728** |
+| Verified in Node (this run) | 407 passed, 0 failed |
+| Browser-verified (DOM) features | 321 |
+| Modules | 115 |
+| Generated | 2026-10-11T14:58:45.233Z |
 
 ## By area
 
@@ -17,9 +17,9 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 |---|---|
 | Core shell | 104 |
 | Solar engineering domain | 124 |
-| Crew simulation | 86 |
-| Shell | 72 |
-| Windows (game UI) | 233 |
+| Crew simulation | 101 |
+| Shell | 81 |
+| Windows (game UI) | 239 |
 | 3D game world | 79 |
 
 ## business/bank (3)
@@ -37,6 +37,14 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 1 | `biz.calendar.funnel` | Marketing funnel numbers parse out of meeting notes (spend, leads, pickup, close, CPA) | node + browser |
 | 2 | `biz.calendar.recurring` | Recurring meetings expand into occurrences and report who never responds | node + browser |
 | 3 | `biz.calendar.clashes` | Overlapping events are flagged as clashes | node + browser |
+
+## business/crypto (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.crypto.roundtrip` | A snapshot seals with AES-256-GCM under a PBKDF2 passphrase, gzipped, and opens again byte for byte | node + browser |
+| 2 | `biz.crypto.wrongKey` | A wrong passphrase or a tampered envelope is refused, never half-decrypted | node + browser |
+| 3 | `biz.crypto.passphrase` | Generated passphrases are five words and a number | node + browser |
 
 ## business/drive (3)
 
@@ -108,6 +116,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `biz.sm8.summaries` | Job summaries supply invoice, payment, schedule and customer-response flags | node + browser |
 | 5 | `biz.sm8.stats` | Job statistics: win rate, pipeline value, awaiting payment, installed base | node + browser |
 
+## business/social (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.social.import` | Facebook pages and Instagram accounts import into one feed of posts, comments and messages with engagement | node + browser |
+| 2 | `biz.social.unanswered` | Unanswered questions and price enquiries in comments and messages are found and flagged as leads | node + browser |
+| 3 | `biz.social.stats` | Cadence, engagement rate and best posting day/hour are measured from the history | node + browser |
+| 4 | `biz.social.drafts` | Minions draft posts from recent installs (suburb and system, never the customer), the market and the season, plus suggested replies | node + browser |
+
 ## business/staff (2)
 
 | # | Feature | What it verifies | Runs in |
@@ -115,14 +132,16 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 1 | `biz.staff.accounts` | Contractor names parse out of Xero expense account names | node + browser |
 | 2 | `biz.staff.merge` | Staff, contractor accounts, weekly bank payments and on-site mentions merge into one roster | node + browser |
 
-## business/sync (4)
+## business/sync (6)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
 | 1 | `biz.sync.import` | Importing a raw snapshot builds the model, caches it and reports a digest | node + browser |
 | 2 | `biz.sync.server` | The model loads from /api/business/model with the cloud token, falling back when absent | node + browser |
 | 3 | `biz.sync.state` | Resolving a finding pays its quest reward and hides it; snoozing hides it for a while | node + browser |
-| 4 | `biz.sync.world` | Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links | node + browser |
+| 4 | `biz.sync.social` | Social drafts wait for approval, can be edited and dismissed, open enquiries are tracked, and publishing goes through the server only once approved | node + browser |
+| 5 | `biz.sync.encrypted` | Encrypted snapshots import with a passphrase and export sealed; a wrong passphrase is refused | node + browser |
+| 6 | `biz.sync.world` | Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links | node + browser |
 
 ## business/xero (4)
 
@@ -681,7 +700,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 20 | `shell.theme` | Themes apply to the document | browser |
 | 21 | `shell.onboarding` | First-run onboarding captures profile and opens the dashboard | browser |
 
-## sim/agent (9)
+## sim/agent (10)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -693,7 +712,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `agent.meta` | Agents carry roster metadata (title, specialties, hired flag) | node + browser |
 | 7 | `agent.serialise` | Agent round-trips through JSON | node + browser |
 | 8 | `agent.efficiency` | Efficiency combines needs and traits | node + browser |
-| 9 | `agent.installBlocked` | Storm blocks install tasks | node + browser |
+| 9 | `agent.genes` | Agents carry DNA, family fields and skill aptitudes that scale XP; all of it round-trips | node + browser |
+| 10 | `agent.installBlocked` | Storm blocks install tasks | node + browser |
 
 ## sim/dialogue (8)
 
@@ -718,6 +738,13 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `economy.effects` | Upgrade effect aggregation | node + browser |
 | 5 | `economy.summary` | Ledger summary | node + browser |
 
+## sim/epochs (2)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `epochs.ladder` | Twenty-four company epochs with rising thresholds, each with a theme and a gift | node + browser |
+| 2 | `epochs.progress` | The company index places the business on the ladder with progress to the next milestone | node + browser |
+
 ## sim/events (6)
 
 | # | Feature | What it verifies | Runs in |
@@ -727,7 +754,25 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `events.catalogue` | World event catalogue | node + browser |
 | 4 | `events.questsForJob` | Quest generated from job stage | node + browser |
 | 5 | `events.achievements` | Achievement evaluation | node + browser |
-| 6 | `events.achievementCatalogue` | Achievement catalogue (12) | node + browser |
+| 6 | `events.achievementCatalogue` | Achievement catalogue (15) | node + browser |
+
+## sim/genetics (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `genes.dna` | Every minion carries deterministic digital DNA (768 base pairs over 23 loci) | node + browser |
+| 2 | `genes.traits` | Loci project to stable traits in [0, 1]; the named personality traits and skill aptitudes derive from them | node + browser |
+| 3 | `genes.breed` | Breeding is crossover plus mutation: children are related to both parents and never identical to either | node + browser |
+| 4 | `genes.appearance` | Looks (hue, height, build, skin) come from the genes so families resemble each other | node + browser |
+
+## sim/lifecycle (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `life.stages` | Minions age through infant, child, adolescent, adult and elder with rising capability; founders arrive grown | node + browser |
+| 2 | `life.social` | Encounters build friendships or rivalries from genetic compatibility and can turn close adult friends into partners | node + browser |
+| 3 | `life.breed` | Partners breed a child that inherits genes, looks, two traits, a quarter of each parent's skills and a surname; family links and cooldowns apply | node + browser |
+| 4 | `life.death` | Only the very old die, probabilistically past their genetic lifespan; the family tree lists the living and the remembered | node + browser |
 
 ## sim/memory (7)
 
@@ -817,7 +862,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `traits.multipliers` | Error/speed/XP multipliers | node + browser |
 | 5 | `traits.fromSeed` | Deterministic traits from seed | node + browser |
 
-## sim/world (10)
+## sim/world (14)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -830,7 +875,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 7 | `world.quests` | Quests derived from open jobs | node + browser |
 | 8 | `world.recordResults` | Checklist/commissioning results earn credits and achievements | node + browser |
 | 9 | `world.serialise` | World round-trips through JSON | node + browser |
-| 10 | `world.inferTag` | Task title → skill tag inference | node + browser |
+| 10 | `world.lifecycle` | Over time minions befriend each other, pair up and have children who grow, inherit and can be recruited when grown | node + browser |
+| 11 | `world.death` | The old die and are remembered at the memorial; the next child born carries their soul and a share of their skills | node + browser |
+| 12 | `world.arrangeMatch` | The player can arrange a match between two adults for credits; family and the already-partnered are refused | node + browser |
+| 13 | `world.epoch` | The world reports its company epoch from installed work, crew and resolved findings | node + browser |
+| 14 | `world.inferTag` | Task title → skill tag inference | node + browser |
 
 ## windows/achievements (3)
 
@@ -930,7 +979,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 7 | `win.comm.reference` | Acceptance criteria reference | browser |
 | 8 | `win.comm.csv` | Commissioning CSV export | node + browser |
 
-## windows/crew (13)
+## windows/crew (14)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -946,7 +995,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 10 | `win.crew.reflect` | Force a reflection | browser |
 | 11 | `win.crew.hire` | Hire with credits, traits and role | browser |
 | 12 | `win.crew.hireNeedsCredits` | Hiring is refused without credits | browser |
-| 13 | `win.crew.traitReference` | Trait reference table | browser |
+| 13 | `win.crew.family` | Family tab shows population, the company epoch, the family tree, genes and lets the player arrange a match | browser |
+| 14 | `win.crew.traitReference` | Trait reference table | browser |
 
 ## windows/dashboard (7)
 
@@ -1211,6 +1261,16 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 1 | `win.sites.table` | Sites table: every address with stage, system, revenue, overdue, waiting emails and pack status | browser |
 | 2 | `win.sites.suburbs` | Suburbs tab aggregates sites into districts | browser |
 | 3 | `win.sites.file` | Site file shows jobs, invoices, conversations and the handover pack for one address | browser |
+
+## windows/social (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.social.overview` | Overview shows every account with followers, cadence, engagement, open enquiries and drafts ready | browser |
+| 2 | `win.social.inbox` | Inbox lists unanswered comments and messages, leads first, with a suggested reply, mark-replied and lead-job creation | browser |
+| 3 | `win.social.drafts` | Drafts can be edited, given platforms and an image, approved into the queue or dismissed | browser |
+| 4 | `win.social.queue` | Queue shows approved drafts with publish/copy and explains when the server has publishing off | browser |
+| 5 | `win.social.posts` | Posts tab lists the history across platforms with engagement and links | browser |
 
 ## windows/spellbook (13)
 

@@ -2,6 +2,40 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.7.0] - 2026-10-11
+
+### Minions that breed, a company that climbs epochs, and social media run by the crew
+
+Ported from the Underworld (Jarvis) genetics, lifecycle and epoch services into Solarhaven, and added the
+last two connectors: Facebook Pages and Instagram Business.
+
+- **Digital DNA** (`sim/genetics.js`): every minion carries 768 base pairs over 23 loci – Big Five
+  personality, cognition, body (longevity, vitality, immune, dexterity), social, and an aptitude for each of
+  the eight realm skills that scales XP. Founders get stable genes from their names; the named traits and
+  looks (hue, height, build) derive from the genes.
+- **Lifecycle** (`sim/lifecycle.js`, `World.tickLife`): minions meet every six hours and become friends or
+  rivals by genetic compatibility; close adult friends pair up; partners have children (crossover +
+  mutation) who inherit a quarter of each parent's skills, a surname and an upbringing bonus, grow infant →
+  child → adolescent → adult in town (small in the world, recruitable only once grown), become elders, and
+  the very old die of old age and are remembered at the memorial – the next child born carries their soul
+  and a share of their skills. Population cap 60, breeding and mortality switchable, "Arrange a match"
+  for credits, Crew › **Family** tab with the family tree, genes and the memorial; three new achievements.
+- **Company epochs** (`sim/epochs.js`): 24 real milestones of a solar business (first install, first
+  battery, handover standard, one megawatt, cash-positive month, second generation, VPP…) placed by an
+  index built from the real installed base, revenue, crew expertise, resolved findings and generations.
+- **Facebook + Instagram** (`src/business/adapters/meta.js`, `business/social.js`): pages, followers,
+  posts with reactions/comments/shares, the comments and the Messenger inbox, the linked Instagram account,
+  its media with reach/saves, and comments – unanswered questions and price enquiries are detected as leads.
+  Five new insight rules (cadence, unanswered leads, unanswered questions, engagement, installs not shown).
+  New **Social** window (Shift+J): overview, inbox with Echo's suggested replies and one-click lead jobs,
+  drafts the crew writes from real installs (suburb and system only, never a customer name), the market
+  and the season, an approval queue, and publishing through the server only when `META_ALLOW_PUBLISH=true`
+  and an admin approved the draft (`POST /api/business/social/publish`).
+- **Encrypted snapshots** (`business/crypto.js`): AES-256-GCM under a PBKDF2 passphrase, gzipped, the same
+  bytes in the browser and Node. Settings › Business imports `.enc.json` with a passphrase and exports
+  sealed; `scripts/business-snapshot.mjs --encrypt`; `/api/business/import` accepts `{snapshot, passphrase}`.
+- Housekeeping: Business HQ connectors list Facebook/Instagram; 39 insight rules; 728 verified features.
+
 ## [2.6.0] - 2026-10-11
 
 ### The real business, inside the game (86 new verified features, 698 total)
