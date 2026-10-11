@@ -30,7 +30,10 @@ export function placeFor(agent, { jobs = [], index = 0, hourOfDay = 12 } = {}) {
     if (action === 'social' || action === 'mentor' || action === 'praise') { const s = pick('fire'); return { place: 'campfire', position: s, activity: 'talk', inside: null, label: 'Talking with the crew' }; }
     if (action === 'inspect' || action === 'walk') { const s = pick('yard'); return { place: 'training', position: s, activity: 'look', inside: null, label: 'Inspecting' }; }
     if (task && task.jobId) { const s = pick('desk'); return { place: 'workshop', position: s, activity: 'read', inside: 'workshop', label: task.label }; }
-    const s = pick('square'); return { place: 'square', position: s, activity: 'idle', inside: null, label: 'Idle' };
+    // Idle minions drift around town over the day instead of crowding the square.
+    const haunts = [['square', 'square', 'Idle'], ['cafe', 'cafe', 'At the cafe'], ['yard', 'training', 'Watching training'], ['fire', 'campfire', 'By the fire'], ['shelf', 'library', 'Browsing the library']];
+    const [key, place, label] = haunts[(index + Math.floor(hourOfDay / 3)) % haunts.length];
+    const s = pick(key); return { place, position: s, activity: key === 'cafe' ? 'sit' : key === 'shelf' ? 'read' : 'idle', inside: SPOTS[key][0].inside || null, label };
 }
 
 /** Speech bubble text: most recent feed line for this agent, else a need complaint, else nothing. */
@@ -50,5 +53,6 @@ export const FEATURES = [
     { id: 'game.behaviour.rest', title: 'Resting or night sends agents to the guild bunks', test: () => placeFor({ currentTask: null, needs: { energy: 50 }, log: [{ events: [{ type: 'action', action: 'rest' }] }] }).place === 'guild' && placeFor({ currentTask: null, needs: { energy: 90 }, log: [] }, { hourOfDay: 23 }).activity === 'sleep' },
     { id: 'game.behaviour.places', title: 'Study → library, break → cafe, social → campfire, inspect → yard', test: () => { const mk = (a) => placeFor({ currentTask: null, needs: { energy: 80 }, log: [{ events: [{ type: 'action', action: a }] }] }, { hourOfDay: 12 }).place; return mk('study') === 'library' && mk('break') === 'cafe' && mk('social') === 'campfire' && mk('inspect') === 'training'; } },
     { id: 'game.behaviour.spotsSpread', title: 'Agents take different spots at the same place', test: () => { const a = placeFor({ currentTask: null, needs: { energy: 80 }, log: [{ events: [{ type: 'action', action: 'study' }] }] }, { index: 0, hourOfDay: 12 }); const b = placeFor({ currentTask: null, needs: { energy: 80 }, log: [{ events: [{ type: 'action', action: 'study' }] }] }, { index: 1, hourOfDay: 12 }); return a.position.x !== b.position.x; } },
+    { id: 'game.behaviour.wander', title: 'Idle minions spread across town and move haunts through the day', test: () => { const mk = (index, hour) => placeFor({ currentTask: null, needs: { energy: 80 }, log: [] }, { index, hourOfDay: hour }).place; const places = new Set([0, 1, 2, 3, 4].map((i) => mk(i, 12))); return places.size === 5 && mk(0, 12) !== mk(0, 15); } },
     { id: 'game.behaviour.bubble', title: 'Speech bubbles from the feed or from an urgent need', test: () => { const agent = { id: 'A', name: 'Ann', needs: { energy: 10, focus: 80 } }; const fromFeed = bubbleFor(agent, [{ agentId: 'A', at: 100, type: 'reflection', text: 'Ann reflects: isolators again' }], 200); const fromNeed = bubbleFor(agent, [], 0); return fromFeed.text.startsWith('💭') && fromNeed.text === 'So tired…' && bubbleFor({ id: 'B', name: 'B', needs: { energy: 90 } }, [], 0) === null; } }
 ];

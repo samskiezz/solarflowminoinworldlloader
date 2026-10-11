@@ -1,7 +1,7 @@
 {
- "at": "2026-10-11T07:16:31.494Z",
- "total": 583,
- "passed": 583,
+ "at": "2026-10-11T07:19:02.562Z",
+ "total": 585,
+ "passed": 585,
  "failed": 0,
  "results": [
   {
@@ -3089,6 +3089,12 @@
    "status": "passed"
   },
   {
+   "id": "shell.toastDedupe",
+   "module": "shell",
+   "title": "Identical world-event toasts are not repeated within a minute",
+   "status": "passed"
+  },
+  {
    "id": "shell.autosave",
    "module": "shell",
    "title": "Autosave persists world and open windows",
@@ -3230,6 +3236,12 @@
    "id": "game.behaviour.spotsSpread",
    "module": "game/behaviour",
    "title": "Agents take different spots at the same place",
+   "status": "passed"
+  },
+  {
+   "id": "game.behaviour.wander",
+   "module": "game/behaviour",
+   "title": "Idle minions spread across town and move haunts through the day",
    "status": "passed"
   },
   {

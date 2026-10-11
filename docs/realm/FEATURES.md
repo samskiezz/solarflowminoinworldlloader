@@ -5,11 +5,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **583** |
-| Verified in Node (this run) | 315 passed, 0 failed |
-| Browser-verified (DOM) features | 268 |
+| Registered features | **585** |
+| Verified in Node (this run) | 316 passed, 0 failed |
+| Browser-verified (DOM) features | 269 |
 | Modules | 83 |
-| Generated | 2026-10-11T07:17:56.789Z |
+| Generated | 2026-10-11T07:19:41.069Z |
 
 ## By area
 
@@ -19,8 +19,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | Solar engineering domain | 124 |
 | Crew simulation | 81 |
 | Windows (game UI) | 198 |
-| Shell | 20 |
-| 3D game world | 65 |
+| Shell | 21 |
+| 3D game world | 66 |
 
 ## core/bus (6)
 
@@ -386,7 +386,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 7 | `yield.co2Offset` | CO₂ offset estimate | node + browser |
 | 8 | `yield.selfConsumption` | Self-consumption with battery | node + browser |
 
-## game/behaviour (6)
+## game/behaviour (7)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -395,7 +395,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `game.behaviour.rest` | Resting or night sends agents to the guild bunks | node + browser |
 | 4 | `game.behaviour.places` | Study → library, break → cafe, social → campfire, inspect → yard | node + browser |
 | 5 | `game.behaviour.spotsSpread` | Agents take different spots at the same place | node + browser |
-| 6 | `game.behaviour.bubble` | Speech bubbles from the feed or from an urgent need | node + browser |
+| 6 | `game.behaviour.wander` | Idle minions spread across town and move haunts through the day | node + browser |
+| 7 | `game.behaviour.bubble` | Speech bubbles from the feed or from an urgent need | node + browser |
 
 ## game/characters (5)
 
@@ -501,7 +502,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 9 | `game.town.district` | A skyline district rings the town beyond the player bounds | node + browser |
 | 10 | `game.town.spotsForRoster` | Enough bunks, desks and seats for the whole 24-minion roster | node + browser |
 
-## shell (20)
+## shell (21)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -521,10 +522,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 14 | `shell.keybinds` | Keyboard toggles windows, pauses the clock and cycles | browser |
 | 15 | `shell.hotbarKeys` | Number keys trigger hotbar slots | browser |
 | 16 | `shell.eventToasts` | Achievements and level-ups raise toasts | browser |
-| 17 | `shell.autosave` | Autosave persists world and open windows | browser |
-| 18 | `shell.restoreSession` | Reopens the windows from the last session | browser |
-| 19 | `shell.theme` | Themes apply to the document | browser |
-| 20 | `shell.onboarding` | First-run onboarding captures profile and opens the dashboard | browser |
+| 17 | `shell.toastDedupe` | Identical world-event toasts are not repeated within a minute | browser |
+| 18 | `shell.autosave` | Autosave persists world and open windows | browser |
+| 19 | `shell.restoreSession` | Reopens the windows from the last session | browser |
+| 20 | `shell.theme` | Themes apply to the document | browser |
+| 21 | `shell.onboarding` | First-run onboarding captures profile and opens the dashboard | browser |
 
 ## sim/agent (9)
 
