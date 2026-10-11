@@ -5,11 +5,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **611** |
+| Registered features | **612** |
 | Verified in Node (this run) | 330 passed, 0 failed |
-| Browser-verified (DOM) features | 281 |
+| Browser-verified (DOM) features | 282 |
 | Modules | 88 |
-| Generated | 2026-10-11T12:44:03.772Z |
+| Generated | 2026-10-11T12:46:20.927Z |
 
 ## By area
 
@@ -18,7 +18,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | Core shell | 104 |
 | Solar engineering domain | 124 |
 | Crew simulation | 86 |
-| Windows (game UI) | 200 |
+| Windows (game UI) | 201 |
 | Shell | 21 |
 | 3D game world | 76 |
 
@@ -943,7 +943,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `win.market.ledger` | Ledger table and totals | browser |
 | 4 | `win.market.earning` | Earning guide | browser |
 
-## windows/notifications (5)
+## windows/notifications (6)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -951,7 +951,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `win.notify.markRead` | Mark all read clears the badge | browser |
 | 3 | `win.notify.navigate` | Clicking a notification opens its subject | browser |
 | 4 | `win.notify.globalSearch` | Global search across jobs, crew, clauses, notes and products | browser |
-| 5 | `win.notify.searchClauses` | Search finds standard clauses | browser |
+| 5 | `win.notify.crewOnly` | Townsfolk level-ups stay out of the inbox | browser |
+| 6 | `win.notify.searchClauses` | Search finds standard clauses | browser |
 
 ## windows/proposal (6)
 

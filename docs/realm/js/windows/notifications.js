@@ -5,7 +5,7 @@ import { section, row } from './_shared.js';
 import { makeTestCtx, openWindow, q, qa, fire } from './_testing.js';
 
 export const IMPORTANT = ['achievement', 'task_failed', 'level_up', 'event', 'quest_blocked', 'stage_advanced', 'hired', 'dnsp', 'proposal', 'checklist', 'commissioning'];
-export function inbox(ctx) { return [...ctx.world.feed].reverse().filter((f) => IMPORTANT.includes(f.type)); }
+export function inbox(ctx) { return [...ctx.world.feed].reverse().filter((f) => IMPORTANT.includes(f.type) && !(f.type === 'level_up' && f.agentId && ctx.world.agent(f.agentId) && ctx.world.agent(f.agentId).meta.hired === false)); }
 export function unreadCount(ctx) { const read = ctx.store.get('ui.readAt', 0); return inbox(ctx).filter((f) => f.at > read).length; }
 
 /** Search jobs, products, clauses and notes in one go. */
@@ -44,5 +44,6 @@ export const FEATURES = [
     { id: 'win.notify.markRead', title: 'Mark all read clears the badge', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx)); qa(b, 'button').find((x) => x.textContent === 'Mark all read').click(); const ok = unreadCount(t.ctx) === 0; t.done(); return ok; } },
     { id: 'win.notify.navigate', title: 'Clicking a notification opens its subject', dom: true, test: () => { const t = makeTestCtx(); t.ctx.wm.register({ id: 'achievements', title: 'a', render: () => {} }); const b = openWindow(t.ctx, def(t.ctx)); const item = qa(b, '.feed-item').find((x) => /Achievement/.test(x.textContent)); item.click(); const ok = t.ctx.wm.isOpen('achievements'); t.done(); return ok; } },
     { id: 'win.notify.globalSearch', title: 'Global search across jobs, crew, clauses, notes and products', dom: true, test: () => { const t = makeTestCtx(); t.ctx.store.set('journal', [{ id: 'n', at: '2026-01-01T00:00:00Z', text: 'Gamma inverter note', tags: [] }]); const hits = globalSearch(t.ctx, 'gamma'); const kinds = new Set(hits.map((h) => h.kind)); const b = openWindow(t.ctx, def(t.ctx), { tab: 'search' }); const i = q(b, 'input[type=search]'); i.value = 'test customer'; fire(i); const ok = kinds.has('note') && kinds.has('product') && qa(b, '.hit').length === 1; t.done(); return ok; } },
+    { id: 'win.notify.crewOnly', title: 'Townsfolk level-ups stay out of the inbox', dom: true, test: () => { const t = makeTestCtx(); t.ctx.world.emit({ type: 'level_up', agentId: 'WREN', text: 'Wren levelled' }); t.ctx.world.emit({ type: 'level_up', agentId: 'ATLAS', text: 'Atlas levelled' }); const texts = inbox(t.ctx).map((f) => f.text); const ok = texts.includes('Atlas levelled') && !texts.includes('Wren levelled'); t.done(); return ok; } },
     { id: 'win.notify.searchClauses', title: 'Search finds standard clauses', dom: true, test: () => { const t = makeTestCtx(); const hits = globalSearch(t.ctx, 'voltage rise'); t.done(); return hits.some((h) => h.kind === 'clause'); } }
 ];

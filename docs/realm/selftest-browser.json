@@ -1,7 +1,7 @@
 {
- "at": "2026-10-11T12:43:20.338Z",
- "total": 611,
- "passed": 611,
+ "at": "2026-10-11T12:46:20.337Z",
+ "total": 612,
+ "passed": 612,
  "failed": 0,
  "results": [
   {
@@ -3038,6 +3038,12 @@
    "id": "win.notify.globalSearch",
    "module": "windows/notifications",
    "title": "Global search across jobs, crew, clauses, notes and products",
+   "status": "passed"
+  },
+  {
+   "id": "win.notify.crewOnly",
+   "module": "windows/notifications",
+   "title": "Townsfolk level-ups stay out of the inbox",
    "status": "passed"
   },
   {
