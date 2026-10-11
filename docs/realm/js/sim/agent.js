@@ -13,12 +13,13 @@ import { chooseAction, BASE_ACTIONS } from './planner.js';
 export const AUTONOMY_LEVELS = ['observe', 'suggest', 'semi', 'full'];
 
 export class Agent {
-    constructor({ id, name, tier = 1, role = 'OPERATOR', traits, needs, skills, memory, autonomy = 'semi', avatar = null, now = () => Date.now() } = {}) {
+    constructor({ id, name, tier = 1, role = 'OPERATOR', traits, needs, skills, memory, autonomy = 'semi', avatar = null, meta = null, now = () => Date.now() } = {}) {
         this.id = String(id || name || 'MINION').toUpperCase();
         this.name = name || this.id;
         this.tier = tier;
         this.role = role;
         this.avatar = avatar;
+        this.meta = { hired: true, ...(meta || {}) };
         this.traits = traits || traitsFromSeed(this.id);
         this.needs = createNeeds(needs);
         this.skills = createSkills(skills);
@@ -113,7 +114,7 @@ export class Agent {
     }
 
     toJSON() {
-        return { id: this.id, name: this.name, tier: this.tier, role: this.role, avatar: this.avatar, traits: this.traits, needs: this.needs, skills: this.skills, memory: this.memory.toJSON(), autonomy: this.autonomy, currentTask: this.currentTask, lastActions: this.lastActions, hoursWorked: this.hoursWorked, stats: this.stats };
+        return { id: this.id, name: this.name, tier: this.tier, role: this.role, avatar: this.avatar, meta: this.meta, traits: this.traits, needs: this.needs, skills: this.skills, memory: this.memory.toJSON(), autonomy: this.autonomy, currentTask: this.currentTask, lastActions: this.lastActions, hoursWorked: this.hoursWorked, stats: this.stats };
     }
 
     static fromJSON(data, options = {}) {
@@ -132,6 +133,7 @@ export const FEATURES = [
     { id: 'agent.idleBehaviour', title: 'Idle agent chooses self-care actions', test: () => { const a = new Agent({ id: 'nova', traits: ['steady'], needs: { energy: 10, focus: 90, morale: 90, social: 90, mastery: 90, safety: 90 }, now: () => 0 }); const r = a.step(1); return r.events.some((e) => e.type === 'action' && (e.action === 'rest' || e.action === 'break')) && a.needs.energy > 10; } },
     { id: 'agent.observeAutonomy', title: 'Observe autonomy never works tasks', test: () => { const a = new Agent({ id: 'x', autonomy: 'observe', now: () => 0 }); a.assign({ id: 'T', label: 'x', tag: 'design', hours: 1 }); a.step(5); return a.currentTask !== null && a.currentTask.remainingH === 1; } },
     { id: 'agent.reflection', title: 'Agent reflects after important memories', test: () => { const a = new Agent({ id: 'sable', needs: { energy: 90, focus: 90, morale: 90, social: 90, mastery: 90, safety: 90 }, now: () => 0 }); a.memory.reflectionThreshold = 10; a.remember('Isolator failed inspection', { tags: ['isolator'] }); a.remember('Another isolator defect', { tags: ['isolator'] }); const r = a.step(0.5); return r.events.some((e) => e.type === 'reflection') && a.stats.reflections >= 1; } },
+    { id: 'agent.meta', title: 'Agents carry roster metadata (title, specialties, hired flag)', test: () => { const a = new Agent({ id: 'm', meta: { title: 'T', specialties: ['x'], hired: false } }); const b = Agent.fromJSON(JSON.parse(JSON.stringify(a.toJSON()))); return a.meta.hired === false && b.meta.title === 'T' && new Agent({ id: 'n' }).meta.hired === true; } },
     { id: 'agent.serialise', title: 'Agent round-trips through JSON', test: () => { const a = new Agent({ id: 'kite', now: () => 0 }); a.remember('hello'); const b = Agent.fromJSON(JSON.parse(JSON.stringify(a.toJSON())), { now: () => 0 }); return b.id === 'KITE' && b.memory.records.length === 1 && JSON.stringify(b.traits) === JSON.stringify(a.traits); } },
     { id: 'agent.efficiency', title: 'Efficiency combines needs and traits', test: () => new Agent({ id: 'z', traits: ['sprinter'], needs: { energy: 100, focus: 100, morale: 50, social: 50, mastery: 50, safety: 50 } }).efficiency === 1.3 },
     { id: 'agent.installBlocked', title: 'Storm blocks install tasks', test: () => { const a = new Agent({ id: 'q', needs: { energy: 100, focus: 100, morale: 50, social: 50, mastery: 50, safety: 50 }, now: () => 0 }); a.assign({ id: 'I', label: 'Install', tag: 'install', hours: 2 }); a.step(1, { installBlocked: true }); return a.currentTask.remainingH === 2; } }

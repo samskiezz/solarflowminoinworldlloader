@@ -12,6 +12,16 @@ Workshop, Market and Depot, and watch each job's house build up from a "SOLAR?" 
 glowing array. The window system is the game's UI. See `docs/realm/FEATURES.md` for the self-test-backed
 ledger and `docs/realm/RESEARCH.md` for the research it is built on.
 
+### 🧬 The original realm, carried into the game
+- The full 24-minion roster from `docs/minions.json` (tiers, modes, specialties, reputation, identicon
+  portraits) lives in Solarhaven. Six are the founding crew; the rest are townsfolk you can talk to and recruit
+  at the Guild Hall for tier-based credits. Specialties map to solar titles, traits and starting skills.
+- The Minion Cognition Engine is ported as an optional language-model adapter (Settings › AI): OpenAI-compatible,
+  Anthropic or local endpoints, with each minion's persona, mood, memories and relevant AS/NZS clauses in the
+  prompt. Without it, crew still answer from mood, memory and the Codex ("what is the voltage rise limit?").
+- Dominion City's health widgets return as Sims-style needs widgets: hover or click a minion in the world to
+  see their six needs, activity and credits; clicking opens their crew sheet. A skyline district rings the town.
+
 ### 🎮 Game world
 - Procedural town with ten landmark buildings bound to windows, twenty residential lots, roads, square,
   fountain, trees and street lamps; day/night lighting and storm/heatwave weather driven by the world clock.

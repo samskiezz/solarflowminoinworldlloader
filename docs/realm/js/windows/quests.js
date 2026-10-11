@@ -11,7 +11,7 @@ export function dailyGoals(ctx) {
         { id: 'tick3', text: 'Complete 3 stage tasks', progress: Math.min(3, ctx.jobs().reduce((n, j) => n + Object.values(j.tasks).filter(Boolean).length, 0)), target: 3 },
         { id: 'clause', text: 'Read a standard clause in the Codex', progress: Math.min(1, s.clausesViewed), target: 1 },
         { id: 'checklist', text: 'Pass a checklist', progress: Math.min(1, s.checklistsPassed), target: 1 },
-        { id: 'crew', text: 'Keep every crew member above 40 energy', progress: ctx.world.agents.every((a) => a.needs.energy > 40) ? 1 : 0, target: 1 }
+        { id: 'crew', text: 'Keep every crew member above 40 energy', progress: ctx.world.crew().every((a) => a.needs.energy > 40) ? 1 : 0, target: 1 }
     ];
 }
 

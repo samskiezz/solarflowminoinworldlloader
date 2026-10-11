@@ -25,7 +25,7 @@ export function def(ctx) {
             const jobs = ctx.jobs();
             const typeSel = h('select', { class: 'input' }, BOOKING_TYPES.map((t) => h('option', { value: t }, t)));
             const jobSel = h('select', { class: 'input' }, jobs.map((j) => h('option', { value: j.id, selected: j.id === ctx.currentJobId() ? '' : null }, `${j.customer} (${j.id})`)));
-            const agentSel = h('select', { class: 'input' }, h('option', { value: '' }, '— any crew —'), ctx.world.agents.map((a) => h('option', { value: a.id }, a.name)));
+            const agentSel = h('select', { class: 'input' }, h('option', { value: '' }, '— any crew —'), ctx.world.crew().map((a) => h('option', { value: a.id }, a.name)));
             const dateInput = h('input', { type: 'date', class: 'input', value: days[0] });
             const add = () => { if (!jobSel.value) { toast('Create a job first', { kind: 'warn' }); return; } const b = { id: `b${Date.now().toString(36)}`, jobId: jobSel.value, type: typeSel.value, agentId: agentSel.value || null, date: dateInput.value }; save([...bookings, b]); const job = ctx.job(b.jobId); if (job) { job.history.push({ at: new Date(ctx.now()).toISOString(), event: 'booked', task: `${b.type} ${b.date}` }); ctx.saveWorld(); } ctx.refresh('schedule'); };
             const cf = conflicts(bookings);

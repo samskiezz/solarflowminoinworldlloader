@@ -1,7 +1,7 @@
 {
- "at": "2026-10-11T06:21:51.606Z",
- "total": 560,
- "passed": 560,
+ "at": "2026-10-11T07:16:31.494Z",
+ "total": 583,
+ "passed": 583,
  "failed": 0,
  "results": [
   {
@@ -1505,6 +1505,18 @@
    "status": "passed"
   },
   {
+   "id": "dialogue.reply.standards",
+   "module": "sim/dialogue",
+   "title": "Crew quote standard clauses when asked about the rules",
+   "status": "passed"
+  },
+  {
+   "id": "dialogue.reply.intro",
+   "module": "sim/dialogue",
+   "title": "Crew introduce themselves with title and specialties",
+   "status": "passed"
+  },
+  {
    "id": "dialogue.replyWithLlm.fallback",
    "module": "sim/dialogue",
    "title": "LLM hook with template fallback",
@@ -1613,6 +1625,12 @@
    "status": "passed"
   },
   {
+   "id": "agent.meta",
+   "module": "sim/agent",
+   "title": "Agents carry roster metadata (title, specialties, hired flag)",
+   "status": "passed"
+  },
+  {
    "id": "agent.serialise",
    "module": "sim/agent",
    "title": "Agent round-trips through JSON",
@@ -1628,6 +1646,12 @@
    "id": "agent.installBlocked",
    "module": "sim/agent",
    "title": "Storm blocks install tasks",
+   "status": "passed"
+  },
+  {
+   "id": "world.recruit",
+   "module": "sim/world",
+   "title": "Townsfolk minions can be recruited into the crew for credits",
    "status": "passed"
   },
   {
@@ -1715,6 +1739,72 @@
    "status": "passed"
   },
   {
+   "id": "roster.legacy",
+   "module": "sim/roster",
+   "title": "All 24 original minions are in the roster with tiers, modes and specialties",
+   "status": "passed"
+  },
+  {
+   "id": "roster.mapping",
+   "module": "sim/roster",
+   "title": "Specialties map to solar roles, traits and starting skills",
+   "status": "passed"
+  },
+  {
+   "id": "roster.founding",
+   "module": "sim/roster",
+   "title": "Six founding crew are hired; the rest can be recruited by tier cost",
+   "status": "passed"
+  },
+  {
+   "id": "roster.portraits",
+   "module": "sim/roster",
+   "title": "Every minion has an identicon portrait path",
+   "status": "passed"
+  },
+  {
+   "id": "roster.uniqueTitles",
+   "module": "sim/roster",
+   "title": "Every minion has a distinct solar title",
+   "status": "passed"
+  },
+  {
+   "id": "core.llm.requests",
+   "module": "core/llm",
+   "title": "Builds OpenAI-compatible and Anthropic requests",
+   "status": "passed"
+  },
+  {
+   "id": "core.llm.persona",
+   "module": "core/llm",
+   "title": "Persona prompt carries role, mood, memories and standard clauses",
+   "status": "passed"
+  },
+  {
+   "id": "core.llm.notConfigured",
+   "module": "core/llm",
+   "title": "Unconfigured adapter refuses and leaves the template dialogue in place",
+   "status": "passed"
+  },
+  {
+   "id": "core.llm.completeAndRateLimit",
+   "module": "core/llm",
+   "title": "Completes through fetch with rate limiting",
+   "status": "passed"
+  },
+  {
+   "id": "core.llm.replyAs",
+   "module": "core/llm",
+   "title": "Replies as a minion with memories and clause context",
+   "status": "passed"
+  },
+  {
+   "id": "core.llm.errors",
+   "module": "core/llm",
+   "title": "HTTP errors surface as test failures, not crashes",
+   "status": "passed"
+  },
+  {
    "id": "win.jobs.board",
    "module": "windows/jobs",
    "title": "Kanban board of jobs by stage",
@@ -1783,7 +1873,13 @@
   {
    "id": "win.crew.roster",
    "module": "windows/crew",
-   "title": "Roster cards with needs, mood and traits",
+   "title": "Crew cards with portraits, needs, mood and traits",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.recruit",
+   "module": "windows/crew",
+   "title": "Recruit townsfolk minions from the original roster for credits",
    "status": "passed"
   },
   {
@@ -2543,6 +2639,12 @@
    "status": "passed"
   },
   {
+   "id": "win.settings.ai",
+   "module": "windows/settings",
+   "title": "AI tab configures the crew language model",
+   "status": "passed"
+  },
+  {
    "id": "win.settings.keysList",
    "module": "windows/settings",
    "title": "Keybind table with custom markers",
@@ -3059,6 +3161,18 @@
    "status": "passed"
   },
   {
+   "id": "game.town.district",
+   "module": "game/town",
+   "title": "A skyline district rings the town beyond the player bounds",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.spotsForRoster",
+   "module": "game/town",
+   "title": "Enough bunks, desks and seats for the whole 24-minion roster",
+   "status": "passed"
+  },
+  {
    "id": "game.steer.arrive",
    "module": "game/steer",
    "title": "Arrive steering reaches the target and stops",
@@ -3209,6 +3323,12 @@
    "status": "passed"
   },
   {
+   "id": "game.overlay.needsWidget",
+   "module": "game/overlay",
+   "title": "Sims-style needs widget with six bars",
+   "status": "passed"
+  },
+  {
    "id": "game.overlay.widgets",
    "module": "game/overlay",
    "title": "Nameplate, bubble, quest marker and key prompt widgets",
@@ -3272,6 +3392,18 @@
    "id": "game.npcs.bubbles",
    "module": "game/npcs",
    "title": "Crew speak in bubbles when something happens",
+   "status": "passed"
+  },
+  {
+   "id": "game.npcs.needsWidget",
+   "module": "game/npcs",
+   "title": "Hovering or selecting a minion shows their needs widget",
+   "status": "passed"
+  },
+  {
+   "id": "game.npcs.roster",
+   "module": "game/npcs",
+   "title": "The whole 24-minion roster walks the town; townsfolk plates look different",
    "status": "passed"
   },
   {
@@ -3350,6 +3482,12 @@
    "id": "game.minimap",
    "module": "game/game",
    "title": "Town minimap with player, crew, houses and markers",
+   "status": "passed"
+  },
+  {
+   "id": "game.clickSelect",
+   "module": "game/game",
+   "title": "Clicking a minion selects them and opens their sheet",
    "status": "passed"
   },
   {

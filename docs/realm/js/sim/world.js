@@ -49,6 +49,18 @@ export class World {
     }
 
     agent(id) { return this.agents.find((a) => a.id === String(id).toUpperCase()) || null; }
+    /** Hired crew only (townsfolk minions wait to be recruited). */
+    crew() { return this.agents.filter((a) => a.meta.hired !== false); }
+    townsfolk() { return this.agents.filter((a) => a.meta.hired === false); }
+    recruit(id, cost = 0) {
+        const agent = this.agent(id); if (!agent) return { ok: false, reason: 'Unknown minion' };
+        if (agent.meta.hired !== false) return { ok: false, reason: 'Already in the crew' };
+        if (this.ledger.balance < cost) return { ok: false, reason: `Need ${cost - this.ledger.balance} more credits` };
+        if (cost) { this.ledger.balance -= cost; this.ledger.entries.push({ at: this.time, type: 'recruit', amount: -cost, balance: this.ledger.balance, ref: agent.id }); }
+        agent.meta.hired = true; agent.remember('Joined the crew', { tags: ['social', 'assignment'], importance: 6 });
+        this.emit({ type: 'hired', agentId: agent.id, text: `${agent.name} (${agent.meta.title || agent.role}) joined the crew` });
+        return { ok: true, agent };
+    }
 
     addJob(spec) {
         const job = spec.tasks ? spec : createJob({ ...spec, createdAt: new Date(this.time).toISOString() });
@@ -178,6 +190,7 @@ export function inferTag(title, stage) {
 }
 
 export const FEATURES = [
+    { id: 'world.recruit', title: 'Townsfolk minions can be recruited into the crew for credits', test: () => { const w = new World({ seed: 3 }); w.addAgent({ id: 'X', meta: { hired: false } }); w.addAgent({ id: 'Y' }); const before = w.crew().length; const poor = w.recruit('X', 999); w.ledger.balance = 500; const ok = w.recruit('X', 100); const dup = w.recruit('X', 100); return before === 1 && !poor.ok && ok.ok && w.crew().length === 2 && w.townsfolk().length === 0 && !dup.ok && w.ledger.balance === 400; } },
     { id: 'world.create', title: 'World with seeded clock and ledger', test: () => { const w = new World({ seed: 3 }); return w.clock.day === 1 && w.ledger.balance === 100; } },
     { id: 'world.addAgentAndJob', title: 'Add agents and jobs', test: () => { const w = new World(); w.addAgent({ id: 'atlas', name: 'Atlas' }); w.addJob({ customer: 'Ann', postcode: '2000', systemKw: 6.6 }); return w.agents.length === 1 && w.jobs.length === 1 && w.stats.jobsCreated === 1 && w.unlocked.includes('first_job'); } },
     { id: 'world.assignNextTask', title: 'Assign next open stage task', test: () => { const w = new World(); w.addAgent({ id: 'bolt' }); const j = w.addJob({ customer: 'B' }); const t = w.assignNextTask('bolt', j.id); return t && t.jobId === j.id && w.agent('bolt').currentTask.label === 'Capture site address and postcode'; } },

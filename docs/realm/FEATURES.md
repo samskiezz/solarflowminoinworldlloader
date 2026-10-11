@@ -5,22 +5,22 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **560** |
-| Verified in Node (this run) | 298 passed, 0 failed |
-| Browser-verified (DOM) features | 262 |
-| Modules | 81 |
-| Generated | 2026-10-11T06:21:52.108Z |
+| Registered features | **583** |
+| Verified in Node (this run) | 315 passed, 0 failed |
+| Browser-verified (DOM) features | 268 |
+| Modules | 83 |
+| Generated | 2026-10-11T07:17:56.789Z |
 
 ## By area
 
 | Area | Features |
 |---|---|
-| Core shell | 89 |
+| Core shell | 95 |
 | Solar engineering domain | 124 |
-| Crew simulation | 72 |
-| Windows (game UI) | 196 |
+| Crew simulation | 81 |
+| Windows (game UI) | 198 |
 | Shell | 20 |
-| 3D game world | 59 |
+| 3D game world | 65 |
 
 ## core/bus (6)
 
@@ -96,6 +96,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `core.keys.persist` | Bindings persist through the store | node + browser |
 | 7 | `core.keys.reset` | Reset to defaults | node + browser |
 | 8 | `core.keys.list` | List bindings with default markers | node + browser |
+
+## core/llm (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `core.llm.requests` | Builds OpenAI-compatible and Anthropic requests | node + browser |
+| 2 | `core.llm.persona` | Persona prompt carries role, mood, memories and standard clauses | node + browser |
+| 3 | `core.llm.notConfigured` | Unconfigured adapter refuses and leaves the template dialogue in place | node + browser |
+| 4 | `core.llm.completeAndRateLimit` | Completes through fetch with rate limiting | node + browser |
+| 5 | `core.llm.replyAs` | Replies as a minion with memories and clause context | node + browser |
+| 6 | `core.llm.errors` | HTTP errors surface as test failures, not crashes | node + browser |
 
 ## core/registry (3)
 
@@ -396,7 +407,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `game.chibi.face` | Characters turn smoothly toward a heading | browser |
 | 5 | `game.chibi.deterministicSkin` | Skin tone and hat derive from id and role deterministically | browser |
 
-## game/game (9)
+## game/game (10)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -407,8 +418,9 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `game.floatingRewards` | Completed tasks and level-ups float reward text in the world | browser |
 | 6 | `game.interactKey` | E interacts with whatever is in front of the player | browser |
 | 7 | `game.minimap` | Town minimap with player, crew, houses and markers | browser |
-| 8 | `game.hudToggle` | Shift+Z hides the HUD overlay | browser |
-| 9 | `game.persistPosition` | Player position is remembered between sessions | browser |
+| 8 | `game.clickSelect` | Clicking a minion selects them and opens their sheet | browser |
+| 9 | `game.hudToggle` | Shift+Z hides the HUD overlay | browser |
+| 10 | `game.persistPosition` | Player position is remembered between sessions | browser |
 
 ## game/interact (5)
 
@@ -420,7 +432,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `game.interact.landmark` | Entering a landmark opens its window (library → Codex) | browser |
 | 5 | `game.interact.labels` | Landmark labels describe what each building does | browser |
 
-## game/npcs (5)
+## game/npcs (7)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -428,16 +440,19 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `game.npcs.walkToWork` | An agent assigned to a job walks to that house and works | browser |
 | 3 | `game.npcs.restAtNight` | At night the crew sleeps at the guild hall | browser |
 | 4 | `game.npcs.bubbles` | Crew speak in bubbles when something happens | browser |
-| 5 | `game.npcs.nearest` | Nearest crew member lookup for interaction | browser |
+| 5 | `game.npcs.needsWidget` | Hovering or selecting a minion shows their needs widget | browser |
+| 6 | `game.npcs.roster` | The whole 24-minion roster walks the town; townsfolk plates look different | browser |
+| 7 | `game.npcs.nearest` | Nearest crew member lookup for interaction | browser |
 
-## game/overlay (4)
+## game/overlay (5)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
 | 1 | `game.overlay.anchors` | Overlay items project 3D anchors to screen positions | browser |
 | 2 | `game.overlay.distanceCull` | Far-away plates are hidden | browser |
 | 3 | `game.overlay.floatText` | Floating reward text animates and removes itself | browser |
-| 4 | `game.overlay.widgets` | Nameplate, bubble, quest marker and key prompt widgets | browser |
+| 4 | `game.overlay.needsWidget` | Sims-style needs widget with six bars | browser |
+| 5 | `game.overlay.widgets` | Nameplate, bubble, quest marker and key prompt widgets | browser |
 
 ## game/player (6)
 
@@ -471,7 +486,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `game.steer.allowInside` | Agents may enter the building they are visiting | node + browser |
 | 5 | `game.steer.helpers` | Distance, heading, clamping and wander helpers | node + browser |
 
-## game/town (8)
+## game/town (10)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -483,6 +498,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `game.town.houseState` | House build state follows the job stage | node + browser |
 | 7 | `game.town.spots` | Behaviour spots for bunks, desks, shelves, fire, cafe, yard | node + browser |
 | 8 | `game.town.roadsTrees` | Roads and trees are laid out | node + browser |
+| 9 | `game.town.district` | A skyline district rings the town beyond the player bounds | node + browser |
+| 10 | `game.town.spotsForRoster` | Enough bunks, desks and seats for the whole 24-minion roster | node + browser |
 
 ## shell (20)
 
@@ -509,7 +526,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 19 | `shell.theme` | Themes apply to the document | browser |
 | 20 | `shell.onboarding` | First-run onboarding captures profile and opens the dashboard | browser |
 
-## sim/agent (8)
+## sim/agent (9)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -518,11 +535,12 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `agent.idleBehaviour` | Idle agent chooses self-care actions | node + browser |
 | 4 | `agent.observeAutonomy` | Observe autonomy never works tasks | node + browser |
 | 5 | `agent.reflection` | Agent reflects after important memories | node + browser |
-| 6 | `agent.serialise` | Agent round-trips through JSON | node + browser |
-| 7 | `agent.efficiency` | Efficiency combines needs and traits | node + browser |
-| 8 | `agent.installBlocked` | Storm blocks install tasks | node + browser |
+| 6 | `agent.meta` | Agents carry roster metadata (title, specialties, hired flag) | node + browser |
+| 7 | `agent.serialise` | Agent round-trips through JSON | node + browser |
+| 8 | `agent.efficiency` | Efficiency combines needs and traits | node + browser |
+| 9 | `agent.installBlocked` | Storm blocks install tasks | node + browser |
 
-## sim/dialogue (6)
+## sim/dialogue (8)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -530,8 +548,10 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `dialogue.traitLine` | Trait flavour lines | node + browser |
 | 3 | `dialogue.reply.status` | Status reply reports mood and lowest need | node + browser |
 | 4 | `dialogue.reply.skills` | Skills reply | node + browser |
-| 5 | `dialogue.replyWithLlm.fallback` | LLM hook with template fallback | node + browser |
-| 6 | `dialogue.replyWithLlm.hook` | LLM hook used when available | node + browser |
+| 5 | `dialogue.reply.standards` | Crew quote standard clauses when asked about the rules | node + browser |
+| 6 | `dialogue.reply.intro` | Crew introduce themselves with title and specialties | node + browser |
+| 7 | `dialogue.replyWithLlm.fallback` | LLM hook with template fallback | node + browser |
+| 8 | `dialogue.replyWithLlm.hook` | LLM hook used when available | node + browser |
 
 ## sim/economy (5)
 
@@ -590,6 +610,16 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `planner.goap.satisfied` | GOAP returns empty plan when goal already met | node + browser |
 | 7 | `planner.goap.impossible` | GOAP reports impossible goals | node + browser |
 
+## sim/roster (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `roster.legacy` | All 24 original minions are in the roster with tiers, modes and specialties | node + browser |
+| 2 | `roster.mapping` | Specialties map to solar roles, traits and starting skills | node + browser |
+| 3 | `roster.founding` | Six founding crew are hired; the rest can be recruited by tier cost | node + browser |
+| 4 | `roster.portraits` | Every minion has an identicon portrait path | node + browser |
+| 5 | `roster.uniqueTitles` | Every minion has a distinct solar title | node + browser |
+
 ## sim/skills (7)
 
 | # | Feature | What it verifies | Runs in |
@@ -622,19 +652,20 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `traits.multipliers` | Error/speed/XP multipliers | node + browser |
 | 5 | `traits.fromSeed` | Deterministic traits from seed | node + browser |
 
-## sim/world (9)
+## sim/world (10)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
-| 1 | `world.create` | World with seeded clock and ledger | node + browser |
-| 2 | `world.addAgentAndJob` | Add agents and jobs | node + browser |
-| 3 | `world.assignNextTask` | Assign next open stage task | node + browser |
-| 4 | `world.tick` | Tick advances time, agents and completes job tasks | node + browser |
-| 5 | `world.events` | World events roll over time | node + browser |
-| 6 | `world.quests` | Quests derived from open jobs | node + browser |
-| 7 | `world.recordResults` | Checklist/commissioning results earn credits and achievements | node + browser |
-| 8 | `world.serialise` | World round-trips through JSON | node + browser |
-| 9 | `world.inferTag` | Task title → skill tag inference | node + browser |
+| 1 | `world.recruit` | Townsfolk minions can be recruited into the crew for credits | node + browser |
+| 2 | `world.create` | World with seeded clock and ledger | node + browser |
+| 3 | `world.addAgentAndJob` | Add agents and jobs | node + browser |
+| 4 | `world.assignNextTask` | Assign next open stage task | node + browser |
+| 5 | `world.tick` | Tick advances time, agents and completes job tasks | node + browser |
+| 6 | `world.events` | World events roll over time | node + browser |
+| 7 | `world.quests` | Quests derived from open jobs | node + browser |
+| 8 | `world.recordResults` | Checklist/commissioning results earn credits and achievements | node + browser |
+| 9 | `world.serialise` | World round-trips through JSON | node + browser |
+| 10 | `world.inferTag` | Task title → skill tag inference | node + browser |
 
 ## windows/achievements (3)
 
@@ -717,22 +748,23 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 7 | `win.comm.reference` | Acceptance criteria reference | browser |
 | 8 | `win.comm.csv` | Commissioning CSV export | node + browser |
 
-## windows/crew (12)
+## windows/crew (13)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
-| 1 | `win.crew.roster` | Roster cards with needs, mood and traits | browser |
-| 2 | `win.crew.select` | Select a member from the roster | browser |
-| 3 | `win.crew.skills` | Skill sheet with rarity ranks and progress | browser |
-| 4 | `win.crew.autonomy` | Change autonomy level | browser |
-| 5 | `win.crew.break` | Send on break restores energy and records memory | browser |
-| 6 | `win.crew.training` | Training spends credits to raise the weakest skill | browser |
-| 7 | `win.crew.assign` | Assign next task on the current job | browser |
-| 8 | `win.crew.memorySearch` | Memory retrieval search | browser |
-| 9 | `win.crew.reflect` | Force a reflection | browser |
-| 10 | `win.crew.hire` | Hire with credits, traits and role | browser |
-| 11 | `win.crew.hireNeedsCredits` | Hiring is refused without credits | browser |
-| 12 | `win.crew.traitReference` | Trait reference table | browser |
+| 1 | `win.crew.roster` | Crew cards with portraits, needs, mood and traits | browser |
+| 2 | `win.crew.recruit` | Recruit townsfolk minions from the original roster for credits | browser |
+| 3 | `win.crew.select` | Select a member from the roster | browser |
+| 4 | `win.crew.skills` | Skill sheet with rarity ranks and progress | browser |
+| 5 | `win.crew.autonomy` | Change autonomy level | browser |
+| 6 | `win.crew.break` | Send on break restores energy and records memory | browser |
+| 7 | `win.crew.training` | Training spends credits to raise the weakest skill | browser |
+| 8 | `win.crew.assign` | Assign next task on the current job | browser |
+| 9 | `win.crew.memorySearch` | Memory retrieval search | browser |
+| 10 | `win.crew.reflect` | Force a reflection | browser |
+| 11 | `win.crew.hire` | Hire with credits, traits and role | browser |
+| 12 | `win.crew.hireNeedsCredits` | Hiring is refused without credits | browser |
+| 13 | `win.crew.traitReference` | Trait reference table | browser |
 
 ## windows/dashboard (7)
 
@@ -930,16 +962,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `win.serials.evidence` | Complete register records STC evidence | browser |
 | 4 | `win.serials.remove` | Remove a serial | browser |
 
-## windows/settings (6)
+## windows/settings (7)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
 | 1 | `win.settings.general` | General settings save and apply | browser |
-| 2 | `win.settings.keysList` | Keybind table with custom markers | browser |
-| 3 | `win.settings.rebind` | Rebind by pressing a key, with conflict refusal | browser |
-| 4 | `win.settings.hotbar` | Hotbar slot editor | browser |
-| 5 | `win.settings.data` | Backup size and export controls | browser |
-| 6 | `win.settings.importRejects` | Import rejects invalid backups | browser |
+| 2 | `win.settings.ai` | AI tab configures the crew language model | browser |
+| 3 | `win.settings.keysList` | Keybind table with custom markers | browser |
+| 4 | `win.settings.rebind` | Rebind by pressing a key, with conflict refusal | browser |
+| 5 | `win.settings.hotbar` | Hotbar slot editor | browser |
+| 6 | `win.settings.data` | Backup size and export controls | browser |
+| 7 | `win.settings.importRejects` | Import rejects invalid backups | browser |
 
 ## windows/spellbook (13)
 

@@ -58,7 +58,7 @@ function renderStats(body, ctx) {
         statCard('Jobs created', s.jobsCreated), statCard('Jobs complete', jobs.filter((j) => j.stage === 'complete').length), statCard('kW designed', kw.toFixed(1)), statCard('kWh storage', kwh.toFixed(1)),
         statCard('Checklists passed', s.checklistsPassed), statCard('Current streak', s.checklistStreak), statCard('Commissioning passes', s.commissioningPassed), statCard('STC-ready jobs', s.stcReady),
         statCard('Clauses read', s.clausesViewed), statCard('Expert crew', s.expertAgents), statCard('Reflections', s.reflections), statCard('Credits earned', lvl.xp)),
-        section('Crew hours', h('ul', { class: 'notes' }, ctx.world.agents.map((a) => h('li', {}, `${a.name}: ${a.hoursWorked.toFixed(0)} h, ${a.stats.tasksDone} tasks, ${a.stats.tasksFailed} reworks`)))));
+        section('Crew hours', h('ul', { class: 'notes' }, ctx.world.crew().map((a) => h('li', {}, `${a.name}: ${a.hoursWorked.toFixed(0)} h, ${a.stats.tasksDone} tasks, ${a.stats.tasksFailed} reworks`)))));
 }
 
 function renderTitles(body, ctx) {

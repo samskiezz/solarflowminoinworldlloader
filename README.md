@@ -23,6 +23,11 @@ storms and heatwaves come from the simulated world clock. WoW-style `!`/`?` ques
 an objective tracker runs an in-world tutorial, and the window system (hotbar 1–9, hotkeys, draggable windows)
 is the game's UI, as in a deep RPG.
 
+The original realm is in it: the 24-minion roster (tiers, specialties, identicon portraits) lives in town, six as
+your founding crew and the rest recruitable; the Minion Cognition Engine returns as an optional language-model
+adapter (Settings › AI) that gives every minion a persona, memories and clause context; the Sims-style needs
+widgets appear when you hover or click a minion.
+
 Everything behind the windows is real work:
 
 - **Real product data** – the Clean Energy Council approved module, inverter and battery lists

@@ -7,6 +7,7 @@ import { AUTONOMY_LEVELS, Agent } from '../sim/agent.js';
 import { mood } from '../sim/needs.js';
 import { section, statCard, grid, row, needBars, moodBadge, avatar, skillBadge, jobPicker } from './_shared.js';
 import { makeTestCtx, openWindow, q, qa, fire } from './_testing.js';
+import { recruitCost, rosterById } from '../sim/roster.js';
 
 export const HIRE_COST = 150;
 export const ROLES = ['Lead installer', 'Designer', 'Electrician', 'Apprentice', 'Commissioning tech', 'Project manager'];
@@ -14,26 +15,29 @@ export const ROLES = ['Lead installer', 'Designer', 'Electrician', 'Apprentice',
 export function def(ctx) {
     return {
         id: 'crew', title: ctx.t('nav.crew'), icon: '👥', hotkey: 'P', width: 900, height: 600,
-        tabs: [{ id: 'roster', label: 'Roster', icon: '👥' }, { id: 'detail', label: 'Member', icon: '🪪' }, { id: 'memory', label: 'Memory', icon: '🧠' }, { id: 'hire', label: 'Hire', icon: '＋' }],
+        tabs: [{ id: 'roster', label: 'Crew', icon: '👥' }, { id: 'detail', label: 'Member', icon: '🪪' }, { id: 'memory', label: 'Memory', icon: '🧠' }, { id: 'recruit', label: 'Recruit', icon: '🏘' }, { id: 'hire', label: 'Hire', icon: '＋' }],
         render(body, { tab }) {
             if (tab === 'detail') return renderDetail(body, ctx);
             if (tab === 'memory') return renderMemory(body, ctx);
             if (tab === 'hire') return renderHire(body, ctx);
+            if (tab === 'recruit') return renderRecruit(body, ctx);
             return renderRoster(body, ctx);
         }
     };
 }
 
-function selectedAgent(ctx) { const id = ctx.store.get('ui.selectedAgent'); return ctx.world.agent(id) || ctx.world.agents[0] || null; }
+function selectedAgent(ctx) { const id = ctx.store.get('ui.selectedAgent'); return ctx.world.agent(id) || ctx.world.crew()[0] || null; }
+export function portrait(agent, size = 'md') { const url = agent.meta && agent.meta.avatarUrl; return url ? h('img', { class: `avatar ${size} portrait`, src: url, alt: '', loading: 'lazy' }) : avatar(agent, size); }
 function selectAgent(ctx, id) { ctx.store.set('ui.selectedAgent', id); }
 
 function renderRoster(body, ctx) {
-    const agents = ctx.world.agents;
-    if (!agents.length) { body.append(empty('No crew. Hire someone from the Hire tab.')); return; }
+    const agents = ctx.world.crew();
+    body.append(row(h('span', { class: 'muted' }, `${agents.length} in the crew · ${ctx.world.townsfolk().length} minions in town to recruit`), button('Recruit', () => ctx.wm.setTab('crew', 'recruit'), { small: true })));
+    if (!agents.length) { body.append(empty('No crew. Recruit minions from town or hire someone new.')); return; }
     body.append(h('div', { class: 'agent-grid' }, agents.map((a) => {
         const best = a.bestSkill();
         return h('div', { class: `card agent-card ${selectedAgent(ctx) === a ? 'selected' : ''}`, onclick: () => { selectAgent(ctx, a.id); ctx.wm.setTab('crew', 'detail'); } },
-            row(avatar(a, 'lg'), h('div', { class: 'agent-head' }, h('div', { class: 'card-title' }, a.name, ' ', badge(`T${a.tier}`)), h('div', { class: 'card-sub' }, a.role), moodBadge(a))),
+            row(portrait(a, 'lg'), h('div', { class: 'agent-head' }, h('div', { class: 'card-title' }, a.name, ' ', badge(`T${a.tier}`, a.tier >= 3 ? 'accent' : 'neutral')), h('div', { class: 'card-sub' }, a.meta?.title || a.role), moodBadge(a))),
             needBars(a),
             h('div', { class: 'card-sub' }, a.currentTask ? `⚒ ${a.currentTask.label} (${Math.max(0, a.currentTask.remainingH).toFixed(1)} h left)` : '○ Idle – self-directed'),
             h('div', { class: 'card-sub' }, 'Traits: ', a.traits.map((t) => TRAITS[t]?.label || t).join(', ')),
@@ -43,10 +47,10 @@ function renderRoster(body, ctx) {
 
 function renderDetail(body, ctx) {
     const agent = selectedAgent(ctx);
-    body.append(row(h('span', { class: 'field-label' }, 'Member'), h('select', { class: 'input', onchange: (e) => { selectAgent(ctx, e.target.value); ctx.refresh('crew'); } }, ctx.world.agents.map((a) => h('option', { value: a.id, selected: agent && a.id === agent.id ? '' : null }, a.name)))));
+    body.append(row(h('span', { class: 'field-label' }, 'Member'), h('select', { class: 'input', onchange: (e) => { selectAgent(ctx, e.target.value); ctx.refresh('crew'); } }, ctx.world.crew().map((a) => h('option', { value: a.id, selected: agent && a.id === agent.id ? '' : null }, a.name)))));
     if (!agent) { body.append(empty('No crew member selected.')); return; }
     const m = mood(agent.needs);
-    body.append(section(null, row(avatar(agent, 'xl'), h('div', {}, h('h2', { class: 'job-heading' }, agent.name, ' ', badge(`Tier ${agent.tier}`), ' ', moodBadge(agent)), h('div', { class: 'muted' }, `${agent.role} · ${agent.hoursWorked.toFixed(0)} h worked · ${agent.stats.tasksDone} tasks done · ${agent.stats.tasksFailed} reworks · ${agent.stats.reflections} reflections`),
+    body.append(section(null, row(portrait(agent, 'xl'), h('div', {}, h('h2', { class: 'job-heading' }, agent.name, ' ', badge(`Tier ${agent.tier}`), ' ', moodBadge(agent)), agent.meta?.title ? h('div', { class: 'card-sub' }, agent.meta.title, agent.meta.specialties ? ` · ${agent.meta.specialties.join(', ')}` : '') : null, h('div', { class: 'muted' }, `${agent.role} · ${agent.hoursWorked.toFixed(0)} h worked · ${agent.stats.tasksDone} tasks done · ${agent.stats.tasksFailed} reworks · ${agent.stats.reflections} reflections`),
         row(button('Rename', async () => { const name = await promptText('New name', { value: agent.name }); if (name) { agent.name = name; ctx.saveWorld(); ctx.refresh('crew'); } }, { small: true }),
             h('label', { class: 'field inline' }, h('span', { class: 'field-label' }, 'Role'), h('select', { class: 'input', onchange: (e) => { agent.role = e.target.value; ctx.saveWorld(); } }, ROLES.map((r) => h('option', { value: r, selected: agent.role === r ? '' : null }, r)))),
             h('label', { class: 'field inline' }, h('span', { class: 'field-label' }, 'Autonomy'), h('select', { class: 'input autonomy', onchange: (e) => { agent.autonomy = e.target.value; ctx.saveWorld(); toast(`${agent.name} autonomy: ${agent.autonomy}`); } }, AUTONOMY_LEVELS.map((l) => h('option', { value: l, selected: agent.autonomy === l ? '' : null }, { observe: 'Observe (never acts)', suggest: 'Suggest (asks first)', semi: 'Semi-autonomous', full: 'Fully autonomous' }[l]))))))),
@@ -71,6 +75,11 @@ function renderMemory(body, ctx) {
             button('Tell them something', async () => { const text = await promptText('What should they remember?'); if (text) { agent.remember(`${ctx.profile().name} said: ${text}`, { tags: ['instruction'], importance: 6 }); ctx.saveWorld(); ctx.refresh('crew'); } }, { small: true }))));
 }
 
+function renderRecruit(body, ctx) {
+    const town = ctx.world.townsfolk().sort((a, b) => b.tier - a.tier || a.name.localeCompare(b.name));
+    body.append(section(`Minions living in Solarhaven (${town.length}) · balance ${ctx.world.ledger.balance} credits`, h('p', { class: 'muted' }, 'The original SolarFlow roster. Each has a tier, specialties and a reputation; recruiting costs credits by tier (120 / 220 / 400). You can also walk up to them in town and press E.'), town.length ? h('div', { class: 'agent-grid' }, town.map((a) => { const cost = recruitCost(rosterById(a.id) || { tier: a.tier }); return h('div', { class: 'card agent-card recruit-card' }, row(portrait(a, 'lg'), h('div', { class: 'agent-head' }, h('div', { class: 'card-title' }, a.name, ' ', badge(`T${a.tier}`, a.tier >= 3 ? 'accent' : 'neutral')), h('div', { class: 'card-sub' }, a.meta?.title || a.role), h('div', { class: 'muted small' }, (a.meta?.specialties || []).join(', ')))), h('div', { class: 'card-sub' }, `Reputation ${Math.round((a.meta?.reputation || 0) * 100)} % · traits ${a.traits.map((t) => TRAITS[t]?.label || t).join(', ')}`), row(button(`Recruit for ${cost} cr`, () => { const r = ctx.world.recruit(a.id, cost); toast(r.ok ? `${a.name} joined the crew` : r.reason, { kind: r.ok ? 'ok' : 'warn' }); ctx.saveWorld(); ctx.refresh('crew'); }, { kind: 'primary', small: true, disabled: ctx.world.ledger.balance < cost }), button('Talk', () => { ctx.store.set('ui.chatAgent', a.id); ctx.open('chat', { tab: 'talk' }); }, { small: true }))); })) : empty('Everyone in town is already on the crew.')));
+}
+
 function renderHire(body, ctx) {
     const balance = ctx.world.ledger.balance;
     const name = h('input', { type: 'text', class: 'input', placeholder: 'Name' });
@@ -93,8 +102,9 @@ function renderHire(body, ctx) {
 }
 
 export const FEATURES = [
-    { id: 'win.crew.roster', title: 'Roster cards with needs, mood and traits', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'roster' }); const ok = qa(b, '.agent-card').length === 3 && qa(b, '.agent-card .need').length === 18; t.done(); return ok; } },
-    { id: 'win.crew.select', title: 'Select a member from the roster', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'roster' }); qa(b, '.agent-card')[1].click(); const ok = t.ctx.store.get('ui.selectedAgent') === 'NOVA' && t.ctx.wm.windows.get('crew').tab === 'detail'; t.done(); return ok; } },
+    { id: 'win.crew.roster', title: 'Crew cards with portraits, needs, mood and traits', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'roster' }); const ok = qa(b, '.agent-card').length === 6 && qa(b, '.agent-card .need').length === 36 && qa(b, 'img.portrait').length === 6; t.done(); return ok; } },
+    { id: 'win.crew.recruit', title: 'Recruit townsfolk minions from the original roster for credits', dom: true, test: () => { const t = makeTestCtx(); t.ctx.world.ledger.balance = 500; let b = openWindow(t.ctx, def(t.ctx), { tab: 'recruit' }); const listed = qa(b, '.recruit-card').length === 18; const card = qa(b, '.recruit-card').find((x) => /Wren/.test(x.textContent)); card.querySelector('button').click(); const ok = listed && t.ctx.world.agent('WREN').meta.hired === true && t.ctx.world.ledger.balance === 380 && t.ctx.world.crew().length === 7; t.done(); return ok; } },
+    { id: 'win.crew.select', title: 'Select a member from the roster', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'roster' }); qa(b, '.agent-card').find((x) => /Nova/.test(x.textContent)).click(); const ok = t.ctx.store.get('ui.selectedAgent') === 'NOVA' && t.ctx.wm.windows.get('crew').tab === 'detail'; t.done(); return ok; } },
     { id: 'win.crew.skills', title: 'Skill sheet with rarity ranks and progress', dom: true, test: () => { const t = makeTestCtx(); t.ctx.store.set('ui.selectedAgent', 'NOVA'); const b = openWindow(t.ctx, def(t.ctx), { tab: 'detail' }); const ok = qa(b, '.skill').length === 8 && qa(b, '.skill-rank').length === 8; t.done(); return ok; } },
     { id: 'win.crew.autonomy', title: 'Change autonomy level', dom: true, test: () => { const t = makeTestCtx(); t.ctx.store.set('ui.selectedAgent', 'BOLT'); const b = openWindow(t.ctx, def(t.ctx), { tab: 'detail' }); const sel = q(b, 'select.autonomy'); sel.value = 'observe'; fire(sel, 'change'); const ok = t.ctx.world.agent('BOLT').autonomy === 'observe'; t.done(); return ok; } },
     { id: 'win.crew.break', title: 'Send on break restores energy and records memory', dom: true, test: () => { const t = makeTestCtx(); const a = t.ctx.world.agent('ATLAS'); a.needs.energy = 20; t.ctx.store.set('ui.selectedAgent', 'ATLAS'); const b = openWindow(t.ctx, def(t.ctx), { tab: 'detail' }); qa(b, 'button').find((x) => x.textContent === 'Send on break').click(); const ok = a.needs.energy === 45 && a.memory.records.some((r) => /break/.test(r.text)); t.done(); return ok; } },
@@ -102,7 +112,7 @@ export const FEATURES = [
     { id: 'win.crew.assign', title: 'Assign next task on the current job', dom: true, test: () => { const t = makeTestCtx(); t.ctx.store.set('ui.selectedAgent', 'NOVA'); const b = openWindow(t.ctx, def(t.ctx), { tab: 'detail' }); qa(b, 'button').find((x) => x.textContent.startsWith('Assign next task')).click(); const ok = t.ctx.world.agent('NOVA').currentTask?.jobId === t.job.id; t.done(); return ok; } },
     { id: 'win.crew.memorySearch', title: 'Memory retrieval search', dom: true, test: () => { const t = makeTestCtx(); const a = t.ctx.world.agent('ATLAS'); a.remember('Isolator failed inspection on JOB-1', { tags: ['isolator'], importance: 7 }); a.remember('Had lunch', { importance: 1 }); t.ctx.store.set('ui.selectedAgent', 'ATLAS'); const b = openWindow(t.ctx, def(t.ctx), { tab: 'memory' }); const inp = q(b, 'input[type=search]'); inp.value = 'isolator'; fire(inp); const hits = qa(b, '.memory'); const ok = hits.length >= 1 && /Isolator/.test(hits[0].textContent); t.done(); return ok; } },
     { id: 'win.crew.reflect', title: 'Force a reflection', dom: true, test: () => { const t = makeTestCtx(); const a = t.ctx.world.agent('ATLAS'); for (let i = 0; i < 4; i++) a.remember(`Isolator defect ${i}`, { tags: ['isolator'], importance: 7 }); t.ctx.store.set('ui.selectedAgent', 'ATLAS'); const b = openWindow(t.ctx, def(t.ctx), { tab: 'memory' }); qa(b, 'button').find((x) => x.textContent === 'Reflect now').click(); const ok = a.memory.byKind('reflection').length >= 1; t.done(); return ok; } },
-    { id: 'win.crew.hire', title: 'Hire with credits, traits and role', dom: true, test: () => { const t = makeTestCtx(); t.ctx.world.ledger.balance = 500; const b = openWindow(t.ctx, def(t.ctx), { tab: 'hire' }); q(b, 'input[placeholder=Name]').value = 'Kite'; qa(b, 'button').find((x) => x.textContent === 'Hire').click(); const k = t.ctx.world.agent('KITE'); const ok = k && k.traits.length === 2 && t.ctx.world.ledger.balance === 350 && t.ctx.world.agents.length === 4; t.done(); return Boolean(ok); } },
+    { id: 'win.crew.hire', title: 'Hire with credits, traits and role', dom: true, test: () => { const t = makeTestCtx(); t.ctx.world.ledger.balance = 500; const b = openWindow(t.ctx, def(t.ctx), { tab: 'hire' }); q(b, 'input[placeholder=Name]').value = 'Kite2'; qa(b, 'button').find((x) => x.textContent === 'Hire').click(); const k = t.ctx.world.agent('KITE2'); const ok = k && k.traits.length === 2 && t.ctx.world.ledger.balance === 350 && t.ctx.world.crew().length === 7; t.done(); return Boolean(ok); } },
     { id: 'win.crew.hireNeedsCredits', title: 'Hiring is refused without credits', dom: true, test: () => { const t = makeTestCtx(); t.ctx.world.ledger.balance = 10; const b = openWindow(t.ctx, def(t.ctx), { tab: 'hire' }); q(b, 'input[placeholder=Name]').value = 'Poor'; qa(b, 'button').find((x) => x.textContent === 'Hire').click(); const ok = !t.ctx.world.agent('POOR'); t.done(); return ok; } },
     { id: 'win.crew.traitReference', title: 'Trait reference table', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'hire' }); const ok = qa(b, 'tbody tr').length === 8; t.done(); return ok; } }
 ];

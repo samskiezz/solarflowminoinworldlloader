@@ -39,7 +39,7 @@ export function nextAction(job, design = {}) {
 /** Suggestions from every agent that is allowed to suggest, for every open job. */
 export function suggestions(world, designFor) {
     const out = [];
-    const agents = world.agents.filter((a) => a.autonomy === 'suggest' || a.autonomy === 'semi' || a.autonomy === 'full');
+    const agents = (world.crew ? world.crew() : world.agents).filter((a) => a.autonomy === 'suggest' || a.autonomy === 'semi' || a.autonomy === 'full');
     if (!agents.length) return out;
     for (const job of world.jobs.filter((j) => j.stage !== 'complete')) {
         const action = nextAction(job, designFor(job.id));

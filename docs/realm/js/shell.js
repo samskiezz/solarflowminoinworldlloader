@@ -104,7 +104,7 @@ export function buildDock(ctx, host) {
         if (e.key !== 'Enter') { e.stopPropagation(); return; }
         e.stopPropagation(); const text = input.value.trim(); if (!text) return; input.value = '';
         if (text.startsWith('/')) { line(text, 'console'); const r = await ctx.commands.exec(text); for (const l of String(r.message).split('\n')) line(l, r.ok ? 'console' : 'error'); return; }
-        const agent = ctx.world.agent(ctx.store.get('ui.chatAgent')) || ctx.world.agents[0];
+        const agent = ctx.world.agent(ctx.store.get('ui.chatAgent')) || ctx.world.crew()[0] || ctx.world.agents[0];
         if (!agent) { line('No crew to talk to', 'error'); return; }
         const { reply } = await import('./sim/dialogue.js');
         line(h('span', {}, h('span', { class: 'who' }, `${ctx.profile().name}: `), text));

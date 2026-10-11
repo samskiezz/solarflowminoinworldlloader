@@ -13,12 +13,17 @@ import { CommandRegistry } from './commands.js';
 import { t, setLocale } from './i18n.js';
 import { World } from '../sim/world.js';
 import { flatten } from '../domain/products.js';
+import { rosterSpecs } from '../sim/roster.js';
+import { createLlm } from './llm.js';
 
-export const DEFAULT_CREW = [
+export const LEGACY_DEFAULT_CREW = [
     { id: 'ATLAS', name: 'Atlas', role: 'Lead installer', tier: 2, traits: ['meticulous', 'steady'], avatar: '🧑‍🔧', skills: { installation: 450, commissioning: 220 } },
     { id: 'NOVA', name: 'Nova', role: 'Designer', tier: 2, traits: ['tinkerer', 'scholar'], avatar: '👩‍💻', skills: { pv_arrays: 500, electrical: 320, standards: 260 } },
     { id: 'BOLT', name: 'Bolt', role: 'Apprentice', tier: 1, traits: ['sprinter', 'optimist'], avatar: '🧑‍🎓', skills: { installation: 60 } }
 ];
+
+/** Everyone from the original roster lives in Solarhaven; six are hired to start. */
+export const DEFAULT_CREW = rosterSpecs().map((spec, i) => ({ ...spec, avatar: LEGACY_DEFAULT_CREW.find((c) => c.id === spec.id)?.avatar || null, skills: { ...spec.skills, ...(LEGACY_DEFAULT_CREW.find((c) => c.id === spec.id)?.skills || {}) } }));
 
 export function companyLevel(ledger) {
     const earned = (ledger.entries || []).filter((e) => e.amount > 0 && e.type !== 'opening').reduce((n, e) => n + e.amount, 0);
@@ -34,6 +39,9 @@ export function createContext({ storage = null, root = null, products = null, se
     const savedWorld = store.get('world');
     const world = savedWorld ? World.fromJSON(savedWorld) : new World({ seed });
     if (!savedWorld) for (const spec of DEFAULT_CREW) world.addAgent(spec);
+    else { // bring any roster minions missing from an older save into town as townsfolk
+        for (const spec of rosterSpecs()) if (!world.agent(spec.id)) world.addAgent({ ...spec, meta: { ...spec.meta, hired: false } });
+    }
     if (!store.get('profile.createdAt')) store.set('profile.createdAt', new Date(now()).toISOString());
     setLocale(locale || store.get('profile.locale', 'en'));
 
@@ -41,9 +49,11 @@ export function createContext({ storage = null, root = null, products = null, se
     const keys = new Keybinds({ store, bus });
     const clock = new WorldClock({ world, bus, store });
     const commands = new CommandRegistry({ bus });
+    const llm = createLlm({ store });
+    llm.install();
 
     const ctx = {
-        store, bus, world, wm, keys, clock, commands, t,
+        store, bus, world, wm, keys, clock, commands, llm, t,
         products: { list: [], byId: new Map(), summary: null, loaded: false, source: null },
         now,
         profile() { return store.get('profile'); },
@@ -90,8 +100,8 @@ export function createContext({ storage = null, root = null, products = null, se
 }
 
 export const FEATURES = [
-    { id: 'core.ctx.create', title: 'Context wires store, world, clock, keys and commands', test: () => { const c = createContext(); return c.world.agents.length === 3 && c.keys.keyFor('window.crew') === 'P' && c.clock.speed.id === 'normal' && typeof c.commands.search === 'function'; } },
-    { id: 'core.ctx.persistWorld', title: 'World persists and restores through the store', test: () => { const storage = createMemoryStorage(); const a = createContext({ storage }); a.world.addJob({ customer: 'Zed', postcode: '2000' }); a.saveWorld(); a.store.flush(); const b = createContext({ storage }); return b.world.jobs.length === 1 && b.world.jobs[0].customer === 'Zed' && b.world.agents.length === 3; } },
+    { id: 'core.ctx.create', title: 'Context wires store, world, clock, keys and commands', test: () => { const c = createContext(); return c.world.agents.length === 24 && c.world.crew().length === 6 && c.keys.keyFor('window.crew') === 'P' && c.clock.speed.id === 'normal' && typeof c.commands.search === 'function'; } },
+    { id: 'core.ctx.persistWorld', title: 'World persists and restores through the store', test: () => { const storage = createMemoryStorage(); const a = createContext({ storage }); a.world.addJob({ customer: 'Zed', postcode: '2000' }); a.saveWorld(); a.store.flush(); const b = createContext({ storage }); return b.world.jobs.length === 1 && b.world.jobs[0].customer === 'Zed' && b.world.agents.length === 24; } },
     { id: 'core.ctx.currentJob', title: 'Current job selection with fallback', test: () => { const c = createContext(); const none = c.currentJob() === null; const j = c.world.addJob({ customer: 'A' }); const k = c.world.addJob({ customer: 'B' }); c.setCurrentJob(k.id); return none && c.currentJob().customer === 'B' && c.job(j.id).customer === 'A'; } },
     { id: 'core.ctx.design', title: 'Design records saved per job and mirrored into the job', test: () => { const c = createContext(); const j = c.world.addJob({ customer: 'A' }); c.saveDesign(j.id, { moduleId: 'PV1', productsApproved: true }); return c.design(j.id).moduleId === 'PV1' && c.job(j.id).design.productsApproved === true; } },
     { id: 'core.ctx.level', title: 'Company level from credits earned', test: () => { const c = createContext(); const l0 = c.level().level; c.world.ledger.entries.push({ at: 1, type: 'checklist_pass', amount: 450, balance: 550 }); return l0 === 1 && c.level().level === 4 && c.level().title === 'Licensed crew'; } },

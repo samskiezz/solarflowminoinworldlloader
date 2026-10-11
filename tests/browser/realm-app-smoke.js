@@ -32,7 +32,7 @@ server.listen(port, async () => {
         check('profile saved from onboarding', await page.evaluate(() => window.REALM.profile().name === 'Ada' && window.REALM.profile().postcode === '3000'));
         check('dashboard + help open after onboarding', await page.evaluate(() => window.REALM.wm.isOpen('dashboard') && window.REALM.wm.isOpen('help')));
         check('windows registered', (await page.evaluate(() => window.REALM.wm.defs.size)) >= 21, String(await page.evaluate(() => window.REALM.wm.defs.size)));
-        check('crew walking the town', await page.evaluate(() => window.GAME.npcs.npcs.size === 3 && document.querySelectorAll('.ov-nameplate').length >= 3));
+        check('the whole roster walks the town (24 minions, 6 crew)', await page.evaluate(() => window.GAME.npcs.npcs.size === 24 && window.REALM.world.crew().length === 6 && document.querySelectorAll('.ov-nameplate').length >= 24));
         await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
         const p0 = await page.evaluate(() => ({ ...window.GAME.player.pos }));
         await page.focus('#realm-game'); await page.keyboard.down('w'); await page.waitForTimeout(700); await page.keyboard.up('w');

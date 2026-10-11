@@ -19,9 +19,9 @@ function history(ctx, agentId) { return ctx.store.get(`chat.${agentId}`, []); }
 function pushMessage(ctx, agentId, msg) { ctx.store.push(`chat.${agentId}`, { ...msg, at: new Date(ctx.now()).toISOString() }, CHAT_LIMIT); }
 
 function renderTalk(body, ctx) {
-    const agents = ctx.world.agents; if (!agents.length) { body.append(empty('No crew to talk to.')); return; }
+    const agents = [...ctx.world.crew(), ...ctx.world.townsfolk()]; if (!agents.length) { body.append(empty('No crew to talk to.')); return; }
     const id = ctx.store.get('ui.chatAgent'); const agent = ctx.world.agent(id) || agents[0];
-    const sel = h('select', { class: 'input', onchange: () => { ctx.store.set('ui.chatAgent', sel.value); ctx.refresh('chat'); } }, agents.map((a) => h('option', { value: a.id, selected: a.id === agent.id ? '' : null }, a.name)));
+    const sel = h('select', { class: 'input', onchange: () => { ctx.store.set('ui.chatAgent', sel.value); ctx.refresh('chat'); } }, agents.map((a) => h('option', { value: a.id, selected: a.id === agent.id ? '' : null }, `${a.name}${a.meta?.hired === false ? ' (townsfolk)' : ''}`)));
     const useLlm = h('input', { type: 'checkbox', checked: ctx.store.get('ui.chatLlm') && llmAvailable() ? '' : null, disabled: llmAvailable() ? null : '', onchange: () => ctx.store.set('ui.chatLlm', useLlm.checked) });
     const log = h('div', { class: 'chat-log' });
     const renderLog = () => { const msgs = history(ctx, agent.id); log.replaceChildren(...(msgs.length ? msgs.map((m) => h('div', { class: `chat-msg ${m.from === 'you' ? 'you' : 'them'}` }, h('span', { class: 'chat-from' }, m.from === 'you' ? ctx.profile().name : agent.name), h('span', { class: 'chat-text' }, m.text))) : [h('div', { class: 'chat-msg them' }, h('span', { class: 'chat-from' }, agent.name), h('span', { class: 'chat-text' }, greeting(agent, ctx.world.random)))])); log.scrollTop = log.scrollHeight; };
@@ -32,12 +32,12 @@ function renderTalk(body, ctx) {
         pushMessage(ctx, agent.id, { from: 'you', text }); renderLog();
         agent.remember(`${ctx.profile().name} said: ${text}`, { tags: ['conversation'], importance: 3 });
         let answer;
-        if (useLlm.checked && llmAvailable()) { try { answer = await replyWithLlm(agent, text, { memory: agent.memory, now: ctx.world.time }); } catch (e) { answer = null; } }
+        if (useLlm.checked && llmAvailable()) { try { answer = await replyWithLlm(agent, text, { memory: agent.memory, now: ctx.world.time, ctx, history: history(ctx, agent.id).slice(-8) }); } catch (e) { answer = null; } }
         if (!answer) answer = reply(agent, text, { memory: agent.memory, random: ctx.world.random, now: ctx.world.time });
         pushMessage(ctx, agent.id, { from: agent.id, text: answer }); agent.needs.social = Math.min(100, agent.needs.social + 5); ctx.saveWorld(); renderLog();
     };
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.stopPropagation(); send(); } });
-    body.append(section(null, row(avatar(agent, 'md'), sel, moodBadge(agent), h('label', { class: 'field inline', title: llmAvailable() ? 'Use the configured language model for replies' : 'No language model configured (window.SOLARFLOW_LLM)' }, useLlm, ' LLM replies')), log, row(input, button('Send', send, { kind: 'primary', small: true }), button('Clear', () => { ctx.store.set(`chat.${agent.id}`, []); renderLog(); }, { small: true }))));
+    body.append(section(null, row(avatar(agent, 'md'), sel, moodBadge(agent), h('label', { class: 'field inline', title: llmAvailable() ? 'Use the configured language model for replies' : 'Configure a language model in Settings › AI' }, useLlm, ' LLM replies', llmAvailable() ? null : button('Set up', () => ctx.open('settings', { tab: 'ai' }), { small: true }))), log, row(input, button('Send', send, { kind: 'primary', small: true }), button('Clear', () => { ctx.store.set(`chat.${agent.id}`, []); renderLog(); }, { small: true }))));
 }
 
 function renderChannel(body, ctx) {

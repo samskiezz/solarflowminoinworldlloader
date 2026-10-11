@@ -25,7 +25,7 @@ export function createInteractions(engine, overlay, { ctx, town, player, npcs })
         find() {
             const pos = player.pos;
             const near = npcs.nearest(pos, 2.8);
-            if (near) return { kind: 'npc', agent: near.agent, npc: near.npc, label: `Talk to ${near.agent.name}`, dist: near.dist };
+            if (near) return { kind: 'npc', agent: near.agent, npc: near.npc, label: `Talk to ${near.agent.name}${near.agent.meta && near.agent.meta.hired === false ? ' (not on the crew yet)' : ''}`, dist: near.dist };
             const jobs = ctx.jobs(); let best = null;
             for (const job of jobs) { const lot = lotForJob(jobs, job.id); if (!lot) continue; const door = doorOf({ ...lot, w: lot.w - 2, d: lot.d - 2 }); const d = Math.min(dist(pos, door), dist(pos, lot) - 4); if (d < 3.2 && (!best || d < best.dist)) best = { kind: 'house', job, label: `Visit ${job.customer}'s job (${STAGES.find((x) => x.id === job.stage)?.title})`, dist: d }; }
             for (const l of LANDMARKS) { const door = ['board', 'campfire', 'training'].includes(l.kind) ? { x: l.x, z: l.z } : doorOf(l); const d = Math.min(dist(pos, door), dist(pos, l) - Math.max(l.w, l.d) / 2); if (d < 3.4 && (!best || d < best.dist)) best = { kind: 'landmark', landmark: l, label: { board: 'Read the notice board', campfire: 'Sit at the campfire', training: 'Enter the training yard' }[l.kind] || `Enter the ${l.name}`, dist: d }; }

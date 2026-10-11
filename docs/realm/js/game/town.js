@@ -49,15 +49,18 @@ export const TREES = Array.from({ length: 48 }, (_, i) => {
     return { x: Math.round(Math.cos(a) * r), z: Math.round(Math.sin(a) * r * 0.95), s: 1 + (i % 4) * 0.25 };
 }).concat([{ x: -20, z: -14, s: 1.3 }, { x: 20, z: -14, s: 1.2 }, { x: -22, z: 6, s: 1.1 }, { x: 22, z: 6, s: 1.4 }, { x: 14, z: 26, s: 1 }, { x: -16, z: 30, s: 1.2 }]);
 
+/** Dominion-style district: tall blocks beyond the town edge as a skyline backdrop (out of reach). */
+export const DISTRICT = Array.from({ length: 22 }, (_, i) => { const a = (i / 22) * Math.PI * 2 + 0.1; const r = 100 + (i % 3) * 9; const seed = (i * 7919) % 97; return { x: Math.round(Math.cos(a) * r), z: Math.round(Math.sin(a) * r * 0.9), w: 8 + (seed % 5), d: 8 + ((seed * 3) % 5), h: 12 + (seed % 7) * 3, colour: [0x4a90e2, 0x7ed321, 0xf5a623, 0xbd10e0, 0x4ecdc4, 0xa8e6cf, 0x9aa0a6, 0x5b6e8c][i % 8] }; });
+
 /** Named spots agents go to for each behaviour. */
 export const SPOTS = {
-    bunk: Array.from({ length: 8 }, (_, i) => ({ x: -7 + i * 2, z: -34.5, inside: 'guild' })),
-    desk: Array.from({ length: 6 }, (_, i) => ({ x: 28 + i * 2, z: -0.8, inside: 'workshop' })),
-    shelf: Array.from({ length: 6 }, (_, i) => ({ x: -39 + i * 2, z: -0.8, inside: 'library' })),
-    fire: Array.from({ length: 8 }, (_, i) => ({ x: -12 + Math.cos((i / 8) * Math.PI * 2) * 3, z: 14 + Math.sin((i / 8) * Math.PI * 2) * 3 })),
-    cafe: Array.from({ length: 6 }, (_, i) => ({ x: -34 + (i % 3) * 3, z: 26 + Math.floor(i / 3) * 2, inside: 'cafe' })),
-    yard: Array.from({ length: 6 }, (_, i) => ({ x: -40 + (i % 3) * 4, z: 35 + Math.floor(i / 3) * 4 })),
-    square: Array.from({ length: 8 }, (_, i) => ({ x: Math.cos((i / 8) * Math.PI * 2) * 11, z: 6 + Math.sin((i / 8) * Math.PI * 2) * 8 }))
+    bunk: Array.from({ length: 24 }, (_, i) => ({ x: -11 + (i % 12) * 2, z: -34.5 - Math.floor(i / 12) * 2, inside: 'guild' })),
+    desk: Array.from({ length: 12 }, (_, i) => ({ x: 27 + (i % 6) * 2.2, z: -0.8 + Math.floor(i / 6) * 2, inside: 'workshop' })),
+    shelf: Array.from({ length: 12 }, (_, i) => ({ x: -40 + (i % 6) * 2.2, z: -0.8 + Math.floor(i / 6) * 2, inside: 'library' })),
+    fire: Array.from({ length: 12 }, (_, i) => ({ x: -12 + Math.cos((i / 12) * Math.PI * 2) * (3 + (i % 2) * 1.5), z: 14 + Math.sin((i / 12) * Math.PI * 2) * (3 + (i % 2) * 1.5) })),
+    cafe: Array.from({ length: 12 }, (_, i) => ({ x: -36 + (i % 4) * 3, z: 26 + Math.floor(i / 4) * 2, inside: 'cafe' })),
+    yard: Array.from({ length: 12 }, (_, i) => ({ x: -41 + (i % 4) * 3.5, z: 34 + Math.floor(i / 4) * 3.5 })),
+    square: Array.from({ length: 16 }, (_, i) => ({ x: Math.cos((i / 16) * Math.PI * 2) * (11 + (i % 2) * 3), z: 6 + Math.sin((i / 16) * Math.PI * 2) * (8 + (i % 2) * 2) }))
 };
 
 export function landmark(id) { return LANDMARKS.find((l) => l.id === id) || null; }
@@ -111,6 +114,8 @@ export const FEATURES = [
     { id: 'game.town.door', title: 'Door positions face the street', test: () => { const d = doorOf(landmark('guild')); return d.z > landmark('guild').z && Math.abs(d.x) < 0.01; } },
     { id: 'game.town.obstacles', title: 'Obstacle boxes include landmarks and job houses', test: () => obstacles([{ id: 'J' }]).some((o) => o.id === 'house:J') && !obstacles().some((o) => o.id === 'board') && obstacles().some((o) => o.id === 'fountain') },
     { id: 'game.town.houseState', title: 'House build state follows the job stage', test: () => { const lead = houseState({ stage: 'lead', tasks: { 'lead:a': false } }); const install = houseState({ stage: 'install', tasks: { 'install:a': true, 'install:b': false }, batteryKwh: 13 }); const done = houseState({ stage: 'complete', tasks: {} }); return lead.forSale && lead.marker === '!' && install.scaffold && install.panelsPct === 0.5 && install.inverter && !install.battery && done.complete && done.marker === null && houseState({ stage: 'lead', tasks: { 'lead:a': true } }).marker === '?'; } },
-    { id: 'game.town.spots', title: 'Behaviour spots for bunks, desks, shelves, fire, cafe, yard', test: () => ['bunk', 'desk', 'shelf', 'fire', 'cafe', 'yard', 'square'].every((k) => SPOTS[k].length >= 6) },
-    { id: 'game.town.roadsTrees', title: 'Roads and trees are laid out', test: () => ROADS.length === 6 && TREES.length === 54 }
+    { id: 'game.town.spots', title: 'Behaviour spots for bunks, desks, shelves, fire, cafe, yard', test: () => ['bunk', 'desk', 'shelf', 'fire', 'cafe', 'yard', 'square'].every((k) => SPOTS[k].length >= 12) },
+    { id: 'game.town.roadsTrees', title: 'Roads and trees are laid out', test: () => ROADS.length === 6 && TREES.length === 54 },
+    { id: 'game.town.district', title: 'A skyline district rings the town beyond the player bounds', test: () => DISTRICT.length === 22 && DISTRICT.every((b) => Math.hypot(b.x, b.z) > 85 && b.h >= 12) },
+    { id: 'game.town.spotsForRoster', title: 'Enough bunks, desks and seats for the whole 24-minion roster', test: () => SPOTS.bunk.length === 24 && SPOTS.square.length >= 16 && SPOTS.fire.length >= 12 }
 ];

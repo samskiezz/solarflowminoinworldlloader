@@ -17,7 +17,7 @@ export function pipelineValue(ctx) {
     return { kw: Math.round(kw * 10) / 10, stcs, stcValue, quoted };
 }
 export function crewUtilisation(ctx) {
-    return ctx.world.agents.map((a) => { const work = a.log.filter((l) => l.events.some((e) => e.type === 'work')).length; const total = a.log.length || 1; return { id: a.id, name: a.name, utilisationPct: Math.round((work / total) * 100), tasksDone: a.stats.tasksDone, reworks: a.stats.tasksFailed, quality: a.stats.tasksDone + a.stats.tasksFailed ? Math.round((a.stats.tasksDone / (a.stats.tasksDone + a.stats.tasksFailed)) * 100) : null }; });
+    return ctx.world.crew().map((a) => { const work = a.log.filter((l) => l.events.some((e) => e.type === 'work')).length; const total = a.log.length || 1; return { id: a.id, name: a.name, utilisationPct: Math.round((work / total) * 100), tasksDone: a.stats.tasksDone, reworks: a.stats.tasksFailed, quality: a.stats.tasksDone + a.stats.tasksFailed ? Math.round((a.stats.tasksDone / (a.stats.tasksDone + a.stats.tasksFailed)) * 100) : null }; });
 }
 
 export function def(ctx) {
@@ -36,5 +36,5 @@ export function def(ctx) {
 export const FEATURES = [
     { id: 'win.analytics.pipeline', title: 'Pipeline kW, STC exposure and quoted value', dom: true, test: () => { const t = makeTestCtx(); const pv = pipelineValue(t.ctx); t.done(); return pv.kw === 6.6 && pv.stcs > 0 && pv.stcValue > 0; } },
     { id: 'win.analytics.utilisation', title: 'Crew utilisation and first-time quality', dom: true, test: () => { const t = makeTestCtx(); const a = t.ctx.world.agent('ATLAS'); a.stats.tasksDone = 3; a.stats.tasksFailed = 1; a.log.push({ events: [{ type: 'work' }] }, { events: [{ type: 'action' }] }); const u = crewUtilisation(t.ctx).find((x) => x.id === 'ATLAS'); t.done(); return u.utilisationPct === 50 && u.quality === 75; } },
-    { id: 'win.analytics.render', title: 'Analytics dashboard renders charts and tables', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx)); const ok = qa(b, '.stat').length === 4 && qa(b, '.bar-col').length === 9 && qa(b, 'tbody tr').length === 3; t.done(); return ok; } }
+    { id: 'win.analytics.render', title: 'Analytics dashboard renders charts and tables', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx)); const ok = qa(b, '.stat').length === 4 && qa(b, '.bar-col').length === 9 && qa(b, 'tbody tr').length === 6; t.done(); return ok; } }
 ];

@@ -4,6 +4,7 @@ import { SPEEDS } from '../core/clock.js';
 import { DEFAULT_BINDINGS, normalize } from '../core/keybinds.js';
 import { LOCALES, setLocale } from '../core/i18n.js';
 import { THEMES } from './character.js';
+import { PROVIDERS } from '../core/llm.js';
 import { section, grid, row, statCard, form } from './_shared.js';
 import { makeTestCtx, openWindow, q, qa, fire } from './_testing.js';
 
@@ -12,8 +13,8 @@ export const HOTBAR_CHOICES = ['dashboard', 'jobs', 'crew', 'quests', 'inventory
 export function def(ctx) {
     return {
         id: 'settings', title: ctx.t('nav.settings'), icon: '⚙', hotkey: 'I', width: 820, height: 600,
-        tabs: [{ id: 'general', label: 'General', icon: '⚙' }, { id: 'keys', label: 'Keybinds', icon: '⌨' }, { id: 'hotbar', label: 'Hotbar', icon: '▦' }, { id: 'data', label: 'Data', icon: '💾' }],
-        render(body, { tab }) { ({ keys: renderKeys, hotbar: renderHotbar, data: renderData }[tab] || renderGeneral)(body, ctx); }
+        tabs: [{ id: 'general', label: 'General', icon: '⚙' }, { id: 'ai', label: 'AI', icon: '🧠' }, { id: 'keys', label: 'Keybinds', icon: '⌨' }, { id: 'hotbar', label: 'Hotbar', icon: '▦' }, { id: 'data', label: 'Data', icon: '💾' }],
+        render(body, { tab }) { ({ keys: renderKeys, hotbar: renderHotbar, data: renderData, ai: renderAi }[tab] || renderGeneral)(body, ctx); }
     };
 }
 
@@ -27,6 +28,19 @@ function renderGeneral(body, ctx) {
         { key: 'autosaveSeconds', label: 'Autosave interval (s)', value: ui.autosaveSeconds ?? 15, min: 5, step: 5 }, { key: 'llmEndpoint', label: 'LLM endpoint (optional)', type: 'text', value: ui.llmEndpoint || '', hint: 'Leave empty for built-in dialogue' }
     ]);
     body.append(section('General', f.el, row(button('Save', () => { const v = f.values(); ctx.store.patch('ui', { speed: v.speed, minimap: v.minimap, chatOpen: v.chatOpen, soundOn: v.soundOn, autosaveSeconds: v.autosaveSeconds, llmEndpoint: v.llmEndpoint }); ctx.store.patch('profile', { locale: v.locale, theme: v.theme }); setLocale(v.locale); ctx.clock.setSpeed(v.speed); ctx.bus.emit('settings:updated', ctx.store.get('ui')); ctx.bus.emit('profile:updated', ctx.profile()); toast(ctx.t('toast.saved'), { kind: 'ok' }); ctx.refresh(); }, { kind: 'primary' }), button('Replay tutorial', () => { ctx.store.patch('onboarding', { step: 0, done: false }); ctx.bus.emit('tutorial:restart'); }, { small: true }))));
+}
+
+function renderAi(body, ctx) {
+    const llm = ctx.llm; const c = llm.config();
+    const f = form([
+        { key: 'enabled', label: 'Use a language model for crew dialogue', type: 'checkbox', value: c.enabled },
+        { key: 'provider', label: 'Provider', type: 'select', options: Object.entries(PROVIDERS).map(([v, p]) => ({ value: v, label: p.label })), value: c.provider },
+        { key: 'baseURL', label: 'Base URL', type: 'text', value: c.baseURL }, { key: 'model', label: 'Model', type: 'text', value: c.model },
+        { key: 'apiKey', label: 'API key (stored only in this browser)', type: 'text', value: c.apiKey }, { key: 'maxTokens', label: 'Max tokens per reply', value: c.maxTokens, step: 10 }, { key: 'temperature', label: 'Temperature', value: c.temperature, step: 0.1 }
+    ], { onChange: (v, key) => { if (key === 'provider') { f.set('baseURL', PROVIDERS[v.provider].baseURL); f.set('model', PROVIDERS[v.provider].model); } } });
+    const status = h('div', { class: 'muted' }, llm.configured() ? '✔ Configured – crew replies use the model with their persona, memories and clause context.' : 'Not configured – crew use the built-in dialogue (mood, memory and clause lookups still work).');
+    body.append(section('Crew minds (ported from the original Minion Cognition Engine)', f.el, status, row(button('Save', () => { const v = f.values(); llm.save({ enabled: v.enabled, provider: v.provider, baseURL: v.baseURL, model: v.model, apiKey: v.apiKey, maxTokens: v.maxTokens || 220, temperature: v.temperature ?? 0.7 }); status.textContent = llm.configured() ? '✔ Configured.' : 'Saved, but not enough to connect (enable it, set a model and a key).'; toast('AI settings saved', { kind: 'ok' }); }, { kind: 'primary' }), button('Test connection', async () => { status.textContent = 'Testing…'; const r = await llm.test(); status.textContent = r.ok ? `✔ Model answered: "${r.sample}"` : `✗ ${r.error}`; }, { small: true })),
+        h('p', { class: 'muted small' }, 'Browser-direct calls need a provider that allows CORS (Anthropic with the direct-browser-access header, local servers, or your own proxy). Keys never leave this browser except to the endpoint you configure.')));
 }
 
 function renderKeys(body, ctx) {
@@ -50,7 +64,7 @@ function renderHotbar(body, ctx) {
 function renderData(body, ctx) {
     const size = ctx.store.sizeBytes();
     const fileInput = h('input', { type: 'file', accept: '.json,application/json', class: 'input' });
-    body.append(grid(3, statCard('Saved document', `${(size / 1024).toFixed(1)} KB`), statCard('Last saved', ctx.store.lastSavedAt ? new Date(ctx.store.lastSavedAt).toLocaleTimeString() : 'not yet'), statCard('Jobs / crew', `${ctx.jobs().length} / ${ctx.world.agents.length}`)),
+    body.append(grid(3, statCard('Saved document', `${(size / 1024).toFixed(1)} KB`), statCard('Last saved', ctx.store.lastSavedAt ? new Date(ctx.store.lastSavedAt).toLocaleTimeString() : 'not yet'), statCard('Jobs / crew', `${ctx.jobs().length} / ${ctx.world.crew().length}`)),
         section('Backup', h('p', { class: 'muted' }, 'Everything (profile, jobs, designs, crew, journal, settings) lives in this browser. Export regularly or to move between devices.'), row(button('Export backup (JSON)', () => { ctx.saveWorld(); download(`solarflow-realm-${new Date(ctx.now()).toISOString().slice(0, 10)}.json`, ctx.store.export(), 'application/json'); }, { kind: 'primary', small: true }), button('Save now', () => { ctx.saveWorld(); toast(ctx.store.flush() ? 'Saved' : 'Save failed', { kind: 'ok' }); ctx.refresh('settings'); }, { small: true }))),
         section('Restore', row(fileInput, button('Import', () => { const file = fileInput.files && fileInput.files[0]; if (!file) { toast('Choose a backup file', { kind: 'warn' }); return; } file.text().then((text) => { if (!confirm) return; importBackup(ctx, text); }); }, { small: true })), h('p', { class: 'muted small' }, 'Importing replaces the current document. Export first if unsure.')),
         section('Danger zone', row(button('Reset everything', async () => { if (await confirm('Delete all jobs, crew progress, designs and settings in this browser?', { okLabel: 'Reset' })) { ctx.store.reset(); location.reload(); } }, { kind: 'danger', small: true }))));
@@ -61,6 +75,7 @@ export async function importBackup(ctx, text) {
 
 export const FEATURES = [
     { id: 'win.settings.general', title: 'General settings save and apply', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx)); const sel = q(b, 'select'); sel.value = 'fast'; qa(b, 'button').find((x) => x.textContent === 'Save').click(); const ok = t.ctx.store.get('ui.speed') === 'fast' && t.ctx.clock.speed.id === 'fast'; t.done(); return ok; } },
+    { id: 'win.settings.ai', title: 'AI tab configures the crew language model', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'ai' }); const cb = q(b, 'input[type=checkbox]'); cb.checked = true; fire(cb, 'change'); const sel = q(b, 'select'); sel.value = 'local'; fire(sel, 'change'); const key = qa(b, 'input[type=text]').find((i) => /API key/.test(i.parentElement.textContent)); key.value = 'k'; qa(b, 'button').find((x) => x.textContent === 'Save').click(); const c = t.ctx.llm.config(); const ok = c.enabled && c.provider === 'local' && c.baseURL.includes('11434') && t.ctx.llm.configured(); t.ctx.llm.save({ enabled: false, apiKey: '' }); t.done(); return ok; } },
     { id: 'win.settings.keysList', title: 'Keybind table with custom markers', dom: true, test: () => { const t = makeTestCtx(); t.ctx.keys.bind('window.crew', 'Shift+P'); const b = openWindow(t.ctx, def(t.ctx), { tab: 'keys' }); const row = q(b, 'tr[data-action="window.crew"]'); const ok = /Shift\+P/.test(row.textContent) && /custom/.test(row.textContent); t.done(); return ok; } },
     { id: 'win.settings.rebind', title: 'Rebind by pressing a key, with conflict refusal', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'keys' }); const row = q(b, 'tr[data-action="window.crew"]'); row.querySelector('button').click(); b.dispatchEvent(new KeyboardEvent('keydown', { key: 'c', bubbles: true })); const refused = t.ctx.keys.keyFor('window.crew') === 'P'; row.querySelector('button').click(); b.dispatchEvent(new KeyboardEvent('keydown', { key: 'p', shiftKey: true, bubbles: true })); const ok = refused && t.ctx.keys.keyFor('window.crew') === 'Shift+P'; t.done(); return ok; } },
     { id: 'win.settings.hotbar', title: 'Hotbar slot editor', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'hotbar' }); const sel = qa(b, 'select')[8]; sel.value = 'map'; fire(sel, 'change'); const ok = t.ctx.store.get('ui.hotbar')[8] === 'map'; t.done(); return ok; } },

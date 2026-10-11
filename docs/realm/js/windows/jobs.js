@@ -35,7 +35,7 @@ function renderNew(body, ctx) {
         { key: 'systemKw', label: 'PV system (kW)', value: 6.6, min: 0, step: 0.1 },
         { key: 'batteryKwh', label: 'Battery (kWh usable)', value: 0, min: 0, step: 0.5 },
         { key: 'phases', label: 'Supply phases', type: 'select', options: [{ value: '1', label: 'Single phase' }, { value: '3', label: 'Three phase' }], value: String(profile.phases || 1) },
-        { key: 'assignedTo', label: 'Assign crew member', type: 'select', options: [{ value: '', label: '— unassigned —' }, ...ctx.world.agents.map((a) => ({ value: a.id, label: `${a.name} (${a.role})` }))] }
+        { key: 'assignedTo', label: 'Assign crew member', type: 'select', options: [{ value: '', label: '— unassigned —' }, ...ctx.world.crew().map((a) => ({ value: a.id, label: `${a.name} (${a.role})` }))] }
     ]);
     const err = h('div', { class: 'error-line' });
     body.append(section('Create a job', f.el, err, row(button('Create job', () => {
@@ -61,7 +61,7 @@ function renderDetail(body, ctx) {
     body.append(section(null, row(h('h2', { class: 'job-heading' }, job.customer, ' ', stageBadge(job.stage)), h('span', { class: 'muted' }, `${job.id} · ${job.address || 'no address'} · ${job.postcode}`)),
         grid(4, statCard('System', `${job.systemKw} kW`), statCard('Battery', job.batteryKwh ? `${job.batteryKwh} kWh` : '—'), statCard('Phases', String(job.phases)), statCard('Progress', `${p.done}/${p.total}`)),
         progressBar(p.pct, { label: `Stage ${p.stageIndex + 1}/${p.stages}` }),
-        row(h('span', {}, 'Assigned: '), h('select', { class: 'input', onchange: (e) => { job.assignedTo = e.target.value || null; ctx.saveWorld(); ctx.refresh('jobs'); } }, h('option', { value: '' }, '— unassigned —'), ctx.world.agents.map((a) => h('option', { value: a.id, selected: job.assignedTo === a.id ? '' : null }, `${a.name} (${a.role})`))),
+        row(h('span', {}, 'Assigned: '), h('select', { class: 'input', onchange: (e) => { job.assignedTo = e.target.value || null; ctx.saveWorld(); ctx.refresh('jobs'); } }, h('option', { value: '' }, '— unassigned —'), ctx.world.crew().map((a) => h('option', { value: a.id, selected: job.assignedTo === a.id ? '' : null }, `${a.name} (${a.role})`))),
             agent ? button('Work next task', () => { const t = ctx.world.assignNextTask(agent.id, job.id); toast(t ? `${agent.name} is working on "${t.label}"` : 'No open task in this stage', { kind: t ? 'ok' : 'warn' }); ctx.saveWorld(); ctx.refresh('jobs'); }, { small: true }) : null)));
     // Stage tasks
     const stage = STAGES.find((s) => s.id === job.stage);

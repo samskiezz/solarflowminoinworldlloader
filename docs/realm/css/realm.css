@@ -258,3 +258,13 @@ body.game #realm-bottom { background: linear-gradient(0deg, rgba(22,28,46,.92), 
 #realm-title .keys kbd { background: #223; border: 1px solid #556; border-radius: 3px; padding: 1px 6px; color: #fff; }
 #realm-title.hidden { display: none; }
 @media (max-width: 900px) { #realm-tracker { display: none; } }
+
+.ov-portrait { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #ffd166; display: block; margin: 0 auto 2px; background: #223; }
+.ov-nameplate.townsfolk .ov-portrait { border-color: #8891a8; } .ov-nameplate.townsfolk .ov-sub { color: #aab; }
+.ov-needs { background: rgba(10,14,26,.9); border: 1px solid var(--gold); border-radius: 8px; padding: 6px 8px; width: 190px; font-size: 11px; color: #eee; text-align: left; }
+.ov-needs-title { font-weight: 700; color: var(--gold); margin-bottom: 3px; white-space: normal; } .ov-needs-role { color: #cdd; font-weight: 400; }
+.ov-need { display: grid; grid-template-columns: 52px 1fr; gap: 6px; align-items: center; margin: 1px 0; text-transform: capitalize; }
+.ov-need-bar { display: block; height: 6px; background: #223; border-radius: 3px; overflow: hidden; } .ov-need-fill { display: block; height: 100%; }
+.ov-needs-foot { color: #aab; margin-top: 3px; white-space: normal; }
+img.avatar.portrait { object-fit: cover; background: #223; }
+.recruit-card { border-style: dashed; }
