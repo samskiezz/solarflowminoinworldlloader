@@ -1,0 +1,5 @@
+{
+  "type": "module",
+  "private": true,
+  "description": "Marks the Realm Workstation modules as ES modules so Node (tests) imports them the same way the browser does."
+}

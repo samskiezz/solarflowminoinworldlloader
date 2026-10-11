@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SolarFlow Realm Workstation</title>
+<meta name="description" content="Solar and battery compliance workstation: real CEC product lists, AS/NZS calculators with clause references, job pipeline, checklists, commissioning and a crew that learns – presented as a deep RPG-style desktop.">
+<meta name="theme-color" content="#0d1220">
+<link rel="icon" href="../favicon.svg">
+<link rel="stylesheet" href="css/realm.css">
+</head>
+<body data-phase="day" data-theme="dusk">
+<div id="realm-sky" aria-hidden="true"></div>
+<div id="realm-horizon" aria-hidden="true"></div>
+<div id="realm">
+    <header id="realm-top" role="banner"></header>
+    <main id="realm-desktop" role="main" aria-label="Workstation desktop">
+        <div id="realm-minimap" title="Realm map (M)"></div>
+        <div id="realm-dock"></div>
+    </main>
+    <footer id="realm-bottom" role="toolbar" aria-label="Hotbar and menu"></footer>
+</div>
+<noscript><p style="padding:20px;font-family:sans-serif">SolarFlow Realm needs JavaScript (ES modules) to run.</p></noscript>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

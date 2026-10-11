@@ -2,6 +2,39 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.5.0] - 2026-10-11
+
+### Realm Workstation: 501 verified features
+
+A new application at `docs/realm/` – a compliance workstation for solar and battery installers presented as a
+deep, windowed RPG-style desktop. See `docs/realm/FEATURES.md` for the self-test-backed ledger and
+`docs/realm/RESEARCH.md` for the research it is built on.
+
+### ✨ Added
+- Real CEC approved product lists (13,160 modules, inverters and batteries) imported from the Clean Energy
+  Regulator CSVs by `scripts/import-cec-lists.js`, with approval/expiry evaluation and design compatibility.
+- Engineering domain modules with clause references: PV string sizing, a.c. voltage rise and cable selection,
+  d.c. cable drop, battery location/sizing/backup and battery STCs, solar STCs with the full postcode-zone
+  table, yield and finance, load profiles, standards codex, checklists, commissioning, labels, jobs,
+  pricing/proposals, serial register, DNSP operators and applications, handover pack, jurisdictions.
+- Crew simulation: needs with response curves, traits, skills/XP, memory stream with retrieval and
+  reflection, utility + GOAP planner, suggestions, dialogue (optional LLM), economy, world events,
+  achievements, deterministic seeded world.
+- Core shell: window manager (drag/resize/tabs/z-order/minimise/maximise/cascade/tile/session restore),
+  persistent store with migrations and backup, rebindable WoW-style keybinds, command palette and slash
+  console, i18n (6 locales), world clock with speeds, feature registry and in-app System check.
+- 31 windows: dashboard, character, crew, quests, jobs, product vault, calculators, codex, map, journal,
+  chat, settings, achievements, market, reports, checklists, commissioning, labels, loads, help, system
+  check, proposal, serial register, network connection, site survey, schedule, crew suggestions, analytics,
+  notifications/global search, handover pack, design wizard.
+- Tests: `tests/realm-*.test.mjs` (Node), `tests/browser/realm-selftest.js` and
+  `tests/browser/realm-app-smoke.js` (Chromium), a CI job that runs them, and `npm run features:realm`.
+- Home page link to the Realm Workstation; `docs/data/` is now tracked so Pages serves the catalogue.
+
+### 🔧 Fixed
+- Job ids could collide when two jobs were created in the same millisecond.
+- Reflections repeated the same sentence; they are now varied and de-duplicated.
+
 ## [2.4.0] - 2026-10-11
 
 ### Audit release: 142 fixes and upgrades

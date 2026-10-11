@@ -11,6 +11,31 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
+## Realm Workstation (new in 2.5.0)
+
+`docs/realm/index.html` is a complete compliance workstation for solar and battery installers, built as a
+windowed, hotkey-driven desktop in the style of deep role-playing games (draggable windows, hotbar 1–9,
+quest log, codex, crew with needs, skills and memories). Everything in it is real work:
+
+- **Real product data** – the Clean Energy Council approved module, inverter and battery lists
+  (`docs/data/cec-products.json`, regenerated with `node scripts/import-cec-lists.js`).
+- **Engineering with clause references** – string sizing (AS/NZS 5033 Voc correction, MPPT window, 1000 V
+  domestic limit), voltage rise (AS/NZS 4777.1 2 %, AS/NZS 3008 mV/A·m), d.c. cable drop, battery location
+  (AS/NZS 5139 restricted locations and clearances), STCs (zone × deeming × kW) and battery STCs,
+  yield/NPV/IRR/LCOE, phase balance, inverter main-switch rule, export limits, roof layout.
+- **Job pipeline** – nine stages with gates, checklists (52 items citing clauses), commissioning test
+  sheet (13 tests), serial register, DNSP connection application, labels, proposal/quote with the STC
+  discount, handover pack (owner's manual, maintenance schedule, warranty register) and a printable report.
+- **A crew that behaves** – utility-AI needs with response curves, traits, skills with XP, a memory stream
+  with retrieval and reflection, GOAP planning that turns into *suggestions* for your next step, a credit
+  economy earned only from verified work, achievements and quests derived from real jobs.
+- **Verifiable feature count** – every feature registers a self-test. `npm run features:realm` writes
+  `docs/realm/FEATURES.md` (501 features at release); `npm run smoke:realm` runs all of them in Chromium
+  plus an end-to-end app smoke; the in-app **System check** window does the same for users.
+
+Research notes behind the design (standards, incentives, market, game-UI and agent-AI references) are in
+`docs/realm/RESEARCH.md`.
+
 ## What the data is (and is not)
 
 - **Product catalogue** (`docs/cer-product-database.json`, 9,247 records) is a **simulated dataset**

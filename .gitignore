@@ -12,7 +12,8 @@ server/node_modules/
 logs/
 *.log
 *.pid
-data/
+/data/
+!docs/data/
 backups/
 restart-count.json
 
