@@ -9,7 +9,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | Verified in Node (this run) | 298 passed, 0 failed |
 | Browser-verified (DOM) features | 262 |
 | Modules | 81 |
-| Generated | 2026-10-11T06:19:14.260Z |
+| Generated | 2026-10-11T06:21:24.337Z |
 
 ## By area
 

@@ -57,7 +57,7 @@ export const SPOTS = {
     fire: Array.from({ length: 8 }, (_, i) => ({ x: -12 + Math.cos((i / 8) * Math.PI * 2) * 3, z: 14 + Math.sin((i / 8) * Math.PI * 2) * 3 })),
     cafe: Array.from({ length: 6 }, (_, i) => ({ x: -34 + (i % 3) * 3, z: 26 + Math.floor(i / 3) * 2, inside: 'cafe' })),
     yard: Array.from({ length: 6 }, (_, i) => ({ x: -40 + (i % 3) * 4, z: 35 + Math.floor(i / 3) * 4 })),
-    square: Array.from({ length: 8 }, (_, i) => ({ x: Math.cos((i / 8) * Math.PI * 2) * 7, z: 4 + Math.sin((i / 8) * Math.PI * 2) * 5 }))
+    square: Array.from({ length: 8 }, (_, i) => ({ x: Math.cos((i / 8) * Math.PI * 2) * 11, z: 6 + Math.sin((i / 8) * Math.PI * 2) * 8 }))
 };
 
 export function landmark(id) { return LANDMARKS.find((l) => l.id === id) || null; }
@@ -79,6 +79,7 @@ export function doorOf(building) {
 /** Axis-aligned obstacles for collision/steering: landmarks (except flat/yard ones) and job houses. */
 export function obstacles(jobs = []) {
     const list = LANDMARKS.filter((l) => !['training', 'board', 'campfire'].includes(l.kind)).map((l) => ({ id: l.id, x: l.x, z: l.z, w: l.w, d: l.d }));
+    list.push({ id: 'fountain', x: 0, z: 6, w: 5.6, d: 5.6 }, { id: 'campfire', x: -12, z: 14, w: 3, d: 3 });
     jobs.forEach((j) => { const lot = lotForJob(jobs, j.id); if (lot) list.push({ id: `house:${j.id}`, x: lot.x, z: lot.z, w: lot.w, d: lot.d }); });
     return list;
 }
@@ -108,7 +109,7 @@ export const FEATURES = [
     { id: 'game.town.lots', title: 'Twenty residential lots ring the town', test: () => LOTS.length === 20 && LOTS.every((l) => Math.abs(l.x) <= 64 && Math.abs(l.z) <= 62) },
     { id: 'game.town.lotForJob', title: 'Jobs get stable lots', test: () => { const jobs = [{ id: 'A' }, { id: 'B' }]; return lotForJob(jobs, 'B').id === 'lot2' && lotForJob(jobs, 'Z') === null; } },
     { id: 'game.town.door', title: 'Door positions face the street', test: () => { const d = doorOf(landmark('guild')); return d.z > landmark('guild').z && Math.abs(d.x) < 0.01; } },
-    { id: 'game.town.obstacles', title: 'Obstacle boxes include landmarks and job houses', test: () => obstacles([{ id: 'J' }]).some((o) => o.id === 'house:J') && !obstacles().some((o) => o.id === 'board') },
+    { id: 'game.town.obstacles', title: 'Obstacle boxes include landmarks and job houses', test: () => obstacles([{ id: 'J' }]).some((o) => o.id === 'house:J') && !obstacles().some((o) => o.id === 'board') && obstacles().some((o) => o.id === 'fountain') },
     { id: 'game.town.houseState', title: 'House build state follows the job stage', test: () => { const lead = houseState({ stage: 'lead', tasks: { 'lead:a': false } }); const install = houseState({ stage: 'install', tasks: { 'install:a': true, 'install:b': false }, batteryKwh: 13 }); const done = houseState({ stage: 'complete', tasks: {} }); return lead.forSale && lead.marker === '!' && install.scaffold && install.panelsPct === 0.5 && install.inverter && !install.battery && done.complete && done.marker === null && houseState({ stage: 'lead', tasks: { 'lead:a': true } }).marker === '?'; } },
     { id: 'game.town.spots', title: 'Behaviour spots for bunks, desks, shelves, fire, cafe, yard', test: () => ['bunk', 'desk', 'shelf', 'fire', 'cafe', 'yard', 'square'].every((k) => SPOTS[k].length >= 6) },
     { id: 'game.town.roadsTrees', title: 'Roads and trees are laid out', test: () => ROADS.length === 6 && TREES.length === 54 }

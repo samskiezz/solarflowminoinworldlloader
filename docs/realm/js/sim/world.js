@@ -80,9 +80,10 @@ export class World {
         this.time += hours * 3600000;
         if (!this.activeEvent || this.hour >= this.eventEndsAt) {
             if (this.random() < 0.15 * hours || !this.activeEvent) {
+                const previous = this.activeEvent && this.activeEvent.id;
                 this.activeEvent = rollEvent(this.random);
                 this.eventEndsAt = this.hour + this.activeEvent.durationH;
-                if (this.activeEvent.id !== 'quiet_day') this.emit({ type: 'event', eventId: this.activeEvent.id, text: `${this.activeEvent.label}: ${this.activeEvent.note}` });
+                if (this.activeEvent.id !== 'quiet_day' && this.activeEvent.id !== previous) this.emit({ type: 'event', eventId: this.activeEvent.id, text: `${this.activeEvent.label}: ${this.activeEvent.note}` });
             }
         }
         const upgrades = upgradeEffects(this.ledger);
