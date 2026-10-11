@@ -5,22 +5,31 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **585** |
-| Verified in Node (this run) | 316 passed, 0 failed |
-| Browser-verified (DOM) features | 269 |
-| Modules | 83 |
-| Generated | 2026-10-11T07:19:41.069Z |
+| Registered features | **611** |
+| Verified in Node (this run) | 330 passed, 0 failed |
+| Browser-verified (DOM) features | 281 |
+| Modules | 88 |
+| Generated | 2026-10-11T12:44:03.772Z |
 
 ## By area
 
 | Area | Features |
 |---|---|
-| Core shell | 95 |
+| Core shell | 104 |
 | Solar engineering domain | 124 |
-| Crew simulation | 81 |
-| Windows (game UI) | 198 |
+| Crew simulation | 86 |
+| Windows (game UI) | 200 |
 | Shell | 21 |
-| 3D game world | 66 |
+| 3D game world | 76 |
+
+## core/audio (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `core.audio.off` | Sound is off by default and plays nothing | node + browser |
+| 2 | `core.audio.synth` | Nine synthesised cues play when enabled | node + browser |
+| 3 | `core.audio.loops` | Ambience loops follow phase, weather and the campfire | node + browser |
+| 4 | `core.audio.noContext` | Without WebAudio support everything is a safe no-op | node + browser |
 
 ## core/bus (6)
 
@@ -46,6 +55,16 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 7 | `core.clock.frameClamp` | Background tabs never fast-forward more than 5 s | node + browser |
 | 8 | `core.clock.dayPhase` | Day/night phase for the realm backdrop | node + browser |
 | 9 | `core.clock.busEvents` | Emits clock:tick and clock:speed events | node + browser |
+
+## core/cloud (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `core.cloud.unconfigured` | Cloud save is inert until an API URL is set | node + browser |
+| 2 | `core.cloud.pushPull` | Push and pull the realm document through /api/state | node + browser |
+| 3 | `core.cloud.login` | Login stores a bearer token used for writes | node + browser |
+| 4 | `core.cloud.conflict` | A newer server copy blocks a push unless forced | node + browser |
+| 5 | `core.cloud.legacyCoexists` | Legacy state on the server is preserved next to the realm save | node + browser |
 
 ## core/commands (7)
 
@@ -386,6 +405,16 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 7 | `yield.co2Offset` | CO₂ offset estimate | node + browser |
 | 8 | `yield.selfConsumption` | Self-consumption with battery | node + browser |
 
+## game/awareness (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.aware.greet` | Minions turn to face the player and greet them once per approach | browser |
+| 2 | `game.aware.conversation` | Minions sharing the campfire talk to each other and gain social | browser |
+| 3 | `game.aware.shelter` | A storm sends everyone indoors; clearing it sends them back | browser |
+| 4 | `game.aware.notice` | Idle crew near a job house remark on what it needs | browser |
+| 5 | `game.aware.cooldowns` | Greetings and notices respect cooldowns | browser |
+
 ## game/behaviour (7)
 
 | # | Feature | What it verifies | Runs in |
@@ -408,7 +437,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `game.chibi.face` | Characters turn smoothly toward a heading | browser |
 | 5 | `game.chibi.deterministicSkin` | Skin tone and hat derive from id and role deterministically | browser |
 
-## game/game (10)
+## game/game (11)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -420,8 +449,9 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `game.interactKey` | E interacts with whatever is in front of the player | browser |
 | 7 | `game.minimap` | Town minimap with player, crew, houses and markers | browser |
 | 8 | `game.clickSelect` | Clicking a minion selects them and opens their sheet | browser |
-| 9 | `game.hudToggle` | Shift+Z hides the HUD overlay | browser |
-| 10 | `game.persistPosition` | Player position is remembered between sessions | browser |
+| 9 | `game.soundHooks` | World events trigger sound cues when sound is on | browser |
+| 10 | `game.hudToggle` | Shift+Z hides the HUD overlay | browser |
+| 11 | `game.persistPosition` | Player position is remembered between sessions | browser |
 
 ## game/interact (5)
 
@@ -455,7 +485,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `game.overlay.needsWidget` | Sims-style needs widget with six bars | browser |
 | 5 | `game.overlay.widgets` | Nameplate, bubble, quest marker and key prompt widgets | browser |
 
-## game/player (6)
+## game/player (7)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -464,9 +494,10 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `game.player.clickToMove` | Click-to-move walks to the point and calls back on arrival | browser |
 | 4 | `game.player.camera` | Third-person camera orbits and zooms | browser |
 | 5 | `game.player.jump` | Space jumps with gravity | browser |
-| 6 | `game.player.worldBounds` | The player cannot leave the town | browser |
+| 6 | `game.player.axis` | Analog axis input (touch joystick) moves the player | browser |
+| 7 | `game.player.worldBounds` | The player cannot leave the town | browser |
 
-## game/scene (6)
+## game/scene (7)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -475,7 +506,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `game.scene.weather` | Storms rain and darken the sky; heatwaves warm it | browser |
 | 4 | `game.scene.town` | Town builds ground, roads, square, ten landmarks, trees and lamps | browser |
 | 5 | `game.scene.houses` | One house per job; it builds up with the job stage | browser |
-| 6 | `game.scene.picking` | Ground and object picking from screen coordinates | browser |
+| 6 | `game.scene.quality` | Graphics quality: shadows and pixel ratio switch at runtime | browser |
+| 7 | `game.scene.picking` | Ground and object picking from screen coordinates | browser |
 
 ## game/steer (5)
 
@@ -486,6 +518,13 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `game.steer.resolve` | Collision resolution pushes out of boxes | node + browser |
 | 4 | `game.steer.allowInside` | Agents may enter the building they are visiting | node + browser |
 | 5 | `game.steer.helpers` | Distance, heading, clamping and wander helpers | node + browser |
+
+## game/touch (2)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.touch.joystick` | Virtual joystick drives the player analog axis | browser |
+| 2 | `game.touch.buttons` | Interact and jump buttons | browser |
 
 ## game/town (10)
 
@@ -633,6 +672,16 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `skills.maxLevel` | Level cap | node + browser |
 | 6 | `skills.skillForTask` | Task tag → skill mapping | node + browser |
 | 7 | `skills.successChance` | Success probability from skill vs difficulty | node + browser |
+
+## sim/social (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `social.approach` | Minions greet the player by mood, task and whether they are hired | node + browser |
+| 2 | `social.conversation` | Two minions hold a conversation drawn from memories and specialties | node + browser |
+| 3 | `social.standardsTopic` | Campfire talk includes standards questions answered from the Codex | node + browser |
+| 4 | `social.shelter` | Storm shelter assignments spread across guild, cafe and library | node + browser |
+| 5 | `social.notice` | Idle crew remark on jobs that need attention, by stage | node + browser |
 
 ## sim/suggestions (5)
 
@@ -964,17 +1013,19 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `win.serials.evidence` | Complete register records STC evidence | browser |
 | 4 | `win.serials.remove` | Remove a serial | browser |
 
-## windows/settings (7)
+## windows/settings (9)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
 | 1 | `win.settings.general` | General settings save and apply | browser |
 | 2 | `win.settings.ai` | AI tab configures the crew language model | browser |
-| 3 | `win.settings.keysList` | Keybind table with custom markers | browser |
-| 4 | `win.settings.rebind` | Rebind by pressing a key, with conflict refusal | browser |
-| 5 | `win.settings.hotbar` | Hotbar slot editor | browser |
-| 6 | `win.settings.data` | Backup size and export controls | browser |
-| 7 | `win.settings.importRejects` | Import rejects invalid backups | browser |
+| 3 | `win.settings.quality` | Graphics, sound and touch settings apply to the game | browser |
+| 4 | `win.settings.cloud` | Cloud save controls (URL, login, push, pull) | browser |
+| 5 | `win.settings.keysList` | Keybind table with custom markers | browser |
+| 6 | `win.settings.rebind` | Rebind by pressing a key, with conflict refusal | browser |
+| 7 | `win.settings.hotbar` | Hotbar slot editor | browser |
+| 8 | `win.settings.data` | Backup size and export controls | browser |
+| 9 | `win.settings.importRejects` | Import rejects invalid backups | browser |
 
 ## windows/spellbook (13)
 

@@ -24,13 +24,14 @@ export function createNpcs(engine, overlay, { ctx, town, obstacles = () => [] })
         n.agent = agent; n.index = index; return n;
     }
     const api = {
-        npcs,
+        npcs, placeHook: null,
         sync() {
             const agents = ctx.world.agents; const ids = new Set(agents.map((a) => a.id));
             for (const [id, n] of npcs) if (!ids.has(id)) { engine.scene.remove(n.chibi); overlay.remove(`np:${id}`); overlay.remove(`bb:${id}`); npcs.delete(id); }
             agents.forEach((agent, index) => {
                 const n = ensure(agent, index);
-                const place = placeFor(agent, { jobs: ctx.jobs(), index, hourOfDay: ctx.world.clock.hourOfDay });
+                let place = placeFor(agent, { jobs: ctx.jobs(), index, hourOfDay: ctx.world.clock.hourOfDay });
+                if (api.placeHook) place = api.placeHook(agent, place, index) || place;
                 if (place.place === 'house') { const door = town.houseDoor(place.jobId, ctx.jobs()); if (door) place.position = { x: door.x + (index % 3) * 1.2 - 1.2, z: door.z }; }
                 n.place = place; n.target = { ...place.position };
                 const m = mood(agent.needs); const plate = overlay.get(`np:${agent.id}`); if (plate) { plate.querySelector('.ov-sub').textContent = `${MOOD_EMOJI[m.label] || ''} ${place.label || agent.role}`; }
@@ -48,7 +49,7 @@ export function createNpcs(engine, overlay, { ctx, town, obstacles = () => [] })
                     n.pos = r.pos; n.anim = 'walk'; face(n.chibi, headingTo(n.pos, n.target), dt, 8);
                 } else {
                     n.anim = ACTIVITY_ANIM[n.place.activity] || n.place.activity || 'idle';
-                    if (n.place.place === 'house' || n.place.inside) { const lm = n.place.inside ? landmark(n.place.inside) : null; if (lm) face(n.chibi, headingTo(n.pos, { x: lm.x, z: lm.z }), dt, 6); }
+                    if (n.facePlayer) { /* awareness turns them toward the player */ } else if (n.place.place === 'house' || n.place.inside) { const lm = n.place.inside ? landmark(n.place.inside) : null; if (lm) face(n.chibi, headingTo(n.pos, { x: lm.x, z: lm.z }), dt, 6); }
                     if (n.place.place === 'campfire') face(n.chibi, headingTo(n.pos, { x: -12, z: 14 }), dt, 6);
                 }
                 n.chibi.position.set(n.pos.x, 0, n.pos.z);

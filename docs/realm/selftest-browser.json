@@ -1,7 +1,7 @@
 {
- "at": "2026-10-11T07:19:02.562Z",
- "total": 585,
- "passed": 585,
+ "at": "2026-10-11T12:43:20.338Z",
+ "total": 611,
+ "passed": 611,
  "failed": 0,
  "results": [
   {
@@ -1805,6 +1805,90 @@
    "status": "passed"
   },
   {
+   "id": "social.approach",
+   "module": "sim/social",
+   "title": "Minions greet the player by mood, task and whether they are hired",
+   "status": "passed"
+  },
+  {
+   "id": "social.conversation",
+   "module": "sim/social",
+   "title": "Two minions hold a conversation drawn from memories and specialties",
+   "status": "passed"
+  },
+  {
+   "id": "social.standardsTopic",
+   "module": "sim/social",
+   "title": "Campfire talk includes standards questions answered from the Codex",
+   "status": "passed"
+  },
+  {
+   "id": "social.shelter",
+   "module": "sim/social",
+   "title": "Storm shelter assignments spread across guild, cafe and library",
+   "status": "passed"
+  },
+  {
+   "id": "social.notice",
+   "module": "sim/social",
+   "title": "Idle crew remark on jobs that need attention, by stage",
+   "status": "passed"
+  },
+  {
+   "id": "core.audio.off",
+   "module": "core/audio",
+   "title": "Sound is off by default and plays nothing",
+   "status": "passed"
+  },
+  {
+   "id": "core.audio.synth",
+   "module": "core/audio",
+   "title": "Nine synthesised cues play when enabled",
+   "status": "passed"
+  },
+  {
+   "id": "core.audio.loops",
+   "module": "core/audio",
+   "title": "Ambience loops follow phase, weather and the campfire",
+   "status": "passed"
+  },
+  {
+   "id": "core.audio.noContext",
+   "module": "core/audio",
+   "title": "Without WebAudio support everything is a safe no-op",
+   "status": "passed"
+  },
+  {
+   "id": "core.cloud.unconfigured",
+   "module": "core/cloud",
+   "title": "Cloud save is inert until an API URL is set",
+   "status": "passed"
+  },
+  {
+   "id": "core.cloud.pushPull",
+   "module": "core/cloud",
+   "title": "Push and pull the realm document through /api/state",
+   "status": "passed"
+  },
+  {
+   "id": "core.cloud.login",
+   "module": "core/cloud",
+   "title": "Login stores a bearer token used for writes",
+   "status": "passed"
+  },
+  {
+   "id": "core.cloud.conflict",
+   "module": "core/cloud",
+   "title": "A newer server copy blocks a push unless forced",
+   "status": "passed"
+  },
+  {
+   "id": "core.cloud.legacyCoexists",
+   "module": "core/cloud",
+   "title": "Legacy state on the server is preserved next to the realm save",
+   "status": "passed"
+  },
+  {
    "id": "win.jobs.board",
    "module": "windows/jobs",
    "title": "Kanban board of jobs by stage",
@@ -2645,6 +2729,18 @@
    "status": "passed"
   },
   {
+   "id": "win.settings.quality",
+   "module": "windows/settings",
+   "title": "Graphics, sound and touch settings apply to the game",
+   "status": "passed"
+  },
+  {
+   "id": "win.settings.cloud",
+   "module": "windows/settings",
+   "title": "Cloud save controls (URL, login, push, pull)",
+   "status": "passed"
+  },
+  {
    "id": "win.settings.keysList",
    "module": "windows/settings",
    "title": "Keybind table with custom markers",
@@ -3311,6 +3407,12 @@
    "status": "passed"
   },
   {
+   "id": "game.scene.quality",
+   "module": "game/scene",
+   "title": "Graphics quality: shadows and pixel ratio switch at runtime",
+   "status": "passed"
+  },
+  {
    "id": "game.scene.picking",
    "module": "game/scene",
    "title": "Ground and object picking from screen coordinates",
@@ -3374,6 +3476,12 @@
    "id": "game.player.jump",
    "module": "game/player",
    "title": "Space jumps with gravity",
+   "status": "passed"
+  },
+  {
+   "id": "game.player.axis",
+   "module": "game/player",
+   "title": "Analog axis input (touch joystick) moves the player",
    "status": "passed"
   },
   {
@@ -3455,6 +3563,48 @@
    "status": "passed"
   },
   {
+   "id": "game.aware.greet",
+   "module": "game/awareness",
+   "title": "Minions turn to face the player and greet them once per approach",
+   "status": "passed"
+  },
+  {
+   "id": "game.aware.conversation",
+   "module": "game/awareness",
+   "title": "Minions sharing the campfire talk to each other and gain social",
+   "status": "passed"
+  },
+  {
+   "id": "game.aware.shelter",
+   "module": "game/awareness",
+   "title": "A storm sends everyone indoors; clearing it sends them back",
+   "status": "passed"
+  },
+  {
+   "id": "game.aware.notice",
+   "module": "game/awareness",
+   "title": "Idle crew near a job house remark on what it needs",
+   "status": "passed"
+  },
+  {
+   "id": "game.aware.cooldowns",
+   "module": "game/awareness",
+   "title": "Greetings and notices respect cooldowns",
+   "status": "passed"
+  },
+  {
+   "id": "game.touch.joystick",
+   "module": "game/touch",
+   "title": "Virtual joystick drives the player analog axis",
+   "status": "passed"
+  },
+  {
+   "id": "game.touch.buttons",
+   "module": "game/touch",
+   "title": "Interact and jump buttons",
+   "status": "passed"
+  },
+  {
    "id": "game.start",
    "module": "game/game",
    "title": "The game starts with the town, the player, the crew and job houses",
@@ -3500,6 +3650,12 @@
    "id": "game.clickSelect",
    "module": "game/game",
    "title": "Clicking a minion selects them and opens their sheet",
+   "status": "passed"
+  },
+  {
+   "id": "game.soundHooks",
+   "module": "game/game",
+   "title": "World events trigger sound cues when sound is on",
    "status": "passed"
   },
   {

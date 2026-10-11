@@ -199,7 +199,8 @@ export function wireWorldFeedback(ctx) {
 /* ---------- autosave, theme, session ---------- */
 export function startAutosave(ctx, { intervalMs = null, setIntervalFn = (fn, ms) => globalThis.setInterval(fn, ms) } = {}) {
     const ms = intervalMs ?? (ctx.store.get('ui.autosaveSeconds', 15) * 1000);
-    const save = () => { ctx.saveWorld(); ctx.store.set('ui.openWindows', ctx.wm.snapshot()); if (ctx.store.flush()) ctx.bus.emit('store:saved'); };
+    let pushes = 0;
+    const save = () => { ctx.saveWorld(); ctx.store.set('ui.openWindows', ctx.wm.snapshot()); if (ctx.store.flush()) ctx.bus.emit('store:saved'); if (ctx.cloud && ctx.cloud.settings().auto && ctx.cloud.configured() && ++pushes % 4 === 0) ctx.cloud.push().catch((e) => ctx.bus.emit('cloud:error', { error: e.message })); };
     const id = setIntervalFn(save, ms);
     if (typeof window !== 'undefined') { window.addEventListener('beforeunload', save); document.addEventListener('visibilitychange', () => { if (document.hidden) save(); }); }
     return { stop: () => clearInterval(id), save };

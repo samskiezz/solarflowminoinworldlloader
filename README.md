@@ -28,6 +28,11 @@ your founding crew and the rest recruitable; the Minion Cognition Engine returns
 adapter (Settings › AI) that gives every minion a persona, memories and clause context; the Sims-style needs
 widgets appear when you hover or click a minion.
 
+Minions are aware: they face and greet you when you approach, talk to each other at the campfire from their
+memories and the standards, shelter from storms and remark on jobs that need attention. Sound is synthesised in
+the browser (off by default), touch controls appear on phones and tablets, graphics quality is adjustable, and
+cloud save works through the API server's `/api/state` (Settings › Data).
+
 Everything behind the windows is real work:
 
 - **Real product data** – the Clean Energy Council approved module, inverter and battery lists

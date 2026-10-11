@@ -8,6 +8,9 @@ import { createOverlay } from './overlay.js';
 import { createPlayer } from './player.js';
 import { createNpcs } from './npcs.js';
 import { createInteractions } from './interact.js';
+import { createAwareness } from './awareness.js';
+import { createTouchControls, isCoarsePointer } from './touch.js';
+import { createAudio } from '../core/audio.js';
 import { obstacles, LANDMARKS, LOTS, ROADS, TOWN_SIZE, lotForJob, houseState } from './town.js';
 import { dayPhase } from '../core/clock.js';
 import { h, replace } from '../core/ui.js';
@@ -60,6 +63,10 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     const player = createPlayer(engine, { obstacles: obs, position: saved && Number.isFinite(saved.x) ? saved : { x: 4, z: 14 }, listen: autoStart });
     const npcs = createNpcs(engine, overlay, { ctx, town, obstacles: obs });
     const interactions = createInteractions(engine, overlay, { ctx, town, player, npcs });
+    const audio = ctx.audio || createAudio({ store: ctx.store });
+    const awareness = createAwareness({ ctx, npcs, player, overlay, audio });
+    const quality = ctx.store.get('ui.quality', {}); engine.setQuality({ shadows: quality.shadows !== false, pixelRatio: quality.pixelRatio || null });
+    let touch = null; const touchMode = ctx.store.get('ui.touch', 'auto'); if (overlayHost && autoStart && (touchMode === 'on' || (touchMode === 'auto' && isCoarsePointer()))) touch = createTouchControls(overlayHost.parentElement || overlayHost, { player, onInteract: () => interactions.interact() });
     const state = { hudVisible: true, lastSync: 0, lastMinimap: 0, jobCount: ctx.jobs().length, moved: 0, lastHoverCheck: 0 };
     // Click a minion to select them (opens their crew sheet); hover shows their needs.
     const pickNpc = (ndc) => { const hit = engine.pick(ndc.x, ndc.y, npcs.chibis()); return hit ? npcs.byChibi(hit.object) : null; };
@@ -67,12 +74,13 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     const onHover = (e) => { if (!autoStart || e.target !== canvas) return; const now = performance.now(); if (now - state.lastHoverCheck < 120) return; state.lastHoverCheck = now; const r = canvas.getBoundingClientRect(); const n = pickNpc({ x: ((e.clientX - r.left) / r.width) * 2 - 1, y: -(((e.clientY - r.top) / r.height) * 2 - 1) }); npcs.setHover(n ? n.agent.id : null); canvas.style.cursor = n ? 'pointer' : ''; };
     if (autoStart) window.addEventListener('pointermove', onHover);
 
-    function applyClock() { const c = ctx.world.clock; engine.setPhase(dayPhase(c.hourOfDay), c.hourOfDay); const ev = ctx.world.activeEvent; engine.setWeather(ev && ev.id === 'storm' ? 'storm' : ev && ev.id === 'heatwave' ? 'heatwave' : 'none'); }
+    function applyClock() { const c = ctx.world.clock; engine.setPhase(dayPhase(c.hourOfDay), c.hourOfDay); const ev = ctx.world.activeEvent; const weather = ev && ev.id === 'storm' ? 'storm' : ev && ev.id === 'heatwave' ? 'heatwave' : 'none'; engine.setWeather(weather); awareness.setWeather(weather); }
     applyClock();
     const offs = [];
     offs.push(ctx.bus.on('clock:tick', () => { applyClock(); }));
     offs.push(ctx.bus.on('world:event', (e) => {
-        if (e.type === 'task_complete') { const n = npcs.npcs.get(e.agentId); overlay.floatText('+5 credits', n ? n.chibi : player.chibi, { colour: '#e2b14a' }); if (n) npcs.say(e.agentId, 'Done! ✔', 'say', 4); }
+        if (e.type === 'task_complete') { const n = npcs.npcs.get(e.agentId); overlay.floatText('+5 credits', n ? n.chibi : player.chibi, { colour: '#e2b14a' }); if (n) npcs.say(e.agentId, 'Done! ✔', 'say', 4); audio.play('reward'); }
+        if (e.type === 'task_failed') audio.play('error'); if (e.type === 'level_up') audio.play('levelup'); if (e.type === 'achievement') audio.play('achievement'); if (e.type === 'tutorial' || e.type === 'stage_advanced') audio.play('reward');
         if (e.type === 'task_failed') { const n = npcs.npcs.get(e.agentId); if (n) npcs.say(e.agentId, 'Defect found – reworking.', 'need', 5); }
         if (e.type === 'level_up') { const n = npcs.npcs.get(e.agentId); overlay.floatText('LEVEL UP', n ? n.chibi : player.chibi, { colour: '#3ddc84', duration: 2000 }); }
         if (e.type === 'achievement') overlay.floatText('🏆 ' + e.text.replace('Achievement unlocked: ', ''), player.chibi, { colour: '#ffd700', duration: 2600 });
@@ -92,7 +100,9 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
         renderTracker();
     }));
     offs.push(ctx.bus.on('design:updated', (e) => { if (e.design && e.design.modulesPerString) completeTutorial(ctx, 'workshop'); const job = ctx.job(e.jobId); if (job) town.updateHouse(job); renderTracker(); }));
-    offs.push(ctx.bus.on('wm:open', () => renderTracker()));
+    offs.push(ctx.bus.on('wm:open', () => { renderTracker(); audio.play('open'); }));
+    offs.push(ctx.bus.on('wm:close', () => audio.play('close')));
+    offs.push(ctx.bus.on('settings:updated', (ui) => { const q = (ui && ui.quality) || {}; engine.setQuality({ shadows: q.shadows !== false, pixelRatio: q.pixelRatio || null }); if (!ctx.store.get('ui.soundOn')) audio.stopAll(); const mode = ctx.store.get('ui.touch', 'auto'); const want = mode === 'on' || (mode === 'auto' && isCoarsePointer()); if (want && !touch && autoStart) touch = createTouchControls(overlayHost.parentElement || overlayHost, { player, onInteract: () => interactions.interact() }); if (!want && touch) { touch.dispose(); touch = null; } }));
     ctx.keys.on('game.interact', () => interactions.interact());
     ctx.keys.on('game.toggleHud', () => { state.hudVisible = !state.hudVisible; overlay.layer.classList.toggle('hidden', !state.hudVisible); });
     ctx.keys.on('game.resetCamera', () => { player.state.cam = { yaw: 0, pitch: 0.42, dist: 12 }; });
@@ -113,9 +123,12 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     let mm = null;
     if (minimapHost) { const fresh = minimapHost.cloneNode(false); minimapHost.replaceWith(fresh); minimapHost = fresh; mm = h('canvas', { width: 180, height: 150, class: 'town-minimap' }); minimapHost.replaceChildren(mm, h('span', { class: 'mm-label' }, 'Solarhaven · click to walk')); mm.addEventListener('click', (e) => { const r = mm.getBoundingClientRect(); const d = drawMinimap(mm, { jobs: ctx.jobs(), npcs: [...npcs.npcs.values()], player: player.state }); const p = d.toWorld((e.clientX - r.left) * (mm.width / r.width), (e.clientY - r.top) * (mm.height / r.height)); player.moveTo(p); }); }
 
+    let stepTimer = 0; let ambienceTimer = 0;
     const frame = (dt, elapsed) => {
         const moved = player.update(dt); state.moved += moved; if (state.moved > 6) completeTutorial(ctx, 'move');
-        npcs.update(dt, elapsed); interactions.update(); town.flicker(elapsed); overlay.update();
+        if (moved > 0) { stepTimer += dt; if (stepTimer > 0.36) { stepTimer = 0; audio.play('step'); } }
+        npcs.update(dt, elapsed); awareness.update(dt); interactions.update(); town.flicker(elapsed); overlay.update();
+        ambienceTimer += dt; if (ambienceTimer > 2) { ambienceTimer = 0; audio.ambience({ phase: engine.state.phase, weather: engine.state.weather, nearFire: Math.hypot(player.pos.x + 12, player.pos.z - 14) < 10 }); }
         state.lastSync += dt; if (state.lastSync > 1.5) { state.lastSync = 0; npcs.sync(); if (ctx.jobs().length !== state.jobCount) { state.jobCount = ctx.jobs().length; town.setJobs(ctx.jobs()); } for (const job of ctx.jobs()) town.updateHouse(job); interactions.refreshMarkers(); ctx.store.set('ui.playerPos', { x: player.pos.x, z: player.pos.z }); if (ctx.world.crew().some((a) => a.currentTask && a.currentTask.jobId)) completeTutorial(ctx, 'assign'); }
         state.lastMinimap += dt; if (mm && state.lastMinimap > 0.2) { state.lastMinimap = 0; drawMinimap(mm, { jobs: ctx.jobs(), npcs: [...npcs.npcs.values()], player: player.state, phase: engine.state.phase }); }
     };
@@ -123,7 +136,8 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     const onResize = () => engine.resize(); window.addEventListener('resize', onResize);
     const onVis = () => { if (document.hidden) engine.stop(); else if (autoStart) engine.start(); }; document.addEventListener('visibilitychange', onVis);
     if (autoStart) engine.start();
-    const game = { engine, town, overlay, player, npcs, interactions, state, tutorial: { current: () => currentTutorial(ctx), complete: (id) => completeTutorial(ctx, id) }, renderTracker, drawMinimap: () => mm && drawMinimap(mm, { jobs: ctx.jobs(), npcs: [...npcs.npcs.values()], player: player.state }), tickOnce(dt = 0.05) { engine.clock.elapsed += dt; frame(dt, engine.clock.elapsed); }, dispose() { engine.stop(); stopUpdate(); for (const off of offs) off(); window.removeEventListener('resize', onResize); window.removeEventListener('pointermove', onHover); document.removeEventListener('visibilitychange', onVis); interactions.dispose(); npcs.dispose(); player.dispose(); overlay.clear(); overlay.layer.remove(); engine.dispose(); } };
+    const unlock = () => audio.unlock(); if (autoStart) { window.addEventListener('pointerdown', unlock, { once: true }); window.addEventListener('keydown', unlock, { once: true }); }
+    const game = { engine, town, overlay, player, npcs, interactions, awareness, audio, state, get touch() { return touch; }, tutorial: { current: () => currentTutorial(ctx), complete: (id) => completeTutorial(ctx, id) }, renderTracker, drawMinimap: () => mm && drawMinimap(mm, { jobs: ctx.jobs(), npcs: [...npcs.npcs.values()], player: player.state }), tickOnce(dt = 0.05) { engine.clock.elapsed += dt; frame(dt, engine.clock.elapsed); }, dispose() { engine.stop(); stopUpdate(); for (const off of offs) off(); window.removeEventListener('resize', onResize); window.removeEventListener('pointermove', onHover); audio.stopAll(); if (touch) touch.dispose(); document.removeEventListener('visibilitychange', onVis); interactions.dispose(); npcs.dispose(); player.dispose(); overlay.clear(); overlay.layer.remove(); engine.dispose(); } };
     return game;
 }
 
@@ -137,6 +151,7 @@ export const FEATURES = [
     { id: 'game.interactKey', title: 'E interacts with whatever is in front of the player', dom: true, test: async () => { const { t, game, cleanup } = await boot(); t.ctx.wm.register({ id: 'chat', title: 'c', render: () => {}, tabs: [{ id: 'talk', label: 't' }] }); const nova = game.npcs.npcs.get('NOVA'); game.player.setPosition({ x: nova.pos.x + 1, z: nova.pos.z }); game.tickOnce(0.01); t.ctx.keys.handle({ key: 'e' }); const ok = t.ctx.wm.isOpen('chat') && t.ctx.store.get('ui.chatAgent') === 'NOVA'; cleanup(); return ok; } },
     { id: 'game.minimap', title: 'Town minimap with player, crew, houses and markers', dom: true, test: async () => { const { t, game, cleanup } = await boot(); const c = h('canvas', { width: 180, height: 150 }); const d = drawMinimap(c, { jobs: t.ctx.jobs(), npcs: [...game.npcs.npcs.values()], player: game.player.state }); const px = c.getContext('2d').getImageData(90, 75, 1, 1).data; const ok = d.scale > 0.8 && px[3] === 255 && Math.abs(d.toWorld(90, 75).x) < 0.01; cleanup(); return ok; } },
     { id: 'game.clickSelect', title: 'Clicking a minion selects them and opens their sheet', dom: true, test: async () => { const { t, game, cleanup } = await boot(); t.ctx.wm.register({ id: 'crew', title: 'c', render: () => {}, tabs: [{ id: 'detail', label: 'd' }] }); const nova = game.npcs.npcs.get('NOVA'); game.player.setPosition({ x: nova.pos.x, z: nova.pos.z + 6 }); game.player.state.cam = { yaw: 0, pitch: 0.3, dist: 8 }; game.player.updateCamera(1); game.engine.camera.updateMatrixWorld(); const p = game.engine.project({ x: nova.pos.x, y: 1, z: nova.pos.z }); game.player.onClick({ x: p.x * 2 - 1, y: -(p.y * 2 - 1) }); const ok = game.npcs.selected === 'NOVA' && t.ctx.wm.isOpen('crew') && t.ctx.store.get('ui.selectedAgent') === 'NOVA'; cleanup(); return ok; } },
+    { id: 'game.soundHooks', title: 'World events trigger sound cues when sound is on', dom: true, test: async () => { const { createAudio } = await import('../core/audio.js'); const { makeTestCtx } = await import('../windows/_testing.js'); const t = makeTestCtx(); t.ctx.store.set('ui.soundOn', true); const played = []; t.ctx.audio = { play: (n) => played.push(n), ambience() {}, stopAll() {}, unlock() {}, loop() {} }; const canvas = h('canvas', { width: 320, height: 200 }); const host = h('div', { style: { width: '320px', height: '200px', position: 'fixed' } }); document.body.append(canvas, host); const game = startGame(t.ctx, { canvas, overlayHost: host, autoStart: false }); t.ctx.world.emit({ type: 'task_complete', agentId: 'NOVA', text: 'x' }); t.ctx.world.emit({ type: 'level_up', agentId: 'NOVA', text: 'x' }); t.ctx.wm.register({ id: 'tmp', title: 't', render: () => {} }); t.ctx.open('tmp'); const ok = played.includes('reward') && played.includes('levelup') && played.includes('open'); game.dispose(); canvas.remove(); host.remove(); t.done(); return ok; } },
     { id: 'game.hudToggle', title: 'Shift+Z hides the HUD overlay', dom: true, test: async () => { const { t, game, cleanup } = await boot(); t.ctx.keys.handle({ key: 'Z', shiftKey: true }); const hidden = game.overlay.layer.classList.contains('hidden'); t.ctx.keys.handle({ key: 'Z', shiftKey: true }); const shown = !game.overlay.layer.classList.contains('hidden'); cleanup(); return hidden && shown; } },
     { id: 'game.persistPosition', title: 'Player position is remembered between sessions', dom: true, test: async () => { const { t, game, cleanup } = await boot(); game.player.setPosition({ x: 20, z: -10 }); game.state.lastSync = 10; game.tickOnce(0.05); const ok = t.ctx.store.get('ui.playerPos').x === 20; cleanup(); return ok; } }
 ];

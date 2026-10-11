@@ -35,7 +35,7 @@ server.listen(port, async () => {
         check('the whole roster walks the town (24 minions, 6 crew)', await page.evaluate(() => window.GAME.npcs.npcs.size === 24 && window.REALM.world.crew().length === 6 && document.querySelectorAll('.ov-nameplate').length >= 24));
         await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
         const p0 = await page.evaluate(() => ({ ...window.GAME.player.pos }));
-        await page.focus('#realm-game'); await page.keyboard.down('w'); await page.waitForTimeout(700); await page.keyboard.up('w');
+        await page.focus('#realm-game'); await page.keyboard.down('w'); await page.waitForFunction((z0) => window.GAME.player.pos.z < z0 - 0.3, p0.z, { timeout: 8000 }).catch(() => {}); await page.keyboard.up('w');
         const p1 = await page.evaluate(() => ({ ...window.GAME.player.pos }));
         check('W walks the player north', p1.z < p0.z - 0.3, `${p0.z.toFixed(1)} → ${p1.z.toFixed(1)}`);
         await page.mouse.move(700, 400); await page.mouse.down(); await page.mouse.move(900, 400, { steps: 8 }); await page.mouse.up();

@@ -12,6 +12,17 @@ Workshop, Market and Depot, and watch each job's house build up from a "SOLAR?" 
 glowing array. The window system is the game's UI. See `docs/realm/FEATURES.md` for the self-test-backed
 ledger and `docs/realm/RESEARCH.md` for the research it is built on.
 
+### 🧠 Alert, conscious minions; sound; playable anywhere
+- Awareness layer: minions turn to face you and greet you when you walk up (by mood, task and whether they are
+  hired), hold conversations with each other at the campfire, cafe and square drawn from their memories,
+  specialties and the standards ("Can a battery go in a bedroom?"), shelter indoors when a storm rolls in, and
+  remark on job houses that need attention as they pass.
+- Sound synthesised in the browser with no audio files: UI cues, rewards, level-ups, achievements, footsteps,
+  rain, campfire crackle and day/night ambience (Settings › General, off by default).
+- Graphics quality (shadows, render resolution), touch controls (virtual joystick and E/jump buttons, automatic
+  on phones and tablets) and cloud save through the existing `/api/state` API with login, push, pull, conflict
+  detection and auto-push (Settings › Data).
+
 ### 🧬 The original realm, carried into the game
 - The full 24-minion roster from `docs/minions.json` (tiers, modes, specialties, reputation, identicon
   portraits) lives in Solarhaven. Six are the founding crew; the rest are townsfolk you can talk to and recruit

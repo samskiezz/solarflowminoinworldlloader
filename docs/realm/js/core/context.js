@@ -15,6 +15,8 @@ import { World } from '../sim/world.js';
 import { flatten } from '../domain/products.js';
 import { rosterSpecs } from '../sim/roster.js';
 import { createLlm } from './llm.js';
+import { createAudio } from './audio.js';
+import { createCloud } from './cloud.js';
 
 export const LEGACY_DEFAULT_CREW = [
     { id: 'ATLAS', name: 'Atlas', role: 'Lead installer', tier: 2, traits: ['meticulous', 'steady'], avatar: '🧑‍🔧', skills: { installation: 450, commissioning: 220 } },
@@ -51,9 +53,11 @@ export function createContext({ storage = null, root = null, products = null, se
     const commands = new CommandRegistry({ bus });
     const llm = createLlm({ store });
     llm.install();
+    const audio = createAudio({ store });
+    const cloud = createCloud({ store });
 
     const ctx = {
-        store, bus, world, wm, keys, clock, commands, llm, t,
+        store, bus, world, wm, keys, clock, commands, llm, audio, cloud, t,
         products: { list: [], byId: new Map(), summary: null, loaded: false, source: null },
         now,
         profile() { return store.get('profile'); },

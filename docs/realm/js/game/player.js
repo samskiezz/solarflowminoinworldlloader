@@ -9,7 +9,7 @@ export const WORLD_HALF = 78;
 export function createPlayer(engine, { obstacles = () => [], position = { x: 0, z: 10 }, id = 'you', listen = true, element = null } = {}) {
     const chibi = buildChibi({ id, isPlayer: true });
     engine.scene.add(chibi);
-    const state = { pos: { ...position }, heading: Math.PI, moving: false, moveTarget: null, onArrive: null, y: 0, vy: 0, jumping: false, cam: { yaw: 0, pitch: 0.42, dist: 12 }, keys: new Set(), drag: null, dragged: false, anim: 'idle', lastMoved: 0 };
+    const state = { pos: { ...position }, heading: Math.PI, moving: false, moveTarget: null, onArrive: null, y: 0, vy: 0, jumping: false, cam: { yaw: 0, pitch: 0.42, dist: 12 }, keys: new Set(), drag: null, dragged: false, anim: 'idle', lastMoved: 0, axis: { x: 0, y: 0 } };
     chibi.position.set(state.pos.x, 0, state.pos.z); chibi.rotation.y = state.heading;
     const el = element || engine.renderer.domElement;
 
@@ -32,6 +32,7 @@ export function createPlayer(engine, { obstacles = () => [], position = { x: 0, 
         stop() { state.moveTarget = null; state.onArrive = null; state.keys.clear(); },
         setPosition(p) { state.pos = { x: p.x, z: p.z }; chibi.position.set(p.x, state.y, p.z); },
         press(k) { state.keys.add(k); }, release(k) { state.keys.delete(k); },
+        setAxis(x, y) { state.axis = { x, y }; if (x || y) state.moveTarget = null; },
         jump,
         update(dt) {
             let moved = 0; const speed = PLAYER_SPEED * (state.keys.has('run') ? 1.6 : 1);
@@ -40,6 +41,7 @@ export function createPlayer(engine, { obstacles = () => [], position = { x: 0, 
             let dir = { x: 0, z: 0 };
             if (state.keys.has('fwd')) { dir.x += fwd.x; dir.z += fwd.z; } if (state.keys.has('back')) { dir.x -= fwd.x; dir.z -= fwd.z; }
             if (state.keys.has('left')) { dir.x -= right.x; dir.z -= right.z; } if (state.keys.has('right')) { dir.x += right.x; dir.z += right.z; }
+            if (state.axis.x || state.axis.y) { dir.x += fwd.x * -state.axis.y + right.x * state.axis.x; dir.z += fwd.z * -state.axis.y + right.z * state.axis.x; }
             const len = Math.hypot(dir.x, dir.z);
             if (len > 0) {
                 dir = { x: dir.x / len, z: dir.z / len };
@@ -78,5 +80,6 @@ export const FEATURES = [
     { id: 'game.player.clickToMove', title: 'Click-to-move walks to the point and calls back on arrival', dom: true, test: async () => { const { createEngine } = await import('./scene.js'); const c = document.createElement('canvas'); document.body.append(c); const e = createEngine(c, { shadows: false }); const p = createPlayer(e, { listen: false, position: { x: 0, z: 0 } }); let arrived = false; p.moveTo({ x: 6, z: 2 }, () => { arrived = true; }); for (let i = 0; i < 200 && !arrived; i++) p.update(1 / 30); const ok = arrived && Math.abs(p.pos.x - 6) < 0.8; p.dispose(); e.dispose(); c.remove(); return ok; } },
     { id: 'game.player.camera', title: 'Third-person camera orbits and zooms', dom: true, test: async () => { const { createEngine } = await import('./scene.js'); const c = document.createElement('canvas'); document.body.append(c); const e = createEngine(c, { shadows: false }); const p = createPlayer(e, { listen: false, position: { x: 0, z: 0 } }); p.updateCamera(1); const behind = e.camera.position.z > 5; p.state.cam.yaw = Math.PI / 2; p.updateCamera(1); const side = e.camera.position.x > 5; p.state.cam.dist = 6; p.updateCamera(1); const near = Math.hypot(e.camera.position.x, e.camera.position.z) < 7; p.dispose(); e.dispose(); c.remove(); return behind && side && near; } },
     { id: 'game.player.jump', title: 'Space jumps with gravity', dom: true, test: async () => { const { createEngine } = await import('./scene.js'); const c = document.createElement('canvas'); document.body.append(c); const e = createEngine(c, { shadows: false }); const p = createPlayer(e, { listen: false }); p.jump(); p.update(0.1); const up = p.state.y > 0; for (let i = 0; i < 60; i++) p.update(0.05); const down = p.state.y === 0 && !p.state.jumping; p.dispose(); e.dispose(); c.remove(); return up && down; } },
+    { id: 'game.player.axis', title: 'Analog axis input (touch joystick) moves the player', dom: true, test: async () => { const { createEngine } = await import('./scene.js'); const c = document.createElement('canvas'); document.body.append(c); const e = createEngine(c, { shadows: false }); const p = createPlayer(e, { listen: false, position: { x: 0, z: 0 } }); p.setAxis(0, -1); for (let i = 0; i < 30; i++) p.update(1 / 30); const ok = p.pos.z < -3 && p.state.anim === 'walk'; p.setAxis(0, 0); p.update(0.1); const stopped = p.state.anim === 'idle'; p.dispose(); e.dispose(); c.remove(); return ok && stopped; } },
     { id: 'game.player.worldBounds', title: 'The player cannot leave the town', dom: true, test: async () => { const { createEngine } = await import('./scene.js'); const c = document.createElement('canvas'); document.body.append(c); const e = createEngine(c, { shadows: false }); const p = createPlayer(e, { listen: false, position: { x: 0, z: 70 } }); p.press('back'); for (let i = 0; i < 200; i++) p.update(1 / 30); const ok = p.pos.z <= WORLD_HALF; p.dispose(); e.dispose(); c.remove(); return ok; } }
 ];
