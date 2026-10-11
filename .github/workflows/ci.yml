@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, check and test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint server code
+        run: npm run lint
+
+      - name: Syntax, JSON and link checks for the static site
+        run: npm run check
+
+      - name: Unit and API tests
+        run: npm test
+
+      - name: Server smoke test
+        run: |
+          JWT_SECRET=ci-secret-ci-secret-ci-secret-123456 PORT=3999 node server.js &
+          SERVER_PID=$!
+          for i in $(seq 1 20); do
+            curl -fsS http://127.0.0.1:3999/health && break
+            sleep 1
+          done
+          curl -fsS "http://127.0.0.1:3999/api/cer-products?limit=1" | head -c 300
+          kill $SERVER_PID
+
+  docker:
+    name: Docker image builds
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: solarflow:ci

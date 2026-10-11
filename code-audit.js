@@ -265,7 +265,7 @@ class CodeAudit {
             const content = fs.readFileSync(file, 'utf8');
             
             // Count global variables
-            const globalVars = content.match(/window\\.\\w+\\s*=/g) || [];
+            const globalVars = content.match(/window\.\w+\s*=/g) || [];
             
             if (globalVars.length > 5) {
                 this.warnings.push({
@@ -279,7 +279,7 @@ class CodeAudit {
             }
             
             // Check for state mutations without proper handling
-            const directMutations = content.match(/\\w+\\.\\w+\\s*=\\s*[^=]/g) || [];
+            const directMutations = content.match(/\w+\.\w+\s*=\s*[^=]/g) || [];
             if (directMutations.length > 10) {
                 this.warnings.push({
                     severity: 'LOW',
@@ -353,8 +353,8 @@ class CodeAudit {
             const content = fs.readFileSync(file, 'utf8');
             
             // Check for inefficient DOM queries
-            const domQueries = content.match(/document\\.getElementById|document\\.querySelector/g) || [];
-            const loops = content.match(/for\\s*\\(|forEach|setInterval/g) || [];
+            const domQueries = content.match(/document\.getElementById|document\.querySelector/g) || [];
+            const loops = content.match(/for\s*\(|forEach|setInterval/g) || [];
             
             if (domQueries.length > 0 && loops.length > 0) {
                 // Check if DOM queries are inside loops
@@ -512,7 +512,7 @@ class CodeAudit {
             const lines = content.split('\\n');
             
             // Check for duplicated function signatures
-            const functions = content.match(/function\\s+\\w+\\s*\\([^)]*\\)|\\w+\\s*[:=]\\s*function/g) || [];
+            const functions = content.match(/function\s+\w+\s*\([^)]*\)|\w+\s*[:=]\s*function/g) || [];
             
             functions.forEach(func => {
                 const signature = func.replace(/\\s+/g, ' ').trim();
@@ -559,7 +559,7 @@ class CodeAudit {
             const content = fs.readFileSync(file, 'utf8');
             
             // Check for while(true) without break
-            const whileTrue = content.match(/while\\s*\\(\\s*true\\s*\\)[^}]*}/gs);
+            const whileTrue = content.match(/while\s*\(\s*true\s*\)[^}]*}/gs);
             if (whileTrue) {
                 whileTrue.forEach(loop => {
                     if (!loop.includes('break') && !loop.includes('return')) {
@@ -576,7 +576,7 @@ class CodeAudit {
             }
             
             // Check for setInterval without clearInterval
-            const intervals = content.match(/setInterval\\([^}]+}[^}]+/gs) || [];
+            const intervals = content.match(/setInterval\([^}]+}[^}]+/gs) || [];
             if (intervals.length > 0 && !content.includes('clearInterval')) {
                 this.warnings.push({
                     severity: 'MEDIUM',

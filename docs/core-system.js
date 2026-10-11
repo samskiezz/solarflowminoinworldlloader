@@ -82,7 +82,7 @@ class SolarFlowCoreSystem {
             ], ui: '🤖 3D Realm (Ultimate AI)' },
             
             // SOLAR MODULE
-            { id: 'project-solar-australia', category: 'solar', files: ['project_solar_australia.html', 'real-cer-product-database.json'], ui: '🇦🇺 Project Solar Australia' }
+            { id: 'project-solar-australia', category: 'solar', files: ['project_solar_australia.html', 'cer-product-database.json'], ui: '🇦🇺 Project Solar Australia' }
         ];
         
         features.forEach(feature => {

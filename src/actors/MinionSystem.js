@@ -2,7 +2,6 @@
  * MinionSystem - Manages all minion avatars in the world
  * Handles spawning, updating, and synchronization with hive state
  */
-import * as THREE from "three";
 import { MinionAvatar } from "./MinionAvatar.js";
 
 export class MinionSystem {
@@ -182,7 +181,7 @@ export class MinionSystem {
                 });
                 break;
                 
-            case 'grid':
+            case 'grid': {
                 const gridSize = Math.ceil(Math.sqrt(count));
                 const spacing = 3;
                 
@@ -195,6 +194,7 @@ export class MinionSystem {
                     avatar.setWalkTarget(x, z);
                 });
                 break;
+            }
                 
             case 'line':
                 avatars.forEach((avatar, index) => {
@@ -271,7 +271,7 @@ export class MinionSystem {
     dispose() {
         console.log('[MinionSystem] Disposing all avatars');
         
-        for (const [id, avatar] of this.avatars.entries()) {
+        for (const avatar of this.avatars.values()) {
             this.scene.remove(avatar.group);
             avatar.dispose();
         }

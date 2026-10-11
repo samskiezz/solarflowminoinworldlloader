@@ -1,60 +1,40 @@
-# PRODUCTION DOCKER CONTAINER - ADDRESSES PROBLEM 102
-FROM node:18-alpine AS base
+# syntax=docker/dockerfile:1
+#
+# SolarFlow API server image.
+#   docker build -t solarflow:latest .
+#   docker run --rm -p 3000:3000 --env-file .env solarflow:latest
 
-# Install security updates and dependencies
-RUN apk update && apk upgrade && \
-    apk add --no-cache \
-    dumb-init \
-    postgresql-client \
-    curl \
-    && rm -rf /var/cache/apk/*
-
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S solarflow -u 1001
-
+FROM node:20-alpine AS deps
 WORKDIR /app
+COPY package.json package-lock.json ./
+# Production dependencies only (bcryptjs is pure JS, so no build toolchain needed).
+RUN npm ci --omit=dev && npm cache clean --force
 
-# Copy package files
-COPY package*.json ./
+FROM node:20-alpine AS runtime
+RUN apk add --no-cache dumb-init curl \
+    && addgroup -g 1001 -S nodejs \
+    && adduser -S solarflow -u 1001 -G nodejs
+WORKDIR /app
+ENV NODE_ENV=production \
+    PORT=3000 \
+    DATA_DIR=/app/data \
+    LOG_DIR=/app/logs
 
-# Install dependencies
-RUN npm ci --only=production && \
-    npm cache clean --force
+COPY --from=deps /app/node_modules ./node_modules
+COPY --chown=solarflow:nodejs package.json server.js ./
+COPY --chown=solarflow:nodejs src ./src
+COPY --chown=solarflow:nodejs docs ./docs
+COPY --chown=solarflow:nodejs server ./server
+COPY --chown=solarflow:nodejs scripts ./scripts
 
-# Copy application code
-COPY --chown=solarflow:nodejs . .
+RUN mkdir -p /app/data /app/logs && chown -R solarflow:nodejs /app/data /app/logs
+VOLUME ["/app/data", "/app/logs"]
 
-# Create necessary directories
-RUN mkdir -p logs data/standards && \
-    chown -R solarflow:nodejs logs data
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3000/health || exit 1
-
-# Switch to non-root user
 USER solarflow
-
-# Expose ports
 EXPOSE 3000
 
-# Start application with dumb-init
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -fsS http://localhost:3000/health || exit 1
+
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "server.js"]
-
-# Multi-stage build for development
-FROM base AS development
-
-# Switch back to root for dev dependencies
-USER root
-
-# Install development dependencies
-RUN npm ci && npm cache clean --force
-
-# Install development tools
-RUN apk add --no-cache git
-
-USER solarflow
-
-CMD ["npm", "run", "dev"]

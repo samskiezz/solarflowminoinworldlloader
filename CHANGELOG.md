@@ -2,6 +2,41 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.4.0] - 2026-10-11
+
+### Audit release: 142 fixes and upgrades
+
+See `IMPROVEMENTS.md` for the full numbered ledger. Highlights:
+
+### 🔧 Fixed
+- Front-end state was wiped on every page load by the storage-manager "migration" (#79).
+- The product catalogue page rendered nothing (`data.products` vs `categories`) and the dashboard
+  reported the catalogue as "empty" (#99, #107).
+- The API server crashed on any database outage (retry called a method on `null`) (#27).
+- `/api/cer-products` silently returned only unverified products (#40).
+- Backups stored inside the table they backed up, growing exponentially (#53).
+- The health monitor downloaded the 8 MB catalogue every 15 seconds (#83).
+- `real-compliance-engine.js` had a syntax error and never loaded (#87).
+- VPS preflight requests returned 404, breaking every cross-origin write (#71).
+- Six shipped JavaScript files did not parse (#17); the neural processor threw a TypeError ten times a second (#133).
+
+### ✨ Added
+- Runtime config (`docs/solarflow-config.js`), `docs/404.html`, `docs/status.html`, `docs/cer-product-summary.json`.
+- File-backed `/api/state`, `/api/cer-products` without a database, `/api/version`, `/ready`.
+- `node:test` suite (34 tests), syntax/JSON/link checks, GitHub Actions CI, Docker Compose stack.
+
+### 🔒 Security
+- No default JWT secret, passwords no longer altered before hashing, full helmet headers, CORS from
+  config, brute-force map pruning, admin-only standards refresh, atomic VPS writes with optional write key.
+
+### 🧹 Removed
+- `node_modules/`, `backups/`, dead server copies and 16 orphaned scripts from version control;
+  the duplicate 8 MB catalogue file; nine unused dependencies.
+
+### 📣 Honesty
+- The catalogue is labelled as a **simulated dataset** in the UI, README and metadata. It is not the
+  CEC/CER approved products lists.
+
 ## [2.3.0] - 2026-02-08
 
 ### 🎯 Major Achievement: 100% Real Data

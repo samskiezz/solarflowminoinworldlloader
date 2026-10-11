@@ -182,7 +182,7 @@ export class City {
     }
 
     addBuildingDetails(buildingGroup, buildingMesh, config) {
-        const [width, height, depth] = config.size;
+        const height = config.size[1];
         
         // Windows
         this.addWindows(buildingGroup, buildingMesh, config);
@@ -240,7 +240,7 @@ export class City {
     }
 
     addEntrance(buildingGroup, buildingMesh, config) {
-        const [width, height, depth] = config.size;
+        const [, height, depth] = config.size;
         
         // Simple entrance doorway
         const doorGeometry = new THREE.BoxGeometry(1.5, 2.5, 0.1);

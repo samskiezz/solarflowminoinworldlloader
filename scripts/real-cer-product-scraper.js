@@ -596,4 +596,26 @@ class RealCERProductScraper {
                 'Connect DC cables in correct sequence per manufacturer instructions',
                 'Install battery management system communications cable',
                 'Connect to dedicated battery isolator and protection systems',
-                '
+                'Label battery enclosure and isolators per AS/NZS 5139 requirements'
+            ];
+        }
+        return [];
+    }
+}
+
+module.exports = RealCERProductScraper;
+
+if (require.main === module) {
+    const scraper = new RealCERProductScraper();
+    const run = typeof scraper.run === 'function' ? scraper.run.bind(scraper)
+        : typeof scraper.scrapeAll === 'function' ? scraper.scrapeAll.bind(scraper)
+            : null;
+    if (run) {
+        run().catch((error) => {
+            console.error('Scraper failed:', error);
+            process.exit(1);
+        });
+    } else {
+        console.log('RealCERProductScraper loaded (no run() entry point defined)');
+    }
+}

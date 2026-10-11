@@ -378,7 +378,7 @@ export class AssetManager {
      * Clear cache and free memory
      */
     clearCache() {
-        for (const [path, asset] of this.cache) {
+        for (const asset of this.cache.values()) {
             if (asset.dispose) {
                 asset.dispose();
             }

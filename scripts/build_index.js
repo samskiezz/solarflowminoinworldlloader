@@ -42,6 +42,7 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <title>SolarFlow Minion World Loader</title>
   <meta name="color-scheme" content="dark light" />
   <style>
@@ -243,6 +244,7 @@ const html = `<!doctype html>
       }
     }
 
+    try{
     const HIVE = safeParse('data-hive');
     const HEALTH = (HIVE.world && HIVE.world.health) ? HIVE.world.health : { tick_interval_sec: 60, paused: false };
 
@@ -464,7 +466,7 @@ const html = `<!doctype html>
       active.forEach(m=>{
         const row = el('div',{class:'row'});
         row.appendChild(el('div',{class:'k',text:(m.label || m.id || 'Mechanic')}));
-        row.appendChild(el('div',{class:'v',text:(m.desc || '') + (m.liturgy ? ('\n' + '“' + m.liturgy + '”') : '')}));
+        row.appendChild(el('div',{class:'v',text:(m.desc || '') + (m.liturgy ? ('\\n' + '“' + m.liturgy + '”') : '')}));
         mechEl.appendChild(row);
       });
     }
@@ -556,5 +558,7 @@ const html = `<!doctype html>
 </html>
 `;
 
-fs.writeFileSync(path.join(docs, 'index.html'), html);
+// The dashboard lives in docs/index.html (hand-maintained); the generated hive
+// status board is published as docs/status.html.
+fs.writeFileSync(path.join(docs, 'status.html'), html);
 console.log('build_index ok');

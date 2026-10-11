@@ -365,7 +365,7 @@ class RealComplianceEngine {
     }
     
     // Main verification method
-    async performCompliance Verification(systemData) {
+    async performComplianceVerification(systemData) {
         const verificationId = this.generateVerificationId();
         const timestamp = Date.now();
         

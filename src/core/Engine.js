@@ -91,6 +91,11 @@ export class DominionEngine {
         }
     }
 
+    /** Avatars are owned by the minion system; expose them for callers that expect engine.avatars. */
+    get avatars() {
+        return this.minionSystem && this.minionSystem.avatars ? this.minionSystem.avatars : new Map();
+    }
+
     async buildWorld() {
         console.log('[Engine] Building world...');
         

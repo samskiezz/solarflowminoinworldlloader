@@ -8,14 +8,15 @@ class RealStatusLoader {
         this.statusUrl = './live_neural_status.json';
         this.isReal = true;
     }
-    
+
     async loadRealStatus() {
         try {
-            const response = await fetch(this.statusUrl + '?t=' + Date.now());
+            const response = await fetch(this.statusUrl, { cache: 'no-cache' });
+            if (!response.ok) throw new Error('HTTP ' + response.status);
             const data = await response.json();
-            
+
             console.log('🧠 Real Neural Status Loaded:', data);
-            
+
             return {
                 neural_cluster_active: data.neural_cluster_active || false,
                 repositories_installed: data.repositories_installed || 0,
@@ -27,7 +28,7 @@ class RealStatusLoader {
             };
         } catch (error) {
             console.warn('⚠️ VPS status unavailable - checking local neural processor:', error);
-            
+
             // Check if real neural processor is active locally
             const localNeural = window.realNeuralProcessor;
             if (localNeural && localNeural.initialized) {
@@ -43,7 +44,7 @@ class RealStatusLoader {
                     workers: localStatus.workers
                 };
             }
-            
+
             // If no VPS and no local, return honest status
             return {
                 neural_cluster_active: false,
@@ -57,11 +58,11 @@ class RealStatusLoader {
             };
         }
     }
-    
+
     async updateSystemStatus() {
         const status = await this.loadRealStatus();
         const statusElement = document.getElementById('system-status');
-        
+
         if (statusElement) {
             if (status.neural_cluster_active && status.is_real) {
                 statusElement.innerHTML = `
@@ -73,17 +74,25 @@ class RealStatusLoader {
                 statusElement.style.background = 'rgba(0,255,0,0.1)';
                 statusElement.style.borderColor = 'rgba(0,255,0,0.3)';
             } else {
+                const loader = window.centralDataLoader;
+                const products = loader && loader.get('cerProducts') ? loader.get('cerProducts').length : null;
+                const summary = loader ? loader.get('cerSummary') : null;
+                const minions = loader && loader.get('minions') ? loader.get('minions').length : null;
+                const orchestrator = window.initOrchestrator ? window.initOrchestrator.getStatus() : null;
+                const parts = [];
+                if (orchestrator) parts.push(`✅ ${orchestrator.ready.length} modules ready`);
+                if (products !== null) parts.push(`✅ ${products.toLocaleString()} ${summary && summary.simulated ? 'simulated ' : ''}catalogue products`);
+                if (minions !== null) parts.push(`✅ ${minions} minions`);
+                parts.push('⚠️ Neural cluster requires a VPS deployment');
                 statusElement.innerHTML = `
                     <div style="font-size: 1rem; margin-bottom: 5px;">⚡ <span style="color: #ffaa00;">Local Mode (Browser-Based)</span></div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">
-                        ✅ 18 Core Systems | ✅ 9,247 CER Products | ✅ AS/NZS Standards | ⚠️ Neural cluster requires VPS deployment
-                    </div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">${parts.join(' | ')}</div>
                 `;
                 statusElement.style.background = 'rgba(255,170,0,0.1)';
                 statusElement.style.borderColor = 'rgba(255,170,0,0.3)';
             }
         }
-        
+
         return status;
     }
 }
@@ -94,7 +103,7 @@ const realStatusLoader = new RealStatusLoader();
 // Auto-update status when page loads
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔍 Loading real neural status from VPS...');
-    
+
     realStatusLoader.updateSystemStatus().then(status => {
         if (status.is_real && status.neural_cluster_active) {
             console.log('✅ Real neural cluster connected:', status);
@@ -102,11 +111,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('📋 Local mode - VPS status unavailable, using browser systems');
         }
     });
-    
-    // Update status every 60 seconds
+
+    const interval = (window.SOLARFLOW_CONFIG && window.SOLARFLOW_CONFIG.pollIntervals.statusLoader) || 120000;
     setInterval(() => {
-        realStatusLoader.updateSystemStatus();
-    }, 60000);
+        if (!document.hidden) realStatusLoader.updateSystemStatus();
+    }, interval);
 });
 
 // Export for global access

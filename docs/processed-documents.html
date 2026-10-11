@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
     <title>Processed Documents - Document Pipeline Status</title>
     <style>
         * {
@@ -208,11 +209,11 @@
             .header {
                 padding: 1rem;
             }
-            
+
             .content {
                 padding: 1rem;
             }
-            
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -281,10 +282,10 @@
                 // Try to load from SolarFlow document pipeline
                 let pipelineData = null;
                 let cerData = null;
-                
+
                 // Load CER product database
                 try {
-                    const cerResponse = await fetch('./real-cer-product-database.json');
+                    const cerResponse = await fetch('./cer-product-database.json');
                     if (cerResponse.ok) {
                         cerData = await cerResponse.json();
                     }
@@ -353,36 +354,36 @@
         function renderDocumentStatus(pipelineData, cerData) {
             // Handle both old format and new progress.json format
             const isProgressFormat = pipelineData.meta && pipelineData.meta.schema === 'solarflow.progress.v1';
-            
+
             // Update statistics with backward compatibility
             if (isProgressFormat) {
-                document.getElementById('totalProcessed').textContent = 
+                document.getElementById('totalProcessed').textContent =
                     pipelineData.pipeline?.document_processing?.total_processed || 188;
-                document.getElementById('queueSize').textContent = 
+                document.getElementById('queueSize').textContent =
                     pipelineData.pipeline?.document_processing?.currently_processing || 0;
-                document.getElementById('cerProducts').textContent = 
+                document.getElementById('cerProducts').textContent =
                     pipelineData.pipeline?.cer_products?.total_products || 12;
-                document.getElementById('docsWithSpecs').textContent = 
+                document.getElementById('docsWithSpecs').textContent =
                     pipelineData.pipeline?.cer_products?.verified_products || 10;
             } else {
                 // Legacy format support
                 document.getElementById('totalProcessed').textContent = pipelineData.totalDocuments || 188;
                 document.getElementById('queueSize').textContent = pipelineData.queueSize || 75;
-                document.getElementById('cerProducts').textContent = cerData?.metadata?.totalProducts || 12;
-                document.getElementById('docsWithSpecs').textContent = 
+                document.getElementById('cerProducts').textContent = (cerData?.metadata?.totalProducts || 0).toLocaleString() + (cerData?.metadata?.simulated ? ' (simulated)' : '');
+                document.getElementById('docsWithSpecs').textContent =
                     cerData?.metadata?.documentsFound || pipelineData.documentsWithSpecs || 10;
             }
 
             // Render pipeline status with format detection
             const statusContainer = document.getElementById('pipelineStatusContainer');
             let status, statusText, lastProcessed;
-            
+
             if (isProgressFormat) {
                 status = pipelineData.pipeline?.document_processing?.status || 'active';
                 lastProcessed = pipelineData.pipeline?.document_processing?.last_tick || pipelineData.meta?.updatedAt;
                 const successRate = pipelineData.pipeline?.document_processing?.success_rate || 1.0;
                 const failed = pipelineData.pipeline?.document_processing?.failed || 0;
-                
+
                 statusText = status === 'completed' ? `Completed (${Math.round(successRate * 100)}% success)` :
                             status === 'active' ? 'Processing documents' :
                             status === 'blocked' ? `Blocked: ${failed} failures` :
@@ -394,8 +395,8 @@
                             status === 'blocked' ? `Blocked: ${pipelineData.blockReason || 'Rate limiting'}` :
                             'Pipeline error';
             }
-            
-            const statusClass = (status === 'active' || status === 'completed') ? 'status-active' : 
+
+            const statusClass = (status === 'active' || status === 'completed') ? 'status-active' :
                                status === 'blocked' ? 'status-blocked' : 'status-error';
 
             statusContainer.innerHTML = `

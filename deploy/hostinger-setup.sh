@@ -31,11 +31,12 @@ cd /opt/openclaw
 # git clone https://github.com/samskiezz/solarflowminoinworldlloader.git app
 
 # For now, copy files from local deployment
-cp -r /home/node/.openclaw/workspace/solarflowminoinworldlloader/* ./app/
+SRC_DIR="${SOLARFLOW_SRC:-$(cd "$(dirname "$0")/.." && pwd)}"
+cp -r "$SRC_DIR"/* ./app/
 
 # Install dependencies
 cd app
-npm install express ws
+(cd server && npm install --omit=dev)
 
 # Create PM2 ecosystem file
 cat > ecosystem.config.js << 'EOF'
@@ -64,18 +65,18 @@ sudo tee /etc/nginx/sites-available/openclaw-solarflow << 'EOF'
 server {
     listen 80;
     server_name your-domain.com;  # Replace with actual domain
-    
+
     # Serve static files
     location / {
         root /opt/openclaw/app/docs;
         index index.html;
         try_files $uri $uri/ /index.html;
-        
+
         # Enable gzip compression
         gzip on;
         gzip_types text/css text/javascript application/javascript application/json;
     }
-    
+
     # API endpoints
     location /api/ {
         proxy_pass http://localhost:3001;
@@ -88,7 +89,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
     }
-    
+
     # WebSocket support
     location /ws {
         proxy_pass http://localhost:3001;
@@ -97,7 +98,7 @@ server {
         proxy_set_header Connection "Upgrade";
         proxy_set_header Host $host;
     }
-    
+
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-XSS-Protection "1; mode=block" always;

@@ -3,91 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
     <title>CER Approved Products Database</title>
     <style>
         :root {
             --primary: #1976d2; --success: #388e3c; --warning: #f57c00; --danger: #d32f2f;
             --bg-dark: #0a0a0a; --bg-light: #1a1a1a; --text: #ffffff; --text-muted: #b0b0b0;
         }
-        
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
             color: var(--text); min-height: 100vh; padding: 1rem;
         }
-        
+
         .container { max-width: 1400px; margin: 0 auto; }
-        
+
         .header {
             background: linear-gradient(135deg, var(--warning), #ef6c00);
             padding: 2rem; border-radius: 16px; text-align: center; margin-bottom: 2rem;
         }
-        
+
         .back-btn {
             display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2);
             color: white; text-decoration: none; border-radius: 8px; margin-bottom: 1rem;
         }
-        
+
         .search-filters {
             background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;
             display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 1rem;
         }
-        
+
         .search-input, .filter-select {
             padding: 0.75rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px;
             background: rgba(255,255,255,0.1); color: white;
         }
-        
+
         .search-input::placeholder { color: rgba(255,255,255,0.6); }
-        
+
         .products-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem; margin-bottom: 2rem;
         }
-        
+
         .product-card {
             background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem;
             border: 1px solid rgba(255,255,255,0.2); transition: transform 0.3s;
         }
-        
+
         .product-card:hover { transform: translateY(-2px); }
-        
+
         .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.5rem; color: var(--warning); }
         .product-manufacturer { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
         .product-model { font-size: 1rem; margin-bottom: 1rem; }
-        
+
         .product-specs {
             display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1rem 0;
             font-size: 0.9rem;
         }
-        
+
         .spec-item { display: flex; justify-content: space-between; }
         .spec-label { color: var(--text-muted); }
         .spec-value { color: var(--success); font-weight: bold; }
-        
+
         .product-docs {
             margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;
         }
-        
+
         .doc-link {
             padding: 0.25rem 0.75rem; background: var(--primary); color: white;
             text-decoration: none; border-radius: 6px; font-size: 0.8rem;
         }
-        
+
         .doc-link:hover { background: #1565c0; }
-        
+
         .stats-panel {
             background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px;
             display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
         }
-        
+
         .stat-item { text-align: center; }
         .stat-value { font-size: 1.5rem; font-weight: bold; color: var(--success); }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); }
-        
+
         .loading { text-align: center; color: var(--text-muted); padding: 2rem; }
     </style>
 </head>
@@ -95,19 +96,22 @@
     <div class="container">
         <div class="header">
             <a href="./index.html" class="back-btn">← Back to Dashboard</a>
-            <h1>🔌 CER Approved Products Database</h1>
-            <p>Australian Clean Energy Regulator Approved Solar & Battery Products</p>
+            <h1>🔌 Product Catalogue</h1>
+            <p>Solar panels, inverters and batteries with specifications and documents</p>
             <div id="productCount" class="version-info">Loading products...</div>
+            <p id="dataSourceNote" style="font-size:0.85rem;opacity:0.9;margin-top:0.5rem;" hidden>
+                ⚠️ This is a <strong>simulated dataset</strong> for demonstration. The official approved product lists are published by the
+                <a href="https://www.cleanenergycouncil.org.au/industry-programs/products-program" target="_blank" rel="noopener" style="color:#fff">Clean Energy Council</a>.
+            </p>
         </div>
 
         <div class="search-filters">
             <input type="text" id="searchInput" class="search-input" placeholder="Search products, manufacturers, models...">
             <select id="categoryFilter" class="filter-select">
                 <option value="">All Categories</option>
-                <option value="solar_panels">Solar Panels</option>
-                <option value="inverters">Inverters</option>
-                <option value="batteries">Battery Storage</option>
-                <option value="mounting">Mounting Systems</option>
+                <option value="solar_panel">Solar Panels</option>
+                <option value="inverter">Inverters</option>
+                <option value="battery">Battery Storage</option>
             </select>
             <select id="manufacturerFilter" class="filter-select">
                 <option value="">All Manufacturers</option>
@@ -140,7 +144,7 @@
         </div>
 
         <div id="loadingMessage" class="loading">🔄 Loading CER products database...</div>
-        
+
         <div id="productsContainer" class="products-grid" style="display: none;">
             <!-- Products will be loaded here -->
         </div>
@@ -150,33 +154,48 @@
         let allProducts = [];
         let filteredProducts = [];
         let manufacturers = new Set();
+        let renderedCount = 0;
+        const PAGE_SIZE = 60;
+
+        function escapeHTML(value) {
+            return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+        }
+
+        function safeUrl(url) {
+            return /^https?:\/\//i.test(String(url)) ? String(url) : '#';
+        }
 
         async function loadProducts() {
             try {
                 const response = await fetch('./cer-product-database.json');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const data = await response.json();
-                
-                allProducts = data.products || [];
-                filteredProducts = [...allProducts];
-                
-                // Extract manufacturers
+
+                // Structure: { metadata, categories: { solar_panels, inverters, batteries } }
+                const categories = data.categories || {};
+                allProducts = [
+                    ...(categories.solar_panels || []),
+                    ...(categories.inverters || []),
+                    ...(categories.batteries || []),
+                    ...(Array.isArray(data.products) ? data.products : [])
+                ];
+                if (data.metadata && data.metadata.simulated) {
+                    document.getElementById('dataSourceNote').hidden = false;
+                }
+
                 allProducts.forEach(product => {
-                    if (product.manufacturer) {
-                        manufacturers.add(product.manufacturer);
-                    }
+                    if (product.manufacturer) manufacturers.add(product.manufacturer);
                 });
-                
+
                 populateManufacturerFilter();
-                updateStats();
-                displayProducts(filteredProducts);
-                
+                filterProducts();
+
                 document.getElementById('loadingMessage').style.display = 'none';
                 document.getElementById('productsContainer').style.display = 'grid';
-                
             } catch (error) {
                 console.error('Error loading products:', error);
-                document.getElementById('loadingMessage').textContent = 
-                    '❌ Error loading products database. Please try again.';
+                document.getElementById('loadingMessage').textContent =
+                    '❌ Error loading the product catalogue (' + error.message + '). Please try again.';
             }
         }
 
@@ -190,41 +209,59 @@
             });
         }
 
-        function displayProducts(products) {
+        function productCard(product) {
+            const specs = product.specifications
+                ? Object.entries(product.specifications).slice(0, 6).map(([key, value]) => `
+                    <div class="spec-item">
+                        <span class="spec-label">${escapeHTML(formatSpecLabel(key))}:</span>
+                        <span class="spec-value">${escapeHTML(value)}</span>
+                    </div>`).join('')
+                : '<div class="spec-item"><span class="spec-label">No specifications available</span></div>';
+
+            const docs = product.documents
+                ? Object.entries(product.documents).map(([type, url]) => `
+                    <a href="${escapeHTML(safeUrl(url))}" target="_blank" rel="noopener" class="doc-link">${escapeHTML(formatDocType(type))}</a>`).join('')
+                : '<span class="spec-label">No documents available</span>';
+
+            return `
+                <div class="product-card">
+                    <div class="product-title">${escapeHTML(product.name || product.model || product.id || 'Unnamed Product')}</div>
+                    <div class="product-manufacturer">${escapeHTML(product.manufacturer || 'Unknown Manufacturer')} · ${escapeHTML(product.type || product.category || '')}</div>
+                    <div class="product-model">${escapeHTML(product.model || 'Model not specified')}</div>
+                    <div class="product-specs">${specs}</div>
+                    <div class="product-docs">${docs}</div>
+                </div>`;
+        }
+
+        // Rendering 9,000+ cards at once froze the page; render in pages instead.
+        function displayProducts(products, append = false) {
             const container = document.getElementById('productsContainer');
-            
+            if (!append) {
+                renderedCount = 0;
+                container.innerHTML = '';
+            }
+            const existingMore = document.getElementById('loadMore');
+            if (existingMore) existingMore.remove();
+
             if (products.length === 0) {
                 container.innerHTML = '<div class="loading">No products found matching your criteria.</div>';
                 return;
             }
-            
-            container.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-title">${product.name || 'Unnamed Product'}</div>
-                    <div class="product-manufacturer">${product.manufacturer || 'Unknown Manufacturer'}</div>
-                    <div class="product-model">${product.model || 'Model not specified'}</div>
-                    
-                    <div class="product-specs">
-                        ${product.specifications ? Object.entries(product.specifications)
-                            .slice(0, 6)
-                            .map(([key, value]) => `
-                                <div class="spec-item">
-                                    <span class="spec-label">${formatSpecLabel(key)}:</span>
-                                    <span class="spec-value">${value}</span>
-                                </div>
-                            `).join('') : '<div class="spec-item"><span class="spec-label">No specifications available</span></div>'}
-                    </div>
-                    
-                    <div class="product-docs">
-                        ${product.documents ? Object.entries(product.documents)
-                            .map(([type, url]) => `
-                                <a href="${url}" target="_blank" class="doc-link">
-                                    ${formatDocType(type)}
-                                </a>
-                            `).join('') : '<span class="spec-label">No documents available</span>'}
-                    </div>
-                </div>
-            `).join('');
+
+            const slice = products.slice(renderedCount, renderedCount + PAGE_SIZE);
+            container.insertAdjacentHTML('beforeend', slice.map(productCard).join(''));
+            renderedCount += slice.length;
+
+            if (renderedCount < products.length) {
+                const more = document.createElement('button');
+                more.id = 'loadMore';
+                more.type = 'button';
+                more.className = 'doc-link';
+                more.style.cssText = 'grid-column: 1 / -1; padding: 1rem; font-size: 1rem; border: none; cursor: pointer;';
+                more.textContent = `Show more (${renderedCount.toLocaleString()} of ${products.length.toLocaleString()} shown)`;
+                more.onclick = () => displayProducts(filteredProducts, true);
+                container.appendChild(more);
+            }
         }
 
         function formatSpecLabel(key) {
@@ -234,9 +271,11 @@
         function formatDocType(type) {
             const typeMap = {
                 spec_sheet: '📊 Spec Sheet',
-                datasheet: '📋 Datasheet', 
+                datasheet: '📋 Datasheet',
                 installation_manual: '🔧 Install Manual',
+                installationManual: '🔧 Install Manual',
                 user_manual: '📖 User Manual',
+                userManual: '📖 User Manual',
                 warranty: '🛡️ Warranty',
                 certificate: '✅ Certificate'
             };
@@ -244,68 +283,63 @@
         }
 
         function updateStats() {
-            document.getElementById('totalProducts').textContent = allProducts.length;
+            document.getElementById('totalProducts').textContent = allProducts.length.toLocaleString();
             document.getElementById('totalManufacturers').textContent = manufacturers.size;
-            document.getElementById('filteredCount').textContent = filteredProducts.length;
-            document.getElementById('productCount').textContent = 
-                `${filteredProducts.length} of ${allProducts.length} products shown`;
-            
-            // Count total documents
+            document.getElementById('filteredCount').textContent = filteredProducts.length.toLocaleString();
+            document.getElementById('productCount').textContent =
+                `${filteredProducts.length.toLocaleString()} of ${allProducts.length.toLocaleString()} products shown`;
+
             let documentCount = 0;
             allProducts.forEach(product => {
-                if (product.documents) {
-                    documentCount += Object.keys(product.documents).length;
-                }
+                if (product.documents) documentCount += Object.keys(product.documents).length;
             });
-            document.getElementById('documentCount').textContent = documentCount;
+            document.getElementById('documentCount').textContent = documentCount.toLocaleString();
+        }
+
+        function powerOf(product) {
+            const s = product.specifications || {};
+            return parseFloat(s.power_watts ?? s.max_power_watts ?? s.ac_power_watts ?? (s.continuous_power_kw ? s.continuous_power_kw * 1000 : 0)) || 0;
         }
 
         function filterProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
             const categoryFilter = document.getElementById('categoryFilter').value;
             const manufacturerFilter = document.getElementById('manufacturerFilter').value;
             const sortBy = document.getElementById('sortBy').value;
-            
+
             filteredProducts = allProducts.filter(product => {
-                const matchesSearch = !searchTerm || 
-                    (product.name && product.name.toLowerCase().includes(searchTerm)) ||
-                    (product.manufacturer && product.manufacturer.toLowerCase().includes(searchTerm)) ||
-                    (product.model && product.model.toLowerCase().includes(searchTerm));
-                
+                const matchesSearch = !searchTerm ||
+                    [product.name, product.manufacturer, product.model, product.id, product.type]
+                        .some(field => field && String(field).toLowerCase().includes(searchTerm));
                 const matchesCategory = !categoryFilter || product.category === categoryFilter;
                 const matchesManufacturer = !manufacturerFilter || product.manufacturer === manufacturerFilter;
-                
                 return matchesSearch && matchesCategory && matchesManufacturer;
             });
-            
-            // Sort products
+
             filteredProducts.sort((a, b) => {
                 switch (sortBy) {
-                    case 'name': return (a.name || '').localeCompare(b.name || '');
-                    case 'manufacturer': return (a.manufacturer || '').localeCompare(b.manufacturer || '');
-                    case 'power': 
-                        const aPower = parseFloat(a.specifications?.max_power_watts) || 0;
-                        const bPower = parseFloat(b.specifications?.max_power_watts) || 0;
-                        return bPower - aPower;
+                    case 'name': return String(a.name || a.model || '').localeCompare(String(b.name || b.model || ''));
+                    case 'manufacturer': return String(a.manufacturer || '').localeCompare(String(b.manufacturer || ''));
+                    case 'power': return powerOf(b) - powerOf(a);
                     case 'efficiency':
-                        const aEff = parseFloat(a.specifications?.efficiency_percent) || 0;
-                        const bEff = parseFloat(b.specifications?.efficiency_percent) || 0;
-                        return bEff - aEff;
+                        return (parseFloat(b.specifications?.efficiency_percent) || 0) - (parseFloat(a.specifications?.efficiency_percent) || 0);
                     default: return 0;
                 }
             });
-            
+
             updateStats();
             displayProducts(filteredProducts);
         }
 
-        // Event listeners
-        document.getElementById('searchInput').addEventListener('input', filterProducts);
+        let searchTimer;
+        document.getElementById('searchInput').addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(filterProducts, 150);
+        });
         document.getElementById('categoryFilter').addEventListener('change', filterProducts);
         document.getElementById('manufacturerFilter').addEventListener('change', filterProducts);
         document.getElementById('sortBy').addEventListener('change', filterProducts);
 
-        // Initialize
         loadProducts();
     </script>
 </body>

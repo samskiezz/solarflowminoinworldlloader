@@ -327,7 +327,7 @@ class RealCERScraper {
             }
         };
 
-        const outputPath = path.join(__dirname, '..', 'docs', 'real-cer-product-database.json');
+        const outputPath = path.join(__dirname, '..', 'docs', 'cer-product-database.json');
         fs.writeFileSync(outputPath, JSON.stringify(database, null, 2));
         
         console.log(`✅ Saved ${this.totalFound} REAL CER products to: ${outputPath}`);

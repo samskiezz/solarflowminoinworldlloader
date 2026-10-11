@@ -312,7 +312,7 @@ class RealPersistentSystem {
         
         try {
             // Load from existing database file
-            const response = await fetch('./real-cer-product-database.json');
+            const response = await fetch('./cer-product-database.json');
             if (response.ok) {
                 const cerDatabase = await response.json();
                 const products = [];

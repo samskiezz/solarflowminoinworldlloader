@@ -349,7 +349,7 @@ class UnifiedRealSystem {
         
         try {
             // Try to load existing real database
-            const response = await fetch('./real-cer-product-database.json');
+            const response = await fetch('./cer-product-database.json');
             if (response.ok) {
                 const cerDatabase = await response.json();
                 
@@ -750,10 +750,7 @@ class UnifiedRealSystem {
         });
     }
     
-    exposeUnifiedAPI() {
-        this.log('🔌 Exposing unified API for all systems...');
-        
-        ///**
+    /**
  * UNIFIED REAL SYSTEM - COMPLETE INTEGRATION
  * Part 2: API exposure, auto-save, and system integration
  */

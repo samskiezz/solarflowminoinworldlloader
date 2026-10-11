@@ -8,7 +8,7 @@ class MinionStandardsIntegration {
         this.standards = {};
         this.minionKnowledge = {};
         this.integrationComplete = false;
-        
+
         console.log("📋 Minion Standards Integration starting...");
         this.loadAllStandards();
     }
@@ -16,20 +16,19 @@ class MinionStandardsIntegration {
     async loadAllStandards() {
         // Load all the AS/NZS standards we extracted
         const standardFiles = [
-            '/artifacts/doc-pipeline/REAL_AS_NZS_3000_2018_electrical_installations.json',
-            '/artifacts/doc-pipeline/REAL_AS_NZS_3008_2017_cable_selection.json',
-            '/artifacts/doc-pipeline/REAL_AS_NZS_3012_2019_construction_sites.json', 
-            '/artifacts/doc-pipeline/REAL_AS_NZS_3017_2022_testing_verification.json',
-            '/artifacts/doc-pipeline/REAL_AS_NZS_4836_2023_worker_safety.json',
-            '/artifacts/doc-pipeline/REAL_AS_NZS_3760_2022_in_service_testing.json',
-            '/artifacts/doc-pipeline/REAL_AS_NZS_5033_2021_pv_arrays_CURRENT.json',
-            '/artifacts/doc-pipeline/REAL_AS_NZS_4777_1_2016_grid_connection.json',
-            '/artifacts/doc-pipeline/REAL_AS_NZS_5139_2019_battery_safety.json',
-            '/artifacts/doc-pipeline/REAL_VIC_Electricity_Safety_Regulations_2019.json'
+            '/standards/AS_NZS_3000_2018_summary.json',
+            '/standards/REAL_AS_NZS_3008_2017_cable_selection.json',
+            '/standards/REAL_AS_NZS_3012_2019_construction_sites.json',
+            '/standards/REAL_AS_NZS_4836_2023_worker_safety.json',
+            '/standards/REAL_AS_NZS_3760_2022_in_service_testing.json',
+            '/standards/REAL_AS_NZS_5033_2021_pv_arrays_CURRENT.json',
+            '/standards/REAL_AS_NZS_4777_1_2016_grid_connection.json',
+            '/standards/REAL_AS_NZS_5139_2019_battery_safety.json',
+            '/standards/REAL_VIC_Electricity_Safety_Regulations_2019.json'
         ];
 
         console.log("📄 Loading extracted AS/NZS standards into minion world...");
-        
+
         for (const file of standardFiles) {
             try {
                 const response = await fetch('.' + file);
@@ -50,7 +49,7 @@ class MinionStandardsIntegration {
 
     integrateWithMinions() {
         console.log("🤖 Integrating standards knowledge with minion systems...");
-        
+
         // Create minion-specific knowledge base
         this.minionKnowledge = {
             electrical_safety: {
@@ -59,19 +58,19 @@ class MinionStandardsIntegration {
                 safety_procedures: this.extractSafetyProcedures(),
                 testing_requirements: this.extractTestingRequirements()
             },
-            
+
             solar_installation: {
                 pv_array_requirements: this.extractPVRequirements(),
                 inverter_requirements: this.extractInverterRequirements(),
                 grid_connection: this.extractGridRequirements()
             },
-            
+
             battery_safety: {
                 installation_rules: this.extractBatteryRules(),
                 safety_protocols: this.extractBatterySafety(),
                 maintenance_procedures: this.extractBatteryMaintenance()
             },
-            
+
             regulatory_compliance: {
                 australian_standards: this.getAustralianStandards(),
                 victorian_regulations: this.getVictorianRegulations(),
@@ -81,16 +80,16 @@ class MinionStandardsIntegration {
 
         // Integrate with existing minion data
         this.updateMinionRoster();
-        this.updateMinionActivities(); 
+        this.updateMinionActivities();
         this.updateHiveState();
-        
+
         this.integrationComplete = true;
         console.log("✅ AS/NZS standards fully integrated into minion world!");
     }
 
     extractComplianceRules() {
         const rules = [];
-        
+
         Object.values(this.standards).forEach(standard => {
             if (standard.scope) {
                 rules.push({
@@ -100,13 +99,13 @@ class MinionStandardsIntegration {
                 });
             }
         });
-        
+
         return rules;
     }
 
     extractSafetyProcedures() {
         const procedures = [];
-        
+
         Object.values(this.standards).forEach(standard => {
             if (standard.safety_priorities || standard.safety_considerations) {
                 const safetyData = standard.safety_priorities || standard.safety_considerations;
@@ -119,13 +118,13 @@ class MinionStandardsIntegration {
                 });
             }
         });
-        
+
         return procedures;
     }
 
     extractTestingRequirements() {
         const testing = [];
-        
+
         // Extract from AS/NZS 3017:2022 (Testing and verification)
         const testingStandard = this.standards['AS/NZS 3017:2022'];
         if (testingStandard) {
@@ -135,7 +134,7 @@ class MinionStandardsIntegration {
                 requirements: testingStandard.scope || 'Electrical installation testing and verification'
             });
         }
-        
+
         return testing;
     }
 
@@ -157,7 +156,7 @@ class MinionStandardsIntegration {
         const inverterStandard = this.standards['AS/NZS 4777.1:2016'];
         if (inverterStandard) {
             return {
-                standard: 'AS/NZS 4777.1:2016', 
+                standard: 'AS/NZS 4777.1:2016',
                 title: inverterStandard.title,
                 scope: inverterStandard.scope,
                 technical_evolution: inverterStandard.technical_evolution,
@@ -196,7 +195,7 @@ class MinionStandardsIntegration {
     extractBatterySafety() {
         const batteryStandard = this.standards['AS/NZS 5139:2019'];
         const workerSafety = this.standards['AS/NZS 4836:2023'];
-        
+
         return {
             battery_specific: batteryStandard?.safety_considerations,
             worker_safety: workerSafety?.scope,
@@ -234,7 +233,7 @@ class MinionStandardsIntegration {
 
     createComplianceMatrix() {
         const matrix = {};
-        
+
         // Create compliance relationships between standards
         Object.values(this.standards).forEach(standard => {
             if (standard.integration_requirements || standard.mandatory_compliance_standards) {
@@ -244,7 +243,7 @@ class MinionStandardsIntegration {
                 };
             }
         });
-        
+
         return matrix;
     }
 
@@ -252,7 +251,7 @@ class MinionStandardsIntegration {
         try {
             // Get existing minion data
             const existingMinions = JSON.parse(localStorage.getItem('minion_economy') || '{}');
-            
+
             if (existingMinions.minions) {
                 // Add standards knowledge to each minion
                 existingMinions.minions.forEach(minion => {
@@ -262,7 +261,7 @@ class MinionStandardsIntegration {
                         last_updated: new Date().toISOString()
                     };
                 });
-                
+
                 // Save updated minion data
                 localStorage.setItem('minion_economy', JSON.stringify(existingMinions));
                 console.log("🤖 Updated minion roster with AS/NZS standards knowledge");
@@ -281,10 +280,10 @@ class MinionStandardsIntegration {
             'safety': ['AS/NZS 4836:2023', 'AS/NZS 3012:2019'],
             'compliance': Object.keys(this.standards)
         };
-        
+
         // Determine specialization based on minion name/type
         const minionName = (minion.name || '').toLowerCase();
-        
+
         if (minionName.includes('solar') || minionName.includes('pv')) {
             return specializations.solar;
         } else if (minionName.includes('battery') || minionName.includes('energy')) {
@@ -301,7 +300,7 @@ class MinionStandardsIntegration {
     getComplianceExpertise(minion) {
         const expertise = [];
         const specialization = this.assignStandardsSpecialization(minion);
-        
+
         specialization.forEach(standardId => {
             const standard = this.standards[standardId];
             if (standard) {
@@ -312,7 +311,7 @@ class MinionStandardsIntegration {
                 });
             }
         });
-        
+
         return expertise;
     }
 
@@ -321,7 +320,7 @@ class MinionStandardsIntegration {
             // Add standards-related activities to the feed
             const standardsActivities = [
                 "📋 Reviewed AS/NZS 3000:2018 electrical installation requirements",
-                "⚡ Analyzed AS/NZS 5033:2021 PV array safety protocols", 
+                "⚡ Analyzed AS/NZS 5033:2021 PV array safety protocols",
                 "🔋 Studied AS/NZS 5139:2019 battery system integration",
                 "🔌 Examined AS/NZS 4777.1:2016 grid connection standards",
                 "🛡️ Assessed AS/NZS 4836:2023 worker safety requirements",
@@ -331,7 +330,7 @@ class MinionStandardsIntegration {
                 "🔍 Conducted AS/NZS 3760:2022 in-service testing",
                 "📋 Cross-referenced Victoria Electricity Safety Regulations"
             ];
-            
+
             // Add to activity feed
             const existingActivities = JSON.parse(localStorage.getItem('activity_feed') || '[]');
             standardsActivities.forEach(activity => {
@@ -343,11 +342,11 @@ class MinionStandardsIntegration {
                     importance: 'high'
                 });
             });
-            
+
             // Keep only recent activities
             existingActivities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             const recentActivities = existingActivities.slice(0, 100);
-            
+
             localStorage.setItem('activity_feed', JSON.stringify(recentActivities));
             console.log("📊 Added AS/NZS standards activities to minion feed");
         } catch (e) {
@@ -358,7 +357,7 @@ class MinionStandardsIntegration {
     updateHiveState() {
         try {
             const hiveState = JSON.parse(localStorage.getItem('hive_state') || '{}');
-            
+
             // Add standards compliance to hive state
             hiveState.standards_compliance = {
                 total_standards: Object.keys(this.standards).length,
@@ -366,13 +365,13 @@ class MinionStandardsIntegration {
                 last_audit: new Date().toISOString(),
                 critical_standards: [
                     'AS/NZS 3000:2018',
-                    'AS/NZS 5033:2021', 
+                    'AS/NZS 5033:2021',
                     'AS/NZS 4777.1:2016',
                     'AS/NZS 5139:2019'
                 ],
                 integration_status: 'FULLY_OPERATIONAL'
             };
-            
+
             // Update systems status
             if (hiveState.systems) {
                 hiveState.systems.standards = {
@@ -382,7 +381,7 @@ class MinionStandardsIntegration {
                     last_update: new Date().toISOString()
                 };
             }
-            
+
             localStorage.setItem('hive_state', JSON.stringify(hiveState));
             console.log("🏠 Updated hive state with standards compliance data");
         } catch (e) {

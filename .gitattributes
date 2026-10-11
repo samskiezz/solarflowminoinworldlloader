@@ -1,16 +1,21 @@
+# Normalise line endings
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.wasm binary
+
+# Large generated data: don't diff, don't try to merge by hand.
+docs/cer-product-database.json -diff merge=ours
+
 # Prevent merge conflicts on generated artifacts.
 # Source of truth is docs/hive_state.json; everything else can be regenerated.
-
 docs/index.html merge=ours
-
 docs/status.json merge=ours
 docs/feed.json merge=ours
 docs/minions.json merge=ours
 docs/agora.json merge=ours
 docs/build.json merge=ours
 docs/roster.html merge=ours
-
 docs/realm.html merge=ours
 docs/realm.js merge=ours
-
 docs/avatars/identicons/** merge=ours

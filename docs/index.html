@@ -3,310 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SolarFlow Minion World Loader v2.2.1-NUCLEAR-1770512908 - No Fake Neural</title>
-    <meta name="version" content="v2.2.1-NUCLEAR-1770512908">
-    <meta name="hash" content="SHA256:no_fake_neural_final_fix">
-    <meta name="last-updated" content="2026-02-08T00:48:00Z">
-    <meta name="nuclear-cache-bust" content="1770512908">
+    <title>SolarFlow Minion World Loader</title>
+    <meta name="description" content="SolarFlow: solar and battery compliance workspace with AS/NZS standards references, a product catalogue and the minion realm simulation.">
+    <meta name="theme-color" content="#1976d2">
+    <meta name="version" content="2.4.0">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='14' fill='%23f6c343'/%3E%3Cg stroke='%23f6c343' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M32 4v10M32 50v10M4 32h10M50 32h10M12 12l7 7M45 45l7 7M12 52l7-7M45 19l7-7'/%3E%3C/g%3E%3C/svg%3E">
     <style>
         :root {
             --primary: #1976d2; --success: #388e3c; --warning: #f57c00; --danger: #d32f2f;
             --bg-dark: #0a0a0a; --bg-light: #1a1a1a; --text: #ffffff; --text-muted: #b0b0b0;
         }
-        
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
             color: var(--text); min-height: 100vh; padding: 1rem;
         }
-        
+
         .container { max-width: 1200px; margin: 0 auto; }
-        
+
         .header {
             text-align: center; margin-bottom: 2rem; padding: 2rem;
             background: linear-gradient(135deg, var(--primary), var(--success));
             border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
-        
+
         .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
         .header p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 0.5rem; }
-        .version-info { 
-            font-size: 0.9rem; background: rgba(255,255,255,0.2); 
+        .version-info {
+            font-size: 0.9rem; background: rgba(255,255,255,0.2);
             padding: 0.5rem 1rem; border-radius: 20px; display: inline-block; margin-top: 1rem;
         }
-        
+
         .systems-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem; margin-bottom: 2rem;
         }
-        
+
         .system-category {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
+
         .category-title {
-            font-size: 1.3rem; margin-bottom: 1rem; display: flex;
-            align-items: center; gap: 0.5rem; color: var(--success);
+            font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;
+            color: var(--primary); display: flex; align-items: center; gap: 0.5rem;
         }
-        
-        .buttons-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.75rem;
-        }
-        
+
+        .buttons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+
         .btn {
-            background: linear-gradient(135deg, var(--primary), #1565c0);
-            color: white; border: none; padding: 0.75rem; border-radius: 10px;
-            cursor: pointer; font-weight: 600; font-size: 0.9rem;
-            transition: all 0.3s ease; text-decoration: none; text-align: center;
-            display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: var(--primary); color: white; border: none; padding: 1rem 0.75rem;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.3s ease; text-decoration: none; text-align: center; min-height: 80px;
         }
-        
-        .btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
-        }
-        
-        .btn.success { background: linear-gradient(135deg, var(--success), #2e7d32); }
-        .btn.warning { background: linear-gradient(135deg, var(--warning), #ef6c00); }
-        .btn.danger { background: linear-gradient(135deg, var(--danger), #c62828); }
-        
-        .btn-icon { font-size: 1.2rem; }
-        .btn-text { font-size: 0.8rem; line-height: 1.1; }
-        
+        .btn:hover, .btn:focus-visible { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(25,118,210,0.4); outline: none; }
+        .btn.success { background: var(--success); }
+        .btn.warning { background: var(--warning); }
+        .btn.danger { background: var(--danger); }
+        .btn-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .btn-text { font-size: 0.8rem; }
+
         .status-bar {
-            background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px;
-            margin: 1.5rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;
+            margin-bottom: 2rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 12px;
         }
-        
-        .status-item {
-            text-align: center; padding: 0.5rem;
-        }
-        
+        .status-item { text-align: center; }
         .status-value { font-size: 1.5rem; font-weight: bold; color: var(--success); }
         .status-label { font-size: 0.8rem; color: var(--text-muted); }
-        
+
         .quick-actions {
             background: linear-gradient(135deg, var(--primary), var(--success));
             color: white; padding: 1.5rem; border-radius: 16px; text-align: center;
         }
-        
         .quick-actions h3 { margin-bottom: 1rem; }
-        
-        .action-buttons {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        
+        .action-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
         .action-btn {
-            background: rgba(255,255,255,0.2); border: 2px solid white;
-            color: white; padding: 1rem; border-radius: 12px; cursor: pointer;
-            font-weight: 600; transition: all 0.3s ease; text-decoration: none;
+            background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 1rem;
+            border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 0.95rem;
         }
-        
-        .action-btn:hover { background: white; color: var(--primary); }
-        
-        .footer {
-            text-align: center; margin-top: 2rem; padding: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+        .action-btn:hover, .action-btn:focus-visible { background: white; color: var(--primary); outline: none; }
+
+        .notice {
+            margin: 0 0 1.5rem; padding: 0.75rem 1rem; border-radius: 10px; font-size: 0.9rem;
+            background: rgba(245,124,0,0.12); border: 1px solid rgba(245,124,0,0.4); color: #ffcc80;
         }
-        
-        .deployment-status {
-            background: var(--success); color: white; padding: 0.5rem 1rem;
-            border-radius: 20px; font-size: 0.8rem; margin: 0.5rem;
+        .notice a { color: #fff; }
+
+        .footer { text-align: center; margin-top: 2rem; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); font-size: 0.9rem; }
+        #system-status {
+            background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.15); color: var(--text); text-align: left;
         }
-        
+        #real-status-display { font-size: 0.9rem; opacity: 0.9; }
+
+        .modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #1a1a1a; color: white; padding: 20px; border-radius: 12px;
+            max-width: 640px; width: 90%; max-height: 80%; overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 10000; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px;
+        }
+        .modal h3 { margin-bottom: 15px; color: #4caf50; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .modal .lines { margin-bottom: 15px; white-space: pre-wrap; line-height: 1.5; }
+        .modal button { padding: 8px 16px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer; }
+
+        .version-indicator {
+            position: fixed; bottom: 10px; right: 10px; background: var(--primary);
+            color: white; padding: 0.5rem; border-radius: 8px; font-size: 0.7rem; z-index: 1000; opacity: 0.8;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .systems-grid { grid-template-columns: 1fr; }
-            .buttons-grid { grid-template-columns: repeat(2, 1fr); }
         }
-        
-        /* Version indicator */
-        .version-indicator {
-            position: fixed; bottom: 10px; right: 10px; background: var(--primary);
-            color: white; padding: 0.5rem; border-radius: 8px; font-size: 0.7rem;
-            z-index: 1000; opacity: 0.8;
-        }
+        @media (prefers-reduced-motion: reduce) { .btn, .action-btn { transition: none; } }
     </style>
 </head>
 <body>
-<div id="live-status" style="padding:12px;font-family:system-ui;">Status: loading...</div>
+    <noscript>
+        <div class="notice">SolarFlow needs JavaScript to load its data and tools. Please enable JavaScript.</div>
+    </noscript>
     <div class="container">
         <header class="header">
             <h1>🌞 SolarFlow Minion World Loader</h1>
-            <p>Complete Solar/Battery Compliance & Management System</p>
-            <p><strong>All Systems Operational & Verified</strong></p>
+            <p>Solar/battery compliance workspace, product catalogue and minion realm</p>
             <div class="version-info">
-                Version 2.2.1-NUCLEAR-1770512908 | Hash: bf6c892e | Last Updated: 07/02/2026 22:35:00
-                <br><span class="boot-status" style="color: #00ff00;">🟢 ALL SYSTEMS OPERATIONAL</span>
+                Version <span id="app-version">2.4.0</span> · Build <span id="app-build">loading…</span>
+                <br><span class="boot-status" id="boot-status">⏳ Initialising…</span>
             </div>
         </header>
 
-        <div class="status-bar">
+        <div class="notice" id="data-notice" hidden>
+            The product catalogue shown on this site is a <strong>simulated dataset</strong> for demonstration.
+            The official approved product lists are published by the
+            <a href="https://www.cleanenergycouncil.org.au/industry-programs/products-program" target="_blank" rel="noopener">Clean Energy Council</a>.
+        </div>
+
+        <div class="status-bar" role="status" aria-live="polite">
             <div class="status-item">
-                <div class="status-value">18</div>
-                <div class="status-label">Active Systems</div>
+                <div class="status-value" id="stat-systems">–</div>
+                <div class="status-label">Modules Ready</div>
             </div>
             <div class="status-item">
-                <div class="status-value">100%</div>
-                <div class="status-label">Functional</div>
+                <div class="status-value" id="stat-health">–</div>
+                <div class="status-label">Browser Health</div>
             </div>
             <div class="status-item">
-                <div class="status-value">✅</div>
-                <div class="status-label">Deploy Status</div>
+                <div class="status-value" id="stat-products">–</div>
+                <div class="status-label">Catalogue Products</div>
             </div>
             <div class="status-item">
                 <div class="status-value" id="uptime">0s</div>
-                <div class="status-label">Uptime</div>
+                <div class="status-label">Session Uptime</div>
             </div>
         </div>
 
-        <div class="systems-grid">
-            <!-- Core Systems -->
+        <nav class="systems-grid" aria-label="SolarFlow sections">
             <div class="system-category">
                 <h3 class="category-title">🎮 Core Systems</h3>
                 <div class="buttons-grid">
-                    <button class="btn" onclick="location.href='./roster.html'">
-                        <div class="btn-icon">👥</div>
-                        <div class="btn-text">Minion Roster</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./ultimate-3d-realm-llm.html'">
-                        <div class="btn-icon">🌐</div>
-                        <div class="btn-text">3D Realm</div>
-                    </button>
-                    <button class="btn success" onclick="location.href='./persistent-data-system.html'">
-                        <div class="btn-icon">💾</div>
-                        <div class="btn-text">Data System</div>
-                    </button>
-                    <button class="btn warning" onclick="location.reload()">
-                        <div class="btn-icon">🔄</div>
-                        <div class="btn-text">Refresh</div>
-                    </button>
+                    <a class="btn" href="./roster.html"><span class="btn-icon">👥</span><span class="btn-text">Minion Roster</span></a>
+                    <a class="btn" href="./ultimate-3d-realm-llm.html"><span class="btn-icon">🌐</span><span class="btn-text">3D Realm</span></a>
+                    <a class="btn success" href="./persistent-data-system.html"><span class="btn-icon">💾</span><span class="btn-text">Data System</span></a>
+                    <button class="btn warning" type="button" onclick="location.reload()"><span class="btn-icon">🔄</span><span class="btn-text">Refresh</span></button>
                 </div>
             </div>
 
-            <!-- Solar Compliance -->
             <div class="system-category">
                 <h3 class="category-title">🇦🇺 Solar Compliance</h3>
                 <div class="buttons-grid">
-                    <button class="btn success" onclick="location.href='./project-solar-australia-WORKING.html'">
-                        <div class="btn-icon">⚡</div>
-                        <div class="btn-text">Project Solar</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./as-nzs-3000-integration.html'">
-                        <div class="btn-icon">📋</div>
-                        <div class="btn-text">AS/NZS 3000</div>
-                    </button>
-                    <button class="btn warning" onclick="location.href='./cer-products.html'">
-                        <div class="btn-icon">🔌</div>
-                        <div class="btn-text">CER Products</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./processed-documents.html'">
-                        <div class="btn-icon">📄</div>
-                        <div class="btn-text">Documents</div>
-                    </button>
+                    <a class="btn success" href="./project-solar-australia-WORKING.html"><span class="btn-icon">⚡</span><span class="btn-text">Project Solar</span></a>
+                    <a class="btn" href="./as-nzs-3000-integration.html"><span class="btn-icon">📋</span><span class="btn-text">AS/NZS 3000</span></a>
+                    <a class="btn warning" href="./cer-products.html"><span class="btn-icon">🔌</span><span class="btn-text">Product Catalogue</span></a>
+                    <a class="btn" href="./processed-documents.html"><span class="btn-icon">📄</span><span class="btn-text">Documents</span></a>
                 </div>
             </div>
 
-            <!-- Advanced Features -->
             <div class="system-category">
                 <h3 class="category-title">🚀 Advanced Features</h3>
                 <div class="buttons-grid">
-                    <button class="btn" onclick="location.href='./autonomous-world.html'">
-                        <div class="btn-icon">🤖</div>
-                        <div class="btn-text">Autonomous</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./consciousness-engine.html'">
-                        <div class="btn-icon">🧠</div>
-                        <div class="btn-text">Consciousness</div>
-                    </button>
-                    <button class="btn success" onclick="location.href='./minion-control.html'">
-                        <div class="btn-icon">🎯</div>
-                        <div class="btn-text">Control</div>
-                    </button>
-                    <button class="btn warning" onclick="location.href='./activity-feed.html'">
-                        <div class="btn-icon">📊</div>
-                        <div class="btn-text">Activity</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./minion-chat.html'">
-                        <div class="btn-icon">💬</div>
-                        <div class="btn-text">Chat</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./dominion-city.html'">
-                        <div class="btn-icon">🏙️</div>
-                        <div class="btn-text">City Sim</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./dominion-engine.html'">
-                        <div class="btn-icon">🚀</div>
-                        <div class="btn-text">Engine</div>
-                    </button>
-                    <button class="btn warning" onclick="location.href='./server-setup-guide.html'">
-                        <div class="btn-icon">🖥️</div>
-                        <div class="btn-text">Server Setup</div>
-                    </button>
+                    <a class="btn" href="./autonomous-world.html"><span class="btn-icon">🤖</span><span class="btn-text">Autonomous</span></a>
+                    <a class="btn" href="./solar-operations.html"><span class="btn-icon">🧠</span><span class="btn-text">Operations</span></a>
+                    <a class="btn success" href="./minion-control.html"><span class="btn-icon">🎯</span><span class="btn-text">Control</span></a>
+                    <a class="btn warning" href="./activity-feed.html"><span class="btn-icon">📊</span><span class="btn-text">Activity</span></a>
+                    <a class="btn" href="./minion-chat.html"><span class="btn-icon">💬</span><span class="btn-text">Chat</span></a>
+                    <a class="btn" href="./dominion-city.html"><span class="btn-icon">🏙️</span><span class="btn-text">City Sim</span></a>
+                    <a class="btn" href="./dominion-engine.html"><span class="btn-icon">🚀</span><span class="btn-text">Engine</span></a>
+                    <a class="btn warning" href="./server-setup-guide.html"><span class="btn-icon">🖥️</span><span class="btn-text">Server Setup</span></a>
                 </div>
             </div>
 
-            <!-- Utilities & Tools -->
             <div class="system-category">
-                <h3 class="category-title">🔧 Utilities & Tools</h3>
+                <h3 class="category-title">🔧 Utilities &amp; Tools</h3>
                 <div class="buttons-grid">
-                    <button class="btn" onclick="location.href='./function-inventory-complete.html'">
-                        <div class="btn-icon">📋</div>
-                        <div class="btn-text">Functions</div>
-                    </button>
-                    <button class="btn success" onclick="location.href='./system-diagnostics.html'">
-                        <div class="btn-icon">🔍</div>
-                        <div class="btn-text">Diagnostics</div>
-                    </button>
-                    <button class="btn danger" onclick="location.href='./real-system-test.html'">
-                        <div class="btn-icon">⚡</div>
-                        <div class="btn-text">System Test</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./autonomous-minion-knowledge-system.html'">
-                        <div class="btn-icon">🤖</div>
-                        <div class="btn-text">Knowledge</div>
-                    </button>
-                    <button class="btn" onclick="location.href='./existential-threat-system.html'" style="background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.3);color:#ff6666">
-                        <div class="btn-icon">💀</div>
-                        <div class="btn-text">Threat</div>
-                    </button>
+                    <a class="btn" href="./function-inventory-complete.html"><span class="btn-icon">📋</span><span class="btn-text">Functions</span></a>
+                    <a class="btn success" href="./system-diagnostics.html"><span class="btn-icon">🔍</span><span class="btn-text">Diagnostics</span></a>
+                    <a class="btn danger" href="./real-system-test.html"><span class="btn-icon">⚡</span><span class="btn-text">System Test</span></a>
+                    <a class="btn" href="./autonomous-minion-knowledge-system.html"><span class="btn-icon">🤖</span><span class="btn-text">Knowledge</span></a>
+                    <a class="btn" href="./existential-threat-system.html" style="background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#ff6666"><span class="btn-icon">💀</span><span class="btn-text">Threat</span></a>
+                    <a class="btn" href="./honest-system-status.html"><span class="btn-icon">🧾</span><span class="btn-text">Honest Status</span></a>
+                    <a class="btn" href="./status.html"><span class="btn-icon">🐝</span><span class="btn-text">Realm Status</span></a>
                 </div>
             </div>
-        </div>
+        </nav>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
+        <section class="quick-actions" aria-label="Quick actions">
             <h3>⚡ Quick Actions</h3>
             <div class="action-buttons">
-                <button class="action-btn" onclick="runSystemTest()">✅ Test All Systems</button>
-                <button class="action-btn" onclick="generateReport()">📋 Generate Report</button>
-                <button class="action-btn" onclick="backupData()">💾 Backup Data</button>
-                <button class="action-btn" onclick="checkVersion()">🔍 Version Check</button>
+                <button class="action-btn" type="button" onclick="runSystemTest()">✅ Test All Systems</button>
+                <button class="action-btn" type="button" onclick="generateReport()">📋 Generate Report</button>
+                <button class="action-btn" type="button" onclick="backupData()">💾 Export Local Data</button>
+                <button class="action-btn" type="button" onclick="checkVersion()">🔍 Version Check</button>
             </div>
-        </div>
+        </section>
 
         <footer class="footer">
-            <div class="deployment-status">🚀 NUCLEAR CACHE BUST | 2.2.1-NUCLEAR-1770512908 | Feb 08 01:08 UTC | FORCED REFRESH
-            <div id="system-status" style="background: rgba(0,255,0,0.1); padding: 10px; border-radius: 8px; margin: 10px 0; border: 1px solid rgba(0,255,0,0.3);">
-                <div style="font-size: 1rem; margin-bottom: 5px;">⚡ <span style="color: #00ff00;">Real System Status</span></div>
-                <div id="real-status-display" style="font-size: 0.9rem; opacity: 0.9;">
-                    🔄 Loading real system metrics...
-                </div>
+            <div id="system-status">
+                <div style="font-size: 1rem; margin-bottom: 5px;">⚡ <span style="color: #8bc34a;">Live System Status</span></div>
+                <div id="real-status-display">🔄 Loading system metrics…</div>
             </div>
-            <p>🌞 SolarFlow Minion World Loader | Complete Solar/Battery Management Platform</p>
-            <p>All systems operational | Real functionality | Verified deployment</p>
+            <p>SolarFlow Minion World Loader · <a href="https://github.com/samskiezz/solarflowminoinworldlloader" style="color:inherit">source on GitHub</a></p>
         </footer>
     </div>
 
-    <div class="version-indicator">
-        v2.2.0
-    </div>
+    <div class="version-indicator" id="version-indicator">v2.4.0</div>
+
+    <!-- CONFIG -->
+    <script src="./solarflow-config.js"></script>
 
     <!-- FOUNDATION LAYER -->
     <script src="./storage-manager.js"></script>
@@ -314,715 +240,305 @@
     <script src="./error-handler.js"></script>
     <script src="./security-utils.js"></script>
     <script src="./performance-monitor.js"></script>
-    
+
     <!-- CORE SYSTEMS -->
     <script src="./central-data-loader.js"></script>
     <script src="./unified-credit-system.js"></script>
-    
-    <!-- INITIALIZATION ORCHESTRATOR - Manages startup order -->
+
+    <!-- INITIALISATION ORCHESTRATOR - manages startup order -->
     <script src="./init-orchestrator.js"></script>
+
+    <!-- PERSISTENCE (shared across all pages) -->
+    <script src="./universal-bootloader.js"></script>
     <script src="./working-persistence.js"></script>
+
+    <!-- REAL-TIME MODULES -->
     <script src="./real-vps-integration.js"></script>
     <script src="./real-health-monitor.js"></script>
     <script src="./real-neural-processor.js"></script>
     <script src="./real-compliance-engine.js"></script>
-    
+
     <script>
-        // Version and deployment verification
-        const VERSION = 'v2.2.0';
-        const HASH = 'SHA256:bf6c892e' + Math.random().toString(36).substr(2, 8);
-        const DEPLOY_TIME = new Date();
-        
-        // ============================================================================
-        // EMBEDDED SOLARFLOW BOOTLOADER v2.2.0
-        // Handles data persistence, state management, and system initialization
-        // ============================================================================
-        
-        class SolarFlowWebBootloader {
-            constructor() {
-                this.version = '2.2.0';
-                this.initialized = false;
-                this.state = {};
-                this.autoSaveInterval = null;
-                this.sessionId = 'solarflow-' + Date.now();
-                this.apiEndpoint = window.location.origin;
-                
-                console.log('🚀 SolarFlow Web Bootloader v' + this.version + ' starting...');
-                this.init();
+        (function () {
+            'use strict';
+
+            const SESSION_START = Date.now();
+            const buildInfo = { version: (window.SOLARFLOW_CONFIG && window.SOLARFLOW_CONFIG.version) || '2.4.0', gitSha: 'unknown', builtAt: null };
+
+            const $ = (id) => document.getElementById(id);
+            const setText = (id, text) => { const el = $(id); if (el) el.textContent = text; };
+
+            // ------------------------------------------------------------ helpers
+
+            function esc(value) {
+                return String(value).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
             }
-            
-            async init() {
-                try {
-                    // 1. Load existing state
-                    await this.loadState();
-                    
-                    // 2. Initialize systems if first run
-                    if (!this.state.initialized || this.shouldReinitialize()) {
-                        await this.initializeSystemData();
-                    }
-                    
-                    // 3. Setup auto-save
-                    this.setupAutoSave();
-                    
-                    // 4. Setup before unload handler
-                    this.setupBeforeUnload();
-                    
-                    // 5. Mark as initialized
-                    this.initialized = true;
-                    this.state.lastBootTime = Date.now();
-                    await this.saveState();
-                    
-                    console.log('✅ SolarFlow Web Bootloader ready!');
-                    console.log('📊 State loaded:', Object.keys(this.state).length, 'sections');
-                    console.log('💾 Auto-save enabled every 30 seconds');
-                    
-                    // Update UI boot status
-                    this.updateBootStatus('🟢 BOOTLOADER ACTIVE');
-                    
-                } catch (error) {
-                    console.error('❌ Bootloader initialization failed:', error);
-                    this.updateBootStatus('🔴 BOOTLOADER ERROR');
-                }
+
+            function formatDuration(ms) {
+                const s = Math.floor(ms / 1000);
+                if (s < 60) return s + 's';
+                if (s < 3600) return Math.floor(s / 60) + 'm ' + (s % 60) + 's';
+                return Math.floor(s / 3600) + 'h ' + Math.floor((s % 3600) / 60) + 'm';
             }
-            
-            shouldReinitialize() {
-                const lastBoot = this.state.lastBootTime || 0;
-                const timeSinceLastBoot = Date.now() - lastBoot;
-                const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-                
-                return timeSinceLastBoot > maxAge;
-            }
-            
-            async loadState() {
-                try {
-                    // Try localStorage first
-                    const localData = localStorage.getItem('solarflow-state');
-                    if (localData) {
-                        this.state = JSON.parse(localData);
-                        console.log('📂 State loaded from localStorage');
-                        return;
-                    }
-                    
-                    // Try API endpoint if available
-                    try {
-                        const response = await fetch('/api/state');
-                        if (response.ok) {
-                            this.state = await response.json();
-                            console.log('📂 State loaded from API');
-                            return;
-                        }
-                    } catch (apiError) {
-                        // API not available, continue with empty state
-                    }
-                    
-                    // Initialize empty state
-                    this.state = this.getDefaultState();
-                    console.log('📂 Initialized empty state');
-                    
-                } catch (error) {
-                    console.error('⚠️ State loading error:', error);
-                    this.state = this.getDefaultState();
-                }
-            }
-            
-            getDefaultState() {
+
+            function showModal(title, lines) {
+                const existing = $('solarflow-modal');
+                if (existing) existing.remove();
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.id = 'solarflow-modal';
+                modal.setAttribute('role', 'dialog');
+                modal.setAttribute('aria-label', title);
+                const heading = document.createElement('h3');
+                heading.textContent = title;
+                const body = document.createElement('div');
+                body.className = 'lines';
+                body.textContent = lines.join('\n');
+                const close = document.createElement('button');
+                close.type = 'button';
+                close.textContent = 'Close';
+                close.onclick = () => modal.remove();
+                modal.append(heading, body, close);
+                document.body.appendChild(modal);
+                close.focus();
                 return {
-                    version: this.version,
-                    initialized: false,
-                    created: Date.now(),
-                    lastUpdate: Date.now(),
-                    sessionCount: 0,
-                    
-                    // Core system data
-                    minions: [],
-                    activities: [],
-                    conversations: {},
-                    documents: [],
-                    
-                    // Autonomous world state
-                    autonomous: {
-                        population: 24,
-                        energyCredits: 2765,
-                        activeWorkers: 18,
-                        shiftRotation: 'Alpha',
-                        productivity: 0, // Will be calculated from real metrics
-                        lastUpdate: Date.now()
-                    },
-                    
-                    // Hive state
-                    hive_state: {
-                        version: "2.2.0",
-                        timestamp: Date.now(),
-                        systems: {
-                            core: { status: "operational", uptime: 0 },
-                            solar: { status: "operational", compliance: 100 },
-                            advanced: { status: "operational", ai_active: true },
-                            utilities: { status: "operational", diagnostics: "passing" }
-                        }
-                    }
+                    update: (newLines) => { body.textContent = newLines.join('\n'); }
                 };
             }
-            
-            async initializeSystemData() {
-                try {
-                    console.log('🔧 Initializing system data...');
-                    
-                    // Initialize minions if empty
-                    if (!this.state.minions || this.state.minions.length === 0) {
-                        this.state.minions = await this.loadMinions();
-                    }
-                    
-                    // Initialize activities if empty
-                    if (!this.state.activities || this.state.activities.length === 0) {
-                        this.state.activities = this.generateInitialActivities();
-                    }
-                    
-                    // Update timestamps
-                    this.state.initialized = true;
-                    this.state.lastUpdate = Date.now();
-                    this.state.sessionCount = (this.state.sessionCount || 0) + 1;
-                    
-                    console.log('✅ System data initialized');
-                    
-                } catch (error) {
-                    console.error('❌ System initialization failed:', error);
+
+            function downloadJSON(filename, data) {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            }
+
+            // --------------------------------------------------------- module state
+
+            function moduleStatus() {
+                const orchestrator = window.initOrchestrator ? window.initOrchestrator.getStatus() : null;
+                const loader = window.centralDataLoader;
+                const products = loader && loader.get('cerProducts');
+                const summary = loader && loader.get('cerSummary');
+                return {
+                    orchestrator,
+                    modulesReady: orchestrator ? orchestrator.ready.length : 0,
+                    modulesFailed: orchestrator ? orchestrator.failed.length : 0,
+                    health: window.realHealthMonitor && window.realHealthMonitor.getCurrentMetrics ? window.realHealthMonitor.getCurrentMetrics() : null,
+                    neural: window.realNeuralProcessor && window.realNeuralProcessor.initialized ? window.realNeuralProcessor.getMetrics() : null,
+                    compliance: window.realComplianceEngine && window.realComplianceEngine.initialized ? window.realComplianceEngine.getStatus() : null,
+                    vps: window.realVPS ? { connected: window.realVPS.isConnected(), reason: window.realVPS.getStatusText ? window.realVPS.getStatusText() : '' } : null,
+                    productCount: products ? products.length : (summary ? summary.totalProducts : null),
+                    simulated: summary ? Boolean(summary.simulated) : null,
+                    minions: loader && loader.get('minions') ? loader.get('minions').length : null,
+                    standards: loader && loader.get('standards') ? Object.keys(loader.get('standards')).length : null
+                };
+            }
+
+            function refreshStatusBar() {
+                const status = moduleStatus();
+                setText('uptime', formatDuration(Date.now() - SESSION_START));
+
+                if (status.orchestrator) {
+                    const total = status.modulesReady + status.modulesFailed;
+                    setText('stat-systems', total ? status.modulesReady + '/' + total : '–');
+                }
+                if (status.health && status.health.overallHealth) {
+                    const el = $('stat-health');
+                    el.textContent = status.health.overallHealth.score + '%';
+                    el.style.color = status.health.overallHealth.color;
+                }
+                if (status.productCount !== null) {
+                    setText('stat-products', status.productCount.toLocaleString());
+                    if (status.simulated) $('data-notice').hidden = false;
                 }
             }
-            
-            async loadMinions() {
-                try {
-                    const response = await fetch('./minions.json');
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('👥 Loaded', data.minions?.length || 0, 'minions');
-                        return data.minions || [];
-                    }
-                } catch (error) {
-                    console.log('⚠️ Could not load minions.json, using defaults');
-                }
-                
-                // Return default minions
-                return [
-                    { id: 'ATLAS', tier: 'Alpha', specialty: 'Architecture', status: 'active', energy: 100 },
-                    { id: 'LUMEN', tier: 'Alpha', specialty: 'Illumination', status: 'active', energy: 95 },
-                    { id: 'NOVA', tier: 'Beta', specialty: 'Stellar', status: 'active', energy: 88 },
-                    { id: 'BOLT', tier: 'Beta', specialty: 'Energy', status: 'active', energy: 92 }
-                ];
-            }
-            
-            generateInitialActivities() {
-                const now = Date.now();
-                return [
-                    {
-                        id: 'boot-' + now,
-                        timestamp: now,
-                        type: 'system',
-                        message: '🚀 SolarFlow system initialized',
-                        minion: 'SYSTEM'
-                    },
-                    {
-                        id: 'data-' + now,
-                        timestamp: now - 1000,
-                        type: 'data',
-                        message: '💾 Data persistence enabled',
-                        minion: 'ATLAS'
-                    }
-                ];
-            }
-            
-            async saveState() {
-                try {
-                    this.state.lastUpdate = Date.now();
-                    
-                    // Save to localStorage
-                    localStorage.setItem('solarflow-state', JSON.stringify(this.state));
-                    
-                    // Try to save to API if available
-                    try {
-                        await fetch('/api/state', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(this.state)
-                        });
-                    } catch (apiError) {
-                        // API not available, localStorage save is sufficient
-                    }
-                    
-                } catch (error) {
-                    console.error('❌ State save failed:', error);
-                }
-            }
-            
-            setupAutoSave() {
-                // Save state every 30 seconds
-                this.autoSaveInterval = setInterval(() => {
-                    if (this.initialized) {
-                        this.saveState();
-                        console.log('💾 Auto-save completed');
-                    }
-                }, 30000);
-            }
-            
-            setupBeforeUnload() {
-                window.addEventListener('beforeunload', () => {
-                    if (this.initialized) {
-                        this.saveState();
-                        console.log('💾 State saved on page unload');
-                    }
-                });
-            }
-            
-            updateBootStatus(status) {
-                // Update any boot status indicators in the UI
-                const statusElements = document.querySelectorAll('.boot-status');
-                statusElements.forEach(el => el.textContent = status);
-                
-                // Also update version indicator if it exists
-                const versionEl = document.querySelector('.version-indicator');
-                if (versionEl && status.includes('ACTIVE')) {
-                    versionEl.style.background = '#28a745'; // Green when active
-                    versionEl.title = 'Bootloader Active - Data Persisting';
-                }
-            }
-            
-            // Public API for other scripts to use
-            getState() { return { ...this.state }; }
-            
-            async updateState(updates) {
-                Object.assign(this.state, updates);
-                await this.saveState();
-            }
-            
-            getMinions() { return this.state.minions || []; }
-            getActivities() { return this.state.activities || []; }
-            getAutonomousState() { return this.state.autonomous || {}; }
-            
-            async addActivity(activity) {
-                if (!this.state.activities) this.state.activities = [];
-                this.state.activities.unshift({
-                    id: 'activity-' + Date.now(),
-                    timestamp: Date.now(),
-                    ...activity
-                });
-                
-                // Keep only last 100 activities
-                if (this.state.activities.length > 100) {
-                    this.state.activities = this.state.activities.slice(0, 100);
-                }
-                
-                await this.saveState();
-            }
-        }
-        
-        // Initialize bootloader when DOM loads
-        let SOLARFLOW_BOOTLOADER = null;
-        document.addEventListener('DOMContentLoaded', () => {
-            SOLARFLOW_BOOTLOADER = new SolarFlowWebBootloader();
-            
-            // Make bootloader globally accessible
-            window.SolarFlow = {
-                bootloader: SOLARFLOW_BOOTLOADER,
-                getState: () => SOLARFLOW_BOOTLOADER.getState(),
-                saveState: (updates) => SOLARFLOW_BOOTLOADER.updateState(updates),
-                addActivity: (activity) => SOLARFLOW_BOOTLOADER.addActivity(activity)
-            };
-        });
-        
-        // ============================================================================
 
-        // Update real-time system metrics
-        function updateUptime() {
-            const now = new Date();
-            const uptimeMs = now - DEPLOY_TIME;
-            const uptimeSeconds = Math.floor(uptimeMs / 1000);
-            
-            if (uptimeSeconds < 60) {
-                document.getElementById('uptime').textContent = uptimeSeconds + 's';
-            } else if (uptimeSeconds < 3600) {
-                document.getElementById('uptime').textContent = Math.floor(uptimeSeconds / 60) + 'm';
-            } else {
-                document.getElementById('uptime').textContent = Math.floor(uptimeSeconds / 3600) + 'h';
+            function refreshStatusLine() {
+                const status = moduleStatus();
+                const parts = [];
+                parts.push(status.health && status.health.overallHealth ? '✅ Browser health ' + status.health.overallHealth.score + '%' : '⏳ Health monitor starting');
+                parts.push(status.neural ? '🧠 Neural workers: ' + status.neural.workers : '⏳ Neural processor initialising');
+                parts.push(status.compliance ? '⚖️ ' + status.compliance.standards + ' standards rules loaded' : '⏳ Compliance engine loading');
+                parts.push(status.vps && status.vps.connected ? '🌐 VPS connected' : '📊 VPS: local mode');
+                if (status.productCount !== null) parts.push('📋 ' + status.productCount.toLocaleString() + (status.simulated ? ' simulated' : '') + ' products');
+                if (status.minions !== null) parts.push('👥 ' + status.minions + ' minions');
+                setText('real-status-display', parts.join(' | '));
             }
-            
-            // Update with real system metrics if available
-            updateRealMetrics();
-        }
-        
-        function updateRealMetrics() {
-            // Update health monitor status
-            if (window.realHealthMonitor && window.realHealthMonitor.getCurrentMetrics) {
-                const healthMetrics = window.realHealthMonitor.getCurrentMetrics();
-                if (healthMetrics.overallHealth) {
-                    // Update health score in status bar
-                    const healthElements = document.querySelectorAll('.status-value');
-                    if (healthElements.length > 0) {
-                        healthElements[1].textContent = healthMetrics.overallHealth.score + '%';
-                        healthElements[1].style.color = healthMetrics.overallHealth.color;
-                    }
-                }
-            }
-            
-            // Update neural processor status
-            if (window.realNeuralProcessor && window.realNeuralProcessor.getMetrics) {
-                const neuralMetrics = window.realNeuralProcessor.getMetrics();
-                console.log('🧠 Neural metrics:', neuralMetrics);
-            }
-            
-            // Update compliance engine status
-            if (window.realComplianceEngine && window.realComplianceEngine.getStatus) {
-                const complianceStatus = window.realComplianceEngine.getStatus();
-                console.log('⚖️ Compliance status:', complianceStatus);
-            }
-            
-            // Update VPS integration status
-            if (window.realVPS && window.realVPS.getRealData) {
-                const vpsData = window.realVPS.getRealData();
-                console.log('🌐 VPS status:', vpsData);
-            }
-        }
 
-        // Quick action functions
-        async function runSystemTest() {
-            const testResults = [];
-            let testElement = document.createElement('div');
-            testElement.id = 'system-test-results';
-            testElement.style.cssText = `
-                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                background: #1a1a1a; color: white; padding: 20px; border-radius: 12px;
-                max-width: 600px; width: 90%; max-height: 80%; overflow-y: auto;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 10000;
-                font-family: monospace; font-size: 14px;
-            `;
-            document.body.appendChild(testElement);
-            
-            function updateTest(message) {
-                testResults.push(message);
-                testElement.innerHTML = `
-                    <h3 style="margin-bottom: 15px; color: #4caf50;">🔍 REAL SYSTEM TEST</h3>
-                    <div style="margin-bottom: 15px;">${testResults.join('<br>')}</div>
-                    <button onclick="this.parentElement.remove()" style="padding: 8px 16px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
-                `;
-            }
-            
-            updateTest('🚀 Starting real system tests...');
-            
-            // Test 1: Health Monitor
-            await new Promise(resolve => setTimeout(resolve, 500));
-            if (window.realHealthMonitor && window.realHealthMonitor.initialized) {
-                const health = window.realHealthMonitor.getCurrentMetrics();
-                updateTest(`✅ Health Monitor: ${health.overallHealth ? health.overallHealth.score + '%' : 'Active'}`);
-            } else {
-                updateTest('❌ Health Monitor: Not initialized');
-            }
-            
-            // Test 2: Neural Processor
-            await new Promise(resolve => setTimeout(resolve, 500));
-            if (window.realNeuralProcessor && window.realNeuralProcessor.initialized) {
-                try {
-                    const testResult = await window.realNeuralProcessor.analyzeText('This is a test of solar panel efficiency.');
-                    updateTest(`✅ Neural Processor: Working (analyzed ${testResult.wordCount || 'N/A'} words)`);
-                } catch (error) {
-                    updateTest(`⚠️ Neural Processor: Active but test failed (${error.message})`);
-                }
-            } else {
-                updateTest('❌ Neural Processor: Not initialized');
-            }
-            
-            // Test 3: Compliance Engine
-            await new Promise(resolve => setTimeout(resolve, 500));
-            if (window.realComplianceEngine && window.realComplianceEngine.initialized) {
-                const status = window.realComplianceEngine.getStatus();
-                updateTest(`✅ Compliance Engine: ${status.standards} standards loaded`);
-            } else {
-                updateTest('❌ Compliance Engine: Not initialized');
-            }
-            
-            // Test 4: VPS Integration
-            await new Promise(resolve => setTimeout(resolve, 500));
-            if (window.realVPS) {
-                const healthMetrics = window.realVPS.getHealthMetrics();
-                updateTest(`✅ VPS Integration: ${window.realVPS.isConnected() ? 'Connected' : 'Local mode'} (${Math.round(healthMetrics.uptime)}s uptime)`);
-            } else {
-                updateTest('❌ VPS Integration: Not loaded');
-            }
-            
-            // Test 5: Data Persistence
-            await new Promise(resolve => setTimeout(resolve, 500));
-            try {
-                const testKey = 'system-test-' + Date.now();
-                const testData = { test: true, timestamp: Date.now() };
-                localStorage.setItem(testKey, JSON.stringify(testData));
-                const retrieved = JSON.parse(localStorage.getItem(testKey));
-                localStorage.removeItem(testKey);
-                
-                if (retrieved && retrieved.test) {
-                    updateTest('✅ Data Persistence: Working');
-                } else {
-                    updateTest('❌ Data Persistence: Failed integrity check');
-                }
-            } catch (error) {
-                updateTest(`❌ Data Persistence: Error (${error.message})`);
-            }
-            
-            // Test 6: CER Database
-            await new Promise(resolve => setTimeout(resolve, 500));
-            try {
-                const response = await fetch('./cer-product-database.json');
-                const data = await response.json();
-                if (data.products && data.products.length > 0) {
-                    updateTest(`✅ CER Database: ${data.products.length} products loaded`);
-                } else {
-                    updateTest('⚠️ CER Database: Empty or invalid');
-                }
-            } catch (error) {
-                updateTest(`❌ CER Database: Failed to load (${error.message})`);
-            }
-            
-            // Test 7: Feature Support
-            await new Promise(resolve => setTimeout(resolve, 500));
-            const features = {
-                webWorkers: typeof Worker !== 'undefined',
-                localStorage: typeof Storage !== 'undefined',
-                fetch: typeof fetch !== 'undefined',
-                webGL: (() => {
-                    try {
-                        const canvas = document.createElement('canvas');
-                        return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
-                    } catch (e) { return false; }
-                })()
-            };
-            
-            const supportedFeatures = Object.values(features).filter(Boolean).length;
-            const totalFeatures = Object.keys(features).length;
-            updateTest(`✅ Browser Features: ${supportedFeatures}/${totalFeatures} supported (${Math.round(supportedFeatures/totalFeatures*100)}%)`);
-            
-            // Final summary
-            await new Promise(resolve => setTimeout(resolve, 500));
-            const passCount = testResults.filter(r => r.startsWith('✅')).length;
-            const totalTests = testResults.filter(r => r.startsWith('✅') || r.startsWith('❌')).length;
-            
-            updateTest('');
-            updateTest(`📊 SUMMARY: ${passCount}/${totalTests} tests passed (${Math.round(passCount/totalTests*100)}%)`);
-            
-            if (passCount === totalTests) {
-                updateTest('🎉 ALL SYSTEMS OPERATIONAL - NO FAKE COMPONENTS DETECTED');
-            } else if (passCount >= totalTests * 0.8) {
-                updateTest('⚠️ MOSTLY OPERATIONAL - SOME COMPONENTS LOADING');
-            } else {
-                updateTest('❌ SYSTEM ISSUES DETECTED - INITIALIZATION IN PROGRESS');
-            }
-        }
+            // ------------------------------------------------------------- actions
 
-        function generateReport() {
-            const report = `
-SOLARFLOW SYSTEM REPORT v${VERSION}
-Generated: ${new Date().toLocaleString()}
+            window.runSystemTest = async function runSystemTest() {
+                const lines = ['🚀 Running system tests…'];
+                const modal = showModal('System test', lines);
+                const push = (line) => { lines.push(line); modal.update(lines); };
+                const pause = () => new Promise((resolve) => setTimeout(resolve, 150));
 
-DEPLOYMENT STATUS: ✅ VERIFIED
-Version: ${VERSION}
-Hash: ${HASH}
-Deploy Time: ${DEPLOY_TIME.toLocaleString()}
+                const status = moduleStatus();
+                await pause();
+                push(status.orchestrator && status.orchestrator.initialized
+                    ? '✅ Init orchestrator: ' + status.modulesReady + ' modules ready' + (status.modulesFailed ? ', ' + status.modulesFailed + ' failed (' + status.orchestrator.failed.join(', ') + ')' : '')
+                    : '❌ Init orchestrator: not initialised');
 
-SYSTEM STATUS: ALL OPERATIONAL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                await pause();
+                push(status.health && status.health.overallHealth ? '✅ Health monitor: ' + status.health.overallHealth.score + '% (' + status.health.overallHealth.status + ')' : '❌ Health monitor: not initialised');
 
-CORE SYSTEMS (4/4 WORKING):
-✅ Minion Roster - Fully functional
-✅ 3D Realm (Ultimate) - Advanced LLM integration
-✅ Data Persistence - Working correctly
-✅ Refresh System - Operational
-
-SOLAR COMPLIANCE (4/4 WORKING):
-✅ Project Solar Australia - Complete functionality
-✅ Standards Database - Enhanced system ready
-✅ CER Products - 9,247 products loaded
-✅ Document Processing - Working pipeline
-
-ADVANCED FEATURES (7/7 WORKING):
-✅ Autonomous World - AI systems active
-✅ Consciousness Engine - Operational
-✅ Minion Control - Full functionality
-✅ Activity Feeds - Real-time updates
-✅ Minion Chat - AI communication system
-✅ Dominion City - City simulation engine
-✅ Dominion Engine - Advanced AI engine
-
-UTILITIES & TOOLS (3/3 WORKING):
-✅ Function Inventory - Complete catalog
-✅ System Diagnostics - All tests passing
-✅ System Testing - All modules verified
-✅ Knowledge System - AI knowledge base
-✅ Threat Analysis - Security monitoring
-
-VERSION TRACKING: ✅ VERIFIED
-Current hash matches deployment
-All files verified and accessible
-No broken links or 404 errors detected
-
-CONCLUSION: Complete operational readiness
-All 18 systems functioning as designed with verified deployment
-            `;
-
-            const reportWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
-            reportWindow.document.write(`
-                <html>
-                <head><title>SolarFlow System Report v${VERSION}</title>
-                <style>body{font-family:monospace;background:#000;color:#0f0;padding:20px;white-space:pre-wrap;}</style></head>
-                <body>${report}<script src="/bundle.js"></script>
-</body></html>
-            `);
-        }
-
-        function backupData() {
-            alert('💾 DATA BACKUP INITIATED\\n\\n📊 Backing up system data...\\n💾 Saving version information...\\n🔄 Creating restore points...\\n\\n✅ Backup completed successfully!\\n\\nVersion: ' + VERSION + '\\nHash: ' + HASH.substring(0, 16) + '...');
-        }
-
-        function checkVersion() {
-            const status = {
-                current: VERSION,
-                hash: HASH.substring(0, 16) + '...',
-                deployed: DEPLOY_TIME.toLocaleString(),
-                status: '✅ VERIFIED'
-            };
-            
-            alert('🔍 VERSION CHECK RESULTS\\n\\n' + 
-                  'Current Version: ' + status.current + '\\n' +
-                  'Hash: ' + status.hash + '\\n' + 
-                  'Deployed: ' + status.deployed + '\\n' +
-                  'Status: ' + status.status + '\\n\\n' +
-                  'All systems verified and operational!');
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateUptime();
-            setInterval(updateUptime, 1000);
-            
-            // Update version display with current values
-            setTimeout(() => {
-                document.getElementById('current-hash').textContent = HASH.substring(7, 15);
-                document.getElementById('current-time').textContent = DEPLOY_TIME.toLocaleDateString() + ' ' + DEPLOY_TIME.toLocaleTimeString();
-            }, 500);
-            
-            // Update real system status
-            setTimeout(() => {
-                updateRealSystemStatus();
-            }, 3000);
-            
-            function updateRealSystemStatus() {
-                const statusDisplay = document.getElementById('real-status-display');
-                if (!statusDisplay) return;
-                
-                let statusParts = [];
-                
-                // Check health monitor
-                if (window.realHealthMonitor && window.realHealthMonitor.initialized) {
-                    const health = window.realHealthMonitor.getCurrentMetrics();
-                    if (health.overallHealth) {
-                        statusParts.push(`✅ Health Score: ${health.overallHealth.score}%`);
-                    }
-                } else {
-                    statusParts.push('⏳ Health Monitor: Starting...');
-                }
-                
-                // Check neural processor
+                await pause();
                 if (window.realNeuralProcessor && window.realNeuralProcessor.initialized) {
-                    const neural = window.realNeuralProcessor.getMetrics();
-                    statusParts.push(`🧠 Neural Processor: ${neural.workers} workers active`);
-                } else {
-                    statusParts.push('⏳ Neural Processor: Initializing...');
-                }
-                
-                // Check compliance engine
-                if (window.realComplianceEngine && window.realComplianceEngine.initialized) {
-                    const compliance = window.realComplianceEngine.getStatus();
-                    statusParts.push(`⚖️ Compliance: ${compliance.standards} standards loaded`);
-                } else {
-                    statusParts.push('⏳ Compliance Engine: Loading...');
-                }
-                
-                // Check VPS integration
-                if (window.realVPS && window.realVPS.isConnected()) {
-                    statusParts.push('🌐 VPS: Connected');
-                } else {
-                    statusParts.push('📊 VPS: Local monitoring mode');
-                }
-                
-                // Check CER database
-                fetch('./cer-product-database.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.products && data.products.length > 0) {
-                            statusParts.push(`📋 CER Products: ${data.products.length} loaded`);
-                        }
-                        statusDisplay.innerHTML = statusParts.join(' | ');
-                    })
-                    .catch(() => {
-                        statusDisplay.innerHTML = statusParts.join(' | ') + ' | ⚠️ CER Database: Loading...';
-                    });
-            }
-            
-            // Update status every 30 seconds
-            setInterval(updateRealSystemStatus, 30000);
-            
-            // Add honest status button
-            const statusButton = document.createElement('button');
-            statusButton.textContent = 'View Honest Status Report';
-            statusButton.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#1976d2;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;z-index:1000;';
-            statusButton.onclick = () => window.open('./honest-system-status.html', '_blank');
-            document.body.appendChild(statusButton);
-
-            // Also load Neural Integration Core
-            const integrationScript = document.createElement('script');
-            integrationScript.src = './neural-integration-core.js';
-            integrationScript.async = true;
-            integrationScript.onload = () => {
-                console.log('🧠 Neural integration core loaded - enhancing all features');
-            };
-            document.head.appendChild(integrationScript);
-
-            // CRITICAL: Load AS/NZS Standards Integration into Minion World
-            const standardsScript = document.createElement('script');
-            standardsScript.src = './minion-standards-integration.js';
-            standardsScript.async = true;
-            standardsScript.onload = () => {
-                console.log('📋 AS/NZS standards integrated into minion world - all documents available to minions');
-                
-                // Show integration status
-                setTimeout(() => {
-                    if (window.getComplianceStatus) {
-                        const status = window.getComplianceStatus();
-                        console.log(`✅ Standards integration complete: ${status.standards_loaded} standards loaded`);
-                        console.log(`📊 Minion knowledge updated: ${status.minion_knowledge_updated ? 'YES' : 'NO'}`);
+                    try {
+                        const result = await window.realNeuralProcessor.analyzeText('This is a test of solar panel efficiency and battery storage.');
+                        push('✅ Neural processor: analysed ' + (result.wordCount || 'n/a') + ' words');
+                    } catch (error) {
+                        push('⚠️ Neural processor: active but test failed (' + error.message + ')');
                     }
-                }, 2000);
-            };
-            document.head.appendChild(standardsScript);
+                } else {
+                    push('❌ Neural processor: not initialised');
+                }
 
-            console.log('✅ SolarFlow v' + VERSION + ' loaded successfully');
-            console.log('🔍 Hash: ' + HASH);
-            console.log('🚀 Deployed: ' + DEPLOY_TIME);
-            console.log('🎯 All 18 systems operational and verified');
-            console.log('🔍 Attempting to connect to real VPS neural cluster...');
-            console.log('📋 Local mode active - using browser-based real systems');
-            
-            // Load VPS neural integration
-            const vpsScript = document.createElement('script');
-            vpsScript.src = './vps-neural-integration.js';
-            vpsScript.async = true;
-            vpsScript.onload = () => {
-                console.log('🌐 VPS Neural Integration loaded - connecting to 76.13.176.135:3000');
-                console.log('📊 Live neural cluster status monitoring active');
+                await pause();
+                push(status.compliance ? '✅ Compliance engine: ' + status.compliance.standards + ' standards loaded' : '❌ Compliance engine: not initialised');
+
+                await pause();
+                push(status.vps ? (status.vps.connected ? '✅ VPS integration: connected' : '✅ VPS integration: local mode (' + status.vps.reason + ')') : '❌ VPS integration: not loaded');
+
+                await pause();
+                try {
+                    const key = 'system-test-' + Date.now();
+                    localStorage.setItem(key, JSON.stringify({ ok: true }));
+                    const ok = JSON.parse(localStorage.getItem(key)).ok === true;
+                    localStorage.removeItem(key);
+                    push(ok ? '✅ Data persistence: localStorage read/write OK' : '❌ Data persistence: integrity check failed');
+                } catch (error) {
+                    push('❌ Data persistence: ' + error.message);
+                }
+
+                await pause();
+                push(status.productCount ? '✅ Product catalogue: ' + status.productCount.toLocaleString() + ' products' + (status.simulated ? ' (simulated dataset)' : '') : '❌ Product catalogue: not loaded');
+                push(status.minions ? '✅ Minion roster: ' + status.minions + ' minions' : '❌ Minion roster: not loaded');
+                push(status.standards ? '✅ Standards reference: ' + status.standards + ' groups' : '❌ Standards reference: not loaded');
+
+                await pause();
+                const features = {
+                    'Web Workers': typeof Worker !== 'undefined',
+                    'localStorage': typeof Storage !== 'undefined',
+                    'fetch': typeof fetch !== 'undefined',
+                    'WebGL': (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl') || c.getContext('experimental-webgl')); } catch (e) { return false; } })()
+                };
+                const supported = Object.values(features).filter(Boolean).length;
+                push((supported === 4 ? '✅' : '⚠️') + ' Browser features: ' + supported + '/4 (' + Object.entries(features).filter(([, v]) => !v).map(([k]) => 'missing ' + k).join(', ') + ')');
+
+                const passed = lines.filter((l) => l.startsWith('✅')).length;
+                const total = lines.filter((l) => /^[✅❌⚠️]/.test(l)).length;
+                push('');
+                push('📊 ' + passed + '/' + total + ' checks passed (' + Math.round(passed / total * 100) + '%)');
             };
-            document.head.appendChild(vpsScript);
-            
-            // Load real status from VPS
-            const realStatusScript = document.createElement('script');
-            realStatusScript.src = './real_status_loader.js';
-            realStatusScript.async = true;
-            document.head.appendChild(realStatusScript);
-        });
+
+            window.generateReport = function generateReport() {
+                const status = moduleStatus();
+                const report = {
+                    title: 'SolarFlow system report',
+                    generatedAt: new Date().toISOString(),
+                    version: buildInfo.version,
+                    build: buildInfo,
+                    page: location.href,
+                    modules: status.orchestrator,
+                    health: status.health ? { overall: status.health.overallHealth, scores: status.health.healthScores } : null,
+                    neural: status.neural,
+                    compliance: status.compliance,
+                    vps: status.vps,
+                    data: { products: status.productCount, simulatedCatalogue: status.simulated, minions: status.minions, standardsGroups: status.standards },
+                    storage: window.storageManager ? window.storageManager.getUsage() : null,
+                    errors: window.errorHandler ? window.errorHandler.getErrorStats() : null
+                };
+                const html = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>SolarFlow System Report</title>'
+                    + '<style>body{font-family:ui-monospace,Menlo,monospace;background:#000;color:#0f0;padding:20px;white-space:pre-wrap;}</style></head><body>'
+                    + esc(JSON.stringify(report, null, 2)) + '</body></html>';
+                const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+                const win = window.open(url, '_blank', 'noopener');
+                if (!win) downloadJSON('solarflow-report-' + Date.now() + '.json', report);
+                setTimeout(() => URL.revokeObjectURL(url), 60000);
+            };
+
+            window.backupData = function backupData() {
+                const payload = window.storageManager ? window.storageManager.exportData() : { data: {} };
+                // Include legacy (non-namespaced) keys other pages still use.
+                payload.legacy = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && !key.startsWith(window.storageManager ? window.storageManager.namespace : '\u0000')) {
+                        payload.legacy[key] = localStorage.getItem(key);
+                    }
+                }
+                downloadJSON('solarflow-backup-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json', payload);
+                showModal('Export complete', ['💾 Local data exported as a JSON download.', 'Namespaced keys: ' + Object.keys(payload.data).length, 'Legacy keys: ' + Object.keys(payload.legacy).length]);
+            };
+
+            window.checkVersion = async function checkVersion() {
+                const lines = ['Page version: ' + buildInfo.version, 'Build: ' + buildInfo.gitSha + (buildInfo.builtAt ? ' (' + buildInfo.builtAt + ')' : '')];
+                try {
+                    const response = await fetch('./build.json', { cache: 'no-cache' });
+                    const remote = await response.json();
+                    lines.push('Deployed build: ' + (remote.gitSha || 'unknown') + ' (' + (remote.builtAt || remote.buildTime || 'unknown') + ')');
+                    lines.push(remote.gitSha && remote.gitSha !== buildInfo.gitSha ? '⚠️ A newer build is deployed. Refresh to update.' : '✅ You are running the deployed build.');
+                } catch (error) {
+                    lines.push('⚠️ Could not read build.json: ' + error.message);
+                }
+                showModal('Version check', lines);
+            };
+
+            // ---------------------------------------------------------- bootstrap
+
+            async function loadBuildInfo() {
+                try {
+                    const response = await fetch('./build.json', { cache: 'no-cache' });
+                    const data = await response.json();
+                    buildInfo.gitSha = data.gitSha || 'unknown';
+                    buildInfo.builtAt = data.builtAt || data.buildTime || null;
+                    if (data.version) buildInfo.version = data.version;
+                } catch (error) {
+                    buildInfo.gitSha = 'unknown';
+                }
+                setText('app-version', buildInfo.version);
+                setText('app-build', buildInfo.gitSha);
+                setText('version-indicator', 'v' + buildInfo.version + (buildInfo.gitSha !== 'unknown' ? ' · ' + buildInfo.gitSha : ''));
+            }
+
+            function loadOptionalScripts() {
+                const scripts = ['./neural-integration-core.js', './minion-standards-integration.js', './real_status_loader.js'];
+                if (window.SOLARFLOW_CONFIG && window.SOLARFLOW_CONFIG.getVpsUrl()) scripts.push('./vps-neural-integration.js');
+                scripts.forEach((src) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.async = true;
+                    script.onerror = () => console.warn('Optional module failed to load: ' + src);
+                    document.head.appendChild(script);
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                loadBuildInfo();
+                refreshStatusBar();
+                setInterval(refreshStatusBar, 1000);
+                setInterval(refreshStatusLine, 15000);
+                setTimeout(refreshStatusLine, 2500);
+                loadOptionalScripts();
+            });
+
+            window.addEventListener('solarflow-ready', (event) => {
+                const status = (event.detail && event.detail.status) || (window.initOrchestrator && window.initOrchestrator.getStatus());
+                const failed = status && status.failed ? status.failed.length : 0;
+                setText('boot-status', failed ? '🟠 Running with ' + failed + ' optional module(s) unavailable' : '🟢 All modules initialised');
+                refreshStatusBar();
+                refreshStatusLine();
+            });
+            window.addEventListener('solarflow-init-failed', () => setText('boot-status', '🔴 Initialisation failed – see console'));
+            window.addEventListener('health-metrics-update', refreshStatusBar);
+        })();
     </script>
-<script src="/bundle.js"></script>
 </body>
-</html><script src="cache-bust-1770512908.js"></script>
+</html>
