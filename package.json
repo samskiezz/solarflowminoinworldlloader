@@ -1,6 +1,6 @@
 {
   "name": "solarflow-minion-world-loader",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "SolarFlow solar/battery compliance platform: static GitHub Pages front end plus an optional Express/PostgreSQL API",
   "main": "server.js",
   "private": true,

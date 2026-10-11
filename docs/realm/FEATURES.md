@@ -5,11 +5,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **612** |
-| Verified in Node (this run) | 330 passed, 0 failed |
-| Browser-verified (DOM) features | 282 |
-| Modules | 88 |
-| Generated | 2026-10-11T12:46:20.927Z |
+| Registered features | **698** |
+| Verified in Node (this run) | 383 passed, 0 failed |
+| Browser-verified (DOM) features | 315 |
+| Modules | 109 |
+| Generated | 2026-10-11T14:34:07.407Z |
 
 ## By area
 
@@ -18,9 +18,120 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | Core shell | 104 |
 | Solar engineering domain | 124 |
 | Crew simulation | 86 |
-| Windows (game UI) | 201 |
-| Shell | 21 |
-| 3D game world | 76 |
+| Shell | 72 |
+| Windows (game UI) | 233 |
+| 3D game world | 79 |
+
+## business/bank (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.bank.categorise` | Bank transactions categorise by payee with model-derived contractor and supplier rules | node + browser |
+| 2 | `biz.bank.recurring` | Weekly fixed payments are detected and annualised; same-day repeats flagged as duplicates | node + browser |
+| 3 | `biz.bank.balances` | Account balances, 30-day flows and days of cash | node + browser |
+
+## business/calendar (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.calendar.funnel` | Marketing funnel numbers parse out of meeting notes (spend, leads, pickup, close, CPA) | node + browser |
+| 2 | `biz.calendar.recurring` | Recurring meetings expand into occurrences and report who never responds | node + browser |
+| 3 | `biz.calendar.clashes` | Overlapping events are flagged as clashes | node + browser |
+
+## business/drive (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.drive.checklist` | A handover pack is scored against the ten documents a compliant handover needs | node + browser |
+| 2 | `biz.drive.match` | Packs match installed sites by customer name, tolerant of brackets and order | node + browser |
+| 3 | `biz.drive.coverage` | Coverage: installed sites without a pack, duplicate and incomplete packs | node + browser |
+
+## business/gmail (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.gmail.thread` | A thread classifies, links to a job/site and knows whether the customer is waiting on a reply | node + browser |
+| 2 | `biz.gmail.noise` | Notifications, marketing and supplier invoices never count as unanswered | node + browser |
+| 3 | `biz.gmail.stats` | Inbox statistics: categories, waiting customers, median response time, leads, complaints | node + browser |
+
+## business/insights (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.insights.rules` | Thirty-plus rules cover finance, receivables, operations, customers, handover, calendar, market and people | node + browser |
+| 2 | `biz.insights.run` | Running the rules on a model yields ranked findings with owners, impact, evidence, actions and links | node + browser |
+| 3 | `biz.insights.summary` | Findings summarise into counts by severity/owner and a 0-100 health score | node + browser |
+| 4 | `biz.insights.state` | Resolved and snoozed findings drop out until they expire | node + browser |
+| 5 | `biz.insights.quest` | A finding converts into a quest with objectives and a credit reward scaled to its impact | node + browser |
+| 6 | `biz.insights.robust` | A failing rule reports itself instead of breaking the run | node + browser |
+
+## business/market (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.market.incentives` | PV STCs and the federal battery discount price under editable assumptions | node + browser |
+| 2 | `biz.market.benchmark` | Quotes benchmark against installed-price bands with a verdict | node + browser |
+| 3 | `biz.market.funnel` | Lead-farm economics: sales per week, cost per sale, ROAS and break-even close rate | node + browser |
+| 4 | `biz.market.watchlist` | A dated watchlist tells the crew what to re-verify and why | node + browser |
+
+## business/model (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.model.build` | The whole model builds from raw connector payloads with every source present | node + browser |
+| 2 | `biz.model.linkInvoices` | Invoices link to jobs and sites by the SM8 reference; overdue amounts land on the site | node + browser |
+| 3 | `biz.model.linkThreads` | Email threads attach to sites by customer email or address and count waiting customers | node + browser |
+| 4 | `biz.model.insights` | The built model carries ranked findings and a health score | node + browser |
+| 5 | `biz.model.digest` | Model digest is compact and non-identifying; isModel tells built models from raw payloads | node + browser |
+
+## business/schema (9)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.schema.address` | Australian addresses parse into street, suburb, state and postcode with a stable match key | node + browser |
+| 2 | `biz.schema.description` | ServiceM8 job descriptions yield customer, contact, NMI, system and team fields | node + browser |
+| 3 | `biz.schema.system` | System sizes derive from inverter, battery and panel strings | node + browser |
+| 4 | `biz.schema.kind` | Internal tasks, site visits, sales and test jobs are told apart from real installs | node + browser |
+| 5 | `biz.schema.partner` | Job titles map to the channel partner or retail | node + browser |
+| 6 | `biz.schema.invoiceRef` | Xero invoice references link back to the ServiceM8 job and site | node + browser |
+| 7 | `biz.schema.email` | Emails classify into legal, complaint, lead, quote, supplier, DNSP, finance, monitoring and noise | node + browser |
+| 8 | `biz.schema.extract` | Job numbers and street addresses can be lifted out of free text | node + browser |
+| 9 | `biz.schema.dates` | Day and business-day arithmetic | node + browser |
+
+## business/servicem8 (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.sm8.normalise` | A ServiceM8 job becomes a normalised job with customer, site, system, team and stage | node + browser |
+| 2 | `biz.sm8.stages` | Status plus billing flags map to realm stages (quote, approval, install, claim, handover, complete, lost) | node + browser |
+| 3 | `biz.sm8.sites` | Jobs at the same address collapse into one site that knows if it is installed | node + browser |
+| 4 | `biz.sm8.summaries` | Job summaries supply invoice, payment, schedule and customer-response flags | node + browser |
+| 5 | `biz.sm8.stats` | Job statistics: win rate, pipeline value, awaiting payment, installed base | node + browser |
+
+## business/staff (2)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.staff.accounts` | Contractor names parse out of Xero expense account names | node + browser |
+| 2 | `biz.staff.merge` | Staff, contractor accounts, weekly bank payments and on-site mentions merge into one roster | node + browser |
+
+## business/sync (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.sync.import` | Importing a raw snapshot builds the model, caches it and reports a digest | node + browser |
+| 2 | `biz.sync.server` | The model loads from /api/business/model with the cloud token, falling back when absent | node + browser |
+| 3 | `biz.sync.state` | Resolving a finding pays its quest reward and hides it; snoozing hides it for a while | node + browser |
+| 4 | `biz.sync.world` | Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links | node + browser |
+
+## business/xero (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `biz.xero.invoice` | Xero invoices normalise and link to the ServiceM8 job and site via the reference | node + browser |
+| 2 | `biz.xero.kpis` | Finance KPIs: margins, monthly run-rate, runway, DSO, labour share, customer concentration | node + browser |
+| 3 | `biz.xero.bills` | Bills normalise with reimbursement detection | node + browser |
+| 4 | `biz.xero.unreconciled` | Unreconciled bank entries normalise from the API shape and the table shape | node + browser |
 
 ## core/audio (4)
 
@@ -437,7 +548,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `game.chibi.face` | Characters turn smoothly toward a heading | browser |
 | 5 | `game.chibi.deterministicSkin` | Skin tone and hat derive from id and role deterministically | browser |
 
-## game/game (11)
+## game/game (12)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -451,7 +562,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 8 | `game.clickSelect` | Clicking a minion selects them and opens their sheet | browser |
 | 9 | `game.soundHooks` | World events trigger sound cues when sound is on | browser |
 | 10 | `game.hudToggle` | Shift+Z hides the HUD overlay | browser |
-| 11 | `game.persistPosition` | Player position is remembered between sessions | browser |
+| 11 | `game.realSites` | Mirrored real sites get houses on suburb lots, suburb labels in the overlay and the player can travel to a site or suburb | browser |
+| 12 | `game.persistPosition` | Player position is remembered between sessions | browser |
 
 ## game/interact (5)
 
@@ -526,7 +638,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 1 | `game.touch.joystick` | Virtual joystick drives the player analog axis | browser |
 | 2 | `game.touch.buttons` | Interact and jump buttons | browser |
 
-## game/town (10)
+## game/town (12)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -537,9 +649,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `game.town.obstacles` | Obstacle boxes include landmarks and job houses | node + browser |
 | 6 | `game.town.houseState` | House build state follows the job stage | node + browser |
 | 7 | `game.town.spots` | Behaviour spots for bunks, desks, shelves, fire, cafe, yard | node + browser |
-| 8 | `game.town.roadsTrees` | Roads and trees are laid out | node + browser |
-| 9 | `game.town.district` | A skyline district rings the town beyond the player bounds | node + browser |
-| 10 | `game.town.spotsForRoster` | Enough bunks, desks and seats for the whole 24-minion roster | node + browser |
+| 8 | `game.town.roadsTrees` | Roads (town and suburb streets) and trees are laid out | node + browser |
+| 9 | `game.town.district` | A skyline district rings the town beyond the suburbs | node + browser |
+| 10 | `game.town.suburbLots` | Over 300 suburb lots line the outer streets, each facing its street | node + browser |
+| 11 | `game.town.assignLots` | Real jobs are grouped by suburb into neighbouring lots; legacy jobs keep the inner ring | node + browser |
+| 12 | `game.town.spotsForRoster` | Enough bunks, desks and seats for the whole 24-minion roster | node + browser |
 
 ## shell (21)
 
@@ -734,6 +848,23 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `win.analytics.utilisation` | Crew utilisation and first-time quality | browser |
 | 3 | `win.analytics.render` | Analytics dashboard renders charts and tables | browser |
 
+## windows/business (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.business.empty` | Business HQ explains how to connect when no model is loaded and can load the example | browser |
+| 2 | `win.business.overview` | Overview shows the health score, money, work, customer and document KPIs with top findings | browser |
+| 3 | `win.business.pipeline` | Pipeline tab lays real jobs out by stage with values and channel shares | browser |
+| 4 | `win.business.connectors` | Connectors tab lists each source with record counts and sync time | browser |
+
+## windows/calendar (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.calendar.upcoming` | Upcoming tab groups real events by day with meet links and clash count | browser |
+| 2 | `win.calendar.unscheduled` | To-schedule tab lists sold work orders without a booking, by value | browser |
+| 3 | `win.calendar.meetings` | Meetings tab shows attendance of the weekly jobs meeting and the lead-farm numbers | browser |
+
 ## windows/character (7)
 
 | # | Feature | What it verifies | Runs in |
@@ -840,6 +971,24 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `win.dnsp.lodge` | Lodging requires a valid application and ticks the task | browser |
 | 6 | `win.dnsp.operators` | Operator reference table | browser |
 
+## windows/documents (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.documents.packs` | Packs tab shows coverage KPIs and every Drive folder with its completeness and missing documents | browser |
+| 2 | `win.documents.missing` | Missing tab lists installed sites without a pack with a jump to the site file | browser |
+| 3 | `win.documents.standard` | Standard tab lists the ten required documents | browser |
+
+## windows/finance (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.finance.overview` | Finance overview: position, P&L summary and revenue by customer | browser |
+| 2 | `win.finance.receivables` | Receivables tab ages every invoice and links overdue ones to jobs | browser |
+| 3 | `win.finance.pnl` | P&L tab lists income, cost of sales and every expense account with share of income | browser |
+| 4 | `win.finance.invoices` | Invoices and bills tables with job links | browser |
+| 5 | `win.finance.bank` | Bank tab: balances, variance, recurring payments, unreconciled queue and transactions | browser |
+
 ## windows/handover (4)
 
 | # | Feature | What it verifies | Runs in |
@@ -857,6 +1006,31 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `win.help.keys` | Hotkey reference | browser |
 | 3 | `win.help.glossary` | Glossary of solar and simulation terms | browser |
 | 4 | `win.help.about` | About page reports the live feature count | browser |
+
+## windows/inbox (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.inbox.waiting` | Waiting tab lists customer conversations without a reply, worst first | browser |
+| 2 | `win.inbox.all` | All threads tab shows category chips and a searchable table with Gmail links | browser |
+| 3 | `win.inbox.stats` | Response tab shows median reply time and leads | browser |
+
+## windows/insights (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.insights.list` | Open findings list with severity/category filters, impact and owners | browser |
+| 2 | `win.insights.resolve` | Resolving from the card pays credits and moves the finding to the Resolved tab | browser |
+| 3 | `win.insights.owners` | By-minion tab groups findings per owner with a talk button | browser |
+
+## windows/intel (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.intel.benchmark` | Benchmark a quote: verdict, band, incentives, and your priced jobs against the market | browser |
+| 2 | `win.intel.funnel` | Lead funnel tab models spend, leads, pickup and close into margin after ads | browser |
+| 3 | `win.intel.assumptions` | Assumptions tab edits STC price, battery factor and price bands and persists them | browser |
+| 4 | `win.intel.watch` | Watchlist tab lists sources with cadence and reasons | browser |
 
 ## windows/inventory (12)
 
@@ -965,17 +1139,18 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `win.proposal.preview` | Proposal document with payment schedule | browser |
 | 6 | `win.proposal.issue` | Issuing the proposal ticks the quote-stage task | browser |
 
-## windows/quests (7)
+## windows/quests (8)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
-| 1 | `win.quests.list` | Quest list generated from open jobs | browser |
-| 2 | `win.quests.objectives` | Objectives tick the underlying job tasks | browser |
-| 3 | `win.quests.turnIn` | Turning in a quest advances the stage and pays credits | browser |
-| 4 | `win.quests.blocked` | Blocked turn-in reports the reason | browser |
-| 5 | `win.quests.flavour` | Stage flavour text for all nine stages | node + browser |
-| 6 | `win.quests.dailyGoals` | Daily goals track real practice | browser |
-| 7 | `win.quests.completed` | Completed quest history | browser |
+| 1 | `win.quests.business` | Business quests tab turns open findings into quests with objectives, owner, links and a credit reward on turn-in | browser |
+| 2 | `win.quests.list` | Quest list generated from open jobs | browser |
+| 3 | `win.quests.objectives` | Objectives tick the underlying job tasks | browser |
+| 4 | `win.quests.turnIn` | Turning in a quest advances the stage and pays credits | browser |
+| 5 | `win.quests.blocked` | Blocked turn-in reports the reason | browser |
+| 6 | `win.quests.flavour` | Stage flavour text for all nine stages | node + browser |
+| 7 | `win.quests.dailyGoals` | Daily goals track real practice | browser |
+| 8 | `win.quests.completed` | Completed quest history | browser |
 
 ## windows/reports (5)
 
@@ -1014,19 +1189,28 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `win.serials.evidence` | Complete register records STC evidence | browser |
 | 4 | `win.serials.remove` | Remove a serial | browser |
 
-## windows/settings (9)
+## windows/settings (10)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
-| 1 | `win.settings.general` | General settings save and apply | browser |
-| 2 | `win.settings.ai` | AI tab configures the crew language model | browser |
-| 3 | `win.settings.quality` | Graphics, sound and touch settings apply to the game | browser |
-| 4 | `win.settings.cloud` | Cloud save controls (URL, login, push, pull) | browser |
-| 5 | `win.settings.keysList` | Keybind table with custom markers | browser |
-| 6 | `win.settings.rebind` | Rebind by pressing a key, with conflict refusal | browser |
-| 7 | `win.settings.hotbar` | Hotbar slot editor | browser |
-| 8 | `win.settings.data` | Backup size and export controls | browser |
-| 9 | `win.settings.importRejects` | Import rejects invalid backups | browser |
+| 1 | `win.settings.business` | Settings › Business: server sync, snapshot import/export, example data, clear and mirror into the world | browser |
+| 2 | `win.settings.general` | General settings save and apply | browser |
+| 3 | `win.settings.ai` | AI tab configures the crew language model | browser |
+| 4 | `win.settings.quality` | Graphics, sound and touch settings apply to the game | browser |
+| 5 | `win.settings.cloud` | Cloud save controls (URL, login, push, pull) | browser |
+| 6 | `win.settings.keysList` | Keybind table with custom markers | browser |
+| 7 | `win.settings.rebind` | Rebind by pressing a key, with conflict refusal | browser |
+| 8 | `win.settings.hotbar` | Hotbar slot editor | browser |
+| 9 | `win.settings.data` | Backup size and export controls | browser |
+| 10 | `win.settings.importRejects` | Import rejects invalid backups | browser |
+
+## windows/sites (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.sites.table` | Sites table: every address with stage, system, revenue, overdue, waiting emails and pack status | browser |
+| 2 | `win.sites.suburbs` | Suburbs tab aggregates sites into districts | browser |
+| 3 | `win.sites.file` | Site file shows jobs, invoices, conversations and the handover pack for one address | browser |
 
 ## windows/spellbook (13)
 
@@ -1045,6 +1229,13 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 11 | `win.spell.phases` | Phase balance, main switch rule and export limit checks | browser |
 | 12 | `win.spell.layout` | Roof layout drawing with orientation factor | browser |
 | 13 | `win.spell.tabs` | Eight calculator tabs | node + browser |
+
+## windows/staff (2)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.staff.roster` | Roster merges ServiceM8 staff with contractor accounts, weekly payments and on-site counts | browser |
+| 2 | `win.staff.cost` | Cost tab ranks labour cost with revenue per labour dollar | browser |
 
 ## windows/suggestions (5)
 

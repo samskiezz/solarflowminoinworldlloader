@@ -2,6 +2,33 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.6.0] - 2026-10-11
+
+### The real business, inside the game (86 new verified features, 698 total)
+
+Solarhaven now runs on the company's actual data. Read-only connectors for **ServiceM8** (jobs, staff,
+schedule), **Xero** (P&L, balance sheet, receivables, invoices, bills, bank rec), **Gmail** (thread
+metadata for one or every workspace mailbox), **Google Drive** (handover packs), **Google Calendar** and
+a **bank feed** are normalised into one cross-linked business model (`docs/realm/js/business/`):
+invoices link to jobs by the `SM8-<job>` reference, emails attach to sites by address, email or job
+number, handover packs match the installed base, and 34 insight rules produce findings with evidence,
+dollar impact, an owning minion and a deep link. See `docs/realm/BUSINESS.md`.
+
+- Nine new windows: Business HQ (Shift+B), Findings (Shift+K), Sites & suburbs (Shift+I), Inbox (Shift+N),
+  Finance (Shift+F), Calendar & schedule (Shift+G), Handover packs (Shift+T), Market intel (Shift+M),
+  People (Shift+Y); Settings › Business for server sync, snapshot import/export and clearing; Quests ›
+  Business quests pays credits for resolved findings.
+- The world: every real site is a house on one of 300+ suburb lots grouped by suburb, with district labels
+  in the overlay and on the minimap; "Visit in Solarhaven" walks to the site; the world grew to ±185 m.
+- Server: `/api/business/{status,model,sync,import,raw/:source}` behind a user JWT or `BUSINESS_API_TOKEN`,
+  adapters with real REST endpoints (ServiceM8, Xero custom connection, Google service-account JWT with
+  domain-wide delegation or OAuth refresh token, generic bank feed), timed re-sync, atomic JSON store under
+  `DATA_DIR/business/`. `scripts/business-snapshot.mjs` builds the same model from exports on disk.
+- Market intelligence: editable incentive/price assumptions with a dated watchlist, quote benchmarking,
+  lead-farm economics (seeded from calendar notes), and re-verify reminders.
+- Privacy: everything read-only, mail bodies never fetched, no customer data in the repo or the public
+  site; tests use fictional data.
+
 ## [2.5.0] - 2026-10-11
 
 ### SolarFlow Realm: a 3D game with 560 verified features

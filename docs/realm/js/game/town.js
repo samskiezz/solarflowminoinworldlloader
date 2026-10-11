@@ -6,7 +6,7 @@
  *
  * Coordinates: metres, x east, z south, origin at the town square.
  */
-export const TOWN_SIZE = 160; // ground extent (square)
+export const TOWN_SIZE = 200; // ground extent (square): inner town within ±80, suburbs out to ±180
 export const ROAD_WIDTH = 6;
 
 export const LANDMARKS = [
@@ -35,13 +35,19 @@ export const LOTS = (() => {
     return lots;
 })();
 
+export const SUBURB_ROADS = [
+    { x: 0, z: -108, w: 360, d: ROAD_WIDTH, axis: 'x' }, { x: 0, z: 108, w: 360, d: ROAD_WIDTH, axis: 'x' }, { x: 0, z: -156, w: 360, d: ROAD_WIDTH, axis: 'x' }, { x: 0, z: 156, w: 360, d: ROAD_WIDTH, axis: 'x' },
+    { x: -108, z: 0, w: ROAD_WIDTH, d: 180, axis: 'z' }, { x: 108, z: 0, w: ROAD_WIDTH, d: 180, axis: 'z' }, { x: -156, z: 0, w: ROAD_WIDTH, d: 180, axis: 'z' }, { x: 156, z: 0, w: ROAD_WIDTH, d: 180, axis: 'z' },
+    { x: -180, z: 0, w: ROAD_WIDTH, d: 360, axis: 'z' }, { x: 180, z: 0, w: ROAD_WIDTH, d: 360, axis: 'z' }
+];
 export const ROADS = [
-    { x: 0, z: 0, w: ROAD_WIDTH, d: 140, axis: 'z' }, // main street north-south
+    { x: 0, z: 0, w: ROAD_WIDTH, d: 360, axis: 'z' }, // main street north-south, out to the suburbs
     { x: 0, z: -50, w: 140, d: ROAD_WIDTH, axis: 'x' }, // north avenue
     { x: 0, z: 52, w: 140, d: ROAD_WIDTH, axis: 'x' }, // south avenue
     { x: -54, z: 0, w: ROAD_WIDTH, d: 110, axis: 'z' }, // west lane
     { x: 54, z: 0, w: ROAD_WIDTH, d: 110, axis: 'z' }, // east lane
-    { x: 0, z: 0, w: 60, d: ROAD_WIDTH, axis: 'x' } // square crossing
+    { x: 0, z: 0, w: 60, d: ROAD_WIDTH, axis: 'x' }, // square crossing
+    ...SUBURB_ROADS
 ];
 
 export const TREES = Array.from({ length: 48 }, (_, i) => {
@@ -50,7 +56,7 @@ export const TREES = Array.from({ length: 48 }, (_, i) => {
 }).concat([{ x: -20, z: -14, s: 1.3 }, { x: 20, z: -14, s: 1.2 }, { x: -22, z: 6, s: 1.1 }, { x: 22, z: 6, s: 1.4 }, { x: 14, z: 26, s: 1 }, { x: -16, z: 30, s: 1.2 }]);
 
 /** Dominion-style district: tall blocks beyond the town edge as a skyline backdrop (out of reach). */
-export const DISTRICT = Array.from({ length: 22 }, (_, i) => { const a = (i / 22) * Math.PI * 2 + 0.1; const r = 100 + (i % 3) * 9; const seed = (i * 7919) % 97; return { x: Math.round(Math.cos(a) * r), z: Math.round(Math.sin(a) * r * 0.9), w: 8 + (seed % 5), d: 8 + ((seed * 3) % 5), h: 12 + (seed % 7) * 3, colour: [0x4a90e2, 0x7ed321, 0xf5a623, 0xbd10e0, 0x4ecdc4, 0xa8e6cf, 0x9aa0a6, 0x5b6e8c][i % 8] }; });
+export const DISTRICT = Array.from({ length: 22 }, (_, i) => { const a = (i / 22) * Math.PI * 2 + 0.1; const r = 212 + (i % 3) * 9; const seed = (i * 7919) % 97; return { x: Math.round(Math.cos(a) * r), z: Math.round(Math.sin(a) * r * 0.9), w: 8 + (seed % 5), d: 8 + ((seed * 3) % 5), h: 12 + (seed % 7) * 3, colour: [0x4a90e2, 0x7ed321, 0xf5a623, 0xbd10e0, 0x4ecdc4, 0xa8e6cf, 0x9aa0a6, 0x5b6e8c][i % 8] }; });
 
 /** Named spots agents go to for each behaviour. */
 export const SPOTS = {
@@ -63,13 +69,48 @@ export const SPOTS = {
     square: Array.from({ length: 16 }, (_, i) => ({ x: Math.cos((i / 16) * Math.PI * 2) * (11 + (i % 2) * 3), z: 6 + Math.sin((i / 16) * Math.PI * 2) * (8 + (i % 2) * 2) }))
 };
 
+/**
+ * Suburb lots: four rows of houses north and south (streets at z ±108 and
+ * ±156) and four columns east and west (streets at x ±108 and ±156). Lots
+ * are listed in street order so neighbouring indices are neighbours on the
+ * ground, which keeps each real suburb together.
+ */
+export const SUBURB_LOTS = (() => {
+    const lots = []; let n = 0;
+    const push = (x, z, facing) => lots.push({ id: `sub${++n}`, x, z, facing, w: 10, d: 8, suburb: true });
+    for (const [z, facing] of [[-96, 0], [-120, Math.PI], [-144, 0], [-168, Math.PI]]) for (let x = -132; x <= 132; x += 12) push(x, z, facing); // north: facing 0 = door toward +z (street at -108 is south of -120 row? handled by facing)
+    for (const [z, facing] of [[96, Math.PI], [120, 0], [144, Math.PI], [168, 0]]) for (let x = -132; x <= 132; x += 12) push(x, z, facing);
+    for (const [x, facing] of [[-96, -Math.PI / 2], [-120, Math.PI / 2], [-144, -Math.PI / 2], [-168, Math.PI / 2]]) for (let z = -84; z <= 84; z += 12) push(x, z, facing);
+    for (const [x, facing] of [[96, Math.PI / 2], [120, -Math.PI / 2], [144, Math.PI / 2], [168, -Math.PI / 2]]) for (let z = -84; z <= 84; z += 12) push(x, z, facing);
+    return lots;
+})();
+
+let lotCache = { sig: '', map: new Map(), centres: [] };
+/** Assign lots: legacy jobs take the inner ring, real (suburb) jobs are grouped by suburb into the suburb streets. */
+export function assignLots(jobs = []) {
+    const sig = jobs.map((j) => `${j.id}|${j.suburb || ''}`).join(',');
+    if (lotCache.sig === sig) return lotCache;
+    const map = new Map(); const byDistrict = new Map();
+    const inner = jobs.filter((j) => !j.suburb); const outer = jobs.filter((j) => j.suburb);
+    inner.forEach((j, i) => map.set(j.id, LOTS[i % LOTS.length]));
+    const groups = new Map(); for (const j of outer) { const k = j.suburb; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(j); }
+    let cursor = 0; const pool = [...SUBURB_LOTS, ...LOTS.slice(inner.length)];
+    for (const [name, list] of [...groups.entries()].sort((a, b) => b[1].length - a[1].length)) {
+        const lots = []; for (const j of list) { const lot = pool[cursor % pool.length]; cursor++; map.set(j.id, lot); lots.push(lot); }
+        byDistrict.set(name, { name, count: list.length, x: lots.reduce((s, l) => s + l.x, 0) / lots.length, z: lots.reduce((s, l) => s + l.z, 0) / lots.length });
+    }
+    lotCache = { sig, map, centres: [...byDistrict.values()] };
+    return lotCache;
+}
+export function suburbCentres(jobs = []) { return assignLots(jobs).centres; }
+export function usedLots(jobs = []) { return [...new Set(assignLots(jobs).map.values())]; }
+
 export function landmark(id) { return LANDMARKS.find((l) => l.id === id) || null; }
 
 /** Lot assigned to a job: by its index among all jobs (stable while jobs exist). */
 export function lotForJob(jobs, jobId) {
-    const index = jobs.findIndex((j) => j.id === jobId);
-    if (index < 0) return null;
-    return LOTS[index % LOTS.length];
+    if (!jobs.some((j) => j.id === jobId)) return null;
+    return assignLots(jobs).map.get(jobId) || null;
 }
 
 /** Position in front of a building's door (facing the road/square). */
@@ -115,7 +156,9 @@ export const FEATURES = [
     { id: 'game.town.obstacles', title: 'Obstacle boxes include landmarks and job houses', test: () => obstacles([{ id: 'J' }]).some((o) => o.id === 'house:J') && !obstacles().some((o) => o.id === 'board') && obstacles().some((o) => o.id === 'fountain') },
     { id: 'game.town.houseState', title: 'House build state follows the job stage', test: () => { const lead = houseState({ stage: 'lead', tasks: { 'lead:a': false } }); const install = houseState({ stage: 'install', tasks: { 'install:a': true, 'install:b': false }, batteryKwh: 13 }); const done = houseState({ stage: 'complete', tasks: {} }); return lead.forSale && lead.marker === '!' && install.scaffold && install.panelsPct === 0.5 && install.inverter && !install.battery && done.complete && done.marker === null && houseState({ stage: 'lead', tasks: { 'lead:a': true } }).marker === '?'; } },
     { id: 'game.town.spots', title: 'Behaviour spots for bunks, desks, shelves, fire, cafe, yard', test: () => ['bunk', 'desk', 'shelf', 'fire', 'cafe', 'yard', 'square'].every((k) => SPOTS[k].length >= 12) },
-    { id: 'game.town.roadsTrees', title: 'Roads and trees are laid out', test: () => ROADS.length === 6 && TREES.length === 54 },
-    { id: 'game.town.district', title: 'A skyline district rings the town beyond the player bounds', test: () => DISTRICT.length === 22 && DISTRICT.every((b) => Math.hypot(b.x, b.z) > 85 && b.h >= 12) },
+    { id: 'game.town.roadsTrees', title: 'Roads (town and suburb streets) and trees are laid out', test: () => ROADS.length === 16 && TREES.length === 54 },
+    { id: 'game.town.district', title: 'A skyline district rings the town beyond the suburbs', test: () => DISTRICT.length === 22 && DISTRICT.every((b) => Math.hypot(b.x, b.z) > 190 && b.h >= 12) },
+    { id: 'game.town.suburbLots', title: 'Over 300 suburb lots line the outer streets, each facing its street', test: () => SUBURB_LOTS.length >= 300 && SUBURB_LOTS.every((l) => Math.abs(l.x) <= 170 && Math.abs(l.z) <= 170 && (Math.abs(l.x) >= 90 || Math.abs(l.z) >= 90)) && SUBURB_ROADS.length === 10 },
+    { id: 'game.town.assignLots', title: 'Real jobs are grouped by suburb into neighbouring lots; legacy jobs keep the inner ring', test: () => { const jobs = [{ id: 'L1' }, { id: 'A', suburb: 'Greenwich' }, { id: 'B', suburb: 'Greenwich' }, { id: 'C', suburb: 'Penrith' }]; const a = lotForJob(jobs, 'A'); const b = lotForJob(jobs, 'B'); const c = lotForJob(jobs, 'C'); const centres = suburbCentres(jobs); return lotForJob(jobs, 'L1').id === 'lot1' && a.suburb && b.suburb && Math.hypot(a.x - b.x, a.z - b.z) <= 13 && c.id !== a.id && centres.length === 2 && centres[0].name === 'Greenwich' && usedLots(jobs).length === 4; } },
     { id: 'game.town.spotsForRoster', title: 'Enough bunks, desks and seats for the whole 24-minion roster', test: () => SPOTS.bunk.length === 24 && SPOTS.square.length >= 16 && SPOTS.fire.length >= 12 }
 ];

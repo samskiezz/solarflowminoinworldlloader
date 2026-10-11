@@ -25,6 +25,7 @@ const SecurityService = require('./src/security/SecurityService');
 const RealStandardsService = require('./src/standards/RealStandardsService');
 const CerProductStore = require('./src/data/CerProductStore');
 const StateStore = require('./src/data/StateStore');
+const BusinessService = require('./src/business/BusinessService');
 
 const STATE_KEY = 'frontend-state';
 
@@ -51,6 +52,7 @@ class SolarFlowServer {
         this.standards = options.standards || new RealStandardsService();
         this.products = options.products || new CerProductStore();
         this.state = options.state || new StateStore(path.join(config.dataDir, 'state'));
+        this.business = options.business || new BusinessService();
 
         this.clients = new Set();
         this.dbRetryTimer = null;
@@ -283,6 +285,45 @@ class SolarFlowServer {
             res.json({ success: true, logs, count: logs.length });
         }));
 
+        // Business (read-only connectors -> model) ---------------------------
+        // Either a logged-in user (JWT) or the static BUSINESS_API_TOKEN may read.
+        const businessAuth = (req, res, next) => {
+            const header = req.headers.authorization || '';
+            const token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
+            const staticToken = config.business.token;
+            if (staticToken && token && token.length === staticToken.length && crypto.timingSafeEqual(Buffer.from(token), Buffer.from(staticToken))) {
+                req.user = { role: 'admin', email: 'business-token' };
+                return next();
+            }
+            return authenticate(req, res, next);
+        };
+        app.get('/api/business/status', businessAuth, asyncRoute(async (req, res) => { res.json(await this.business.status()); }));
+        app.get('/api/business/model', businessAuth, asyncRoute(async (req, res) => {
+            const model = await this.business.model();
+            if (!model) return res.status(204).end();
+            res.setHeader('cache-control', 'private, no-store');
+            return res.json(model);
+        }));
+        app.post('/api/business/sync', businessAuth, requireRole('admin'), modify, asyncRoute(async (req, res) => {
+            const only = Array.isArray(req.body && req.body.only) ? req.body.only.filter((x) => typeof x === 'string') : null;
+            const configured = this.business.configured();
+            const started = Object.entries(configured).filter(([id, ok]) => ok && (!only || only.includes(id))).map(([id]) => id);
+            const run = this.business.sync({ only });
+            if (req.query.wait === '1') return res.json(await run);
+            run.catch(() => {});
+            return res.status(202).json({ started, configured });
+        }));
+        app.post('/api/business/import', businessAuth, requireRole('admin'), modify, asyncRoute(async (req, res) => {
+            if (!req.body || typeof req.body !== 'object') return res.status(400).json({ error: 'JSON body required' });
+            const model = await this.business.build(req.body);
+            res.json({ generatedAt: model.generatedAt, jobs: model.jobs.length, sites: model.sites.length, findings: model.insights.length });
+        }));
+        app.get('/api/business/raw/:source', businessAuth, requireRole('admin'), asyncRoute(async (req, res) => {
+            const data = await this.business.raw(req.params.source);
+            if (!data) return res.status(204).end();
+            return res.json(data);
+        }));
+
         app.post('/api/backup', authenticate, requireRole('admin'), asyncRoute(async (req, res) => {
             const backup = await this.db.createBackup();
             res.json({ success: true, backup: { backupId: backup.backupId, timestamp: backup.timestamp, size: backup.size } });
@@ -419,6 +460,8 @@ class SolarFlowServer {
 
     async start(port = config.port, host = config.host) {
         await this.state.init();
+        await this.business.init();
+        this.business.schedule();
         await new Promise((resolve, reject) => {
             this.server.once('error', reject);
             this.server.listen(port, host, () => {
@@ -457,6 +500,7 @@ class SolarFlowServer {
         logger.info('Shutting down server');
         clearTimeout(this.dbRetryTimer);
         clearInterval(this.heartbeat);
+        this.business.stop();
         this.security.dispose();
 
         for (const client of this.clients) {

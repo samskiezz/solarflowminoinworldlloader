@@ -11,7 +11,7 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## SolarFlow Realm – the game (new in 2.5.0)
+## SolarFlow Realm – the game (new in 2.5.0, now on your real business in 2.6.0)
 
 `docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
 third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
@@ -54,6 +54,17 @@ Everything behind the windows is real work:
 
 The game needs WebGL; without it the same windows still work as a workstation. Research notes behind the
 design (standards, incentives, market, game-UI and agent-AI references) are in `docs/realm/RESEARCH.md`.
+
+### Your real business in the game (2.6.0)
+
+Read-only connectors for ServiceM8, Xero, Gmail, Google Drive, Google Calendar and a bank feed build one
+cross-linked business model on your API server; the game loads it, turns every real site into a house in
+the suburbs of Solarhaven, and the minions run 34 rules over it to find mistakes and improvements
+(overdue invoices, sold work never scheduled, customers waiting on replies, installs without handover
+packs, cash runway, labour share, lead-farm economics…). Findings become quests. Nothing is written
+back and no customer data enters the repo or the public site. Setup, windows and the API are in
+`docs/realm/BUSINESS.md`; `node scripts/business-snapshot.mjs` builds the model from exports without
+the server.
 
 ## What the data is (and is not)
 

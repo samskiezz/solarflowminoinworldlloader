@@ -7,6 +7,7 @@ export const DEFAULT_BINDINGS = Object.freeze({
     'window.journal': 'J', 'window.codex': 'N', 'window.achievements': 'Y', 'window.jobs': 'O', 'window.settings': 'I', 'window.help': 'F1',
     'window.chat': 'Enter', 'window.market': 'U', 'window.reports': 'R', 'window.checklists': 'H', 'window.commissioning': 'T', 'window.dashboard': 'Shift+D',
     'window.proposal': 'Shift+Q', 'window.serials': 'Shift+S', 'window.dnsp': 'G', 'window.survey': 'V', 'window.schedule': 'Shift+E', 'window.suggestions': 'X', 'window.analytics': 'Shift+A', 'window.notifications': 'Z', 'window.labels': 'Shift+L', 'window.loads': 'Shift+O', 'window.handover': 'Shift+H', 'window.wizard': 'Shift+W',
+    'window.business': 'Shift+B', 'window.insights': 'Shift+K', 'window.sites': 'Shift+I', 'window.inbox': 'Shift+N', 'window.finance': 'Shift+F', 'window.calendar': 'Shift+G', 'window.documents': 'Shift+T', 'window.intel': 'Shift+M', 'window.staff': 'Shift+Y',
     'game.interact': 'E', 'game.toggleHud': 'Shift+Z', 'game.resetCamera': 'Shift+C',
     'palette.open': 'Ctrl+K', 'console.open': '/', 'wm.closeTop': 'Escape', 'wm.cycle': 'Tab', 'clock.pause': 'Shift+Space', 'clock.faster': '=', 'clock.slower': '-',
     'hotbar.1': '1', 'hotbar.2': '2', 'hotbar.3': '3', 'hotbar.4': '4', 'hotbar.5': '5', 'hotbar.6': '6', 'hotbar.7': '7', 'hotbar.8': '8', 'hotbar.9': '9',

@@ -15,6 +15,9 @@ async function boot() {
     mountShell(ctx, { top: document.getElementById('realm-top'), bottom: document.getElementById('realm-bottom'), minimap: document.getElementById('realm-minimap'), dock: document.getElementById('realm-dock') });
     ctx.store.set('stats.sessions', (ctx.store.get('stats.sessions') || 0) + 1);
     ctx.loadProducts('../data/cec-products.json');
+    // The real business: model from the server (or the cached/imported snapshot), mirrored into the world as houses and quests.
+    ctx.business.load().then((model) => { if (model) { const r = ctx.business.syncWorld(); ctx.saveWorld(); if (r.created) toast(`${r.created} real sites added to Solarhaven`, { kind: 'ok' }); ctx.refresh(); } }).catch((error) => console.warn('business model unavailable', error));
+    ctx.bus.on('business:loaded', () => { const r = ctx.business.syncWorld(); ctx.saveWorld(); ctx.refresh(); if (r.created) toast(`${r.created} real sites added to Solarhaven`, { kind: 'ok' }); });
     if (!storage) toast('Browser storage is unavailable – progress will not persist', { kind: 'warn', timeout: 8000 });
 
     // The world

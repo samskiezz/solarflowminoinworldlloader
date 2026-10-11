@@ -17,7 +17,7 @@ export function createEngine(canvas, { pixelRatio = Math.min(2, globalThis.devic
     renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(PHASE_SKY.day);
-    scene.fog = new THREE.Fog(PHASE_FOG.day, 90, 220);
+    scene.fog = new THREE.Fog(PHASE_FOG.day, 110, 260);
     const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 400);
     camera.position.set(0, 14, 22);
     const hemi = new THREE.HemisphereLight(0xbfdfff, 0x4a6a3a, 0.9); scene.add(hemi);

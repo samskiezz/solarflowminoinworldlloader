@@ -98,6 +98,24 @@ const config = {
         requestTimeoutMs: int(env.STANDARDS_REQUEST_TIMEOUT_MS, 10000)
     },
 
+    business: {
+        // Static bearer token for the business API (in addition to user JWTs).
+        token: env.BUSINESS_API_TOKEN || '',
+        syncMinutes: int(env.BUSINESS_SYNC_MINUTES, 0), // 0 = manual sync only
+        requestTimeoutMs: int(env.BUSINESS_REQUEST_TIMEOUT_MS, 20000),
+        company: { name: env.BUSINESS_NAME || '', domains: list(env.BUSINESS_DOMAINS, []), timezone: env.BUSINESS_TIMEZONE || 'Australia/Sydney' },
+        servicem8: { apiKey: env.SERVICEM8_API_KEY || '', email: env.SERVICEM8_EMAIL || '', password: env.SERVICEM8_PASSWORD || '', maxJobs: int(env.SERVICEM8_MAX_JOBS, 5000) },
+        xero: { clientId: env.XERO_CLIENT_ID || '', clientSecret: env.XERO_CLIENT_SECRET || '', tenantId: env.XERO_TENANT_ID || '', months: int(env.XERO_MONTHS, 12) },
+        google: {
+            serviceAccount: env.GOOGLE_SERVICE_ACCOUNT_JSON || '', // path to the key file or the JSON itself
+            subject: env.GOOGLE_IMPERSONATE || '', // workspace user to act as (domain-wide delegation)
+            allUsers: bool(env.GOOGLE_ALL_USERS, false), // read every mailbox in the workspace (admin portal)
+            oauthClientId: env.GOOGLE_OAUTH_CLIENT_ID || '', oauthClientSecret: env.GOOGLE_OAUTH_CLIENT_SECRET || '', oauthRefreshToken: env.GOOGLE_OAUTH_REFRESH_TOKEN || '',
+            handoverFolderId: env.GOOGLE_HANDOVER_FOLDER_ID || '', calendarId: env.GOOGLE_CALENDAR_ID || 'primary', mailQuery: env.GOOGLE_MAIL_QUERY || 'newer_than:365d -category:promotions -category:social', mailMaxThreads: int(env.GOOGLE_MAIL_MAX_THREADS, 2000)
+        },
+        bank: { feedUrl: env.BANK_FEED_URL || '', feedToken: env.BANK_FEED_TOKEN || '' }
+    },
+
     websocket: {
         heartbeatMs: int(env.WS_HEARTBEAT_MS, 30000),
         maxPayloadBytes: int(env.WS_MAX_PAYLOAD_BYTES, 64 * 1024)

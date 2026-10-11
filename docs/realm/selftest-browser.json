@@ -1,7 +1,7 @@
 {
- "at": "2026-10-11T12:46:20.337Z",
- "total": 612,
- "passed": 612,
+ "at": "2026-10-11T14:34:06.645Z",
+ "total": 698,
+ "passed": 698,
  "failed": 0,
  "results": [
   {
@@ -1889,6 +1889,312 @@
    "status": "passed"
   },
   {
+   "id": "biz.schema.address",
+   "module": "business/schema",
+   "title": "Australian addresses parse into street, suburb, state and postcode with a stable match key",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.description",
+   "module": "business/schema",
+   "title": "ServiceM8 job descriptions yield customer, contact, NMI, system and team fields",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.system",
+   "module": "business/schema",
+   "title": "System sizes derive from inverter, battery and panel strings",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.kind",
+   "module": "business/schema",
+   "title": "Internal tasks, site visits, sales and test jobs are told apart from real installs",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.partner",
+   "module": "business/schema",
+   "title": "Job titles map to the channel partner or retail",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.invoiceRef",
+   "module": "business/schema",
+   "title": "Xero invoice references link back to the ServiceM8 job and site",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.email",
+   "module": "business/schema",
+   "title": "Emails classify into legal, complaint, lead, quote, supplier, DNSP, finance, monitoring and noise",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.extract",
+   "module": "business/schema",
+   "title": "Job numbers and street addresses can be lifted out of free text",
+   "status": "passed"
+  },
+  {
+   "id": "biz.schema.dates",
+   "module": "business/schema",
+   "title": "Day and business-day arithmetic",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sm8.normalise",
+   "module": "business/servicem8",
+   "title": "A ServiceM8 job becomes a normalised job with customer, site, system, team and stage",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sm8.stages",
+   "module": "business/servicem8",
+   "title": "Status plus billing flags map to realm stages (quote, approval, install, claim, handover, complete, lost)",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sm8.sites",
+   "module": "business/servicem8",
+   "title": "Jobs at the same address collapse into one site that knows if it is installed",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sm8.summaries",
+   "module": "business/servicem8",
+   "title": "Job summaries supply invoice, payment, schedule and customer-response flags",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sm8.stats",
+   "module": "business/servicem8",
+   "title": "Job statistics: win rate, pipeline value, awaiting payment, installed base",
+   "status": "passed"
+  },
+  {
+   "id": "biz.xero.invoice",
+   "module": "business/xero",
+   "title": "Xero invoices normalise and link to the ServiceM8 job and site via the reference",
+   "status": "passed"
+  },
+  {
+   "id": "biz.xero.kpis",
+   "module": "business/xero",
+   "title": "Finance KPIs: margins, monthly run-rate, runway, DSO, labour share, customer concentration",
+   "status": "passed"
+  },
+  {
+   "id": "biz.xero.bills",
+   "module": "business/xero",
+   "title": "Bills normalise with reimbursement detection",
+   "status": "passed"
+  },
+  {
+   "id": "biz.xero.unreconciled",
+   "module": "business/xero",
+   "title": "Unreconciled bank entries normalise from the API shape and the table shape",
+   "status": "passed"
+  },
+  {
+   "id": "biz.gmail.thread",
+   "module": "business/gmail",
+   "title": "A thread classifies, links to a job/site and knows whether the customer is waiting on a reply",
+   "status": "passed"
+  },
+  {
+   "id": "biz.gmail.noise",
+   "module": "business/gmail",
+   "title": "Notifications, marketing and supplier invoices never count as unanswered",
+   "status": "passed"
+  },
+  {
+   "id": "biz.gmail.stats",
+   "module": "business/gmail",
+   "title": "Inbox statistics: categories, waiting customers, median response time, leads, complaints",
+   "status": "passed"
+  },
+  {
+   "id": "biz.drive.checklist",
+   "module": "business/drive",
+   "title": "A handover pack is scored against the ten documents a compliant handover needs",
+   "status": "passed"
+  },
+  {
+   "id": "biz.drive.match",
+   "module": "business/drive",
+   "title": "Packs match installed sites by customer name, tolerant of brackets and order",
+   "status": "passed"
+  },
+  {
+   "id": "biz.drive.coverage",
+   "module": "business/drive",
+   "title": "Coverage: installed sites without a pack, duplicate and incomplete packs",
+   "status": "passed"
+  },
+  {
+   "id": "biz.calendar.funnel",
+   "module": "business/calendar",
+   "title": "Marketing funnel numbers parse out of meeting notes (spend, leads, pickup, close, CPA)",
+   "status": "passed"
+  },
+  {
+   "id": "biz.calendar.recurring",
+   "module": "business/calendar",
+   "title": "Recurring meetings expand into occurrences and report who never responds",
+   "status": "passed"
+  },
+  {
+   "id": "biz.calendar.clashes",
+   "module": "business/calendar",
+   "title": "Overlapping events are flagged as clashes",
+   "status": "passed"
+  },
+  {
+   "id": "biz.bank.categorise",
+   "module": "business/bank",
+   "title": "Bank transactions categorise by payee with model-derived contractor and supplier rules",
+   "status": "passed"
+  },
+  {
+   "id": "biz.bank.recurring",
+   "module": "business/bank",
+   "title": "Weekly fixed payments are detected and annualised; same-day repeats flagged as duplicates",
+   "status": "passed"
+  },
+  {
+   "id": "biz.bank.balances",
+   "module": "business/bank",
+   "title": "Account balances, 30-day flows and days of cash",
+   "status": "passed"
+  },
+  {
+   "id": "biz.market.incentives",
+   "module": "business/market",
+   "title": "PV STCs and the federal battery discount price under editable assumptions",
+   "status": "passed"
+  },
+  {
+   "id": "biz.market.benchmark",
+   "module": "business/market",
+   "title": "Quotes benchmark against installed-price bands with a verdict",
+   "status": "passed"
+  },
+  {
+   "id": "biz.market.funnel",
+   "module": "business/market",
+   "title": "Lead-farm economics: sales per week, cost per sale, ROAS and break-even close rate",
+   "status": "passed"
+  },
+  {
+   "id": "biz.market.watchlist",
+   "module": "business/market",
+   "title": "A dated watchlist tells the crew what to re-verify and why",
+   "status": "passed"
+  },
+  {
+   "id": "biz.staff.accounts",
+   "module": "business/staff",
+   "title": "Contractor names parse out of Xero expense account names",
+   "status": "passed"
+  },
+  {
+   "id": "biz.staff.merge",
+   "module": "business/staff",
+   "title": "Staff, contractor accounts, weekly bank payments and on-site mentions merge into one roster",
+   "status": "passed"
+  },
+  {
+   "id": "biz.insights.rules",
+   "module": "business/insights",
+   "title": "Thirty-plus rules cover finance, receivables, operations, customers, handover, calendar, market and people",
+   "status": "passed"
+  },
+  {
+   "id": "biz.insights.run",
+   "module": "business/insights",
+   "title": "Running the rules on a model yields ranked findings with owners, impact, evidence, actions and links",
+   "status": "passed"
+  },
+  {
+   "id": "biz.insights.summary",
+   "module": "business/insights",
+   "title": "Findings summarise into counts by severity/owner and a 0-100 health score",
+   "status": "passed"
+  },
+  {
+   "id": "biz.insights.state",
+   "module": "business/insights",
+   "title": "Resolved and snoozed findings drop out until they expire",
+   "status": "passed"
+  },
+  {
+   "id": "biz.insights.quest",
+   "module": "business/insights",
+   "title": "A finding converts into a quest with objectives and a credit reward scaled to its impact",
+   "status": "passed"
+  },
+  {
+   "id": "biz.insights.robust",
+   "module": "business/insights",
+   "title": "A failing rule reports itself instead of breaking the run",
+   "status": "passed"
+  },
+  {
+   "id": "biz.model.build",
+   "module": "business/model",
+   "title": "The whole model builds from raw connector payloads with every source present",
+   "status": "passed"
+  },
+  {
+   "id": "biz.model.linkInvoices",
+   "module": "business/model",
+   "title": "Invoices link to jobs and sites by the SM8 reference; overdue amounts land on the site",
+   "status": "passed"
+  },
+  {
+   "id": "biz.model.linkThreads",
+   "module": "business/model",
+   "title": "Email threads attach to sites by customer email or address and count waiting customers",
+   "status": "passed"
+  },
+  {
+   "id": "biz.model.insights",
+   "module": "business/model",
+   "title": "The built model carries ranked findings and a health score",
+   "status": "passed"
+  },
+  {
+   "id": "biz.model.digest",
+   "module": "business/model",
+   "title": "Model digest is compact and non-identifying; isModel tells built models from raw payloads",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sync.import",
+   "module": "business/sync",
+   "title": "Importing a raw snapshot builds the model, caches it and reports a digest",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sync.server",
+   "module": "business/sync",
+   "title": "The model loads from /api/business/model with the cloud token, falling back when absent",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sync.state",
+   "module": "business/sync",
+   "title": "Resolving a finding pays its quest reward and hides it; snoozing hides it for a while",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sync.world",
+   "module": "business/sync",
+   "title": "Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links",
+   "status": "passed"
+  },
+  {
    "id": "win.jobs.board",
    "module": "windows/jobs",
    "title": "Kanban board of jobs by stage",
@@ -2114,6 +2420,12 @@
    "id": "win.dashboard.pipeline",
    "module": "windows/dashboard",
    "title": "Pipeline charts (jobs and kW per stage)",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.business",
+   "module": "windows/quests",
+   "title": "Business quests tab turns open findings into quests with objectives, owner, links and a credit reward on turn-in",
    "status": "passed"
   },
   {
@@ -2717,6 +3029,12 @@
    "status": "passed"
   },
   {
+   "id": "win.settings.business",
+   "module": "windows/settings",
+   "title": "Settings › Business: server sync, snapshot import/export, example data, clear and mirror into the world",
+   "status": "passed"
+  },
+  {
    "id": "win.settings.general",
    "module": "windows/settings",
    "title": "General settings save and apply",
@@ -3095,6 +3413,186 @@
    "status": "passed"
   },
   {
+   "id": "win.business.empty",
+   "module": "windows/business",
+   "title": "Business HQ explains how to connect when no model is loaded and can load the example",
+   "status": "passed"
+  },
+  {
+   "id": "win.business.overview",
+   "module": "windows/business",
+   "title": "Overview shows the health score, money, work, customer and document KPIs with top findings",
+   "status": "passed"
+  },
+  {
+   "id": "win.business.pipeline",
+   "module": "windows/business",
+   "title": "Pipeline tab lays real jobs out by stage with values and channel shares",
+   "status": "passed"
+  },
+  {
+   "id": "win.business.connectors",
+   "module": "windows/business",
+   "title": "Connectors tab lists each source with record counts and sync time",
+   "status": "passed"
+  },
+  {
+   "id": "win.insights.list",
+   "module": "windows/insights",
+   "title": "Open findings list with severity/category filters, impact and owners",
+   "status": "passed"
+  },
+  {
+   "id": "win.insights.resolve",
+   "module": "windows/insights",
+   "title": "Resolving from the card pays credits and moves the finding to the Resolved tab",
+   "status": "passed"
+  },
+  {
+   "id": "win.insights.owners",
+   "module": "windows/insights",
+   "title": "By-minion tab groups findings per owner with a talk button",
+   "status": "passed"
+  },
+  {
+   "id": "win.sites.table",
+   "module": "windows/sites",
+   "title": "Sites table: every address with stage, system, revenue, overdue, waiting emails and pack status",
+   "status": "passed"
+  },
+  {
+   "id": "win.sites.suburbs",
+   "module": "windows/sites",
+   "title": "Suburbs tab aggregates sites into districts",
+   "status": "passed"
+  },
+  {
+   "id": "win.sites.file",
+   "module": "windows/sites",
+   "title": "Site file shows jobs, invoices, conversations and the handover pack for one address",
+   "status": "passed"
+  },
+  {
+   "id": "win.inbox.waiting",
+   "module": "windows/inbox",
+   "title": "Waiting tab lists customer conversations without a reply, worst first",
+   "status": "passed"
+  },
+  {
+   "id": "win.inbox.all",
+   "module": "windows/inbox",
+   "title": "All threads tab shows category chips and a searchable table with Gmail links",
+   "status": "passed"
+  },
+  {
+   "id": "win.inbox.stats",
+   "module": "windows/inbox",
+   "title": "Response tab shows median reply time and leads",
+   "status": "passed"
+  },
+  {
+   "id": "win.finance.overview",
+   "module": "windows/finance",
+   "title": "Finance overview: position, P&L summary and revenue by customer",
+   "status": "passed"
+  },
+  {
+   "id": "win.finance.receivables",
+   "module": "windows/finance",
+   "title": "Receivables tab ages every invoice and links overdue ones to jobs",
+   "status": "passed"
+  },
+  {
+   "id": "win.finance.pnl",
+   "module": "windows/finance",
+   "title": "P&L tab lists income, cost of sales and every expense account with share of income",
+   "status": "passed"
+  },
+  {
+   "id": "win.finance.invoices",
+   "module": "windows/finance",
+   "title": "Invoices and bills tables with job links",
+   "status": "passed"
+  },
+  {
+   "id": "win.finance.bank",
+   "module": "windows/finance",
+   "title": "Bank tab: balances, variance, recurring payments, unreconciled queue and transactions",
+   "status": "passed"
+  },
+  {
+   "id": "win.calendar.upcoming",
+   "module": "windows/calendar",
+   "title": "Upcoming tab groups real events by day with meet links and clash count",
+   "status": "passed"
+  },
+  {
+   "id": "win.calendar.unscheduled",
+   "module": "windows/calendar",
+   "title": "To-schedule tab lists sold work orders without a booking, by value",
+   "status": "passed"
+  },
+  {
+   "id": "win.calendar.meetings",
+   "module": "windows/calendar",
+   "title": "Meetings tab shows attendance of the weekly jobs meeting and the lead-farm numbers",
+   "status": "passed"
+  },
+  {
+   "id": "win.documents.packs",
+   "module": "windows/documents",
+   "title": "Packs tab shows coverage KPIs and every Drive folder with its completeness and missing documents",
+   "status": "passed"
+  },
+  {
+   "id": "win.documents.missing",
+   "module": "windows/documents",
+   "title": "Missing tab lists installed sites without a pack with a jump to the site file",
+   "status": "passed"
+  },
+  {
+   "id": "win.documents.standard",
+   "module": "windows/documents",
+   "title": "Standard tab lists the ten required documents",
+   "status": "passed"
+  },
+  {
+   "id": "win.intel.benchmark",
+   "module": "windows/intel",
+   "title": "Benchmark a quote: verdict, band, incentives, and your priced jobs against the market",
+   "status": "passed"
+  },
+  {
+   "id": "win.intel.funnel",
+   "module": "windows/intel",
+   "title": "Lead funnel tab models spend, leads, pickup and close into margin after ads",
+   "status": "passed"
+  },
+  {
+   "id": "win.intel.assumptions",
+   "module": "windows/intel",
+   "title": "Assumptions tab edits STC price, battery factor and price bands and persists them",
+   "status": "passed"
+  },
+  {
+   "id": "win.intel.watch",
+   "module": "windows/intel",
+   "title": "Watchlist tab lists sources with cadence and reasons",
+   "status": "passed"
+  },
+  {
+   "id": "win.staff.roster",
+   "module": "windows/staff",
+   "title": "Roster merges ServiceM8 staff with contractor accounts, weekly payments and on-site counts",
+   "status": "passed"
+  },
+  {
+   "id": "win.staff.cost",
+   "module": "windows/staff",
+   "title": "Cost tab ranks labour cost with revenue per labour dollar",
+   "status": "passed"
+  },
+  {
    "id": "shell.registerWindows",
    "module": "shell",
    "title": "All window modules register with the window manager",
@@ -3265,13 +3763,25 @@
   {
    "id": "game.town.roadsTrees",
    "module": "game/town",
-   "title": "Roads and trees are laid out",
+   "title": "Roads (town and suburb streets) and trees are laid out",
    "status": "passed"
   },
   {
    "id": "game.town.district",
    "module": "game/town",
-   "title": "A skyline district rings the town beyond the player bounds",
+   "title": "A skyline district rings the town beyond the suburbs",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.suburbLots",
+   "module": "game/town",
+   "title": "Over 300 suburb lots line the outer streets, each facing its street",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.assignLots",
+   "module": "game/town",
+   "title": "Real jobs are grouped by suburb into neighbouring lots; legacy jobs keep the inner ring",
    "status": "passed"
   },
   {
@@ -3668,6 +4178,12 @@
    "id": "game.hudToggle",
    "module": "game/game",
    "title": "Shift+Z hides the HUD overlay",
+   "status": "passed"
+  },
+  {
+   "id": "game.realSites",
+   "module": "game/game",
+   "title": "Mirrored real sites get houses on suburb lots, suburb labels in the overlay and the player can travel to a site or suburb",
    "status": "passed"
   },
   {

@@ -6,6 +6,7 @@ import { LOCALES, setLocale } from '../core/i18n.js';
 import { THEMES } from './character.js';
 import { PROVIDERS } from '../core/llm.js';
 import { section, grid, row, statCard, form } from './_shared.js';
+import { SAMPLE_RAW } from '../business/model.js';
 import { makeTestCtx, openWindow, q, qa, fire } from './_testing.js';
 
 export const HOTBAR_CHOICES = ['dashboard', 'jobs', 'crew', 'quests', 'inventory', 'spellbook', 'codex', 'checklists', 'commissioning', 'labels', 'loads', 'reports', 'map', 'journal', 'chat', 'market', 'achievements', 'character', 'settings', 'help', 'selftest'];
@@ -13,8 +14,8 @@ export const HOTBAR_CHOICES = ['dashboard', 'jobs', 'crew', 'quests', 'inventory
 export function def(ctx) {
     return {
         id: 'settings', title: ctx.t('nav.settings'), icon: '⚙', hotkey: 'I', width: 820, height: 600,
-        tabs: [{ id: 'general', label: 'General', icon: '⚙' }, { id: 'ai', label: 'AI', icon: '🧠' }, { id: 'keys', label: 'Keybinds', icon: '⌨' }, { id: 'hotbar', label: 'Hotbar', icon: '▦' }, { id: 'data', label: 'Data', icon: '💾' }],
-        render(body, { tab }) { ({ keys: renderKeys, hotbar: renderHotbar, data: renderData, ai: renderAi }[tab] || renderGeneral)(body, ctx); }
+        tabs: [{ id: 'general', label: 'General', icon: '⚙' }, { id: 'ai', label: 'AI', icon: '🧠' }, { id: 'keys', label: 'Keybinds', icon: '⌨' }, { id: 'hotbar', label: 'Hotbar', icon: '▦' }, { id: 'data', label: 'Data', icon: '💾' }, { id: 'business', label: 'Business', icon: '🏢' }],
+        render(body, { tab }) { ({ keys: renderKeys, hotbar: renderHotbar, data: renderData, ai: renderAi, business: renderBusiness }[tab] || renderGeneral)(body, ctx); }
     };
 }
 
@@ -63,6 +64,15 @@ function renderHotbar(body, ctx) {
         row(button('Reset hotbar', () => { ctx.store.set('ui.hotbar', ['dashboard', 'jobs', 'crew', 'spellbook', 'inventory', 'codex', 'checklists', 'quests', 'reports']); ctx.bus.emit('hotbar:updated'); ctx.refresh('settings'); }, { small: true }))));
 }
 
+function renderBusiness(body, ctx) {
+    const st = ctx.business.status(); const d = st.digest;
+    const fileInput = h('input', { type: 'file', accept: '.json,application/json', class: 'input' });
+    body.append(grid(4, statCard('Model', st.loaded ? 'loaded' : 'none', st.loadedFrom ? `from ${st.loadedFrom}` : ''), statCard('Built', st.generatedAt ? new Date(st.generatedAt).toLocaleDateString() : '–'), statCard('Sites / jobs', d ? `${d.sites} / ${d.jobs}` : '–'), statCard('Findings', d ? String(d.findings) : '–', d && d.health != null ? `health ${d.health}` : '')),
+        section('Server sync (ServiceM8, Xero, Gmail, Drive, Calendar, bank)', h('p', { class: 'muted' }, 'Your SolarFlow API server holds the connector credentials (never this page) and builds the model. Log in on the Data tab, then sync. The server URL comes from the site config or the cloud settings.'),
+            row(button('Sync now on the server', async () => { try { const r = await ctx.business.requestSync(); toast(`Sync requested: ${(r.started || Object.keys(r.sources || {})).join(', ') || 'ok'}`, { kind: 'ok' }); setTimeout(() => ctx.business.pullServer().then(() => ctx.refresh()).catch(() => {}), 5000); } catch (e) { toast(e.message, { kind: 'warn' }); } }, { kind: 'primary', small: true }), button('Pull model from server', async () => { try { const m = await ctx.business.pullServer(); toast(m ? 'Business model loaded' : 'No model on the server yet', { kind: m ? 'ok' : 'warn' }); ctx.refresh(); } catch (e) { toast(e.message, { kind: 'warn' }); } }, { small: true }))),
+        section('Import a snapshot file', h('p', { class: 'muted small' }, 'A raw connector export (from scripts/business-snapshot.mjs) or a built model JSON. It stays in this browser\'s private cache.'), row(fileInput, button('Import', async () => { const file = fileInput.files && fileInput.files[0]; if (!file) { toast('Choose a file', { kind: 'warn' }); return; } try { await ctx.business.importFile(file); toast('Business model imported', { kind: 'ok' }); ctx.refresh(); } catch (e) { toast(`Import failed: ${e.message}`, { kind: 'bad' }); } }, { small: true })), row(button('Export current model', () => { if (!ctx.business.model) { toast('Nothing loaded', { kind: 'warn' }); return; } download(`business-model-${new Date(ctx.now()).toISOString().slice(0, 10)}.json`, ctx.business.exportJson(), 'application/json'); }, { small: true }), button('Load the example business', () => { ctx.business.setModel(SAMPLE_RAW()); ctx.refresh(); toast('Example business loaded', { kind: 'ok' }); }, { small: true }), button('Clear business data', async () => { if (await confirm('Remove the business model from this browser? Server data is untouched.', { okLabel: 'Clear' })) { ctx.business.clear(); ctx.refresh(); } }, { kind: 'danger', small: true }))),
+        section('Mirror into Solarhaven', h('p', { class: 'muted small' }, 'Every real site becomes a house and every finding can be a quest.'), row(button('Mirror sites into the world now', () => { const r = ctx.business.syncWorld(); ctx.saveWorld(); toast(`${r.created} created, ${r.updated} updated${r.skipped ? `, ${r.skipped} beyond the world limit` : ''}`, { kind: 'ok' }); ctx.refresh(); }, { small: true }), h('span', { class: 'muted small' }, ctx.store.get('business.worldSyncedAt') ? `last mirrored ${new Date(ctx.store.get('business.worldSyncedAt')).toLocaleString()}` : 'not mirrored yet'))));
+}
 function renderData(body, ctx) {
     const size = ctx.store.sizeBytes();
     const fileInput = h('input', { type: 'file', accept: '.json,application/json', class: 'input' });
@@ -89,6 +99,7 @@ export async function importBackup(ctx, text) {
 }
 
 export const FEATURES = [
+    { id: 'win.settings.business', title: 'Settings › Business: server sync, snapshot import/export, example data, clear and mirror into the world', dom: true, test: () => { const t = makeTestCtx({ withJob: false }); let b = openWindow(t.ctx, def(t.ctx), { tab: 'business' }); const none = /none/.test(b.textContent); qa(b, 'button').find((x) => /example business/.test(x.textContent)).click(); b = t.ctx.wm.windows.get('settings').body; const loaded = Boolean(t.ctx.business.model) && /loaded/.test(b.textContent); qa(b, 'button').find((x) => /Mirror sites/.test(x.textContent)).click(); const mirrored = t.ctx.jobs().filter((j) => j.real).length >= 3; t.done(); return none && loaded && mirrored; } },
     { id: 'win.settings.general', title: 'General settings save and apply', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx)); const sel = q(b, 'select'); sel.value = 'fast'; qa(b, 'button').find((x) => x.textContent === 'Save').click(); const ok = t.ctx.store.get('ui.speed') === 'fast' && t.ctx.clock.speed.id === 'fast'; t.done(); return ok; } },
     { id: 'win.settings.ai', title: 'AI tab configures the crew language model', dom: true, test: () => { const t = makeTestCtx(); const b = openWindow(t.ctx, def(t.ctx), { tab: 'ai' }); const cb = q(b, 'input[type=checkbox]'); cb.checked = true; fire(cb, 'change'); const sel = q(b, 'select'); sel.value = 'local'; fire(sel, 'change'); const key = qa(b, 'input[type=text]').find((i) => /API key/.test(i.parentElement.textContent)); key.value = 'k'; qa(b, 'button').find((x) => x.textContent === 'Save').click(); const c = t.ctx.llm.config(); const ok = c.enabled && c.provider === 'local' && c.baseURL.includes('11434') && t.ctx.llm.configured(); t.ctx.llm.save({ enabled: false, apiKey: '' }); t.done(); return ok; } },
     { id: 'win.settings.quality', title: 'Graphics, sound and touch settings apply to the game', dom: true, test: () => { const t = makeTestCtx(); let seen = null; t.ctx.bus.on('settings:updated', (u) => { seen = u; }); const b = openWindow(t.ctx, def(t.ctx)); const cbs = qa(b, 'input[type=checkbox]'); const shadows = cbs.find((c) => /Shadows/.test(c.parentElement.textContent)); shadows.checked = false; const sel = qa(b, 'select').find((s) => [...s.options].some((o) => o.value === '0.75')); sel.value = '0.75'; qa(b, 'button').find((x) => x.textContent === 'Save').click(); const q = t.ctx.store.get('ui.quality'); const ok = q.shadows === false && q.pixelRatio === 0.75 && seen && seen.quality.pixelRatio === 0.75; t.done(); return ok; } },
