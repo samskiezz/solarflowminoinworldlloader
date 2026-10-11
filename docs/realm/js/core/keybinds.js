@@ -5,9 +5,10 @@
 export const DEFAULT_BINDINGS = Object.freeze({
     'window.character': 'C', 'window.crew': 'P', 'window.quests': 'L', 'window.inventory': 'B', 'window.spellbook': 'K', 'window.map': 'M',
     'window.journal': 'J', 'window.codex': 'N', 'window.achievements': 'Y', 'window.jobs': 'O', 'window.settings': 'I', 'window.help': 'F1',
-    'window.chat': 'Enter', 'window.market': 'U', 'window.reports': 'R', 'window.checklists': 'H', 'window.commissioning': 'T', 'window.dashboard': 'D',
-    'window.proposal': 'Q', 'window.serials': 'S', 'window.dnsp': 'G', 'window.survey': 'V', 'window.schedule': 'E', 'window.suggestions': 'X', 'window.analytics': 'A', 'window.notifications': 'Z', 'window.labels': 'W', 'window.loads': 'F', 'window.handover': 'Shift+H', 'window.wizard': 'Shift+W',
-    'palette.open': 'Ctrl+K', 'console.open': '/', 'wm.closeTop': 'Escape', 'wm.cycle': 'Tab', 'clock.pause': 'Space', 'clock.faster': '=', 'clock.slower': '-',
+    'window.chat': 'Enter', 'window.market': 'U', 'window.reports': 'R', 'window.checklists': 'H', 'window.commissioning': 'T', 'window.dashboard': 'Shift+D',
+    'window.proposal': 'Shift+Q', 'window.serials': 'Shift+S', 'window.dnsp': 'G', 'window.survey': 'V', 'window.schedule': 'Shift+E', 'window.suggestions': 'X', 'window.analytics': 'Shift+A', 'window.notifications': 'Z', 'window.labels': 'Shift+L', 'window.loads': 'Shift+O', 'window.handover': 'Shift+H', 'window.wizard': 'Shift+W',
+    'game.interact': 'E', 'game.toggleHud': 'Shift+Z', 'game.resetCamera': 'Shift+C',
+    'palette.open': 'Ctrl+K', 'console.open': '/', 'wm.closeTop': 'Escape', 'wm.cycle': 'Tab', 'clock.pause': 'Shift+Space', 'clock.faster': '=', 'clock.slower': '-',
     'hotbar.1': '1', 'hotbar.2': '2', 'hotbar.3': '3', 'hotbar.4': '4', 'hotbar.5': '5', 'hotbar.6': '6', 'hotbar.7': '7', 'hotbar.8': '8', 'hotbar.9': '9',
     'wm.closeAll': 'Shift+Escape', 'selftest.run': 'Ctrl+Shift+T', 'save.now': 'Ctrl+S'
 });
@@ -20,8 +21,8 @@ export function normalize(event) {
     if (event.ctrlKey || event.metaKey) parts.push('Ctrl');
     if (event.altKey) parts.push('Alt');
     let key = String(event.key ?? '');
-    if (event.shiftKey && (key.length > 1 || /[a-z]/i.test(key))) parts.push('Shift');
     key = KEY_ALIASES[key] ?? KEY_ALIASES[key.toLowerCase()] ?? key;
+    if (event.shiftKey && (key.length > 1 || /[a-z]/i.test(key))) parts.push('Shift');
     if (key.length === 1) key = key.toUpperCase();
     if (['Control', 'Shift', 'Alt', 'Meta'].includes(key)) return null;
     parts.push(key);
@@ -86,8 +87,8 @@ export class Keybinds {
 }
 
 export const FEATURES = [
-    { id: 'core.keys.normalize', title: 'Keyboard event normalisation', test: () => normalize({ key: 'k', ctrlKey: true }) === 'Ctrl+K' && normalize({ key: ' ' }) === 'Space' && normalize({ key: 'Escape', shiftKey: true }) === 'Shift+Escape' && normalize({ key: 'P', shiftKey: true }) === 'Shift+P' && normalize({ key: '+', shiftKey: true }) === '=' && normalize({ key: 'Shift' }) === null },
-    { id: 'core.keys.defaults', title: 'Default WoW-style window bindings', test: () => { const k = new Keybinds(); return k.keyFor('window.character') === 'C' && k.keyFor('window.inventory') === 'B' && k.keyFor('window.map') === 'M' && k.conflicts().length === 0; } },
+    { id: 'core.keys.normalize', title: 'Keyboard event normalisation', test: () => normalize({ key: 'k', ctrlKey: true }) === 'Ctrl+K' && normalize({ key: ' ' }) === 'Space' && normalize({ key: ' ', shiftKey: true }) === 'Shift+Space' && normalize({ key: 'Escape', shiftKey: true }) === 'Shift+Escape' && normalize({ key: 'P', shiftKey: true }) === 'Shift+P' && normalize({ key: '+', shiftKey: true }) === '=' && normalize({ key: 'Shift' }) === null },
+    { id: 'core.keys.defaults', title: 'Default WoW-style window bindings', test: () => { const k = new Keybinds(); return k.keyFor('window.character') === 'C' && k.keyFor('window.inventory') === 'B' && k.keyFor('window.map') === 'M' && k.conflicts().length === 0 && !Object.values(DEFAULT_BINDINGS).some((v) => ['W', 'A', 'S', 'D', 'Q', 'E', 'Space'].includes(v) && v !== 'E') && k.keyFor('game.interact') === 'E'; } },
     { id: 'core.keys.handle', title: 'Dispatch key events to actions', test: () => { const k = new Keybinds(); let hit = null; k.on('window.crew', (a) => { hit = a; }); return k.handle({ key: 'p' }) === 'window.crew' && hit === 'window.crew'; } },
     { id: 'core.keys.typingGuard', title: 'Keys ignored while typing (except Escape/Ctrl)', test: () => { const k = new Keybinds(); const input = { tagName: 'INPUT' }; return k.handle({ key: 'p', target: input }) === null && k.handle({ key: 'Escape', target: input }) === 'wm.closeTop' && k.handle({ key: 'k', ctrlKey: true, target: input }) === 'palette.open'; } },
     { id: 'core.keys.rebind', title: 'Rebinding with conflict detection', test: () => { const k = new Keybinds(); const bad = k.bind('window.crew', 'C'); const good = k.bind('window.crew', 'Shift+P'); return !bad.ok && bad.conflict === 'window.character' && good.ok && k.keyFor('window.crew') === 'Shift+P'; } },

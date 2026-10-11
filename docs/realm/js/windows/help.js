@@ -9,7 +9,7 @@ export const TUTORIAL_STEPS = [
     { id: 'job', title: 'Create a job', text: 'Open Jobs (O) › New job. Every job runs through nine stages from lead to handover; each stage has tasks and some have gates.', window: 'jobs' },
     { id: 'products', title: 'Pick approved products', text: 'Open the Product vault (B). Search the real CEC lists, star favourites, and press 📐 to put a module, inverter and battery into the job design.', window: 'inventory' },
     { id: 'design', title: 'Run the calculators', text: 'Open Calculators (K). String sizing, voltage rise, cable sizes, battery location, STCs and yield – each result cites its clause and saves into the design.', window: 'spellbook' },
-    { id: 'crew', title: 'Put the crew to work', text: 'Open Crew (P). Assign a member to the job; press Space to run the clock. They work tasks, rest when tired, learn skills and remember what happened.', window: 'crew' },
+    { id: 'crew', title: 'Put the crew to work', text: 'Open Crew (P). Assign a member to the job and watch them walk to the house and work. Walk up to anyone and press E to talk. They rest when tired, learn skills and remember what happened.', window: 'crew' },
     { id: 'verify', title: 'Verify and hand over', text: 'Checklists (H) and Commissioning (T) gate the later stages. Reports (R) assembles everything into a printable job report.', window: 'checklists' },
     { id: 'learn', title: 'Keep learning', text: 'The Codex (N) holds clause summaries; the quest log (L) and achievements (Y) track your progress. Press Ctrl+K for the command palette and / for the console.', window: 'codex' }
 ];

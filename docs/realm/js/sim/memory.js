@@ -30,6 +30,8 @@ export class MemoryStream {
         this.now = now;
         this.records = [];
         this.importanceSinceReflection = 0;
+        this.lastReflectionAt = -Infinity;
+        this.reflectionCooldownMs = 6 * 3600000;
         this.counter = 0;
     }
 
@@ -81,8 +83,8 @@ export class MemoryStream {
     }
 
     /** Should the agent reflect? (sum of importance since last reflection exceeds threshold) */
-    shouldReflect() {
-        return this.importanceSinceReflection >= this.reflectionThreshold;
+    shouldReflect(now = this.now()) {
+        return this.importanceSinceReflection >= this.reflectionThreshold && now - this.lastReflectionAt >= this.reflectionCooldownMs;
     }
 
     /**
@@ -117,6 +119,7 @@ export class MemoryStream {
         const existing = new Set(this.records.filter((r) => r.kind === 'reflection').slice(-10, -reflections.length || undefined).map((r) => r.text));
         for (const r of [...reflections]) if (existing.has(r.text)) { this.records.splice(this.records.indexOf(r), 1); reflections.splice(reflections.indexOf(r), 1); }
         this.importanceSinceReflection = 0;
+        this.lastReflectionAt = at;
         return reflections;
     }
 

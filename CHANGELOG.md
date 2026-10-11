@@ -4,11 +4,25 @@ All notable changes to SolarFlow Minion World Loader.
 
 ## [2.5.0] - 2026-10-11
 
-### Realm Workstation: 501 verified features
+### SolarFlow Realm: a 3D game with 560 verified features
 
-A new application at `docs/realm/` – a compliance workstation for solar and battery installers presented as a
-deep, windowed RPG-style desktop. See `docs/realm/FEATURES.md` for the self-test-backed ledger and
-`docs/realm/RESEARCH.md` for the research it is built on.
+A new application at `docs/realm/` – **Solarhaven**, a 3D town (three.js) where your solar crew live and work.
+Walk a third-person character through the town, talk to your minions, enter the Guild Hall, Library,
+Workshop, Market and Depot, and watch each job's house build up from a "SOLAR?" sign to a commissioned,
+glowing array. The window system is the game's UI. See `docs/realm/FEATURES.md` for the self-test-backed
+ledger and `docs/realm/RESEARCH.md` for the research it is built on.
+
+### 🎮 Game world
+- Procedural town with ten landmark buildings bound to windows, twenty residential lots, roads, square,
+  fountain, trees and street lamps; day/night lighting and storm/heatwave weather driven by the world clock.
+- Procedural chibi characters with hard hats and nine animations; a player with WASD/arrow movement,
+  mouse-orbit camera, wheel zoom, click-to-move, jump and collision.
+- Crew NPCs driven by the simulation: they walk to the job they are assigned to and work, study at the
+  library, take breaks at the cafe, talk at the campfire and sleep at the guild hall at night; nameplates,
+  mood, speech and thought bubbles.
+- Houses that reflect the job stage (sign → plans → scaffold → panels → inverter/battery → energised → flag),
+  `!`/`?` quest markers, E-to-interact prompts, floating reward text, an objective tracker with a nine-step
+  in-world tutorial, and a live town minimap (click to walk).
 
 ### ✨ Added
 - Real CEC approved product lists (13,160 modules, inverters and batteries) imported from the Clean Energy
@@ -23,6 +37,7 @@ deep, windowed RPG-style desktop. See `docs/realm/FEATURES.md` for the self-test
 - Core shell: window manager (drag/resize/tabs/z-order/minimise/maximise/cascade/tile/session restore),
   persistent store with migrations and backup, rebindable WoW-style keybinds, command palette and slash
   console, i18n (6 locales), world clock with speeds, feature registry and in-app System check.
+- Game modules under `docs/realm/js/game/` (town, steer, behaviour, characters, scene, overlay, player, npcs, interact, game).
 - 31 windows: dashboard, character, crew, quests, jobs, product vault, calculators, codex, map, journal,
   chat, settings, achievements, market, reports, checklists, commissioning, labels, loads, help, system
   check, proposal, serial register, network connection, site survey, schedule, crew suggestions, analytics,

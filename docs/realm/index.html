@@ -3,24 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SolarFlow Realm Workstation</title>
-<meta name="description" content="Solar and battery compliance workstation: real CEC product lists, AS/NZS calculators with clause references, job pipeline, checklists, commissioning and a crew that learns – presented as a deep RPG-style desktop.">
+<title>SolarFlow Realm</title>
+<meta name="description" content="SolarFlow Realm: a 3D town where your solar crew live, learn and work real jobs. Walk the streets, talk to your minions, design compliant solar and battery systems with real CEC products and AS/NZS rules, and watch the houses light up.">
 <meta name="theme-color" content="#0d1220">
 <link rel="icon" href="../favicon.svg">
 <link rel="stylesheet" href="css/realm.css">
+<script type="importmap">{ "imports": { "three": "../vendor/three/build/three.module.js" } }</script>
 </head>
-<body data-phase="day" data-theme="dusk">
+<body data-phase="day" data-theme="dusk" class="game">
+<canvas id="realm-game" tabindex="0" aria-label="Solarhaven – 3D world"></canvas>
 <div id="realm-sky" aria-hidden="true"></div>
 <div id="realm-horizon" aria-hidden="true"></div>
 <div id="realm">
     <header id="realm-top" role="banner"></header>
-    <main id="realm-desktop" role="main" aria-label="Workstation desktop">
-        <div id="realm-minimap" title="Realm map (M)"></div>
+    <main id="realm-desktop" role="main" aria-label="Game interface">
+        <div id="realm-overlay"></div>
+        <div id="realm-tracker"></div>
+        <div id="realm-minimap" title="Solarhaven minimap"></div>
         <div id="realm-dock"></div>
     </main>
     <footer id="realm-bottom" role="toolbar" aria-label="Hotbar and menu"></footer>
 </div>
-<noscript><p style="padding:20px;font-family:sans-serif">SolarFlow Realm needs JavaScript (ES modules) to run.</p></noscript>
+<div id="realm-title">
+    <h1>☀ SolarFlow Realm</h1>
+    <p>Welcome to Solarhaven. Your crew live here. Every house is a real solar job: pick approved products, size the strings, pass the checklists, commission it, and watch it light up. Your minions learn, rest, remember and talk back.</p>
+    <div class="keys"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> walk</span><span><kbd>mouse drag</kbd> look</span><span><kbd>E</kbd> talk / enter</span><span><kbd>Space</kbd> jump</span><span><kbd>1</kbd>–<kbd>9</kbd> hotbar</span><span><kbd>Ctrl</kbd>+<kbd>K</kbd> commands</span><span><kbd>F1</kbd> help</span></div>
+    <button class="btn primary" id="realm-play" type="button">Enter the Realm</button>
+    <p id="realm-loading" class="muted small">Loading the world…</p>
+</div>
+<noscript><p style="padding:20px;font-family:sans-serif">SolarFlow Realm needs JavaScript (ES modules and WebGL) to run.</p></noscript>
 <script type="module" src="js/app.js"></script>
 </body>
 </html>

@@ -5,11 +5,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **501** |
-| Verified in Node (this run) | 279 passed, 0 failed |
-| Browser-verified (DOM) features | 222 |
-| Modules | 71 |
-| Generated | 2026-10-11T03:10:24.919Z |
+| Registered features | **560** |
+| Verified in Node (this run) | 298 passed, 0 failed |
+| Browser-verified (DOM) features | 262 |
+| Modules | 81 |
+| Generated | 2026-10-11T06:19:14.260Z |
 
 ## By area
 
@@ -18,8 +18,9 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | Core shell | 89 |
 | Solar engineering domain | 124 |
 | Crew simulation | 72 |
-| Windows | 196 |
+| Windows (game UI) | 196 |
 | Shell | 20 |
+| 3D game world | 59 |
 
 ## core/bus (6)
 
@@ -373,6 +374,115 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `yield.lcoe` | LCOE | node + browser |
 | 7 | `yield.co2Offset` | CO₂ offset estimate | node + browser |
 | 8 | `yield.selfConsumption` | Self-consumption with battery | node + browser |
+
+## game/behaviour (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.behaviour.lastAction` | Last self-chosen action is read from the agent log | node + browser |
+| 2 | `game.behaviour.work` | An agent with a job task walks to that house | node + browser |
+| 3 | `game.behaviour.rest` | Resting or night sends agents to the guild bunks | node + browser |
+| 4 | `game.behaviour.places` | Study → library, break → cafe, social → campfire, inspect → yard | node + browser |
+| 5 | `game.behaviour.spotsSpread` | Agents take different spots at the same place | node + browser |
+| 6 | `game.behaviour.bubble` | Speech bubbles from the feed or from an urgent need | node + browser |
+
+## game/characters (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.chibi.build` | Procedural chibi character with hard hat, vest, arms, legs and tool | browser |
+| 2 | `game.chibi.playerLook` | Player gets a distinct blue outfit and white hat | browser |
+| 3 | `game.chibi.animations` | Nine animation states move the right parts | browser |
+| 4 | `game.chibi.face` | Characters turn smoothly toward a heading | browser |
+| 5 | `game.chibi.deterministicSkin` | Skin tone and hat derive from id and role deterministically | browser |
+
+## game/game (9)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.start` | The game starts with the town, the player, the crew and job houses | browser |
+| 2 | `game.clockDrivesWorld` | Simulated clock drives day/night and weather in the world | browser |
+| 3 | `game.tutorialChain` | In-world tutorial objectives complete in order and pay credits | browser |
+| 4 | `game.houseAppears` | Creating a job raises a house with a quest marker | browser |
+| 5 | `game.floatingRewards` | Completed tasks and level-ups float reward text in the world | browser |
+| 6 | `game.interactKey` | E interacts with whatever is in front of the player | browser |
+| 7 | `game.minimap` | Town minimap with player, crew, houses and markers | browser |
+| 8 | `game.hudToggle` | Shift+Z hides the HUD overlay | browser |
+| 9 | `game.persistPosition` | Player position is remembered between sessions | browser |
+
+## game/interact (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.interact.markers` | WoW-style ! and ? markers float over job houses | browser |
+| 2 | `game.interact.house` | Standing at a house and pressing E opens that job | browser |
+| 3 | `game.interact.npc` | Talking to a crew member opens chat and they remember it | browser |
+| 4 | `game.interact.landmark` | Entering a landmark opens its window (library → Codex) | browser |
+| 5 | `game.interact.labels` | Landmark labels describe what each building does | browser |
+
+## game/npcs (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.npcs.spawn` | Every crew member spawns as a chibi with a nameplate | browser |
+| 2 | `game.npcs.walkToWork` | An agent assigned to a job walks to that house and works | browser |
+| 3 | `game.npcs.restAtNight` | At night the crew sleeps at the guild hall | browser |
+| 4 | `game.npcs.bubbles` | Crew speak in bubbles when something happens | browser |
+| 5 | `game.npcs.nearest` | Nearest crew member lookup for interaction | browser |
+
+## game/overlay (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.overlay.anchors` | Overlay items project 3D anchors to screen positions | browser |
+| 2 | `game.overlay.distanceCull` | Far-away plates are hidden | browser |
+| 3 | `game.overlay.floatText` | Floating reward text animates and removes itself | browser |
+| 4 | `game.overlay.widgets` | Nameplate, bubble, quest marker and key prompt widgets | browser |
+
+## game/player (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.player.move` | WASD moves the player relative to the camera | browser |
+| 2 | `game.player.collide` | Buildings block the player | browser |
+| 3 | `game.player.clickToMove` | Click-to-move walks to the point and calls back on arrival | browser |
+| 4 | `game.player.camera` | Third-person camera orbits and zooms | browser |
+| 5 | `game.player.jump` | Space jumps with gravity | browser |
+| 6 | `game.player.worldBounds` | The player cannot leave the town | browser |
+
+## game/scene (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.scene.engine` | WebGL engine renders a frame | browser |
+| 2 | `game.scene.dayNight` | Sun, sky, fog and lamps follow the world clock phase | browser |
+| 3 | `game.scene.weather` | Storms rain and darken the sky; heatwaves warm it | browser |
+| 4 | `game.scene.town` | Town builds ground, roads, square, ten landmarks, trees and lamps | browser |
+| 5 | `game.scene.houses` | One house per job; it builds up with the job stage | browser |
+| 6 | `game.scene.picking` | Ground and object picking from screen coordinates | browser |
+
+## game/steer (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.steer.arrive` | Arrive steering reaches the target and stops | node + browser |
+| 2 | `game.steer.avoid` | Movement slides around boxes instead of entering them | node + browser |
+| 3 | `game.steer.resolve` | Collision resolution pushes out of boxes | node + browser |
+| 4 | `game.steer.allowInside` | Agents may enter the building they are visiting | node + browser |
+| 5 | `game.steer.helpers` | Distance, heading, clamping and wander helpers | node + browser |
+
+## game/town (8)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.town.landmarks` | Ten landmark buildings, each bound to a window | node + browser |
+| 2 | `game.town.lots` | Twenty residential lots ring the town | node + browser |
+| 3 | `game.town.lotForJob` | Jobs get stable lots | node + browser |
+| 4 | `game.town.door` | Door positions face the street | node + browser |
+| 5 | `game.town.obstacles` | Obstacle boxes include landmarks and job houses | node + browser |
+| 6 | `game.town.houseState` | House build state follows the job stage | node + browser |
+| 7 | `game.town.spots` | Behaviour spots for bunks, desks, shelves, fire, cafe, yard | node + browser |
+| 8 | `game.town.roadsTrees` | Roads and trees are laid out | node + browser |
 
 ## shell (20)
 

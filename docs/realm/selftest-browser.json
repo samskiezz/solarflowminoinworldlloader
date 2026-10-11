@@ -1,0 +1,3368 @@
+{
+ "at": "2026-10-11T06:18:39.600Z",
+ "total": 560,
+ "passed": 560,
+ "failed": 0,
+ "results": [
+  {
+   "id": "core.bus.onEmit",
+   "module": "core/bus",
+   "title": "Subscribe and emit events",
+   "status": "passed"
+  },
+  {
+   "id": "core.bus.once",
+   "module": "core/bus",
+   "title": "One-shot listeners",
+   "status": "passed"
+  },
+  {
+   "id": "core.bus.off",
+   "module": "core/bus",
+   "title": "Unsubscribe via returned disposer",
+   "status": "passed"
+  },
+  {
+   "id": "core.bus.wildcard",
+   "module": "core/bus",
+   "title": "Wildcard listeners see every event",
+   "status": "passed"
+  },
+  {
+   "id": "core.bus.errorIsolation",
+   "module": "core/bus",
+   "title": "A throwing handler never breaks other handlers",
+   "status": "passed"
+  },
+  {
+   "id": "core.bus.history",
+   "module": "core/bus",
+   "title": "Bounded event history for the debug console",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.defaults",
+   "module": "core/store",
+   "title": "Default state document",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.getSet",
+   "module": "core/store",
+   "title": "Path-based get/set/patch",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.persist",
+   "module": "core/store",
+   "title": "Persists to storage and reloads",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.subscribe",
+   "module": "core/store",
+   "title": "Change subscriptions with path prefixes",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.push",
+   "module": "core/store",
+   "title": "Bounded list append",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.exportImport",
+   "module": "core/store",
+   "title": "Backup export/import round-trip",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.importRejectsGarbage",
+   "module": "core/store",
+   "title": "Import rejects non-backup documents",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.migrate",
+   "module": "core/store",
+   "title": "Migration fills new keys without losing data",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.corruptRecovery",
+   "module": "core/store",
+   "title": "Corrupt storage falls back to defaults and keeps a copy",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.reset",
+   "module": "core/store",
+   "title": "Reset to defaults",
+   "status": "passed"
+  },
+  {
+   "id": "core.store.size",
+   "module": "core/store",
+   "title": "Reports document size",
+   "status": "passed"
+  },
+  {
+   "id": "core.registry.register",
+   "module": "core/registry",
+   "title": "Register features with duplicate detection",
+   "status": "passed"
+  },
+  {
+   "id": "core.registry.run",
+   "module": "core/registry",
+   "title": "Run self-tests with pass/fail/timeout reporting",
+   "status": "passed"
+  },
+  {
+   "id": "core.registry.report",
+   "module": "core/registry",
+   "title": "Markdown report generation",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.normalize",
+   "module": "core/keybinds",
+   "title": "Keyboard event normalisation",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.defaults",
+   "module": "core/keybinds",
+   "title": "Default WoW-style window bindings",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.handle",
+   "module": "core/keybinds",
+   "title": "Dispatch key events to actions",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.typingGuard",
+   "module": "core/keybinds",
+   "title": "Keys ignored while typing (except Escape/Ctrl)",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.rebind",
+   "module": "core/keybinds",
+   "title": "Rebinding with conflict detection",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.persist",
+   "module": "core/keybinds",
+   "title": "Bindings persist through the store",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.reset",
+   "module": "core/keybinds",
+   "title": "Reset to defaults",
+   "status": "passed"
+  },
+  {
+   "id": "core.keys.list",
+   "module": "core/keybinds",
+   "title": "List bindings with default markers",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.translate",
+   "module": "core/i18n",
+   "title": "Message lookup with interpolation",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.locales",
+   "module": "core/i18n",
+   "title": "Six locales with English fallback",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.coverage",
+   "module": "core/i18n",
+   "title": "Translation coverage metric",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.number",
+   "module": "core/i18n",
+   "title": "Locale-aware number formatting",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.currency",
+   "module": "core/i18n",
+   "title": "Currency formatting",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.date",
+   "module": "core/i18n",
+   "title": "Date formatting",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.relative",
+   "module": "core/i18n",
+   "title": "Relative time (\"in 2 hours\")",
+   "status": "passed"
+  },
+  {
+   "id": "core.i18n.listeners",
+   "module": "core/i18n",
+   "title": "Locale change notifications",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.advance",
+   "module": "core/clock",
+   "title": "Fixed-step accumulator",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.speeds",
+   "module": "core/clock",
+   "title": "Five speed presets incl. pause",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.update",
+   "module": "core/clock",
+   "title": "Clock ticks the world at the chosen speed",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.pause",
+   "module": "core/clock",
+   "title": "Pause/resume remembers previous speed",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.fasterSlower",
+   "module": "core/clock",
+   "title": "Step through speeds",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.startStop",
+   "module": "core/clock",
+   "title": "Interval lifecycle with injectable timers",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.frameClamp",
+   "module": "core/clock",
+   "title": "Background tabs never fast-forward more than 5 s",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.dayPhase",
+   "module": "core/clock",
+   "title": "Day/night phase for the realm backdrop",
+   "status": "passed"
+  },
+  {
+   "id": "core.clock.busEvents",
+   "module": "core/clock",
+   "title": "Emits clock:tick and clock:speed events",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.escape",
+   "module": "core/ui",
+   "title": "HTML escaping",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.fmt",
+   "module": "core/ui",
+   "title": "Number/percent formatting",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.sort",
+   "module": "core/ui",
+   "title": "Natural sort with null handling",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.filter",
+   "module": "core/ui",
+   "title": "Multi-term row filtering",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.paginate",
+   "module": "core/ui",
+   "title": "Pagination with clamping",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.rarity",
+   "module": "core/ui",
+   "title": "Rarity tiers (common → legendary)",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.h",
+   "module": "core/ui",
+   "title": "Element builder with events/attributes",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.tooltip",
+   "module": "core/ui",
+   "title": "Rich tooltips show on hover",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.toast",
+   "module": "core/ui",
+   "title": "Toast notifications",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.dialog",
+   "module": "core/ui",
+   "title": "Modal dialog resolves with the chosen button",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.contextMenu",
+   "module": "core/ui",
+   "title": "Context menus",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.tabs",
+   "module": "core/ui",
+   "title": "Tab strips with persistence callback",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.table",
+   "module": "core/ui",
+   "title": "Sortable, filterable, paged data table",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.progress",
+   "module": "core/ui",
+   "title": "Progress bars",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.forms",
+   "module": "core/ui",
+   "title": "Form fields (number/text/select)",
+   "status": "passed"
+  },
+  {
+   "id": "core.ui.charts",
+   "module": "core/ui",
+   "title": "Sparkline and bar chart",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.clamp",
+   "module": "core/wm",
+   "title": "Windows clamp to the viewport",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.cascade",
+   "module": "core/wm",
+   "title": "Cascade layout algorithm",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.tile",
+   "module": "core/wm",
+   "title": "Tile layout algorithm",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.openClose",
+   "module": "core/wm",
+   "title": "Open, toggle and close windows",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.zOrder",
+   "module": "core/wm",
+   "title": "Focus brings a window to the front",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.tabs",
+   "module": "core/wm",
+   "title": "Window tabs re-render the body",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.minMax",
+   "module": "core/wm",
+   "title": "Minimise and maximise",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.moveResize",
+   "module": "core/wm",
+   "title": "Programmatic move/resize with clamping",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.closeTop",
+   "module": "core/wm",
+   "title": "Escape closes the top-most window",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.layouts",
+   "module": "core/wm",
+   "title": "Cascade/tile all open windows",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.snapshot",
+   "module": "core/wm",
+   "title": "Session restore of open windows",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.cycle",
+   "module": "core/wm",
+   "title": "Tab cycles focus through windows",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.contextMenu",
+   "module": "core/wm",
+   "title": "Title-bar context menu (close others, cascade, tile)",
+   "status": "passed"
+  },
+  {
+   "id": "core.wm.renderErrorIsolation",
+   "module": "core/wm",
+   "title": "A crashing window shows an error instead of breaking the shell",
+   "status": "passed"
+  },
+  {
+   "id": "core.cmd.fuzzy",
+   "module": "core/commands",
+   "title": "Fuzzy scoring (exact > prefix > contains > subsequence)",
+   "status": "passed"
+  },
+  {
+   "id": "core.cmd.parse",
+   "module": "core/commands",
+   "title": "Slash command parsing with args and flags",
+   "status": "passed"
+  },
+  {
+   "id": "core.cmd.registerRun",
+   "module": "core/commands",
+   "title": "Register and run commands",
+   "status": "passed"
+  },
+  {
+   "id": "core.cmd.search",
+   "module": "core/commands",
+   "title": "Palette search ranks recent commands higher",
+   "status": "passed"
+  },
+  {
+   "id": "core.cmd.exec",
+   "module": "core/commands",
+   "title": "Console executes slash lines and lists help",
+   "status": "passed"
+  },
+  {
+   "id": "core.cmd.aliases",
+   "module": "core/commands",
+   "title": "Command aliases",
+   "status": "passed"
+  },
+  {
+   "id": "core.cmd.errors",
+   "module": "core/commands",
+   "title": "Command errors are reported, not thrown",
+   "status": "passed"
+  },
+  {
+   "id": "core.ctx.create",
+   "module": "core/context",
+   "title": "Context wires store, world, clock, keys and commands",
+   "status": "passed"
+  },
+  {
+   "id": "core.ctx.persistWorld",
+   "module": "core/context",
+   "title": "World persists and restores through the store",
+   "status": "passed"
+  },
+  {
+   "id": "core.ctx.currentJob",
+   "module": "core/context",
+   "title": "Current job selection with fallback",
+   "status": "passed"
+  },
+  {
+   "id": "core.ctx.design",
+   "module": "core/context",
+   "title": "Design records saved per job and mirrored into the job",
+   "status": "passed"
+  },
+  {
+   "id": "core.ctx.level",
+   "module": "core/context",
+   "title": "Company level from credits earned",
+   "status": "passed"
+  },
+  {
+   "id": "core.ctx.products",
+   "module": "core/context",
+   "title": "Inline product catalogue indexing",
+   "status": "passed"
+  },
+  {
+   "id": "core.ctx.worldEvents",
+   "module": "core/context",
+   "title": "World events are republished on the bus",
+   "status": "passed"
+  },
+  {
+   "id": "pv.correctVoc",
+   "module": "domain/pv",
+   "title": "Voc temperature correction (coefficient)",
+   "status": "passed"
+  },
+  {
+   "id": "pv.vocFactorTable",
+   "module": "domain/pv",
+   "title": "Voc correction factor table (AS/NZS 5033 Table 4.1 style)",
+   "status": "passed"
+  },
+  {
+   "id": "pv.correctVmp",
+   "module": "domain/pv",
+   "title": "Vmp hot-cell correction",
+   "status": "passed"
+  },
+  {
+   "id": "pv.cellTemperature",
+   "module": "domain/pv",
+   "title": "NOCT cell temperature model",
+   "status": "passed"
+  },
+  {
+   "id": "pv.arrayMaxVoltage",
+   "module": "domain/pv",
+   "title": "Array maximum voltage",
+   "status": "passed"
+  },
+  {
+   "id": "pv.systemVoltageLimit",
+   "module": "domain/pv",
+   "title": "Installation class voltage limits",
+   "status": "passed"
+  },
+  {
+   "id": "pv.stringSizing",
+   "module": "domain/pv",
+   "title": "String sizing against Voc, MPPT and class limits",
+   "status": "passed"
+  },
+  {
+   "id": "pv.stringSizing.infeasible",
+   "module": "domain/pv",
+   "title": "String sizing reports infeasible combinations",
+   "status": "passed"
+  },
+  {
+   "id": "pv.dcAcRatio",
+   "module": "domain/pv",
+   "title": "DC/AC ratio and 133 % oversizing check",
+   "status": "passed"
+  },
+  {
+   "id": "pv.stringCableCurrent",
+   "module": "domain/pv",
+   "title": "String/array cable current (1.25 × Isc)",
+   "status": "passed"
+  },
+  {
+   "id": "pv.dcVoltageDrop",
+   "module": "domain/pv",
+   "title": "DC voltage drop percentage",
+   "status": "passed"
+  },
+  {
+   "id": "pv.selectDcCable",
+   "module": "domain/pv",
+   "title": "DC cable selection for 3 % limit",
+   "status": "passed"
+  },
+  {
+   "id": "pv.orientationFactor",
+   "module": "domain/pv",
+   "title": "Tilt/azimuth generation factor",
+   "status": "passed"
+  },
+  {
+   "id": "pv.arrayLayout",
+   "module": "domain/pv",
+   "title": "Roof layout module count",
+   "status": "passed"
+  },
+  {
+   "id": "ac.mvPerAm",
+   "module": "domain/ac",
+   "title": "mV/A·m lookup (3-phase and single-phase)",
+   "status": "passed"
+  },
+  {
+   "id": "ac.inverterCurrent",
+   "module": "domain/ac",
+   "title": "Inverter rated current",
+   "status": "passed"
+  },
+  {
+   "id": "ac.voltageRise",
+   "module": "domain/ac",
+   "title": "Voltage rise for a segment",
+   "status": "passed"
+  },
+  {
+   "id": "ac.voltageRisePath",
+   "module": "domain/ac",
+   "title": "Voltage rise over a path vs 2 % limit",
+   "status": "passed"
+  },
+  {
+   "id": "ac.voltageRisePath.fail",
+   "module": "domain/ac",
+   "title": "Voltage rise path failure detection",
+   "status": "passed"
+  },
+  {
+   "id": "ac.maxCableLength",
+   "module": "domain/ac",
+   "title": "Maximum cable length for a limit",
+   "status": "passed"
+  },
+  {
+   "id": "ac.deratedRating",
+   "module": "domain/ac",
+   "title": "Current rating with ambient and grouping derating",
+   "status": "passed"
+  },
+  {
+   "id": "ac.selectAcCable",
+   "module": "domain/ac",
+   "title": "AC cable selection (rating + rise)",
+   "status": "passed"
+  },
+  {
+   "id": "ac.checkPhaseBalance",
+   "module": "domain/ac",
+   "title": "Phase balance check (5 kVA)",
+   "status": "passed"
+  },
+  {
+   "id": "ac.checkSinglePhaseCapacity",
+   "module": "domain/ac",
+   "title": "Single-phase capacity rule (30 kVA)",
+   "status": "passed"
+  },
+  {
+   "id": "ac.inverterMainSwitchRule",
+   "module": "domain/ac",
+   "title": "Inverter main switch / master switch rule",
+   "status": "passed"
+  },
+  {
+   "id": "ac.checkExportLimit",
+   "module": "domain/ac",
+   "title": "DNSP export limit check",
+   "status": "passed"
+  },
+  {
+   "id": "battery.assess.restricted",
+   "module": "domain/battery",
+   "title": "Battery restricted-location detection",
+   "status": "passed"
+  },
+  {
+   "id": "battery.assess.clearance",
+   "module": "domain/battery",
+   "title": "Battery 600 mm clearance rule",
+   "status": "passed"
+  },
+  {
+   "id": "battery.assess.barrier",
+   "module": "domain/battery",
+   "title": "Non-combustible barrier rule",
+   "status": "passed"
+  },
+  {
+   "id": "battery.assess.warnings",
+   "module": "domain/battery",
+   "title": "Battery environmental warnings",
+   "status": "passed"
+  },
+  {
+   "id": "battery.sizeBattery",
+   "module": "domain/battery",
+   "title": "Battery sizing from daily consumption",
+   "status": "passed"
+  },
+  {
+   "id": "battery.backupCapability",
+   "module": "domain/battery",
+   "title": "Backup hours for loads",
+   "status": "passed"
+  },
+  {
+   "id": "battery.stcFactor",
+   "module": "domain/battery",
+   "title": "Battery STC factor schedule",
+   "status": "passed"
+  },
+  {
+   "id": "battery.stcs.tiered",
+   "module": "domain/battery",
+   "title": "Battery STCs with 14/28/50 kWh tiers",
+   "status": "passed"
+  },
+  {
+   "id": "battery.stcs.untiered",
+   "module": "domain/battery",
+   "title": "Battery STCs before tiers",
+   "status": "passed"
+  },
+  {
+   "id": "battery.stcs.ineligible",
+   "module": "domain/battery",
+   "title": "Battery STC eligibility bounds",
+   "status": "passed"
+  },
+  {
+   "id": "incentives.zoneForPostcode",
+   "module": "domain/incentives",
+   "title": "STC postcode zone lookup",
+   "status": "passed"
+  },
+  {
+   "id": "incentives.zoneTableCoverage",
+   "module": "domain/incentives",
+   "title": "Postcode zone table covers 0000–9999 contiguously",
+   "status": "passed"
+  },
+  {
+   "id": "incentives.deemingYears",
+   "module": "domain/incentives",
+   "title": "Deeming period schedule to 2030",
+   "status": "passed"
+  },
+  {
+   "id": "incentives.solarStcs",
+   "module": "domain/incentives",
+   "title": "Solar STC calculation",
+   "status": "passed"
+  },
+  {
+   "id": "incentives.solarStcs.cap",
+   "module": "domain/incentives",
+   "title": "STC price cap and system size limit",
+   "status": "passed"
+  },
+  {
+   "id": "incentives.stateFromPostcode",
+   "module": "domain/incentives",
+   "title": "State inference from postcode",
+   "status": "passed"
+  },
+  {
+   "id": "incentives.statePrograms",
+   "module": "domain/incentives",
+   "title": "State program catalogue",
+   "status": "passed"
+  },
+  {
+   "id": "yield.cityYield",
+   "module": "domain/yield",
+   "title": "CEC city yield table",
+   "status": "passed"
+  },
+  {
+   "id": "yield.annualYield",
+   "module": "domain/yield",
+   "title": "Annual yield with orientation and losses",
+   "status": "passed"
+  },
+  {
+   "id": "yield.monthlyYield",
+   "module": "domain/yield",
+   "title": "Monthly yield distribution sums to annual",
+   "status": "passed"
+  },
+  {
+   "id": "yield.financials",
+   "module": "domain/yield",
+   "title": "Payback, NPV, IRR and lifetime savings",
+   "status": "passed"
+  },
+  {
+   "id": "yield.irr",
+   "module": "domain/yield",
+   "title": "IRR solver",
+   "status": "passed"
+  },
+  {
+   "id": "yield.lcoe",
+   "module": "domain/yield",
+   "title": "LCOE",
+   "status": "passed"
+  },
+  {
+   "id": "yield.co2Offset",
+   "module": "domain/yield",
+   "title": "CO₂ offset estimate",
+   "status": "passed"
+  },
+  {
+   "id": "yield.selfConsumption",
+   "module": "domain/yield",
+   "title": "Self-consumption with battery",
+   "status": "passed"
+  },
+  {
+   "id": "loads.library",
+   "module": "domain/loads",
+   "title": "Appliance library",
+   "status": "passed"
+  },
+  {
+   "id": "loads.hourlyProfile",
+   "module": "domain/loads",
+   "title": "Hourly load profile",
+   "status": "passed"
+  },
+  {
+   "id": "loads.dailyKwh",
+   "module": "domain/loads",
+   "title": "Daily consumption",
+   "status": "passed"
+  },
+  {
+   "id": "loads.peakKw",
+   "module": "domain/loads",
+   "title": "Peak demand (kW)",
+   "status": "passed"
+  },
+  {
+   "id": "loads.eveningSharePct",
+   "module": "domain/loads",
+   "title": "Evening share for battery sizing",
+   "status": "passed"
+  },
+  {
+   "id": "loads.maximumDemandA",
+   "module": "domain/loads",
+   "title": "Maximum demand estimate",
+   "status": "passed"
+  },
+  {
+   "id": "standards.catalogue",
+   "module": "domain/standards",
+   "title": "Standards codex (8 standards)",
+   "status": "passed"
+  },
+  {
+   "id": "standards.standardById",
+   "module": "domain/standards",
+   "title": "Standard lookup",
+   "status": "passed"
+  },
+  {
+   "id": "standards.findClause",
+   "module": "domain/standards",
+   "title": "Clause lookup",
+   "status": "passed"
+  },
+  {
+   "id": "standards.search",
+   "module": "domain/standards",
+   "title": "Full-text clause search",
+   "status": "passed"
+  },
+  {
+   "id": "checklists.catalogue",
+   "module": "domain/checklists",
+   "title": "Clause-referenced checklists (5 lists, 52 items)",
+   "status": "passed"
+  },
+  {
+   "id": "checklists.evaluate.pass",
+   "module": "domain/checklists",
+   "title": "Checklist evaluation: PASS",
+   "status": "passed"
+  },
+  {
+   "id": "checklists.evaluate.fail",
+   "module": "domain/checklists",
+   "title": "Checklist evaluation: critical FAIL",
+   "status": "passed"
+  },
+  {
+   "id": "checklists.evaluate.incomplete",
+   "module": "domain/checklists",
+   "title": "Checklist evaluation: INCOMPLETE and completion %",
+   "status": "passed"
+  },
+  {
+   "id": "checklists.evaluate.defects",
+   "module": "domain/checklists",
+   "title": "Checklist evaluation: non-critical DEFECTS",
+   "status": "passed"
+  },
+  {
+   "id": "checklists.applicable",
+   "module": "domain/checklists",
+   "title": "Applicable checklists for a configuration",
+   "status": "passed"
+  },
+  {
+   "id": "commissioning.definitions",
+   "module": "domain/commissioning",
+   "title": "Commissioning test definitions (13 tests)",
+   "status": "passed"
+  },
+  {
+   "id": "commissioning.expectedStringVoc",
+   "module": "domain/commissioning",
+   "title": "Expected string Voc at site temperature",
+   "status": "passed"
+  },
+  {
+   "id": "commissioning.expectedIsc",
+   "module": "domain/commissioning",
+   "title": "Expected Isc at irradiance",
+   "status": "passed"
+  },
+  {
+   "id": "commissioning.evaluate.pass",
+   "module": "domain/commissioning",
+   "title": "Commissioning evaluation PASS",
+   "status": "passed"
+  },
+  {
+   "id": "commissioning.evaluate.fail",
+   "module": "domain/commissioning",
+   "title": "Commissioning evaluation FAIL on insulation",
+   "status": "passed"
+  },
+  {
+   "id": "commissioning.evaluate.voc",
+   "module": "domain/commissioning",
+   "title": "Voc deviation beyond 5 % fails",
+   "status": "passed"
+  },
+  {
+   "id": "commissioning.irradiance",
+   "module": "domain/commissioning",
+   "title": "Irradiance adequacy for I-V tests",
+   "status": "passed"
+  },
+  {
+   "id": "labels.pvOnly",
+   "module": "domain/labels",
+   "title": "Label set for PV-only systems",
+   "status": "passed"
+  },
+  {
+   "id": "labels.battery",
+   "module": "domain/labels",
+   "title": "Battery labels added for BESS",
+   "status": "passed"
+  },
+  {
+   "id": "labels.backupSupplyType",
+   "module": "domain/labels",
+   "title": "Supply-type labels (alternative/independent)",
+   "status": "passed"
+  },
+  {
+   "id": "labels.masterSwitch",
+   "module": "domain/labels",
+   "title": "Master switch label when > 2 inverter main switches",
+   "status": "passed"
+  },
+  {
+   "id": "labels.ratingText",
+   "module": "domain/labels",
+   "title": "Array rating label text",
+   "status": "passed"
+  },
+  {
+   "id": "labels.sheet",
+   "module": "domain/labels",
+   "title": "Printable label sheet",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.stages",
+   "module": "domain/jobs",
+   "title": "Job pipeline (9 stages, 28 tasks)",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.createJob",
+   "module": "domain/jobs",
+   "title": "Create job with task map",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.completeTask",
+   "module": "domain/jobs",
+   "title": "Complete and reopen tasks",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.advanceStage.blocked",
+   "module": "domain/jobs",
+   "title": "Stage advance blocked by incomplete tasks",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.advanceStage",
+   "module": "domain/jobs",
+   "title": "Stage advance when tasks complete",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.stageGate",
+   "module": "domain/jobs",
+   "title": "Commissioning gate requires checklists and tests",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.progress",
+   "module": "domain/jobs",
+   "title": "Job progress percentage",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.validateForStcClaim",
+   "module": "domain/jobs",
+   "title": "STC claim readiness validation",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.addNote",
+   "module": "domain/jobs",
+   "title": "Job notes",
+   "status": "passed"
+  },
+  {
+   "id": "jobs.jobsByStage",
+   "module": "domain/jobs",
+   "title": "Group jobs by stage",
+   "status": "passed"
+  },
+  {
+   "id": "products.flatten",
+   "module": "domain/products",
+   "title": "Flatten catalogue categories",
+   "status": "passed"
+  },
+  {
+   "id": "products.isApprovedOn",
+   "module": "domain/products",
+   "title": "Approval status on a date",
+   "status": "passed"
+  },
+  {
+   "id": "products.daysToExpiry",
+   "module": "domain/products",
+   "title": "Days to approval expiry",
+   "status": "passed"
+  },
+  {
+   "id": "products.search",
+   "module": "domain/products",
+   "title": "Catalogue search with filters and paging",
+   "status": "passed"
+  },
+  {
+   "id": "products.manufacturers",
+   "module": "domain/products",
+   "title": "Manufacturer facets",
+   "status": "passed"
+  },
+  {
+   "id": "products.matchInverters",
+   "module": "domain/products",
+   "title": "Inverter matching by DC/AC ratio",
+   "status": "passed"
+  },
+  {
+   "id": "products.matchBatteries",
+   "module": "domain/products",
+   "title": "Battery matching by usable capacity",
+   "status": "passed"
+  },
+  {
+   "id": "products.designCompatibility",
+   "module": "domain/products",
+   "title": "Design compatibility and expiry warnings",
+   "status": "passed"
+  },
+  {
+   "id": "report.escapeHtml",
+   "module": "domain/report",
+   "title": "HTML escaping",
+   "status": "passed"
+  },
+  {
+   "id": "report.designSection",
+   "module": "domain/report",
+   "title": "Design section renders provided fields only",
+   "status": "passed"
+  },
+  {
+   "id": "report.buildJobReport",
+   "module": "domain/report",
+   "title": "Full job report document",
+   "status": "passed"
+  },
+  {
+   "id": "report.extraSections",
+   "module": "domain/report",
+   "title": "Reports accept extra sections (proposal, serials, warranties)",
+   "status": "passed"
+  },
+  {
+   "id": "jurisdictions.catalogue",
+   "module": "domain/jurisdictions",
+   "title": "Jurisdiction profiles (AU, NZ, UK, US, EU)",
+   "status": "passed"
+  },
+  {
+   "id": "jurisdictions.limit",
+   "module": "domain/jurisdictions",
+   "title": "Jurisdiction limit lookup",
+   "status": "passed"
+  },
+  {
+   "id": "jurisdictions.standards",
+   "module": "domain/jurisdictions",
+   "title": "Standards per jurisdiction",
+   "status": "passed"
+  },
+  {
+   "id": "pricing.defaultItems",
+   "module": "domain/pricing",
+   "title": "Default line items from the design",
+   "status": "passed"
+  },
+  {
+   "id": "pricing.totals",
+   "module": "domain/pricing",
+   "title": "Totals with STC discount, GST and payment schedule",
+   "status": "passed"
+  },
+  {
+   "id": "pricing.margin",
+   "module": "domain/pricing",
+   "title": "Gross margin from cost of goods",
+   "status": "passed"
+  },
+  {
+   "id": "pricing.perWatt",
+   "module": "domain/pricing",
+   "title": "Price per watt",
+   "status": "passed"
+  },
+  {
+   "id": "pricing.proposalText",
+   "module": "domain/pricing",
+   "title": "Plain-text proposal document",
+   "status": "passed"
+  },
+  {
+   "id": "pricing.noNegative",
+   "module": "domain/pricing",
+   "title": "Discounts never push the total below zero",
+   "status": "passed"
+  },
+  {
+   "id": "serials.validate",
+   "module": "domain/serials",
+   "title": "Serial format validation",
+   "status": "passed"
+  },
+  {
+   "id": "serials.parse",
+   "module": "domain/serials",
+   "title": "Parse pasted lists with duplicates and invalids",
+   "status": "passed"
+  },
+  {
+   "id": "serials.status",
+   "module": "domain/serials",
+   "title": "Register status against the design",
+   "status": "passed"
+  },
+  {
+   "id": "serials.duplicatesAcross",
+   "module": "domain/serials",
+   "title": "Duplicates across categories are flagged",
+   "status": "passed"
+  },
+  {
+   "id": "serials.csv",
+   "module": "domain/serials",
+   "title": "Serial CSV export",
+   "status": "passed"
+  },
+  {
+   "id": "dnsp.lookup",
+   "module": "domain/dnsp",
+   "title": "DNSPs by postcode/state",
+   "status": "passed"
+  },
+  {
+   "id": "dnsp.catalogue",
+   "module": "domain/dnsp",
+   "title": "Sixteen network operators with export allowances",
+   "status": "passed"
+  },
+  {
+   "id": "dnsp.validate",
+   "module": "domain/dnsp",
+   "title": "Application validation with NMI format and export allowance",
+   "status": "passed"
+  },
+  {
+   "id": "dnsp.summary",
+   "module": "domain/dnsp",
+   "title": "Application summary text",
+   "status": "passed"
+  },
+  {
+   "id": "handover.addYears",
+   "module": "domain/handover",
+   "title": "Date arithmetic for warranty expiry",
+   "status": "passed"
+  },
+  {
+   "id": "handover.warranty",
+   "module": "domain/handover",
+   "title": "Warranty register with product and performance terms",
+   "status": "passed"
+  },
+  {
+   "id": "handover.maintenance",
+   "module": "domain/handover",
+   "title": "Maintenance schedule with owner and installer items",
+   "status": "passed"
+  },
+  {
+   "id": "handover.manual",
+   "module": "domain/handover",
+   "title": "Owner's manual text with shutdown procedure",
+   "status": "passed"
+  },
+  {
+   "id": "needs.curves",
+   "module": "sim/needs",
+   "title": "Response curves (linear, quadratic, sqrt, logistic, inverse)",
+   "status": "passed"
+  },
+  {
+   "id": "needs.create",
+   "module": "sim/needs",
+   "title": "Create needs in range",
+   "status": "passed"
+  },
+  {
+   "id": "needs.decay",
+   "module": "sim/needs",
+   "title": "Needs decay with trait modifiers",
+   "status": "passed"
+  },
+  {
+   "id": "needs.applyEffects",
+   "module": "sim/needs",
+   "title": "Apply activity effects with clamping",
+   "status": "passed"
+  },
+  {
+   "id": "needs.urgency",
+   "module": "sim/needs",
+   "title": "Urgency ranking",
+   "status": "passed"
+  },
+  {
+   "id": "needs.mood",
+   "module": "sim/needs",
+   "title": "Mood and moodlets",
+   "status": "passed"
+  },
+  {
+   "id": "needs.efficiency",
+   "module": "sim/needs",
+   "title": "Efficiency multiplier",
+   "status": "passed"
+  },
+  {
+   "id": "traits.catalogue",
+   "module": "sim/traits",
+   "title": "Trait catalogue (8 traits)",
+   "status": "passed"
+  },
+  {
+   "id": "traits.actionWeight",
+   "module": "sim/traits",
+   "title": "Trait action weighting",
+   "status": "passed"
+  },
+  {
+   "id": "traits.decayModifiers",
+   "module": "sim/traits",
+   "title": "Trait decay modifiers combine",
+   "status": "passed"
+  },
+  {
+   "id": "traits.multipliers",
+   "module": "sim/traits",
+   "title": "Error/speed/XP multipliers",
+   "status": "passed"
+  },
+  {
+   "id": "traits.fromSeed",
+   "module": "sim/traits",
+   "title": "Deterministic traits from seed",
+   "status": "passed"
+  },
+  {
+   "id": "skills.definitions",
+   "module": "sim/skills",
+   "title": "Skill tree (8 skills)",
+   "status": "passed"
+  },
+  {
+   "id": "skills.levelCurve",
+   "module": "sim/skills",
+   "title": "Level curve and progress",
+   "status": "passed"
+  },
+  {
+   "id": "skills.awardXp",
+   "module": "sim/skills",
+   "title": "Award XP with level-up detection",
+   "status": "passed"
+  },
+  {
+   "id": "skills.rank",
+   "module": "sim/skills",
+   "title": "Rank titles",
+   "status": "passed"
+  },
+  {
+   "id": "skills.maxLevel",
+   "module": "sim/skills",
+   "title": "Level cap",
+   "status": "passed"
+  },
+  {
+   "id": "skills.skillForTask",
+   "module": "sim/skills",
+   "title": "Task tag → skill mapping",
+   "status": "passed"
+  },
+  {
+   "id": "skills.successChance",
+   "module": "sim/skills",
+   "title": "Success probability from skill vs difficulty",
+   "status": "passed"
+  },
+  {
+   "id": "memory.tokenize",
+   "module": "sim/memory",
+   "title": "Tokeniser with stop words",
+   "status": "passed"
+  },
+  {
+   "id": "memory.scoreImportance",
+   "module": "sim/memory",
+   "title": "Importance heuristic",
+   "status": "passed"
+  },
+  {
+   "id": "memory.addAndRecent",
+   "module": "sim/memory",
+   "title": "Add memories and list recent",
+   "status": "passed"
+  },
+  {
+   "id": "memory.retrieve",
+   "module": "sim/memory",
+   "title": "Retrieval by relevance/recency/importance",
+   "status": "passed"
+  },
+  {
+   "id": "memory.capacity",
+   "module": "sim/memory",
+   "title": "Capacity bound",
+   "status": "passed"
+  },
+  {
+   "id": "memory.reflect",
+   "module": "sim/memory",
+   "title": "Reflection synthesises insights from failures",
+   "status": "passed"
+  },
+  {
+   "id": "memory.serialise",
+   "module": "sim/memory",
+   "title": "Serialise and restore",
+   "status": "passed"
+  },
+  {
+   "id": "planner.scoreAction",
+   "module": "sim/planner",
+   "title": "Utility scoring with need, trait and skill considerations",
+   "status": "passed"
+  },
+  {
+   "id": "planner.chooseAction",
+   "module": "sim/planner",
+   "title": "Best action selection",
+   "status": "passed"
+  },
+  {
+   "id": "planner.chooseAction.explore",
+   "module": "sim/planner",
+   "title": "Weighted-random exploration among top actions",
+   "status": "passed"
+  },
+  {
+   "id": "planner.novelty",
+   "module": "sim/planner",
+   "title": "Recently done actions are discounted",
+   "status": "passed"
+  },
+  {
+   "id": "planner.goap",
+   "module": "sim/planner",
+   "title": "GOAP plan to claim STCs",
+   "status": "passed"
+  },
+  {
+   "id": "planner.goap.satisfied",
+   "module": "sim/planner",
+   "title": "GOAP returns empty plan when goal already met",
+   "status": "passed"
+  },
+  {
+   "id": "planner.goap.impossible",
+   "module": "sim/planner",
+   "title": "GOAP reports impossible goals",
+   "status": "passed"
+  },
+  {
+   "id": "dialogue.greeting",
+   "module": "sim/dialogue",
+   "title": "Mood-based greeting",
+   "status": "passed"
+  },
+  {
+   "id": "dialogue.traitLine",
+   "module": "sim/dialogue",
+   "title": "Trait flavour lines",
+   "status": "passed"
+  },
+  {
+   "id": "dialogue.reply.status",
+   "module": "sim/dialogue",
+   "title": "Status reply reports mood and lowest need",
+   "status": "passed"
+  },
+  {
+   "id": "dialogue.reply.skills",
+   "module": "sim/dialogue",
+   "title": "Skills reply",
+   "status": "passed"
+  },
+  {
+   "id": "dialogue.replyWithLlm.fallback",
+   "module": "sim/dialogue",
+   "title": "LLM hook with template fallback",
+   "status": "passed"
+  },
+  {
+   "id": "dialogue.replyWithLlm.hook",
+   "module": "sim/dialogue",
+   "title": "LLM hook used when available",
+   "status": "passed"
+  },
+  {
+   "id": "economy.rewards",
+   "module": "sim/economy",
+   "title": "Reward table and upgrade catalogue",
+   "status": "passed"
+  },
+  {
+   "id": "economy.earn",
+   "module": "sim/economy",
+   "title": "Earn credits (append-only ledger)",
+   "status": "passed"
+  },
+  {
+   "id": "economy.spend",
+   "module": "sim/economy",
+   "title": "Spend on upgrades with validation",
+   "status": "passed"
+  },
+  {
+   "id": "economy.effects",
+   "module": "sim/economy",
+   "title": "Upgrade effect aggregation",
+   "status": "passed"
+  },
+  {
+   "id": "economy.summary",
+   "module": "sim/economy",
+   "title": "Ledger summary",
+   "status": "passed"
+  },
+  {
+   "id": "events.prng",
+   "module": "sim/events",
+   "title": "Seeded PRNG reproducibility",
+   "status": "passed"
+  },
+  {
+   "id": "events.rollEvent",
+   "module": "sim/events",
+   "title": "Weighted world event roll",
+   "status": "passed"
+  },
+  {
+   "id": "events.catalogue",
+   "module": "sim/events",
+   "title": "World event catalogue",
+   "status": "passed"
+  },
+  {
+   "id": "events.questsForJob",
+   "module": "sim/events",
+   "title": "Quest generated from job stage",
+   "status": "passed"
+  },
+  {
+   "id": "events.achievements",
+   "module": "sim/events",
+   "title": "Achievement evaluation",
+   "status": "passed"
+  },
+  {
+   "id": "events.achievementCatalogue",
+   "module": "sim/events",
+   "title": "Achievement catalogue (12)",
+   "status": "passed"
+  },
+  {
+   "id": "agent.create",
+   "module": "sim/agent",
+   "title": "Agent creation with deterministic traits",
+   "status": "passed"
+  },
+  {
+   "id": "agent.assignAndWork",
+   "module": "sim/agent",
+   "title": "Assigned task progresses and completes with XP",
+   "status": "passed"
+  },
+  {
+   "id": "agent.idleBehaviour",
+   "module": "sim/agent",
+   "title": "Idle agent chooses self-care actions",
+   "status": "passed"
+  },
+  {
+   "id": "agent.observeAutonomy",
+   "module": "sim/agent",
+   "title": "Observe autonomy never works tasks",
+   "status": "passed"
+  },
+  {
+   "id": "agent.reflection",
+   "module": "sim/agent",
+   "title": "Agent reflects after important memories",
+   "status": "passed"
+  },
+  {
+   "id": "agent.serialise",
+   "module": "sim/agent",
+   "title": "Agent round-trips through JSON",
+   "status": "passed"
+  },
+  {
+   "id": "agent.efficiency",
+   "module": "sim/agent",
+   "title": "Efficiency combines needs and traits",
+   "status": "passed"
+  },
+  {
+   "id": "agent.installBlocked",
+   "module": "sim/agent",
+   "title": "Storm blocks install tasks",
+   "status": "passed"
+  },
+  {
+   "id": "world.create",
+   "module": "sim/world",
+   "title": "World with seeded clock and ledger",
+   "status": "passed"
+  },
+  {
+   "id": "world.addAgentAndJob",
+   "module": "sim/world",
+   "title": "Add agents and jobs",
+   "status": "passed"
+  },
+  {
+   "id": "world.assignNextTask",
+   "module": "sim/world",
+   "title": "Assign next open stage task",
+   "status": "passed"
+  },
+  {
+   "id": "world.tick",
+   "module": "sim/world",
+   "title": "Tick advances time, agents and completes job tasks",
+   "status": "passed"
+  },
+  {
+   "id": "world.events",
+   "module": "sim/world",
+   "title": "World events roll over time",
+   "status": "passed"
+  },
+  {
+   "id": "world.quests",
+   "module": "sim/world",
+   "title": "Quests derived from open jobs",
+   "status": "passed"
+  },
+  {
+   "id": "world.recordResults",
+   "module": "sim/world",
+   "title": "Checklist/commissioning results earn credits and achievements",
+   "status": "passed"
+  },
+  {
+   "id": "world.serialise",
+   "module": "sim/world",
+   "title": "World round-trips through JSON",
+   "status": "passed"
+  },
+  {
+   "id": "world.inferTag",
+   "module": "sim/world",
+   "title": "Task title → skill tag inference",
+   "status": "passed"
+  },
+  {
+   "id": "suggest.jobState",
+   "module": "sim/suggestions",
+   "title": "Planner state derived from job and design",
+   "status": "passed"
+  },
+  {
+   "id": "suggest.nextAction",
+   "module": "sim/suggestions",
+   "title": "Next action from the GOAP plan",
+   "status": "passed"
+  },
+  {
+   "id": "suggest.done",
+   "module": "sim/suggestions",
+   "title": "No suggestion for a complete job",
+   "status": "passed"
+  },
+  {
+   "id": "suggest.fromAgents",
+   "module": "sim/suggestions",
+   "title": "Agents under suggest/semi/full autonomy propose actions",
+   "status": "passed"
+  },
+  {
+   "id": "suggest.labels",
+   "module": "sim/suggestions",
+   "title": "Every planner action has a label and a target window",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.board",
+   "module": "windows/jobs",
+   "title": "Kanban board of jobs by stage",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.create",
+   "module": "windows/jobs",
+   "title": "Create a job from the form with validation",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.tasks",
+   "module": "windows/jobs",
+   "title": "Tick stage tasks and persist",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.advance",
+   "module": "windows/jobs",
+   "title": "Advance stage only when tasks are complete",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.assign",
+   "module": "windows/jobs",
+   "title": "Assign a crew member and start the next task",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.stcReadiness",
+   "module": "windows/jobs",
+   "title": "STC claim readiness with evidence checkboxes",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.notes",
+   "module": "windows/jobs",
+   "title": "Add timestamped notes",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.list",
+   "module": "windows/jobs",
+   "title": "Searchable job table",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.duplicate",
+   "module": "windows/jobs",
+   "title": "Duplicate a job as a template (design carried, evidence reset)",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.exportImport",
+   "module": "windows/jobs",
+   "title": "Export and import a single job with its design",
+   "status": "passed"
+  },
+  {
+   "id": "win.jobs.stageTrack",
+   "module": "windows/jobs",
+   "title": "Nine-stage progress track",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.roster",
+   "module": "windows/crew",
+   "title": "Roster cards with needs, mood and traits",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.select",
+   "module": "windows/crew",
+   "title": "Select a member from the roster",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.skills",
+   "module": "windows/crew",
+   "title": "Skill sheet with rarity ranks and progress",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.autonomy",
+   "module": "windows/crew",
+   "title": "Change autonomy level",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.break",
+   "module": "windows/crew",
+   "title": "Send on break restores energy and records memory",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.training",
+   "module": "windows/crew",
+   "title": "Training spends credits to raise the weakest skill",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.assign",
+   "module": "windows/crew",
+   "title": "Assign next task on the current job",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.memorySearch",
+   "module": "windows/crew",
+   "title": "Memory retrieval search",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.reflect",
+   "module": "windows/crew",
+   "title": "Force a reflection",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.hire",
+   "module": "windows/crew",
+   "title": "Hire with credits, traits and role",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.hireNeedsCredits",
+   "module": "windows/crew",
+   "title": "Hiring is refused without credits",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.traitReference",
+   "module": "windows/crew",
+   "title": "Trait reference table",
+   "status": "passed"
+  },
+  {
+   "id": "win.character.header",
+   "module": "windows/character",
+   "title": "Level, title and XP bar",
+   "status": "passed"
+  },
+  {
+   "id": "win.character.saveProfile",
+   "module": "windows/character",
+   "title": "Edit and save the installer profile",
+   "status": "passed"
+  },
+  {
+   "id": "win.character.zoneHint",
+   "module": "windows/character",
+   "title": "Postcode shows STC zone and state live",
+   "status": "passed"
+  },
+  {
+   "id": "win.character.locale",
+   "module": "windows/character",
+   "title": "Switching language re-renders the chrome",
+   "status": "passed"
+  },
+  {
+   "id": "win.character.stats",
+   "module": "windows/character",
+   "title": "Statistics sheet",
+   "status": "passed"
+  },
+  {
+   "id": "win.character.titles",
+   "module": "windows/character",
+   "title": "Titles from levels and achievements",
+   "status": "passed"
+  },
+  {
+   "id": "win.character.equipment",
+   "module": "windows/character",
+   "title": "Equipment shows owned upgrades",
+   "status": "passed"
+  },
+  {
+   "id": "win.dashboard.overview",
+   "module": "windows/dashboard",
+   "title": "Overview with credits, level, crew and jobs",
+   "status": "passed"
+  },
+  {
+   "id": "win.dashboard.quickActions",
+   "module": "windows/dashboard",
+   "title": "Quick actions open other windows",
+   "status": "passed"
+  },
+  {
+   "id": "win.dashboard.crewLink",
+   "module": "windows/dashboard",
+   "title": "Clicking a crew line opens that member",
+   "status": "passed"
+  },
+  {
+   "id": "win.dashboard.eventBanner",
+   "module": "windows/dashboard",
+   "title": "Active world event banner",
+   "status": "passed"
+  },
+  {
+   "id": "win.dashboard.productWatch",
+   "module": "windows/dashboard",
+   "title": "Product watch flags de-listed or expiring products on open jobs",
+   "status": "passed"
+  },
+  {
+   "id": "win.dashboard.feed",
+   "module": "windows/dashboard",
+   "title": "Filterable activity feed",
+   "status": "passed"
+  },
+  {
+   "id": "win.dashboard.pipeline",
+   "module": "windows/dashboard",
+   "title": "Pipeline charts (jobs and kW per stage)",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.list",
+   "module": "windows/quests",
+   "title": "Quest list generated from open jobs",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.objectives",
+   "module": "windows/quests",
+   "title": "Objectives tick the underlying job tasks",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.turnIn",
+   "module": "windows/quests",
+   "title": "Turning in a quest advances the stage and pays credits",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.blocked",
+   "module": "windows/quests",
+   "title": "Blocked turn-in reports the reason",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.flavour",
+   "module": "windows/quests",
+   "title": "Stage flavour text for all nine stages",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.dailyGoals",
+   "module": "windows/quests",
+   "title": "Daily goals track real practice",
+   "status": "passed"
+  },
+  {
+   "id": "win.quests.completed",
+   "module": "windows/quests",
+   "title": "Completed quest history",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.strings",
+   "module": "windows/spellbook",
+   "title": "String sizing calculator with live results",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.stringsPrefill",
+   "module": "windows/spellbook",
+   "title": "Prefills from the job design products",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.stringsSave",
+   "module": "windows/spellbook",
+   "title": "Save string design into the job",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.stringsLive",
+   "module": "windows/spellbook",
+   "title": "Editing an input recalculates",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.acrise",
+   "module": "windows/spellbook",
+   "title": "Voltage rise with automatic cable selection",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.dccable",
+   "module": "windows/spellbook",
+   "title": "DC cable selection with drop table",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.batteryLocation",
+   "module": "windows/spellbook",
+   "title": "Battery location assessment flags restricted locations",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.batterySizing",
+   "module": "windows/spellbook",
+   "title": "Battery sizing, backup runtime and battery STCs",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.stc",
+   "module": "windows/spellbook",
+   "title": "Solar STC estimate with state programs",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.yield",
+   "module": "windows/spellbook",
+   "title": "Yield, self-consumption, NPV/IRR/LCOE and monthly chart",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.phases",
+   "module": "windows/spellbook",
+   "title": "Phase balance, main switch rule and export limit checks",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.layout",
+   "module": "windows/spellbook",
+   "title": "Roof layout drawing with orientation factor",
+   "status": "passed"
+  },
+  {
+   "id": "win.spell.tabs",
+   "module": "windows/spellbook",
+   "title": "Eight calculator tabs",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.browse",
+   "module": "windows/inventory",
+   "title": "Browse the catalogue with search",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.filters",
+   "module": "windows/inventory",
+   "title": "Category, manufacturer and approved-only filters",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.sort",
+   "module": "windows/inventory",
+   "title": "Sort by expiry / power / recency",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.detail",
+   "module": "windows/inventory",
+   "title": "Product detail panel with approval status and specs",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.favourite",
+   "module": "windows/inventory",
+   "title": "Favourites persist",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.compare",
+   "module": "windows/inventory",
+   "title": "Compare up to three products",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.useInDesign",
+   "module": "windows/inventory",
+   "title": "Use a product in the current job design",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.matches",
+   "module": "windows/inventory",
+   "title": "Inverter and battery matches for the job",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.designSlots",
+   "module": "windows/inventory",
+   "title": "Job selection slots with compatibility check",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.csv",
+   "module": "windows/inventory",
+   "title": "CSV export of the result set",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.about",
+   "module": "windows/inventory",
+   "title": "Catalogue summary and provenance",
+   "status": "passed"
+  },
+  {
+   "id": "win.vault.tooltip",
+   "module": "windows/inventory",
+   "title": "Rich item tooltips on models",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.library",
+   "module": "windows/codex",
+   "title": "Standards library with clause list",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.selectStandard",
+   "module": "windows/codex",
+   "title": "Switch between standards",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.readClause",
+   "module": "windows/codex",
+   "title": "Opening a clause logs it and counts toward achievements",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.search",
+   "module": "windows/codex",
+   "title": "Full-text search across clauses and checklist items",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.searchJump",
+   "module": "windows/codex",
+   "title": "Search hit jumps to the clause in the library",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.contextQuery",
+   "module": "windows/codex",
+   "title": "Clause links open the codex pre-searched",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.jurisdictions",
+   "module": "windows/codex",
+   "title": "Jurisdiction limits comparison table",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.history",
+   "module": "windows/codex",
+   "title": "Reading log with coverage",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.bookmarks",
+   "module": "windows/codex",
+   "title": "Bookmark clauses for quick return",
+   "status": "passed"
+  },
+  {
+   "id": "win.codex.related",
+   "module": "windows/codex",
+   "title": "Clause → checklist cross-references",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.applicable",
+   "module": "windows/checklists",
+   "title": "Applicable checklists derived from the job",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.answer",
+   "module": "windows/checklists",
+   "title": "Answer items pass/fail/na and persist on the job",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.evidence",
+   "module": "windows/checklists",
+   "title": "Evidence notes per item",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.submit",
+   "module": "windows/checklists",
+   "title": "Submitting a PASS records stats and credits",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.incompleteBlocked",
+   "module": "windows/checklists",
+   "title": "Incomplete checklists cannot be submitted",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.switch",
+   "module": "windows/checklists",
+   "title": "Switch between applicable checklists",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.summary",
+   "module": "windows/checklists",
+   "title": "Per-job checklist summary",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.catalogue",
+   "module": "windows/checklists",
+   "title": "Checklist catalogue with clause references",
+   "status": "passed"
+  },
+  {
+   "id": "win.check.csv",
+   "module": "windows/checklists",
+   "title": "Checklist CSV export",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.sheet",
+   "module": "windows/commissioning",
+   "title": "Thirteen-test commissioning sheet",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.expected",
+   "module": "windows/commissioning",
+   "title": "Expected Voc/Isc derived from context",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.evaluate",
+   "module": "windows/commissioning",
+   "title": "Readings are evaluated live against criteria",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.record",
+   "module": "windows/commissioning",
+   "title": "Recording a full PASS awards credits and stats",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.incomplete",
+   "module": "windows/commissioning",
+   "title": "Incomplete sheets are not recorded",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.irradiance",
+   "module": "windows/commissioning",
+   "title": "Low irradiance warning",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.reference",
+   "module": "windows/commissioning",
+   "title": "Acceptance criteria reference",
+   "status": "passed"
+  },
+  {
+   "id": "win.comm.csv",
+   "module": "windows/commissioning",
+   "title": "Commissioning CSV export",
+   "status": "passed"
+  },
+  {
+   "id": "win.labels.generate",
+   "module": "windows/labels",
+   "title": "Label list generated from the job and design",
+   "status": "passed"
+  },
+  {
+   "id": "win.labels.backup",
+   "module": "windows/labels",
+   "title": "Backup circuits add supply-type labels",
+   "status": "passed"
+  },
+  {
+   "id": "win.labels.masterSwitch",
+   "module": "windows/labels",
+   "title": "More than two inverter main switches adds the master switch label",
+   "status": "passed"
+  },
+  {
+   "id": "win.labels.save",
+   "module": "windows/labels",
+   "title": "Label settings persist in the design",
+   "status": "passed"
+  },
+  {
+   "id": "win.labels.html",
+   "module": "windows/labels",
+   "title": "Printable label sheet HTML",
+   "status": "passed"
+  },
+  {
+   "id": "win.loads.library",
+   "module": "windows/loads",
+   "title": "Appliance library with quantities",
+   "status": "passed"
+  },
+  {
+   "id": "win.loads.select",
+   "module": "windows/loads",
+   "title": "Selecting appliances updates the profile",
+   "status": "passed"
+  },
+  {
+   "id": "win.loads.presets",
+   "module": "windows/loads",
+   "title": "Household presets",
+   "status": "passed"
+  },
+  {
+   "id": "win.loads.quantity",
+   "module": "windows/loads",
+   "title": "Quantity multiplies consumption",
+   "status": "passed"
+  },
+  {
+   "id": "win.loads.save",
+   "module": "windows/loads",
+   "title": "Profile saved into the design for battery sizing",
+   "status": "passed"
+  },
+  {
+   "id": "win.loads.maxDemand",
+   "module": "windows/loads",
+   "title": "Maximum demand estimate",
+   "status": "passed"
+  },
+  {
+   "id": "win.reports.build",
+   "module": "windows/reports",
+   "title": "Full HTML job report with design, checklists, tests and labels",
+   "status": "passed"
+  },
+  {
+   "id": "win.reports.preview",
+   "module": "windows/reports",
+   "title": "Sandboxed report preview",
+   "status": "passed"
+  },
+  {
+   "id": "win.reports.summary",
+   "module": "windows/reports",
+   "title": "Markdown design summary",
+   "status": "passed"
+  },
+  {
+   "id": "win.reports.extras",
+   "module": "windows/reports",
+   "title": "Report includes proposal, serials and warranties when present",
+   "status": "passed"
+  },
+  {
+   "id": "win.reports.escaping",
+   "module": "windows/reports",
+   "title": "Customer input is HTML-escaped in reports",
+   "status": "passed"
+  },
+  {
+   "id": "win.map.project",
+   "module": "windows/map",
+   "title": "Map projection and postcode positioning",
+   "status": "passed"
+  },
+  {
+   "id": "win.map.render",
+   "module": "windows/map",
+   "title": "Realm map renders coastline, cities and job pins",
+   "status": "passed"
+  },
+  {
+   "id": "win.map.pinClick",
+   "module": "windows/map",
+   "title": "Clicking a pin opens the job",
+   "status": "passed"
+  },
+  {
+   "id": "win.map.stageFilter",
+   "module": "windows/map",
+   "title": "Filter pins by stage",
+   "status": "passed"
+  },
+  {
+   "id": "win.map.zoneLookup",
+   "module": "windows/map",
+   "title": "Postcode zone lookup and full zone table",
+   "status": "passed"
+  },
+  {
+   "id": "win.map.cities",
+   "module": "windows/map",
+   "title": "City yield table",
+   "status": "passed"
+  },
+  {
+   "id": "win.journal.add",
+   "module": "windows/journal",
+   "title": "Add tagged notes attached to a job",
+   "status": "passed"
+  },
+  {
+   "id": "win.journal.search",
+   "module": "windows/journal",
+   "title": "Search notes by text or tag",
+   "status": "passed"
+  },
+  {
+   "id": "win.journal.delete",
+   "module": "windows/journal",
+   "title": "Delete a note",
+   "status": "passed"
+  },
+  {
+   "id": "win.journal.markdown",
+   "module": "windows/journal",
+   "title": "Markdown export",
+   "status": "passed"
+  },
+  {
+   "id": "win.journal.reflections",
+   "module": "windows/journal",
+   "title": "Crew reflections aggregated",
+   "status": "passed"
+  },
+  {
+   "id": "win.journal.timeline",
+   "module": "windows/journal",
+   "title": "Unified timeline of notes, crew events and job history",
+   "status": "passed"
+  },
+  {
+   "id": "win.chat.greeting",
+   "module": "windows/chat",
+   "title": "Crew member greets you",
+   "status": "passed"
+  },
+  {
+   "id": "win.chat.sendReply",
+   "module": "windows/chat",
+   "title": "Send a message and get a mood-aware reply",
+   "status": "passed"
+  },
+  {
+   "id": "win.chat.memoryRecall",
+   "module": "windows/chat",
+   "title": "Agent recalls memories in conversation",
+   "status": "passed"
+  },
+  {
+   "id": "win.chat.switchAgent",
+   "module": "windows/chat",
+   "title": "Switch conversation partner",
+   "status": "passed"
+  },
+  {
+   "id": "win.chat.channel",
+   "module": "windows/chat",
+   "title": "Crew channel shows agent events",
+   "status": "passed"
+  },
+  {
+   "id": "win.chat.llmOptional",
+   "module": "windows/chat",
+   "title": "LLM replies are optional and detected at runtime",
+   "status": "passed"
+  },
+  {
+   "id": "win.ach.grid",
+   "module": "windows/achievements",
+   "title": "Achievement grid with progress",
+   "status": "passed"
+  },
+  {
+   "id": "win.ach.progress",
+   "module": "windows/achievements",
+   "title": "Progress toward locked achievements",
+   "status": "passed"
+  },
+  {
+   "id": "win.ach.coverage",
+   "module": "windows/achievements",
+   "title": "Every achievement has a progress rule",
+   "status": "passed"
+  },
+  {
+   "id": "win.market.shop",
+   "module": "windows/market",
+   "title": "Upgrade shop with affordability",
+   "status": "passed"
+  },
+  {
+   "id": "win.market.buy",
+   "module": "windows/market",
+   "title": "Buying deducts credits and activates effects",
+   "status": "passed"
+  },
+  {
+   "id": "win.market.ledger",
+   "module": "windows/market",
+   "title": "Ledger table and totals",
+   "status": "passed"
+  },
+  {
+   "id": "win.market.earning",
+   "module": "windows/market",
+   "title": "Earning guide",
+   "status": "passed"
+  },
+  {
+   "id": "win.settings.general",
+   "module": "windows/settings",
+   "title": "General settings save and apply",
+   "status": "passed"
+  },
+  {
+   "id": "win.settings.keysList",
+   "module": "windows/settings",
+   "title": "Keybind table with custom markers",
+   "status": "passed"
+  },
+  {
+   "id": "win.settings.rebind",
+   "module": "windows/settings",
+   "title": "Rebind by pressing a key, with conflict refusal",
+   "status": "passed"
+  },
+  {
+   "id": "win.settings.hotbar",
+   "module": "windows/settings",
+   "title": "Hotbar slot editor",
+   "status": "passed"
+  },
+  {
+   "id": "win.settings.data",
+   "module": "windows/settings",
+   "title": "Backup size and export controls",
+   "status": "passed"
+  },
+  {
+   "id": "win.settings.importRejects",
+   "module": "windows/settings",
+   "title": "Import rejects invalid backups",
+   "status": "passed"
+  },
+  {
+   "id": "win.help.tutorial",
+   "module": "windows/help",
+   "title": "Seven-step tutorial with completion tracking",
+   "status": "passed"
+  },
+  {
+   "id": "win.help.keys",
+   "module": "windows/help",
+   "title": "Hotkey reference",
+   "status": "passed"
+  },
+  {
+   "id": "win.help.glossary",
+   "module": "windows/help",
+   "title": "Glossary of solar and simulation terms",
+   "status": "passed"
+  },
+  {
+   "id": "win.help.about",
+   "module": "windows/help",
+   "title": "About page reports the live feature count",
+   "status": "passed"
+  },
+  {
+   "id": "win.selftest.window",
+   "module": "windows/selftest",
+   "title": "System check window shows the registry size",
+   "status": "passed"
+  },
+  {
+   "id": "win.selftest.lastRun",
+   "module": "windows/selftest",
+   "title": "Remembers the last run summary",
+   "status": "passed"
+  },
+  {
+   "id": "win.proposal.items",
+   "module": "windows/proposal",
+   "title": "Line items generated from the design",
+   "status": "passed"
+  },
+  {
+   "id": "win.proposal.edit",
+   "module": "windows/proposal",
+   "title": "Editing quantities/prices updates totals and persists",
+   "status": "passed"
+  },
+  {
+   "id": "win.proposal.stcDiscount",
+   "module": "windows/proposal",
+   "title": "STC values from the design discount the quote",
+   "status": "passed"
+  },
+  {
+   "id": "win.proposal.addRemove",
+   "module": "windows/proposal",
+   "title": "Add and remove lines",
+   "status": "passed"
+  },
+  {
+   "id": "win.proposal.preview",
+   "module": "windows/proposal",
+   "title": "Proposal document with payment schedule",
+   "status": "passed"
+  },
+  {
+   "id": "win.proposal.issue",
+   "module": "windows/proposal",
+   "title": "Issuing the proposal ticks the quote-stage task",
+   "status": "passed"
+  },
+  {
+   "id": "win.serials.add",
+   "module": "windows/serials",
+   "title": "Paste serials with validation and de-duplication",
+   "status": "passed"
+  },
+  {
+   "id": "win.serials.status",
+   "module": "windows/serials",
+   "title": "Register status against the design counts",
+   "status": "passed"
+  },
+  {
+   "id": "win.serials.evidence",
+   "module": "windows/serials",
+   "title": "Complete register records STC evidence",
+   "status": "passed"
+  },
+  {
+   "id": "win.serials.remove",
+   "module": "windows/serials",
+   "title": "Remove a serial",
+   "status": "passed"
+  },
+  {
+   "id": "win.dnsp.candidates",
+   "module": "windows/dnsp",
+   "title": "Operators offered match the job postcode",
+   "status": "passed"
+  },
+  {
+   "id": "win.dnsp.prefill",
+   "module": "windows/dnsp",
+   "title": "Form prefilled from the design and profile",
+   "status": "passed"
+  },
+  {
+   "id": "win.dnsp.validation",
+   "module": "windows/dnsp",
+   "title": "Live validation including export allowance",
+   "status": "passed"
+  },
+  {
+   "id": "win.dnsp.save",
+   "module": "windows/dnsp",
+   "title": "Application persists in the design",
+   "status": "passed"
+  },
+  {
+   "id": "win.dnsp.lodge",
+   "module": "windows/dnsp",
+   "title": "Lodging requires a valid application and ticks the task",
+   "status": "passed"
+  },
+  {
+   "id": "win.dnsp.operators",
+   "module": "windows/dnsp",
+   "title": "Operator reference table",
+   "status": "passed"
+  },
+  {
+   "id": "win.survey.faces",
+   "module": "windows/survey",
+   "title": "Add roof faces with orientation factor and fit",
+   "status": "passed"
+  },
+  {
+   "id": "win.survey.best",
+   "module": "windows/survey",
+   "title": "Best face (orientation × shading) feeds the design",
+   "status": "passed"
+  },
+  {
+   "id": "win.survey.checks",
+   "module": "windows/survey",
+   "title": "Survey checklist persists",
+   "status": "passed"
+  },
+  {
+   "id": "win.survey.general",
+   "module": "windows/survey",
+   "title": "Site details persist",
+   "status": "passed"
+  },
+  {
+   "id": "win.survey.ranking",
+   "module": "windows/survey",
+   "title": "Face ranking helper",
+   "status": "passed"
+  },
+  {
+   "id": "win.schedule.book",
+   "module": "windows/schedule",
+   "title": "Book a crew visit against a job",
+   "status": "passed"
+  },
+  {
+   "id": "win.schedule.week",
+   "module": "windows/schedule",
+   "title": "Seven-day grid with today highlighted",
+   "status": "passed"
+  },
+  {
+   "id": "win.schedule.conflicts",
+   "module": "windows/schedule",
+   "title": "Double-booked crew are flagged",
+   "status": "passed"
+  },
+  {
+   "id": "win.schedule.weather",
+   "module": "windows/schedule",
+   "title": "Storm events warn on roof work",
+   "status": "passed"
+  },
+  {
+   "id": "win.schedule.navigate",
+   "module": "windows/schedule",
+   "title": "Navigate weeks and remove bookings",
+   "status": "passed"
+  },
+  {
+   "id": "win.schedule.helpers",
+   "module": "windows/schedule",
+   "title": "Week and conflict helpers",
+   "status": "passed"
+  },
+  {
+   "id": "win.suggest.list",
+   "module": "windows/suggestions",
+   "title": "Suggestions listed per open job",
+   "status": "passed"
+  },
+  {
+   "id": "win.suggest.doIt",
+   "module": "windows/suggestions",
+   "title": "\"Do it\" jumps to the right window and cheers the agent",
+   "status": "passed"
+  },
+  {
+   "id": "win.suggest.dismiss",
+   "module": "windows/suggestions",
+   "title": "Dismiss and restore suggestions",
+   "status": "passed"
+  },
+  {
+   "id": "win.suggest.observeQuiet",
+   "module": "windows/suggestions",
+   "title": "Observe-only crews make no suggestions",
+   "status": "passed"
+  },
+  {
+   "id": "win.suggest.progression",
+   "module": "windows/suggestions",
+   "title": "Suggestions advance as the design progresses",
+   "status": "passed"
+  },
+  {
+   "id": "win.analytics.pipeline",
+   "module": "windows/analytics",
+   "title": "Pipeline kW, STC exposure and quoted value",
+   "status": "passed"
+  },
+  {
+   "id": "win.analytics.utilisation",
+   "module": "windows/analytics",
+   "title": "Crew utilisation and first-time quality",
+   "status": "passed"
+  },
+  {
+   "id": "win.analytics.render",
+   "module": "windows/analytics",
+   "title": "Analytics dashboard renders charts and tables",
+   "status": "passed"
+  },
+  {
+   "id": "win.notify.inbox",
+   "module": "windows/notifications",
+   "title": "Inbox of important events with unread count",
+   "status": "passed"
+  },
+  {
+   "id": "win.notify.markRead",
+   "module": "windows/notifications",
+   "title": "Mark all read clears the badge",
+   "status": "passed"
+  },
+  {
+   "id": "win.notify.navigate",
+   "module": "windows/notifications",
+   "title": "Clicking a notification opens its subject",
+   "status": "passed"
+  },
+  {
+   "id": "win.notify.globalSearch",
+   "module": "windows/notifications",
+   "title": "Global search across jobs, crew, clauses, notes and products",
+   "status": "passed"
+  },
+  {
+   "id": "win.notify.searchClauses",
+   "module": "windows/notifications",
+   "title": "Search finds standard clauses",
+   "status": "passed"
+  },
+  {
+   "id": "win.handover.manual",
+   "module": "windows/handover",
+   "title": "Owner's manual generated from the job and design",
+   "status": "passed"
+  },
+  {
+   "id": "win.handover.issue",
+   "module": "windows/handover",
+   "title": "Issuing the pack ticks the handover tasks",
+   "status": "passed"
+  },
+  {
+   "id": "win.handover.maintenance",
+   "module": "windows/handover",
+   "title": "Five-year maintenance schedule",
+   "status": "passed"
+  },
+  {
+   "id": "win.handover.warranty",
+   "module": "windows/handover",
+   "title": "Warranty register from selected products",
+   "status": "passed"
+  },
+  {
+   "id": "win.wizard.steps",
+   "module": "windows/wizard",
+   "title": "Workflow steps derived from the job and design",
+   "status": "passed"
+  },
+  {
+   "id": "win.wizard.progress",
+   "module": "windows/wizard",
+   "title": "Progress and next step",
+   "status": "passed"
+  },
+  {
+   "id": "win.wizard.render",
+   "module": "windows/wizard",
+   "title": "Stepper highlights the next step and jumps to its window",
+   "status": "passed"
+  },
+  {
+   "id": "shell.registerWindows",
+   "module": "shell",
+   "title": "All window modules register with the window manager",
+   "status": "passed"
+  },
+  {
+   "id": "shell.topbar",
+   "module": "shell",
+   "title": "Top bar shows clock, speed, credits and level",
+   "status": "passed"
+  },
+  {
+   "id": "shell.bell",
+   "module": "shell",
+   "title": "Notification bell shows the unread count",
+   "status": "passed"
+  },
+  {
+   "id": "shell.dayPhase",
+   "module": "shell",
+   "title": "Backdrop phase follows the world clock",
+   "status": "passed"
+  },
+  {
+   "id": "shell.hotbar",
+   "module": "shell",
+   "title": "Nine-slot hotbar toggles windows and highlights open ones",
+   "status": "passed"
+  },
+  {
+   "id": "shell.hotbarAssign",
+   "module": "shell",
+   "title": "Right-click a hotbar slot to assign a window",
+   "status": "passed"
+  },
+  {
+   "id": "shell.microMenu",
+   "module": "shell",
+   "title": "Micro-menu buttons for the main windows",
+   "status": "passed"
+  },
+  {
+   "id": "shell.minimap",
+   "module": "shell",
+   "title": "Minimap draws jobs and home and opens the map",
+   "status": "passed"
+  },
+  {
+   "id": "shell.dockFeed",
+   "module": "shell",
+   "title": "Dock shows crew events as they happen",
+   "status": "passed"
+  },
+  {
+   "id": "shell.dockConsole",
+   "module": "shell",
+   "title": "Console runs slash commands from the dock",
+   "status": "passed"
+  },
+  {
+   "id": "shell.dockChat",
+   "module": "shell",
+   "title": "Plain text in the dock talks to the crew",
+   "status": "passed"
+  },
+  {
+   "id": "shell.palette",
+   "module": "shell",
+   "title": "Command palette searches and runs commands",
+   "status": "passed"
+  },
+  {
+   "id": "shell.commands",
+   "module": "shell",
+   "title": "Built-in commands (job new, skip, stats, features)",
+   "status": "passed"
+  },
+  {
+   "id": "shell.keybinds",
+   "module": "shell",
+   "title": "Keyboard toggles windows, pauses the clock and cycles",
+   "status": "passed"
+  },
+  {
+   "id": "shell.hotbarKeys",
+   "module": "shell",
+   "title": "Number keys trigger hotbar slots",
+   "status": "passed"
+  },
+  {
+   "id": "shell.eventToasts",
+   "module": "shell",
+   "title": "Achievements and level-ups raise toasts",
+   "status": "passed"
+  },
+  {
+   "id": "shell.autosave",
+   "module": "shell",
+   "title": "Autosave persists world and open windows",
+   "status": "passed"
+  },
+  {
+   "id": "shell.restoreSession",
+   "module": "shell",
+   "title": "Reopens the windows from the last session",
+   "status": "passed"
+  },
+  {
+   "id": "shell.theme",
+   "module": "shell",
+   "title": "Themes apply to the document",
+   "status": "passed"
+  },
+  {
+   "id": "shell.onboarding",
+   "module": "shell",
+   "title": "First-run onboarding captures profile and opens the dashboard",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.landmarks",
+   "module": "game/town",
+   "title": "Ten landmark buildings, each bound to a window",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.lots",
+   "module": "game/town",
+   "title": "Twenty residential lots ring the town",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.lotForJob",
+   "module": "game/town",
+   "title": "Jobs get stable lots",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.door",
+   "module": "game/town",
+   "title": "Door positions face the street",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.obstacles",
+   "module": "game/town",
+   "title": "Obstacle boxes include landmarks and job houses",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.houseState",
+   "module": "game/town",
+   "title": "House build state follows the job stage",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.spots",
+   "module": "game/town",
+   "title": "Behaviour spots for bunks, desks, shelves, fire, cafe, yard",
+   "status": "passed"
+  },
+  {
+   "id": "game.town.roadsTrees",
+   "module": "game/town",
+   "title": "Roads and trees are laid out",
+   "status": "passed"
+  },
+  {
+   "id": "game.steer.arrive",
+   "module": "game/steer",
+   "title": "Arrive steering reaches the target and stops",
+   "status": "passed"
+  },
+  {
+   "id": "game.steer.avoid",
+   "module": "game/steer",
+   "title": "Movement slides around boxes instead of entering them",
+   "status": "passed"
+  },
+  {
+   "id": "game.steer.resolve",
+   "module": "game/steer",
+   "title": "Collision resolution pushes out of boxes",
+   "status": "passed"
+  },
+  {
+   "id": "game.steer.allowInside",
+   "module": "game/steer",
+   "title": "Agents may enter the building they are visiting",
+   "status": "passed"
+  },
+  {
+   "id": "game.steer.helpers",
+   "module": "game/steer",
+   "title": "Distance, heading, clamping and wander helpers",
+   "status": "passed"
+  },
+  {
+   "id": "game.behaviour.lastAction",
+   "module": "game/behaviour",
+   "title": "Last self-chosen action is read from the agent log",
+   "status": "passed"
+  },
+  {
+   "id": "game.behaviour.work",
+   "module": "game/behaviour",
+   "title": "An agent with a job task walks to that house",
+   "status": "passed"
+  },
+  {
+   "id": "game.behaviour.rest",
+   "module": "game/behaviour",
+   "title": "Resting or night sends agents to the guild bunks",
+   "status": "passed"
+  },
+  {
+   "id": "game.behaviour.places",
+   "module": "game/behaviour",
+   "title": "Study → library, break → cafe, social → campfire, inspect → yard",
+   "status": "passed"
+  },
+  {
+   "id": "game.behaviour.spotsSpread",
+   "module": "game/behaviour",
+   "title": "Agents take different spots at the same place",
+   "status": "passed"
+  },
+  {
+   "id": "game.behaviour.bubble",
+   "module": "game/behaviour",
+   "title": "Speech bubbles from the feed or from an urgent need",
+   "status": "passed"
+  },
+  {
+   "id": "game.chibi.build",
+   "module": "game/characters",
+   "title": "Procedural chibi character with hard hat, vest, arms, legs and tool",
+   "status": "passed"
+  },
+  {
+   "id": "game.chibi.playerLook",
+   "module": "game/characters",
+   "title": "Player gets a distinct blue outfit and white hat",
+   "status": "passed"
+  },
+  {
+   "id": "game.chibi.animations",
+   "module": "game/characters",
+   "title": "Nine animation states move the right parts",
+   "status": "passed"
+  },
+  {
+   "id": "game.chibi.face",
+   "module": "game/characters",
+   "title": "Characters turn smoothly toward a heading",
+   "status": "passed"
+  },
+  {
+   "id": "game.chibi.deterministicSkin",
+   "module": "game/characters",
+   "title": "Skin tone and hat derive from id and role deterministically",
+   "status": "passed"
+  },
+  {
+   "id": "game.scene.engine",
+   "module": "game/scene",
+   "title": "WebGL engine renders a frame",
+   "status": "passed"
+  },
+  {
+   "id": "game.scene.dayNight",
+   "module": "game/scene",
+   "title": "Sun, sky, fog and lamps follow the world clock phase",
+   "status": "passed"
+  },
+  {
+   "id": "game.scene.weather",
+   "module": "game/scene",
+   "title": "Storms rain and darken the sky; heatwaves warm it",
+   "status": "passed"
+  },
+  {
+   "id": "game.scene.town",
+   "module": "game/scene",
+   "title": "Town builds ground, roads, square, ten landmarks, trees and lamps",
+   "status": "passed"
+  },
+  {
+   "id": "game.scene.houses",
+   "module": "game/scene",
+   "title": "One house per job; it builds up with the job stage",
+   "status": "passed"
+  },
+  {
+   "id": "game.scene.picking",
+   "module": "game/scene",
+   "title": "Ground and object picking from screen coordinates",
+   "status": "passed"
+  },
+  {
+   "id": "game.overlay.anchors",
+   "module": "game/overlay",
+   "title": "Overlay items project 3D anchors to screen positions",
+   "status": "passed"
+  },
+  {
+   "id": "game.overlay.distanceCull",
+   "module": "game/overlay",
+   "title": "Far-away plates are hidden",
+   "status": "passed"
+  },
+  {
+   "id": "game.overlay.floatText",
+   "module": "game/overlay",
+   "title": "Floating reward text animates and removes itself",
+   "status": "passed"
+  },
+  {
+   "id": "game.overlay.widgets",
+   "module": "game/overlay",
+   "title": "Nameplate, bubble, quest marker and key prompt widgets",
+   "status": "passed"
+  },
+  {
+   "id": "game.player.move",
+   "module": "game/player",
+   "title": "WASD moves the player relative to the camera",
+   "status": "passed"
+  },
+  {
+   "id": "game.player.collide",
+   "module": "game/player",
+   "title": "Buildings block the player",
+   "status": "passed"
+  },
+  {
+   "id": "game.player.clickToMove",
+   "module": "game/player",
+   "title": "Click-to-move walks to the point and calls back on arrival",
+   "status": "passed"
+  },
+  {
+   "id": "game.player.camera",
+   "module": "game/player",
+   "title": "Third-person camera orbits and zooms",
+   "status": "passed"
+  },
+  {
+   "id": "game.player.jump",
+   "module": "game/player",
+   "title": "Space jumps with gravity",
+   "status": "passed"
+  },
+  {
+   "id": "game.player.worldBounds",
+   "module": "game/player",
+   "title": "The player cannot leave the town",
+   "status": "passed"
+  },
+  {
+   "id": "game.npcs.spawn",
+   "module": "game/npcs",
+   "title": "Every crew member spawns as a chibi with a nameplate",
+   "status": "passed"
+  },
+  {
+   "id": "game.npcs.walkToWork",
+   "module": "game/npcs",
+   "title": "An agent assigned to a job walks to that house and works",
+   "status": "passed"
+  },
+  {
+   "id": "game.npcs.restAtNight",
+   "module": "game/npcs",
+   "title": "At night the crew sleeps at the guild hall",
+   "status": "passed"
+  },
+  {
+   "id": "game.npcs.bubbles",
+   "module": "game/npcs",
+   "title": "Crew speak in bubbles when something happens",
+   "status": "passed"
+  },
+  {
+   "id": "game.npcs.nearest",
+   "module": "game/npcs",
+   "title": "Nearest crew member lookup for interaction",
+   "status": "passed"
+  },
+  {
+   "id": "game.interact.markers",
+   "module": "game/interact",
+   "title": "WoW-style ! and ? markers float over job houses",
+   "status": "passed"
+  },
+  {
+   "id": "game.interact.house",
+   "module": "game/interact",
+   "title": "Standing at a house and pressing E opens that job",
+   "status": "passed"
+  },
+  {
+   "id": "game.interact.npc",
+   "module": "game/interact",
+   "title": "Talking to a crew member opens chat and they remember it",
+   "status": "passed"
+  },
+  {
+   "id": "game.interact.landmark",
+   "module": "game/interact",
+   "title": "Entering a landmark opens its window (library → Codex)",
+   "status": "passed"
+  },
+  {
+   "id": "game.interact.labels",
+   "module": "game/interact",
+   "title": "Landmark labels describe what each building does",
+   "status": "passed"
+  },
+  {
+   "id": "game.start",
+   "module": "game/game",
+   "title": "The game starts with the town, the player, the crew and job houses",
+   "status": "passed"
+  },
+  {
+   "id": "game.clockDrivesWorld",
+   "module": "game/game",
+   "title": "Simulated clock drives day/night and weather in the world",
+   "status": "passed"
+  },
+  {
+   "id": "game.tutorialChain",
+   "module": "game/game",
+   "title": "In-world tutorial objectives complete in order and pay credits",
+   "status": "passed"
+  },
+  {
+   "id": "game.houseAppears",
+   "module": "game/game",
+   "title": "Creating a job raises a house with a quest marker",
+   "status": "passed"
+  },
+  {
+   "id": "game.floatingRewards",
+   "module": "game/game",
+   "title": "Completed tasks and level-ups float reward text in the world",
+   "status": "passed"
+  },
+  {
+   "id": "game.interactKey",
+   "module": "game/game",
+   "title": "E interacts with whatever is in front of the player",
+   "status": "passed"
+  },
+  {
+   "id": "game.minimap",
+   "module": "game/game",
+   "title": "Town minimap with player, crew, houses and markers",
+   "status": "passed"
+  },
+  {
+   "id": "game.hudToggle",
+   "module": "game/game",
+   "title": "Shift+Z hides the HUD overlay",
+   "status": "passed"
+  },
+  {
+   "id": "game.persistPosition",
+   "module": "game/game",
+   "title": "Player position is remembered between sessions",
+   "status": "passed"
+  }
+ ]
+}

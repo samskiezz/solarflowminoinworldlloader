@@ -11,11 +11,19 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## Realm Workstation (new in 2.5.0)
+## SolarFlow Realm – the game (new in 2.5.0)
 
-`docs/realm/index.html` is a complete compliance workstation for solar and battery installers, built as a
-windowed, hotkey-driven desktop in the style of deep role-playing games (draggable windows, hotbar 1–9,
-quest log, codex, crew with needs, skills and memories). Everything in it is real work:
+`docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
+third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
+minions walk the streets on their own – to the Design Workshop, the Standards Library, the campfire, the
+cafe, their bunks at the Guild Hall at night, and to the houses they are assigned to – and every house is a
+real solar job that visibly builds up: a "SOLAR?" sign on the lot, plans, scaffolding, panels appearing on
+the roof, an inverter and battery on the wall, then a green glow once it is commissioned. Day and night,
+storms and heatwaves come from the simulated world clock. WoW-style `!`/`?` quest markers float over houses,
+an objective tracker runs an in-world tutorial, and the window system (hotbar 1–9, hotkeys, draggable windows)
+is the game's UI, as in a deep RPG.
+
+Everything behind the windows is real work:
 
 - **Real product data** – the Clean Energy Council approved module, inverter and battery lists
   (`docs/data/cec-products.json`, regenerated with `node scripts/import-cec-lists.js`).
@@ -27,14 +35,15 @@ quest log, codex, crew with needs, skills and memories). Everything in it is rea
   sheet (13 tests), serial register, DNSP connection application, labels, proposal/quote with the STC
   discount, handover pack (owner's manual, maintenance schedule, warranty register) and a printable report.
 - **A crew that behaves** – utility-AI needs with response curves, traits, skills with XP, a memory stream
-  with retrieval and reflection, GOAP planning that turns into *suggestions* for your next step, a credit
-  economy earned only from verified work, achievements and quests derived from real jobs.
+  with retrieval and reflection, GOAP planning that turns into *suggestions*, a credit economy earned only
+  from verified work, achievements and quests derived from real jobs. Talk to anyone (E) and they answer from
+  their mood and memories.
 - **Verifiable feature count** – every feature registers a self-test. `npm run features:realm` writes
-  `docs/realm/FEATURES.md` (501 features at release); `npm run smoke:realm` runs all of them in Chromium
-  plus an end-to-end app smoke; the in-app **System check** window does the same for users.
+  `docs/realm/FEATURES.md`; `npm run smoke:realm` runs all of them in Chromium (WebGL via SwiftShader) plus
+  an end-to-end play-through; the in-app **System check** window does the same for players.
 
-Research notes behind the design (standards, incentives, market, game-UI and agent-AI references) are in
-`docs/realm/RESEARCH.md`.
+The game needs WebGL; without it the same windows still work as a workstation. Research notes behind the
+design (standards, incentives, market, game-UI and agent-AI references) are in `docs/realm/RESEARCH.md`.
 
 ## What the data is (and is not)
 

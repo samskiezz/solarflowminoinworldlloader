@@ -11,16 +11,22 @@ export const MODULE_PATHS = {
     'domain/standards': () => import('./domain/standards.js'), 'domain/checklists': () => import('./domain/checklists.js'), 'domain/commissioning': () => import('./domain/commissioning.js'), 'domain/labels': () => import('./domain/labels.js'), 'domain/jobs': () => import('./domain/jobs.js'), 'domain/products': () => import('./domain/products.js'), 'domain/report': () => import('./domain/report.js'), 'domain/jurisdictions': () => import('./domain/jurisdictions.js'), 'domain/pricing': () => import('./domain/pricing.js'), 'domain/serials': () => import('./domain/serials.js'), 'domain/dnsp': () => import('./domain/dnsp.js'), 'domain/handover': () => import('./domain/handover.js'),
     'sim/needs': () => import('./sim/needs.js'), 'sim/traits': () => import('./sim/traits.js'), 'sim/skills': () => import('./sim/skills.js'), 'sim/memory': () => import('./sim/memory.js'), 'sim/planner': () => import('./sim/planner.js'), 'sim/dialogue': () => import('./sim/dialogue.js'), 'sim/economy': () => import('./sim/economy.js'), 'sim/events': () => import('./sim/events.js'), 'sim/agent': () => import('./sim/agent.js'), 'sim/world': () => import('./sim/world.js'), 'sim/suggestions': () => import('./sim/suggestions.js'),
     'windows/jobs': () => import('./windows/jobs.js'), 'windows/crew': () => import('./windows/crew.js'), 'windows/character': () => import('./windows/character.js'), 'windows/dashboard': () => import('./windows/dashboard.js'), 'windows/quests': () => import('./windows/quests.js'), 'windows/spellbook': () => import('./windows/spellbook.js'), 'windows/inventory': () => import('./windows/inventory.js'), 'windows/codex': () => import('./windows/codex.js'), 'windows/checklists': () => import('./windows/checklists.js'), 'windows/commissioning': () => import('./windows/commissioning.js'), 'windows/labels': () => import('./windows/labels.js'), 'windows/loads': () => import('./windows/loads.js'), 'windows/reports': () => import('./windows/reports.js'), 'windows/map': () => import('./windows/map.js'), 'windows/journal': () => import('./windows/journal.js'), 'windows/chat': () => import('./windows/chat.js'), 'windows/achievements': () => import('./windows/achievements.js'), 'windows/market': () => import('./windows/market.js'), 'windows/settings': () => import('./windows/settings.js'), 'windows/help': () => import('./windows/help.js'), 'windows/selftest': () => import('./windows/selftest.js'), 'windows/proposal': () => import('./windows/proposal.js'), 'windows/serials': () => import('./windows/serials.js'), 'windows/dnsp': () => import('./windows/dnsp.js'), 'windows/survey': () => import('./windows/survey.js'), 'windows/schedule': () => import('./windows/schedule.js'), 'windows/suggestions': () => import('./windows/suggestions.js'), 'windows/analytics': () => import('./windows/analytics.js'), 'windows/notifications': () => import('./windows/notifications.js'), 'windows/handover': () => import('./windows/handover.js'), 'windows/wizard': () => import('./windows/wizard.js'),
-    'shell': () => import('./shell.js')
+    'shell': () => import('./shell.js'),
+    'game/town': () => import('./game/town.js'), 'game/steer': () => import('./game/steer.js'), 'game/behaviour': () => import('./game/behaviour.js'),
+    'game/characters': () => import('./game/characters.js'), 'game/scene': () => import('./game/scene.js'), 'game/overlay': () => import('./game/overlay.js'), 'game/player': () => import('./game/player.js'), 'game/npcs': () => import('./game/npcs.js'), 'game/interact': () => import('./game/interact.js'), 'game/game': () => import('./game/game.js')
 };
 
+export const BROWSER_ONLY_MODULES = ['game/characters', 'game/scene', 'game/overlay', 'game/player', 'game/npcs', 'game/interact', 'game/game'];
 export const WINDOW_MODULES = Object.keys(MODULE_PATHS).filter((k) => k.startsWith('windows/'));
 
 let loaded = null;
 export async function loadAll() {
     if (loaded) return loaded;
     const modules = {};
+    const browserOnly = new Set(['game/characters', 'game/scene', 'game/overlay', 'game/player', 'game/npcs', 'game/interact', 'game/game']);
+    const hasDom = typeof document !== 'undefined';
     for (const [id, load] of Object.entries(MODULE_PATHS)) {
+        if (browserOnly.has(id) && !hasDom) continue; // needs WebGL / three.js
         const mod = await load();
         modules[id] = mod;
         if (Array.isArray(mod.FEATURES)) registry.register(id, mod.FEATURES);

@@ -217,3 +217,44 @@ textarea.input { width: 100%; resize: vertical; }
 .tt-body { white-space: pre-line; }
 @media (max-width: 900px) { #realm-minimap { display: none; } #realm-dock { width: 260px; } .hot-slot { width: 44px; height: 44px; } .micro-menu { display: none; } .board { grid-template-columns: repeat(9, 160px); } .vault-layout, .codex-layout, .quest-layout { grid-template-columns: 1fr; } .grid.cols-4, .grid.cols-5 { grid-template-columns: repeat(2, 1fr); } }
 @media print { #realm-top, #realm-bottom, #realm-minimap, #realm-dock, #realm-sky { display: none !important; } }
+
+/* ---- game world ---- */
+#realm-game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; outline: none; }
+body.game #realm-sky, body.game #realm-horizon { display: none; }
+body.game #realm { background: transparent; pointer-events: none; }
+body.game #realm-top, body.game #realm-bottom, body.game #realm-minimap, body.game #realm-dock, body.game .win, body.game #realm-tracker { pointer-events: auto; }
+body.game #realm-desktop { pointer-events: none; }
+body.game #realm-top { background: linear-gradient(180deg, rgba(22,28,46,.92), rgba(22,28,46,.75)); }
+body.game #realm-bottom { background: linear-gradient(0deg, rgba(22,28,46,.92), rgba(22,28,46,.75)); }
+#realm-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.game-overlay { position: absolute; inset: 0; pointer-events: none; }
+.game-overlay.hidden { display: none; }
+.ov-item { position: absolute; left: 0; top: 0; will-change: transform; white-space: nowrap; }
+.ov-nameplate { text-align: center; text-shadow: 0 1px 3px #000, 0 0 6px #000; font-size: 13px; }
+.ov-name { font-weight: 700; } .ov-sub { font-size: 11px; color: #ddd; }
+.ov-item.landmark .ov-name { color: #9fd8ff; font-size: 14px; } .ov-item.landmark .ov-sub { max-width: 220px; white-space: normal; color: #cfe; }
+.ov-bubble { background: #fff; color: #222; border-radius: 12px; padding: 5px 10px; font-size: 12px; max-width: 220px; white-space: normal; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,.4); position: relative; }
+.ov-bubble::after { content: ""; position: absolute; left: 50%; bottom: -7px; margin-left: -6px; border: 6px solid transparent; border-top-color: #fff; border-bottom: 0; }
+.ov-bubble.think { background: #e8e4ff; color: #3a2a7a; font-style: italic; border-radius: 16px; } .ov-bubble.think::after { border-top-color: #e8e4ff; }
+.ov-bubble.need { background: #ffe3e3; color: #8a1f1f; } .ov-bubble.need::after { border-top-color: #ffe3e3; }
+.ov-marker { font-size: 34px; font-weight: 900; text-shadow: 0 2px 4px #000; animation: bob 1.4s ease-in-out infinite; }
+.ov-marker.available { color: #ffd400; } .ov-marker.turnin { color: #ffd400; }
+.ov-marker.available::before { content: ""; }
+@keyframes bob { 0%, 100% { margin-top: 0; } 50% { margin-top: -8px; } }
+.ov-prompt { background: rgba(10,14,26,.85); border: 1px solid var(--gold); color: #fff; border-radius: 6px; padding: 4px 10px; font-size: 13px; }
+.ov-prompt kbd { background: var(--gold); color: #000; border-radius: 3px; padding: 0 6px; font-weight: 700; }
+.ov-float { font-weight: 800; font-size: 16px; text-shadow: 0 1px 3px #000; }
+#realm-tracker { position: absolute; left: 12px; top: 12px; width: 300px; z-index: 2; }
+.quest-tracker { background: rgba(10,14,26,.55); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; backdrop-filter: blur(3px); font-size: 12px; }
+.qt-title { color: var(--gold); font-weight: 700; letter-spacing: .5px; margin-bottom: 4px; }
+.qt-quest { margin: 4px 0 6px; cursor: pointer; } .qt-quest.tutorial .qt-name { color: #9fd8ff; }
+.qt-name { font-weight: 600; color: #fff; text-shadow: 0 1px 2px #000; } .qt-obj { color: #ddd; padding-left: 4px; } .qt-obj.done { color: var(--ok); }
+.town-minimap { width: 100%; height: 100%; display: block; image-rendering: auto; }
+#realm-title { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(ellipse at 50% 60%, #1a2340, #05070f 70%); color: #fff; text-align: center; gap: 14px; }
+#realm-title h1 { font-size: 46px; margin: 0; color: var(--gold); letter-spacing: 2px; text-shadow: 0 0 30px rgba(226,177,74,.5); }
+#realm-title p { max-width: 560px; color: #cdd; margin: 0; line-height: 1.5; }
+#realm-title .btn.primary { font-size: 18px; padding: 10px 28px; }
+#realm-title .keys { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; font-size: 12px; color: #aab; }
+#realm-title .keys kbd { background: #223; border: 1px solid #556; border-radius: 3px; padding: 1px 6px; color: #fff; }
+#realm-title.hidden { display: none; }
+@media (max-width: 900px) { #realm-tracker { display: none; } }

@@ -93,7 +93,7 @@ export class Agent {
                     this.skills = xp.skills;
                     if (xp.levelUp) events.push({ type: 'level_up', ...xp.levelUp });
                 }
-                if (choice.id === 'reflect' || this.memory.shouldReflect()) {
+                if (choice.id === 'reflect' || this.memory.shouldReflect(at)) {
                     const reflections = this.memory.reflect({ now: at });
                     this.stats.reflections += reflections.length;
                     if (reflections.length) events.push({ type: 'reflection', texts: reflections.map((r) => r.text) });
@@ -102,7 +102,7 @@ export class Agent {
                 events.push({ type: 'action', action: choice.id, score: choice.score });
             }
         }
-        if (this.memory.shouldReflect()) {
+        if (this.memory.shouldReflect(at)) {
             const reflections = this.memory.reflect({ now: at });
             this.stats.reflections += reflections.length;
             if (reflections.length) events.push({ type: 'reflection', texts: reflections.map((r) => r.text) });

@@ -6,21 +6,25 @@
  * Browser-only features (DOM) are listed and marked; they run in
  * tests/browser/realm-selftest.js and in the in-app System check.
  */
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const { loadAll, registry } = await import(path.join(here, '..', 'docs', 'realm', 'js', 'modules.js'));
 await loadAll();
-const features = registry.all();
+const browserReportPath = path.join(here, '..', 'docs', 'realm', 'selftest-browser.json');
+const browserReport = existsSync(browserReportPath) ? JSON.parse(readFileSync(browserReportPath, 'utf8')) : null;
+const nodeIds = new Set(registry.all().map((f) => f.id));
+const browserOnly = browserReport ? browserReport.results.filter((r) => !nodeIds.has(r.id)).map((r) => ({ id: r.id, module: r.module, title: r.title, dom: true, browserStatus: r.status })) : [];
+const features = [...registry.all(), ...browserOnly];
 const summary = await registry.runAll({ filter: (f) => !f.dom });
 if (summary.failed) { console.error(`${summary.failed} Node-runnable feature tests failed:`); for (const f of summary.failures) console.error(` - ${f.id}: ${f.error}`); process.exit(1); }
 
 const groups = {};
 for (const f of features) (groups[f.module] = groups[f.module] || []).push(f);
 const dom = features.filter((f) => f.dom).length;
-const area = (m) => (m.startsWith('core/') ? 'Core shell' : m.startsWith('domain/') ? 'Solar engineering domain' : m.startsWith('sim/') ? 'Crew simulation' : m.startsWith('windows/') ? 'Windows' : 'Shell');
+const area = (m) => (m.startsWith('core/') ? 'Core shell' : m.startsWith('domain/') ? 'Solar engineering domain' : m.startsWith('sim/') ? 'Crew simulation' : m.startsWith('windows/') ? 'Windows (game UI)' : m.startsWith('game/') ? '3D game world' : 'Shell');
 const byArea = {};
 for (const [m, list] of Object.entries(groups)) byArea[area(m)] = (byArea[area(m)] || 0) + list.length;
 
