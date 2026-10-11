@@ -1,8 +1,8 @@
 {
- "at": "2026-10-11T06:21:23.968Z",
+ "at": "2026-10-11T06:21:51.606Z",
  "total": 560,
- "passed": 559,
- "failed": 1,
+ "passed": 560,
+ "failed": 0,
  "results": [
   {
    "id": "core.bus.onEmit",
@@ -3326,7 +3326,7 @@
    "id": "game.tutorialChain",
    "module": "game/game",
    "title": "In-world tutorial objectives complete in order and pay credits",
-   "status": "failed"
+   "status": "passed"
   },
   {
    "id": "game.houseAppears",
