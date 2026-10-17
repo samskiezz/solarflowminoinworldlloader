@@ -34,13 +34,18 @@ export function assetsReady() { return state.ready; }
 export function assetStatus() { return { ready: state.ready, loaded: state.loaded, failed: state.failed.slice(), total: state.total }; }
 export function has(key) { return cache.has(key); }
 export function keys() { return [...cache.keys()]; }
-export function urlFor(key) { return `${BASE}${key}.glb`; }
+/** Models ship as .glb; a host that serves only web media types gets the same models as glTF JSON (.json, buffer embedded). The first failure switches the extension once. */
+let ext = 'glb';
+export function urlFor(key, e = ext) { return `${BASE}${key}.${e}`; }
+export function modelExtension() { return ext; }
 
 /** Load one model into the cache; resolves to the cached entry or null. */
 export async function load(key, { timeoutMs = 20000 } = {}) {
     if (cache.has(key)) return cache.get(key);
     if (!loader) loader = new GLTFLoader();
-    const gltf = await Promise.race([loader.loadAsync(urlFor(key)), new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeoutMs))]);
+    const attempt = (e) => Promise.race([loader.loadAsync(urlFor(key, e)), new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeoutMs))]);
+    let gltf;
+    try { gltf = await attempt(ext); } catch (error) { if (ext !== 'glb') throw error; try { gltf = await attempt('json'); ext = 'json'; } catch { throw error; } }
     gltf.scene.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; if (o.material && o.material.map) o.material.map.colorSpace = THREE.SRGBColorSpace; } });
     const entry = { key, scene: gltf.scene, animations: gltf.animations || [], skinned: Boolean(gltf.scene.getObjectByProperty('isSkinnedMesh', true)) };
     cache.set(key, entry);
