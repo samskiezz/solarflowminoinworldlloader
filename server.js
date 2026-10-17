@@ -28,6 +28,8 @@ const StateStore = require('./src/data/StateStore');
 const BusinessService = require('./src/business/BusinessService');
 
 const STATE_KEY = 'frontend-state';
+/** Feature areas built for the thousand-feature programme: each exports mount(app, deps); a missing area is skipped. */
+const AREAS = ['platform', 'reliability', 'governance', 'accounts', 'documents', 'telemetry', 'notify'];
 
 function asyncRoute(handler) {
     return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
@@ -332,6 +334,26 @@ class SolarFlowServer {
             const backup = await this.db.createBackup();
             res.json({ success: true, backup: { backupId: backup.backupId, timestamp: backup.timestamp, size: backup.size } });
         }));
+
+        this.mountAreas();
+    }
+
+    /** Mount every programme area under src/<area>/routes.js that exists. */
+    mountAreas() {
+        this.areas = {};
+        const deps = { security: this.security, store: this.state, config, logger, db: this.db, business: this.business, products: this.products, standards: this.standards, wss: this.wss, server: this };
+        for (const area of AREAS) {
+            const file = path.join(__dirname, 'src', area, 'routes.js');
+            if (!fs.existsSync(file)) continue;
+            try {
+                const mod = require(file);
+                if (typeof mod.mount !== 'function') continue;
+                this.areas[area] = mod.mount(this.app, deps) || true;
+                logger.info(`Area mounted: ${area}`);
+            } catch (error) {
+                logger.error(`Area failed to mount: ${area}`, { message: error.message, stack: error.stack });
+            }
+        }
     }
 
     // ---------------------------------------------------------------- static
@@ -506,6 +528,7 @@ class SolarFlowServer {
         clearInterval(this.heartbeat);
         this.business.stop();
         this.security.dispose();
+        for (const [area, handle] of Object.entries(this.areas || {})) { if (handle && typeof handle.stop === 'function') { try { await handle.stop(); } catch (error) { logger.warn(`Area stop failed: ${area}`, { message: error.message }); } } }
 
         for (const client of this.clients) {
             try { client.close(1001, 'Server shutting down'); } catch (error) { /* ignore */ }
