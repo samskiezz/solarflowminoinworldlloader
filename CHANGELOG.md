@@ -2,6 +2,37 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.11.0] - 2026-10-17
+
+### Ultron, a thousand workers, and the big map
+
+- **The Workforce** (`sim/workforce.js`): Ultron at the top, Atlas as chief of staff, twelve
+  department managers drawn from the named crew (Research, Design, Compliance, Install crews, Grid,
+  Commissioning, Incentives, Finance, Customer care, Documents, Audit, Review board) and a thousand
+  generated workers with ranks and skills. Every open job task, every business finding and every book
+  on the shelf becomes a task that flows research → execute → audit → review → manager sign-off, with
+  hand-offs between teams and rework when an audit fails. Sweeps run every six simulated hours; the
+  state rides in the world save. **Ultron window** (Shift+P): chain of command, task board, teams,
+  hand-off log.
+- **The crowd** (`game/crowd.js`): up to 600 instanced workers walk the campus, the yard, the square
+  and the park; the headcount follows the simulation's busy count.
+- **The big map** (`game/layout.js`, `game/districts.js`): the ground grows to ±300 m with five new
+  districts – the Ultron Campus (AI core, server halls, holograms, computing hall, university,
+  observatory, command atrium), the Old Town (market, fountain, windmill, watermill, clock tower,
+  towers from the castle kit), the Industrial Yard (warehouses, silo, water tower, substation,
+  transformers, battery banks, a 24-array solar farm, three wind turbines, trucks, drones, machines),
+  the Solar Park (lake, lilies, cherry blossom, willows, benches, playground, lighthouse, greenhouse,
+  orchard) and civic corners (hospital, courthouse, school, town hall, apartments, the solar guild
+  training campus) – plus streetlights along the main roads, four new arterial roads, 700 instanced
+  trees, bushes and flowers, and road signs at the town entries.
+- **Your model library**: 118 Tripo models and 8 Jarvis models from the samskiezz/jarvis-app repository
+  (compressed with meshopt and WebP so they fit the site) and the Kenney fantasy-town, city-roads,
+  castle and full nature kits it holds. Models load as .glb, or as glTF JSON where a host serves only
+  web media types.
+- **Light**: a physical sky that follows the sun, image-based lighting, and bloom on the bright bits.
+- **The shelf** gains OpenSolar, ServiceM8 and Xero help-centre books, so the crew study the tools the
+  business runs on, and a nightly routine harvests, verifies, commits and pushes the library.
+
 ## [2.10.0] - 2026-10-17
 
 ### The librarians go out on the web, and the town gets real models

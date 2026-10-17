@@ -46,7 +46,20 @@
     "sa.gov.au",
     "wa.gov.au",
     "nt.gov.au",
-    "act.gov.au"
+    "act.gov.au",
+    "opensolar.com",
+    "support.opensolar.com",
+    "help.opensolar.com",
+    "docs.opensolar.com",
+    "servicem8.com",
+    "support.servicem8.com",
+    "help.servicem8.com",
+    "xero.com",
+    "central.xero.com",
+    "developer.xero.com",
+    "solarquotes.com.au",
+    "sunwiz.com.au",
+    "cleanenergyregulator.gov.au"
   ],
   "books": [
     {
@@ -345,6 +358,61 @@
         "Electricity (Consumer Safety) Act 2004 NSW solar",
         "Energy Safe Victoria solar installation requirements",
         "working at heights solar installation code of practice"
+      ]
+    },
+    {
+      "id": "opensolar",
+      "code": "OpenSolar",
+      "title": "OpenSolar – design, proposals, projects, pricing and integrations (help centre)",
+      "tier": 6,
+      "licence": "public",
+      "seeds": [
+        "https://support.opensolar.com/hc/en-us",
+        "https://www.opensolar.com/",
+        "https://support.opensolar.com/hc/en-us/categories/360002031771",
+        "https://support.opensolar.com/hc/en-us/sections/360005443712"
+      ],
+      "queries": [
+        "OpenSolar help centre design tool",
+        "OpenSolar proposal pricing payment options help",
+        "OpenSolar project workflow stages help",
+        "OpenSolar integrations ServiceM8 Xero",
+        "OpenSolar 3D design shading tutorial",
+        "OpenSolar API developer docs"
+      ]
+    },
+    {
+      "id": "servicem8",
+      "code": "ServiceM8",
+      "title": "ServiceM8 – jobs, scheduling, forms, invoicing and the API (help centre)",
+      "tier": 6,
+      "licence": "public",
+      "seeds": [
+        "https://support.servicem8.com/hc/en-us",
+        "https://developer.servicem8.com/docs"
+      ],
+      "queries": [
+        "ServiceM8 help job statuses quote work order",
+        "ServiceM8 forms checklists help",
+        "ServiceM8 API jobs endpoint docs",
+        "ServiceM8 scheduling dispatch help"
+      ]
+    },
+    {
+      "id": "xero",
+      "code": "Xero",
+      "title": "Xero – invoicing, bank reconciliation, reports and the API (Xero Central)",
+      "tier": 6,
+      "licence": "public",
+      "seeds": [
+        "https://central.xero.com/s/",
+        "https://developer.xero.com/documentation/api/accounting/overview"
+      ],
+      "queries": [
+        "Xero Central bank reconciliation help",
+        "Xero invoices overdue reminders help",
+        "Xero API invoices endpoint",
+        "Xero aged receivables report help"
       ]
     }
   ]

@@ -106,6 +106,8 @@ export function createContext({ storage = null, root = null, products = null, se
     ctx.setLibrary = (lib) => { ctx.library = lib; world.library = lib; for (const b of Object.values(store.get('knowledge.private') || {})) mergePrivate(lib, b); bus.emit('library:loaded', { books: Object.keys(lib.books).length }); if (wm) wm.refreshAll(); return lib; };
     ctx.loadLibrary = async (baseUrl) => { try { const lib = await loadLibrary(baseUrl); ctx.setLibrary(lib); return lib; } catch (error) { bus.emit('library:error', { error: error.message, baseUrl }); return ctx.library; } };
     ctx.bridge = createBridge(ctx);
+    bus.on('business:loaded', () => { world.findings = (business.model && business.model.findings) || []; });
+    if (business.model) world.findings = business.model.findings || [];
     world.on((entry) => { bus.emit('world:event', entry); bus.emit(`world:${entry.type}`, entry); });
     if (products) ctx.setProducts(products);
     return ctx;

@@ -30,8 +30,8 @@ export function createOverlay(container, engine) {
         const id = `float:${Date.now()}:${Math.random()}`;
         const el = add(id, { el: h('div', { class: 'ov-float', style: { color: colour } }, text), anchor: anchorPos(anchor), offsetY: 2.4, maxDistance: 120 });
         const start = performance.now();
-        const tick = () => { const k = (performance.now() - start) / duration; if (k >= 1) { remove(id); return; } el.style.opacity = String(1 - k); el.style.marginTop = `${-k * 40}px`; requestAnimationFrame(tick); };
-        requestAnimationFrame(tick);
+        const tick = () => { if (!items.has(id)) return; const k = (performance.now() - start) / duration; if (k >= 1) { remove(id); return; } el.style.opacity = String(1 - k); el.style.marginTop = `${-k * 40}px`; requestAnimationFrame(tick); };
+        requestAnimationFrame(tick); setTimeout(() => { if (items.has(id)) remove(id); }, duration + 40); // frames pause in a hidden tab; the timer still clears the text
         return el;
     }
     return { layer, add, remove, get, update, floatText, count: () => items.size, clear() { for (const id of [...items.keys()]) remove(id); } };

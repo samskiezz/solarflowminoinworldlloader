@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-const modules = ['needs', 'traits', 'skills', 'memory', 'planner', 'dialogue', 'economy', 'events', 'agent', 'world', 'narrative', 'shifts'];
+const modules = ['needs', 'traits', 'skills', 'memory', 'planner', 'dialogue', 'economy', 'events', 'agent', 'world', 'narrative', 'shifts', 'workforce'];
 
 for (const name of modules) {
     test(`sim/${name}: registered self-tests pass`, async () => {

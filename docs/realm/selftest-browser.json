@@ -1,7 +1,7 @@
 {
- "at": "2026-10-17T12:50:29.159Z",
- "total": 808,
- "passed": 808,
+ "at": "2026-10-17T14:26:42.999Z",
+ "total": 826,
+ "passed": 826,
  "failed": 0,
  "results": [
   {
@@ -2273,6 +2273,48 @@
    "status": "passed"
   },
   {
+   "id": "workforce.hierarchy",
+   "module": "sim/workforce",
+   "title": "Ultron leads a chief of staff, twelve managers drawn from the named crew, and a thousand workers in teams",
+   "status": "passed"
+  },
+  {
+   "id": "workforce.deterministic",
+   "module": "sim/workforce",
+   "title": "The same seed produces the same workforce",
+   "status": "passed"
+  },
+  {
+   "id": "workforce.pipeline",
+   "module": "sim/workforce",
+   "title": "Every task walks research → execute → audit → review → sign-off with hand-offs between teams",
+   "status": "passed"
+  },
+  {
+   "id": "workforce.rework",
+   "module": "sim/workforce",
+   "title": "A failed audit sends the task back to the executing team and counts a rejection",
+   "status": "passed"
+  },
+  {
+   "id": "workforce.sweep",
+   "module": "sim/workforce",
+   "title": "The sweep turns open job tasks, business findings and library books into tasks routed to the right teams",
+   "status": "passed"
+  },
+  {
+   "id": "workforce.world",
+   "module": "sim/workforce",
+   "title": "The world runs the workforce: work sweeps in every six hours, flows through the teams, and the state round-trips",
+   "status": "passed"
+  },
+  {
+   "id": "workforce.board",
+   "module": "sim/workforce",
+   "title": "The board lists open tasks by priority with their current stage and team",
+   "status": "passed"
+  },
+  {
    "id": "bridge.route",
    "module": "core/bridge",
    "title": "Questions route to product knowledge or the compliance pipeline",
@@ -4223,6 +4265,30 @@
    "status": "passed"
   },
   {
+   "id": "win.ultron.command",
+   "module": "windows/ultron",
+   "title": "Command tab: Ultron, the chief of staff, twelve teams with managers, headcount and load",
+   "status": "passed"
+  },
+  {
+   "id": "win.ultron.sweep",
+   "module": "windows/ultron",
+   "title": "Sweeping adds tasks from the open job and the board shows them with stage and team",
+   "status": "passed"
+  },
+  {
+   "id": "win.ultron.teams",
+   "module": "windows/ultron",
+   "title": "Teams tab lists a team's workers with rank, skill and status; the selector switches teams",
+   "status": "passed"
+  },
+  {
+   "id": "win.ultron.log",
+   "module": "windows/ultron",
+   "title": "The hand-off log shows sign-offs once the clock has run",
+   "status": "passed"
+  },
+  {
    "id": "shell.registerWindows",
    "module": "shell",
    "title": "All window modules register with the window manager",
@@ -4346,6 +4412,24 @@
    "id": "shell.onboarding",
    "module": "shell",
    "title": "First-run onboarding captures profile and opens the dashboard",
+   "status": "passed"
+  },
+  {
+   "id": "game.layout.districts",
+   "module": "game/layout",
+   "title": "Five outer districts – Ultron Campus, Old Town, Industrial Yard, Solar Park and the civic corners – with hundreds of placements and streetlights",
+   "status": "passed"
+  },
+  {
+   "id": "game.layout.sizes",
+   "module": "game/layout",
+   "title": "Size targets come from the model name, so Tripo models land at sensible metres",
+   "status": "passed"
+  },
+  {
+   "id": "game.layout.obstacles",
+   "module": "game/layout",
+   "title": "Blocking placements become obstacle boxes for steering",
    "status": "passed"
   },
   {
@@ -4514,6 +4598,30 @@
    "id": "game.assets.load",
    "module": "game/assets",
    "title": "Models load from the site (GLB), clone with shadows, and rigged characters come with their animations",
+   "status": "passed"
+  },
+  {
+   "id": "game.neighbourhood.instanced",
+   "module": "game/districts",
+   "title": "Every suburb lot gets an instanced background house (fences, parked cars) and a job taking the lot hides it",
+   "status": "passed"
+  },
+  {
+   "id": "game.districts.build",
+   "module": "game/districts",
+   "title": "Districts build with whatever models are loaded and report what is missing",
+   "status": "passed"
+  },
+  {
+   "id": "game.crowd.instanced",
+   "module": "game/crowd",
+   "title": "The crowd is three instanced draws for up to 600 workers, split over the campus, yard, square and park",
+   "status": "passed"
+  },
+  {
+   "id": "game.crowd.walks",
+   "module": "game/crowd",
+   "title": "Workers walk toward waypoints and the headcount follows the simulation",
    "status": "passed"
   },
   {

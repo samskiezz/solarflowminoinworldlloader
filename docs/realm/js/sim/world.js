@@ -11,11 +11,12 @@ import { trait } from './genetics.js';
 import { epochProgress, companyIndex, epochInputs } from './epochs.js';
 import { Chronicle } from './narrative.js';
 import { tickShifts } from './shifts.js';
+import { Workforce } from './workforce.js';
 
 export const HOURS_PER_DAY = 24;
 
 export class World {
-    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked, population = null, memorial = [], chronicle = null } = {}) {
+    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked, population = null, memorial = [], chronicle = null, workforce = null, findings = [] } = {}) {
         this.seed = seed;
         this.random = mulberry32(seed);
         this.time = startTime; // ms
@@ -32,6 +33,9 @@ export class World {
         this.unlocked = unlocked || [];
         // The Chronicle: archetypes, quests, conflicts, debates and the stories the town tells (sim/narrative.js).
         this.chronicle = chronicle instanceof Chronicle ? chronicle : Chronicle.fromJSON(chronicle);
+        // The Workforce: Ultron, the managers and a thousand workers passing every task research → execute → audit → review → sign-off (sim/workforce.js).
+        this.workforce = workforce instanceof Workforce ? workforce : Workforce.fromJSON(workforce);
+        this.findings = findings || [];
         this.activeEvent = null;
         this.eventEndsAt = 0;
         this.feed = [];
@@ -129,6 +133,7 @@ export class World {
         this.tickLife(hours);
         tickShifts(this, hours);
         this.chronicle.tick(this, hours);
+        this.workforce.tick(this, hours);
         this.stats.expertAgents = this.agents.filter((a) => Object.keys(a.skills).some((k) => a.level(k) >= 10)).length;
         this.stats.reflections = this.agents.reduce((n, a) => n + a.stats.reflections, 0);
         this.stats.upgradesOwned = this.ledger.owned.length;
@@ -248,11 +253,11 @@ export class World {
     quests() { return this.jobs.filter((j) => j.stage !== 'complete').map(questsForJob); }
 
     toJSON() {
-        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100), population: this.population, memorial: this.memorial, chronicle: this.chronicle.toJSON() };
+        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100), population: this.population, memorial: this.memorial, chronicle: this.chronicle.toJSON(), workforce: this.workforce.toJSON() };
     }
 
     static fromJSON(data) {
-        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked, population: data.population, memorial: data.memorial, chronicle: data.chronicle || null });
+        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked, population: data.population, memorial: data.memorial, chronicle: data.chronicle || null, workforce: data.workforce || null });
         world.hour = data.hour || 0;
         world.activeEvent = data.activeEvent || null;
         world.eventEndsAt = data.eventEndsAt || 0;

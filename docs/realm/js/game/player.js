@@ -4,7 +4,7 @@ import { buildChibi, animate, face } from './characters.js';
 import { step, resolveCollisions, clampToWorld, dist, headingTo } from './steer.js';
 
 export const PLAYER_SPEED = 6;
-export const WORLD_HALF = 185;
+export const WORLD_HALF = 292;
 
 export function createPlayer(engine, { obstacles = () => [], position = { x: 0, z: 10 }, id = 'you', listen = true, element = null } = {}) {
     let chibi = buildChibi({ id, isPlayer: true });

@@ -20,7 +20,7 @@ const out = document.getElementById('results');
 const sum = document.getElementById('summary');
 try {
     await loadAll();
-    const result = await registry.runAll({ onProgress: (entry) => { if (entry.status === 'failed') { const d = document.createElement('div'); d.className = 'fail'; d.textContent = `✗ ${entry.id} – ${entry.title}: ${entry.error}`; out.append(d); } } });
+    const result = await registry.runAll({ timeoutMs: 20000, onProgress: (entry) => { if (entry.status === 'failed') { const d = document.createElement('div'); d.className = 'fail'; d.textContent = `✗ ${entry.id} – ${entry.title}: ${entry.error}`; out.append(d); } } });
     window.__REALM_SELFTEST__ = result;
     sum.textContent = `${result.passed}/${result.total} passed, ${result.failed} failed, ${result.skipped} skipped`;
     const byModule = {};

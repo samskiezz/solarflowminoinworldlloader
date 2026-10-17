@@ -7,6 +7,14 @@ import * as THREE from 'three';
 import { TOWN_SIZE, LANDMARKS, LOTS, ROADS, TREES, DISTRICT, lotForJob, houseState, doorOf } from './town.js';
 import { has, instance, fitTo, pickFor, HOUSE_TYPES, TREE_TYPES, LANDMARK_MODELS, MANIFEST, assetsReady } from './assets.js';
 import { RoomEnvironment } from '../../../vendor/three/examples/jsm/environments/RoomEnvironment.js';
+import { Sky } from '../../../vendor/three/examples/jsm/objects/Sky.js';
+import { EffectComposer } from '../../../vendor/three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from '../../../vendor/three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from '../../../vendor/three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from '../../../vendor/three/examples/jsm/postprocessing/OutputPass.js';
+import { buildDistricts, buildVegetation, buildNeighbourhood, districtObstacles } from './districts.js';
+const DISTRICT_BLOCKS = () => districtObstacles();
+import { createCrowd } from './crowd.js';
 
 /** Soft image-based lighting so the kit models (and the procedural fallbacks) read with real shading. */
 function tuneMaterials(root, intensity = 0.35) { root.traverse((o) => { if (o.material) { const mats = Array.isArray(o.material) ? o.material : [o.material]; for (const m of mats) if ('envMapIntensity' in m) m.envMapIntensity = intensity; } }); }
@@ -23,8 +31,15 @@ export function createEngine(canvas, { pixelRatio = Math.min(2, globalThis.devic
     const scene = new THREE.Scene();
     try { const pmrem = new THREE.PMREMGenerator(renderer); scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture; pmrem.dispose(); } catch (error) { /* environment lighting is optional (software GL in tests) */ }
     scene.background = new THREE.Color(PHASE_SKY.day);
-    scene.fog = new THREE.Fog(PHASE_FOG.day, 110, 260);
-    const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 400);
+    scene.fog = new THREE.Fog(PHASE_FOG.day, 160, 520);
+    const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 900);
+    // A physical sky (Preetham) that follows the sun, drawn behind everything; the scene background colour stays as the fallback and the fog tint.
+    const sky = new Sky(); sky.scale.setScalar(4000); sky.name = 'sky'; scene.add(sky);
+    const skyU = sky.material.uniforms; skyU.turbidity.value = 6; skyU.rayleigh.value = 1.6; skyU.mieCoefficient.value = 0.006; skyU.mieDirectionalG.value = 0.8;
+    // Bloom on the bright bits (panels, holograms, lamps at night) through a composer; plain rendering stays available for weak GPUs.
+    let composer = null; let bloomPass = null;
+    try { composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera)); bloomPass = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.16, 0.4, 0.93); composer.addPass(bloomPass); composer.addPass(new OutputPass()); } catch (error) { composer = null; }
+    let useComposer = Boolean(composer);
     camera.position.set(0, 14, 22);
     const hemi = new THREE.HemisphereLight(0xbfdfff, 0x4a6a3a, 0.9); scene.add(hemi);
     const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.castShadow = shadows; sun.shadow.mapSize.set(2048, 2048); sun.shadow.camera.left = -70; sun.shadow.camera.right = 70; sun.shadow.camera.top = 70; sun.shadow.camera.bottom = -70; sun.shadow.camera.near = 10; sun.shadow.camera.far = 260; sun.shadow.bias = -0.0008; scene.add(sun); scene.add(sun.target);
@@ -34,12 +49,12 @@ export function createEngine(canvas, { pixelRatio = Math.min(2, globalThis.devic
     const rain = makeRain(); rain.visible = false; scene.add(rain);
     const state = { phase: 'day', hourOfDay: 12, weather: 'none', frames: 0 };
 
-    function resize() { const w = canvas.clientWidth || canvas.parentElement?.clientWidth || window.innerWidth; const h = canvas.clientHeight || canvas.parentElement?.clientHeight || window.innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+    function resize() { const w = canvas.clientWidth || canvas.parentElement?.clientWidth || window.innerWidth; const h = canvas.clientHeight || canvas.parentElement?.clientHeight || window.innerHeight; renderer.setSize(w, h, false); if (composer) { composer.setSize(w, h); if (bloomPass) bloomPass.resolution.set(w, h); } camera.aspect = w / h; camera.updateProjectionMatrix(); }
     function frame(now) {
         const dt = Math.min(0.1, last === null ? 0.016 : (now - last) / 1000); last = now; clock.dt = dt; clock.elapsed += dt;
         for (const fn of updaters) { try { fn(dt, clock.elapsed); } catch (error) { console.error(error); } }
         if (rain.visible) animateRain(rain, dt);
-        renderer.render(scene, camera); state.frames++;
+        if (useComposer && composer) composer.render(dt); else renderer.render(scene, camera); state.frames++;
         raf = requestAnimationFrame(frame);
     }
     function setPhase(phase, hourOfDay = 12) {
@@ -51,6 +66,7 @@ export function createEngine(canvas, { pixelRatio = Math.min(2, globalThis.devic
         const a = ((hourOfDay - 6) / 12) * Math.PI; // 6h → 0, 18h → π
         const day = hourOfDay >= 5.5 && hourOfDay <= 18.5;
         sun.position.set(Math.cos(a) * 120, Math.max(8, Math.sin(a) * 120), 40); sun.target.position.set(0, 0, 0);
+        skyU.sunPosition.value.copy(sun.position).normalize(); skyU.rayleigh.value = day ? 1.6 : 0.2; skyU.turbidity.value = state.weather === 'storm' ? 20 : 6; sky.visible = day || phase === 'dawn' || phase === 'dusk';
         sun.intensity = day ? (0.6 + Math.max(0, Math.sin(a)) * 1.8) * (state.weather === 'storm' ? 0.4 : 1) : 0;
         sun.color.set(phase === 'dawn' || phase === 'dusk' ? 0xffc890 : 0xffffff);
         moon.position.set(-60, 90, -40); moon.intensity = day ? 0 : 0.35;
@@ -63,7 +79,7 @@ export function createEngine(canvas, { pixelRatio = Math.min(2, globalThis.devic
     function groundPoint(ndcX, ndcY) { raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera); const p = new THREE.Vector3(); return raycaster.ray.intersectPlane(groundPlane, p) ? { x: p.x, z: p.z } : null; }
     function pick(ndcX, ndcY, objects) { scene.updateMatrixWorld(); raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera); const hits = raycaster.intersectObjects(objects, true); return hits.length ? hits[0] : null; }
     function project(v3) { const p = new THREE.Vector3(v3.x, v3.y, v3.z).project(camera); return { x: (p.x + 1) / 2, y: (1 - p.y) / 2, behind: p.z > 1 }; }
-    function setQuality({ shadows: sh = true, pixelRatio: pr = null } = {}) { renderer.shadowMap.enabled = Boolean(sh); sun.castShadow = Boolean(sh); scene.traverse((o) => { if (o.material) { const mats = Array.isArray(o.material) ? o.material : [o.material]; for (const m of mats) m.needsUpdate = true; } }); if (pr) renderer.setPixelRatio(pr); state.quality = { shadows: Boolean(sh), pixelRatio: pr || renderer.getPixelRatio() }; resize(); return state.quality; }
+    function setQuality({ shadows: sh = true, pixelRatio: pr = null, bloom = null } = {}) { renderer.shadowMap.enabled = Boolean(sh); sun.castShadow = Boolean(sh); if (bloom !== null) useComposer = Boolean(bloom && composer); scene.traverse((o) => { if (o.material) { const mats = Array.isArray(o.material) ? o.material : [o.material]; for (const m of mats) m.needsUpdate = true; } }); if (pr) renderer.setPixelRatio(pr); state.quality = { shadows: Boolean(sh), pixelRatio: pr || renderer.getPixelRatio() }; resize(); return state.quality; }
     resize();
     return { renderer, scene, camera, sun, hemi, state, clock, resize, setPhase, setWeather, setQuality, groundPoint, pick, project, onUpdate: (fn) => { updaters.add(fn); return () => updaters.delete(fn); }, start() { if (!raf) raf = requestAnimationFrame(frame); }, stop() { if (raf) cancelAnimationFrame(raf); raf = null; last = null; }, renderOnce() { for (const fn of updaters) fn(0.016, clock.elapsed); renderer.render(scene, camera); state.frames++; }, dispose() { this.stop(); renderer.dispose(); } };
 }
@@ -174,7 +190,7 @@ export function updateHouse(houseGroup, job) {
     return s;
 }
 
-export function buildTown(scene, { jobs = [] } = {}) {
+export function buildTown(scene, { jobs = [], detail = 'full' } = {}) {
     const town = new THREE.Group(); town.name = 'town'; scene.add(town);
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(TOWN_SIZE * 2, TOWN_SIZE * 2), new THREE.MeshStandardMaterial({ map: groundTexture(), roughness: 1 })); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; ground.name = 'ground'; town.add(ground);
     for (const r of ROADS) { const road = new THREE.Mesh(new THREE.PlaneGeometry(r.w, r.d), mat(0x5a5a60, { roughness: 1 })); road.rotation.x = -Math.PI / 2; road.position.set(r.x, 0.02, r.z); road.receiveShadow = true; town.add(road); }
@@ -191,6 +207,8 @@ export function buildTown(scene, { jobs = [] } = {}) {
             for (let i = 0; i < 40 && extras.length; i++) { const a = (i / 40) * Math.PI * 2; const r = 20 + (i % 5) * 6; const m = instance(extras[i % extras.length]); fitTo(m, { h: 0.5 + (i % 3) * 0.25 }); m.position.set(Math.cos(a) * r + ((i * 7) % 5) - 2, 0, Math.sin(a) * r * 0.9 + ((i * 3) % 4) - 2); props.add(m); }
             const cars = ['cars/sedan', 'cars/suv', 'cars/taxi', 'cars/hatchback-sports', 'cars/delivery', 'cars/truck'].filter((k) => has(k));
             [[-18, -32, 0], [22, -32, 0], [-42, 14, Math.PI / 2], [44, 8, Math.PI / 2], [12, 44, 0], [-8, 44, 0]].forEach(([x, z, rot], i) => { if (!cars.length) return; const m = instance(cars[i % cars.length]); fitTo(m, { w: 2.2 }); m.position.set(x, 0, z); m.rotation.y = rot; props.add(m); });
+            const built = detail === 'low' ? { placed: 0, missing: 0, skipped: true } : buildDistricts(props, { tune: (m) => tuneMaterials(m) }); props.userData.districts = built;
+            props.userData.neighbourhood = detail === 'low' ? null : buildNeighbourhood(props); props.userData.vegetation = buildVegetation(props, { count: detail === 'low' ? 150 : 1600, avoid: [...LOTS, ...DISTRICT_BLOCKS()], roads: ROADS, size: TOWN_SIZE });
             const districtKeys = MANIFEST.commercial.map((n) => `commercial/${n}`).filter((k) => has(k) && !/detail/.test(k));
             for (const b of DISTRICT) { if (!districtKeys.length) break; const m = instance(pickFor(`${b.x},${b.z}`, districtKeys)); fitTo(m, { w: b.w * 1.6, d: b.d * 1.6, h: b.h * 1.3 }); m.position.set(b.x, 0, b.z); tuneMaterials(m); props.add(m); }
             return 'models';
@@ -209,6 +227,7 @@ export function buildTown(scene, { jobs = [] } = {}) {
             const ids = new Set(list.map((j) => j.id));
             for (const [id, g] of houses) if (!ids.has(id)) { town.remove(g); houses.delete(id); }
             for (const job of list) { const lot = lotForJob(list, job.id); if (!lot) continue; let g = houses.get(job.id); if (!g) { g = buildHouse(job, lot); houses.set(job.id, g); town.add(g); } else { g.position.set(lot.x, 0, lot.z); g.rotation.y = lot.facing; updateHouse(g, job); } }
+            if (props.userData.neighbourhood) props.userData.neighbourhood.refresh(new Set(list.map((job) => lotForJob(list, job.id)).filter(Boolean).map((l) => l.id)));
             return houses.size;
         },
         updateHouse(job) { const g = houses.get(job.id); return g ? updateHouse(g, job) : null; },
@@ -221,6 +240,9 @@ export function buildTown(scene, { jobs = [] } = {}) {
             for (const [, g] of houses) town.remove(g); houses.clear(); api.setJobs(list);
             return { mode, landmarks: landmarks.size, houses: houses.size };
         },
+        /** The visible workforce: created once the models are in; follows the simulation's busy count. */
+        crowd: null,
+        ensureCrowd(count = 400) { if (!api.crowd) api.crowd = createCrowd(scene, { count }); else api.crowd.setCount(count); return api.crowd; },
         flicker(elapsed) { for (const g of landmarks.values()) g.traverse((o) => { if (o.userData.flicker) o.intensity = 2.2 + Math.sin(elapsed * 17) * 0.4 + Math.sin(elapsed * 5) * 0.3; if (o.name === 'flame') o.scale.y = 1 + Math.sin(elapsed * 12) * 0.12; }); }
     };
     api.setJobs(jobs);

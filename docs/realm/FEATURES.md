@@ -5,11 +5,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **808** |
-| Verified in Node (this run) | 463 passed, 0 failed |
-| Browser-verified (DOM) features | 345 |
-| Modules | 128 |
-| Generated | 2026-10-17T12:51:57.356Z |
+| Registered features | **826** |
+| Verified in Node (this run) | 473 passed, 0 failed |
+| Browser-verified (DOM) features | 353 |
+| Modules | 133 |
+| Generated | 2026-10-17T14:27:06.612Z |
 
 ## By area
 
@@ -17,10 +17,10 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 |---|---|
 | Core shell | 108 |
 | Solar engineering domain | 160 |
-| Crew simulation | 114 |
+| Crew simulation | 121 |
 | Shell | 84 |
-| Windows (game UI) | 258 |
-| 3D game world | 84 |
+| Windows (game UI) | 262 |
+| 3D game world | 91 |
 
 ## business/bank (3)
 
@@ -650,6 +650,20 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `game.chibi.deterministicSkin` | Skin tone and hat derive from id and role deterministically | browser |
 | 6 | `game.chibi.rigged` | With the character kit loaded, minions are rigged models with a hard hat, a vest stripe and real walk/sit/pick-up clips driven by the mixer | browser |
 
+## game/crowd (2)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.crowd.instanced` | The crowd is three instanced draws for up to 600 workers, split over the campus, yard, square and park | browser |
+| 2 | `game.crowd.walks` | Workers walk toward waypoints and the headcount follows the simulation | browser |
+
+## game/districts (2)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.neighbourhood.instanced` | Every suburb lot gets an instanced background house (fences, parked cars) and a job taking the lot hides it | browser |
+| 2 | `game.districts.build` | Districts build with whatever models are loaded and report what is missing | browser |
+
 ## game/game (12)
 
 | # | Feature | What it verifies | Runs in |
@@ -676,6 +690,14 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `game.interact.npc` | Talking to a crew member opens chat and they remember it | browser |
 | 4 | `game.interact.landmark` | Entering a landmark opens its window (library → Codex) | browser |
 | 5 | `game.interact.labels` | Landmark labels describe what each building does | browser |
+
+## game/layout (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.layout.districts` | Five outer districts – Ultron Campus, Old Town, Industrial Yard, Solar Park and the civic corners – with hundreds of placements and streetlights | node + browser |
+| 2 | `game.layout.sizes` | Size targets come from the model name, so Tripo models land at sensible metres | node + browser |
+| 3 | `game.layout.obstacles` | Blocking placements become obstacle boxes for steering | node + browser |
 
 ## game/npcs (7)
 
@@ -967,6 +989,18 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `traits.decayModifiers` | Trait decay modifiers combine | node + browser |
 | 4 | `traits.multipliers` | Error/speed/XP multipliers | node + browser |
 | 5 | `traits.fromSeed` | Deterministic traits from seed | node + browser |
+
+## sim/workforce (7)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `workforce.hierarchy` | Ultron leads a chief of staff, twelve managers drawn from the named crew, and a thousand workers in teams | node + browser |
+| 2 | `workforce.deterministic` | The same seed produces the same workforce | node + browser |
+| 3 | `workforce.pipeline` | Every task walks research → execute → audit → review → sign-off with hand-offs between teams | node + browser |
+| 4 | `workforce.rework` | A failed audit sends the task back to the executing team and counts a rejection | node + browser |
+| 5 | `workforce.sweep` | The sweep turns open job tasks, business findings and library books into tasks routed to the right teams | node + browser |
+| 6 | `workforce.world` | The world runs the workforce: work sweeps in every six hours, flows through the teams, and the state round-trips | node + browser |
+| 7 | `workforce.board` | The board lists open tasks by priority with their current stage and team | node + browser |
 
 ## sim/world (14)
 
@@ -1461,6 +1495,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `win.survey.checks` | Survey checklist persists | browser |
 | 4 | `win.survey.general` | Site details persist | browser |
 | 5 | `win.survey.ranking` | Face ranking helper | node + browser |
+
+## windows/ultron (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.ultron.command` | Command tab: Ultron, the chief of staff, twelve teams with managers, headcount and load | browser |
+| 2 | `win.ultron.sweep` | Sweeping adds tasks from the open job and the board shows them with stage and team | browser |
+| 3 | `win.ultron.teams` | Teams tab lists a team's workers with rank, skill and status; the selector switches teams | browser |
+| 4 | `win.ultron.log` | The hand-off log shows sign-offs once the clock has run | browser |
 
 ## windows/wizard (3)
 

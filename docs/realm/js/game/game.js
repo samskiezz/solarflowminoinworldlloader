@@ -13,6 +13,7 @@ import { createAwareness } from './awareness.js';
 import { createTouchControls, isCoarsePointer } from './touch.js';
 import { createAudio } from '../core/audio.js';
 import { obstacles, LANDMARKS, LOTS, ROADS, TOWN_SIZE, lotForJob, houseState, usedLots, suburbCentres, doorOf } from './town.js';
+import { DISTRICTS } from './layout.js';
 import { dayPhase } from '../core/clock.js';
 import { h, replace } from '../core/ui.js';
 
@@ -45,6 +46,7 @@ export function drawMinimap(canvas, { jobs, npcs, player, phase = 'day' }) {
     const g = canvas.getContext('2d'); const w = canvas.width; const hh = canvas.height; const s = Math.min(w, hh) / (TOWN_SIZE + 10);
     const X = (x) => w / 2 + x * s; const Z = (z) => hh / 2 + z * s;
     g.fillStyle = phase === 'night' ? '#16301c' : '#2f6b2f'; g.fillRect(0, 0, w, hh);
+    for (const d of DISTRICTS) if (d.w && d.ground) { g.fillStyle = `#${d.ground.toString(16).padStart(6, '0')}`; g.fillRect(X(d.x - d.w / 2), Z(d.z - d.d / 2), d.w * s, d.d * s); }
     g.fillStyle = '#5a5a60'; for (const r of ROADS) g.fillRect(X(r.x - r.w / 2), Z(r.z - r.d / 2), r.w * s, r.d * s);
     g.fillStyle = '#b9ad98'; g.beginPath(); g.arc(X(0), Z(0), 16 * s, 0, Math.PI * 2); g.fill();
     for (const l of LANDMARKS) { g.fillStyle = `#${l.colour.toString(16).padStart(6, '0')}`; g.fillRect(X(l.x - l.w / 2), Z(l.z - l.d / 2), Math.max(2, l.w * s), Math.max(2, l.d * s)); }
@@ -56,9 +58,9 @@ export function drawMinimap(canvas, { jobs, npcs, player, phase = 'day' }) {
     return { scale: s, toWorld: (px, pz) => ({ x: (px - w / 2) / s, z: (pz - hh / 2) / s }) };
 }
 
-export function startGame(ctx, { canvas, overlayHost, minimapHost = null, trackerHost = null, autoStart = true } = {}) {
+export function startGame(ctx, { canvas, overlayHost, minimapHost = null, trackerHost = null, autoStart = true, detail = 'full' } = {}) {
     const engine = createEngine(canvas);
-    const town = buildTown(engine.scene, { jobs: ctx.jobs() });
+    const town = buildTown(engine.scene, { jobs: ctx.jobs(), detail });
     const overlay = createOverlay(overlayHost, engine);
     const obs = () => obstacles(ctx.jobs());
     const saved = ctx.store.get('ui.playerPos');
@@ -69,7 +71,7 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     const awareness = createAwareness({ ctx, npcs, player, overlay, audio });
     const quality = ctx.store.get('ui.quality', {}); engine.setQuality({ shadows: quality.shadows !== false, pixelRatio: quality.pixelRatio || null });
     // The town appears at once in its procedural look and upgrades to the real model kits as they load (buildings, trees, cars, rigged minions).
-    const assets = autoStart ? preloadAssets({ timeoutMs: 25000 }).then((st) => { if (st.loaded) { town.refreshModels(ctx.jobs()); npcs.refreshModels(); player.refreshModel(); if (interactions.refreshMarkers) interactions.refreshMarkers(); ctx.bus.emit('game:assets', st); } return st; }).catch((error) => { console.warn('asset kits unavailable', error); return assetStatus(); }) : Promise.resolve(assetStatus());
+    const assets = autoStart ? preloadAssets({ timeoutMs: 25000 }).then((st) => { if (st.loaded) { town.refreshModels(ctx.jobs()); npcs.refreshModels(); player.refreshModel(); town.ensureCrowd(Math.min(600, 120 + ctx.world.workforce.summary().busy)); if (interactions.refreshMarkers) interactions.refreshMarkers(); ctx.bus.emit('game:assets', st); } return st; }).catch((error) => { console.warn('asset kits unavailable', error); return assetStatus(); }) : Promise.resolve(assetStatus());
     let touch = null; const touchMode = ctx.store.get('ui.touch', 'auto'); if (overlayHost && autoStart && (touchMode === 'on' || (touchMode === 'auto' && isCoarsePointer()))) touch = createTouchControls(overlayHost.parentElement || overlayHost, { player, onInteract: () => interactions.interact() });
     const state = { hudVisible: true, lastSync: 0, lastMinimap: 0, jobCount: ctx.jobs().length, moved: 0, lastHoverCheck: 0 };
     // Click a minion to select them (opens their crew sheet); hover shows their needs.
@@ -131,9 +133,9 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     const frame = (dt, elapsed) => {
         const moved = player.update(dt); state.moved += moved; if (state.moved > 6) completeTutorial(ctx, 'move');
         if (moved > 0) { stepTimer += dt; if (stepTimer > 0.36) { stepTimer = 0; audio.play('step'); } }
-        npcs.update(dt, elapsed); awareness.update(dt); interactions.update(); town.flicker(elapsed); overlay.update();
+        npcs.update(dt, elapsed); awareness.update(dt); interactions.update(); town.flicker(elapsed); overlay.update(); if (town.crowd) town.crowd.update(dt, elapsed);
         ambienceTimer += dt; if (ambienceTimer > 2) { ambienceTimer = 0; audio.ambience({ phase: engine.state.phase, weather: engine.state.weather, nearFire: Math.hypot(player.pos.x + 12, player.pos.z - 14) < 10 }); }
-        state.lastSync += dt; if (state.lastSync > 1.5) { state.lastSync = 0; npcs.sync(); if (ctx.jobs().length !== state.jobCount) { state.jobCount = ctx.jobs().length; town.setJobs(ctx.jobs()); } for (const job of ctx.jobs()) town.updateHouse(job); interactions.refreshMarkers(); ctx.store.set('ui.playerPos', { x: player.pos.x, z: player.pos.z }); if (ctx.world.crew().some((a) => a.currentTask && a.currentTask.jobId)) completeTutorial(ctx, 'assign'); }
+        state.lastSync += dt; if (state.lastSync > 1.5) { state.lastSync = 0; npcs.sync(); if (town.crowd) town.crowd.setCount(Math.min(600, 120 + ctx.world.workforce.summary().busy)); if (ctx.jobs().length !== state.jobCount) { state.jobCount = ctx.jobs().length; town.setJobs(ctx.jobs()); } for (const job of ctx.jobs()) town.updateHouse(job); interactions.refreshMarkers(); ctx.store.set('ui.playerPos', { x: player.pos.x, z: player.pos.z }); if (ctx.world.crew().some((a) => a.currentTask && a.currentTask.jobId)) completeTutorial(ctx, 'assign'); }
         state.lastMinimap += dt; if (mm && state.lastMinimap > 0.2) { state.lastMinimap = 0; drawMinimap(mm, { jobs: ctx.jobs(), npcs: [...npcs.npcs.values()], player: player.state, phase: engine.state.phase }); }
     };
     const stopUpdate = engine.onUpdate(frame);
@@ -150,7 +152,7 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     return game;
 }
 
-const boot = async () => { const { makeTestCtx } = await import('../windows/_testing.js'); const t = makeTestCtx(); const canvas = h('canvas', { width: 320, height: 200 }); const host = h('div', { style: { width: '320px', height: '200px', position: 'fixed' } }); document.body.append(canvas, host); const game = startGame(t.ctx, { canvas, overlayHost: host, trackerHost: host, autoStart: false }); return { t, game, cleanup: () => { game.dispose(); canvas.remove(); host.remove(); t.done(); } }; };
+const boot = async () => { const { makeTestCtx } = await import('../windows/_testing.js'); const t = makeTestCtx(); const canvas = h('canvas', { width: 320, height: 200 }); const host = h('div', { style: { width: '320px', height: '200px', position: 'fixed' } }); document.body.append(canvas, host); const game = startGame(t.ctx, { canvas, overlayHost: host, trackerHost: host, autoStart: false, detail: 'low' }); return { t, game, cleanup: () => { game.dispose(); canvas.remove(); host.remove(); t.done(); } }; };
 export const FEATURES = [
     { id: 'game.start', title: 'The game starts with the town, the player, the crew and job houses', dom: true, test: async () => { const { t, game, cleanup } = await boot(); game.engine.renderOnce(); const ok = game.npcs.npcs.size === 24 && game.town.houses.size === 1 && game.player.chibi.parent === game.engine.scene && game.engine.state.frames === 1; cleanup(); return ok; } },
     { id: 'game.clockDrivesWorld', title: 'Simulated clock drives day/night and weather in the world', dom: true, test: async () => { const { t, game, cleanup } = await boot(); t.ctx.world.tick(12); t.ctx.bus.emit('clock:tick', {}); const night = game.engine.state.phase === 'night'; t.ctx.world.activeEvent = { id: 'storm', label: 'Storm', effects: { installBlocked: true }, durationH: 12 }; t.ctx.bus.emit('clock:tick', {}); const rain = game.engine.state.weather === 'storm'; cleanup(); return night && rain; } },
@@ -158,7 +160,7 @@ export const FEATURES = [
     { id: 'game.houseAppears', title: 'Creating a job raises a house with a quest marker', dom: true, test: async () => { const { t, game, cleanup } = await boot(); const job = t.ctx.world.addJob({ customer: 'Bea', postcode: '2000', systemKw: 5 }); const ok = game.town.houses.has(job.id) && game.overlay.get(`mk:${job.id}`) && game.overlay.get(`mk:${job.id}`).textContent === '!'; cleanup(); return Boolean(ok); } },
     { id: 'game.floatingRewards', title: 'Completed tasks and level-ups float reward text in the world', dom: true, test: async () => { const { t, game, cleanup } = await boot(); const before = game.overlay.count(); t.ctx.world.emit({ type: 'task_complete', agentId: 'NOVA', text: 'Nova completed x' }); const ok = game.overlay.count() >= before + 1 && game.overlay.get('bb:NOVA') && /Done/.test(game.overlay.get('bb:NOVA').textContent); cleanup(); return Boolean(ok); } },
     { id: 'game.interactKey', title: 'E interacts with whatever is in front of the player', dom: true, test: async () => { const { t, game, cleanup } = await boot(); t.ctx.wm.register({ id: 'chat', title: 'c', render: () => {}, tabs: [{ id: 'talk', label: 't' }] }); const nova = game.npcs.npcs.get('NOVA'); game.player.setPosition({ x: nova.pos.x + 1, z: nova.pos.z }); game.tickOnce(0.01); t.ctx.keys.handle({ key: 'e' }); const ok = t.ctx.wm.isOpen('chat') && t.ctx.store.get('ui.chatAgent') === 'NOVA'; cleanup(); return ok; } },
-    { id: 'game.minimap', title: 'Town minimap with player, crew, houses and markers', dom: true, test: async () => { const { t, game, cleanup } = await boot(); const c = h('canvas', { width: 180, height: 150 }); const d = drawMinimap(c, { jobs: t.ctx.jobs(), npcs: [...game.npcs.npcs.values()], player: game.player.state }); const px = c.getContext('2d').getImageData(90, 75, 1, 1).data; const ok = d.scale > 0.6 && px[3] === 255 && Math.abs(d.toWorld(90, 75).x) < 0.01; cleanup(); return ok; } },
+    { id: 'game.minimap', title: 'Town minimap with player, crew, houses and markers', dom: true, test: async () => { const { t, game, cleanup } = await boot(); const c = h('canvas', { width: 180, height: 150 }); const d = drawMinimap(c, { jobs: t.ctx.jobs(), npcs: [...game.npcs.npcs.values()], player: game.player.state }); const px = c.getContext('2d').getImageData(90, 75, 1, 1).data; const ok = d.scale > 0.4 && px[3] === 255 && Math.abs(d.toWorld(90, 75).x) < 0.01; cleanup(); return ok; } },
     { id: 'game.clickSelect', title: 'Clicking a minion selects them and opens their sheet', dom: true, test: async () => { const { t, game, cleanup } = await boot(); t.ctx.wm.register({ id: 'crew', title: 'c', render: () => {}, tabs: [{ id: 'detail', label: 'd' }] }); const nova = game.npcs.npcs.get('NOVA'); game.player.setPosition({ x: nova.pos.x, z: nova.pos.z + 6 }); game.player.state.cam = { yaw: 0, pitch: 0.3, dist: 8 }; game.player.updateCamera(1); game.engine.camera.updateMatrixWorld(); const p = game.engine.project({ x: nova.pos.x, y: 1, z: nova.pos.z }); game.player.onClick({ x: p.x * 2 - 1, y: -(p.y * 2 - 1) }); const ok = game.npcs.selected === 'NOVA' && t.ctx.wm.isOpen('crew') && t.ctx.store.get('ui.selectedAgent') === 'NOVA'; cleanup(); return ok; } },
     { id: 'game.soundHooks', title: 'World events trigger sound cues when sound is on', dom: true, test: async () => { const { createAudio } = await import('../core/audio.js'); const { makeTestCtx } = await import('../windows/_testing.js'); const t = makeTestCtx(); t.ctx.store.set('ui.soundOn', true); const played = []; t.ctx.audio = { play: (n) => played.push(n), ambience() {}, stopAll() {}, unlock() {}, loop() {} }; const canvas = h('canvas', { width: 320, height: 200 }); const host = h('div', { style: { width: '320px', height: '200px', position: 'fixed' } }); document.body.append(canvas, host); const game = startGame(t.ctx, { canvas, overlayHost: host, autoStart: false }); t.ctx.world.emit({ type: 'task_complete', agentId: 'NOVA', text: 'x' }); t.ctx.world.emit({ type: 'level_up', agentId: 'NOVA', text: 'x' }); t.ctx.wm.register({ id: 'tmp', title: 't', render: () => {} }); t.ctx.open('tmp'); const ok = played.includes('reward') && played.includes('levelup') && played.includes('open'); game.dispose(); canvas.remove(); host.remove(); t.done(); return ok; } },
     { id: 'game.hudToggle', title: 'Shift+Z hides the HUD overlay', dom: true, test: async () => { const { t, game, cleanup } = await boot(); t.ctx.keys.handle({ key: 'Z', shiftKey: true }); const hidden = game.overlay.layer.classList.contains('hidden'); t.ctx.keys.handle({ key: 'Z', shiftKey: true }); const shown = !game.overlay.layer.classList.contains('hidden'); cleanup(); return hidden && shown; } },

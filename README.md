@@ -11,7 +11,7 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0, the library in 2.10.0)
+## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0, the library in 2.10.0, Ultron and the big map in 2.11.0)
 
 `docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
 third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
@@ -100,6 +100,15 @@ tested modules (`docs/realm/js/domain/hierarchy.js`, `courtsafe.js`, `compliance
 Every answer the engine gives is governed by the highest regulatory tier that applies, cites its
 authority, is rewritten in court-safe language and must pass the personal, coroner, regulator, judge
 and insurer tests; beyond the competency envelope it refuses with conservative guidance instead.
+
+### Ultron and the big map (2.11.0)
+
+Ultron leads the Workforce: a chief of staff, twelve managers from the named crew and a thousand
+workers in teams. Every job task, business finding and book becomes a task that is researched,
+executed, audited, reviewed and signed off, with hand-offs between teams and rework when an audit
+fails (Ultron, Shift+P). The map grows to ±300 m with the Ultron Campus, the Old Town, the Industrial
+Yard and solar farm, the Solar Park and civic corners, built from your own Jarvis model library
+(Tripo and Kenney kits, compressed) with a physical sky, bloom and 700 instanced plants.
 
 ### Real models (2.10.0)
 

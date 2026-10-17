@@ -1,6 +1,6 @@
 {
  "version": 1,
- "harvestedAt": "2026-10-17T12:38:53.185Z",
+ "harvestedAt": "2026-10-17T13:16:08.507Z",
  "books": [
   {
    "id": "cec_saa_guidelines",
@@ -392,6 +392,72 @@
     "pages": null
    },
    "harvestedAt": "2026-10-17T12:38:53.185Z"
+  },
+  {
+   "id": "opensolar",
+   "code": "OpenSolar",
+   "title": "OpenSolar – design, proposals, projects, pricing and integrations (help centre)",
+   "tier": 6,
+   "licence": "public",
+   "codexId": null,
+   "sources": 25,
+   "sourcesOk": 19,
+   "chars": 175279,
+   "passages": 166,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T13:13:02.521Z"
+  },
+  {
+   "id": "servicem8",
+   "code": "ServiceM8",
+   "title": "ServiceM8 – jobs, scheduling, forms, invoicing and the API (help centre)",
+   "tier": 6,
+   "licence": "public",
+   "codexId": null,
+   "sources": 25,
+   "sourcesOk": 24,
+   "chars": 114127,
+   "passages": 131,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T13:15:37.178Z"
+  },
+  {
+   "id": "xero",
+   "code": "Xero",
+   "title": "Xero – invoicing, bank reconciliation, reports and the API (Xero Central)",
+   "tier": 6,
+   "licence": "public",
+   "codexId": null,
+   "sources": 19,
+   "sourcesOk": 5,
+   "chars": 94078,
+   "passages": 99,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T13:16:08.507Z"
   }
  ]
 }

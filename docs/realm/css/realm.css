@@ -338,3 +338,10 @@ table.connectors tr.missing td { color: var(--muted); }
 .book-body { padding: 6px 0 2px; } .sources li { margin: 2px 0; }
 .library-query { flex: 1; min-width: 260px; }
 .passage .finding-detail { white-space: pre-wrap; }
+.org { display: grid; gap: 8px; }
+.org-node { border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; background: var(--panel-2); }
+.org-node.leader { border-color: var(--gold); background: linear-gradient(180deg, rgba(226,177,74,.12), transparent); }
+.org-node.chief { margin-left: 24px; }
+.org-teams { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px; margin-left: 48px; }
+.org-node.team { border-top: 3px solid var(--accent); }
+.task-board td, .roster-table td { vertical-align: middle; }
