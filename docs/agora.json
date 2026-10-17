@@ -35,7 +35,7 @@
       "target_tier": 2,
       "timestamp": "2050-02-03T14:00:32Z",
       "intent": "MEMORY_WRITE",
-      "payload": {"task_id":"doc_seed_001","source_domain":"example.com","delta":+0.2,"pattern":"/datasheet|/downloads"},
+      "payload": {"task_id":"doc_seed_001","source_domain":"example.com","delta":0.2,"pattern":"/datasheet|/downloads"},
       "spark_delta": 0.1,
       "metadata": {"requires_quantum_break": false}
     }

@@ -1,0 +1,1 @@
+Jarvis interface models from samskiezz/jarvis-app, owned by Project Solar. Compressed with glTF Transform.

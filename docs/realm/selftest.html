@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SolarFlow Realm – system check</title>
+<link rel="icon" href="../favicon.svg">
+<link rel="stylesheet" href="css/realm.css">
+<script type="importmap">{ "imports": { "three": "../vendor/three/build/three.module.js" } }</script>
+<style>body{padding:16px;font-family:system-ui,sans-serif}#results{white-space:pre-wrap;font:12px/1.4 ui-monospace,monospace;max-height:60vh;overflow:auto;background:#111;color:#ddd;padding:8px;border-radius:6px}.fail{color:#ff6b6b}.sum{font-size:18px;margin:8px 0}</style>
+</head>
+<body>
+<h1>SolarFlow Realm – system check</h1>
+<p>Runs every registered feature self-test in this browser. The JSON summary is also written to <code>window.__REALM_SELFTEST__</code> for automated smoke tests.</p>
+<div class="sum" id="summary">Running…</div>
+<div id="results"></div>
+<script type="module">
+import { loadAll, registry } from './js/modules.js';
+const out = document.getElementById('results');
+const sum = document.getElementById('summary');
+try {
+    await loadAll();
+    const result = await registry.runAll({ timeoutMs: 20000, onProgress: (entry) => { if (entry.status === 'failed') { const d = document.createElement('div'); d.className = 'fail'; d.textContent = `✗ ${entry.id} – ${entry.title}: ${entry.error}`; out.append(d); } } });
+    window.__REALM_SELFTEST__ = result;
+    sum.textContent = `${result.passed}/${result.total} passed, ${result.failed} failed, ${result.skipped} skipped`;
+    const byModule = {};
+    for (const r of result.results) (byModule[r.module] = byModule[r.module] || { passed: 0, failed: 0 })[r.status === 'passed' ? 'passed' : 'failed']++;
+    const d = document.createElement('div'); d.textContent = JSON.stringify(byModule, null, 1); out.append(d);
+    const md = document.createElement('a'); md.textContent = 'Download report (Markdown)'; md.href = URL.createObjectURL(new Blob([registry.reportMarkdown(result)], { type: 'text/markdown' })); md.download = 'realm-selftest.md'; document.body.append(md);
+} catch (error) {
+    window.__REALM_SELFTEST__ = { error: error.message, stack: error.stack };
+    sum.textContent = `Self-test crashed: ${error.message}`;
+    out.textContent = error.stack;
+}
+</script>
+</body>
+</html>

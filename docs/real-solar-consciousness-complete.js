@@ -319,7 +319,7 @@ class RealSolarConsciousnessSystem {
             // For now, we'll use our existing comprehensive database as the foundation
             // and simulate the extraction process
             
-            const response = await fetch('./real-cer-product-database.json');
+            const response = await fetch('./cer-product-database.json');
             if (!response.ok) {
                 throw new Error(`Failed to load CER database: HTTP ${response.status}`);
             }
@@ -712,8 +712,7 @@ class RealSolarConsciousnessSystem {
         }
     }
     
-    async processDocumentWithMinion(document) {
-        // Simulate/**
+    /**
  * CONTINUATION OF REAL SOLAR CONSCIOUSNESS SYSTEM
  * Part 2: Document processing, consciousness building, and UI functions
  */

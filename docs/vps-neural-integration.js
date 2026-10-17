@@ -5,17 +5,19 @@
 
 class VPSNeuralConnector {
     constructor() {
-        this.vpsUrl = 'http://76.13.176.135:3000';  // Hostinger VPS
+        // Backend URL comes from solarflow-config.js (null when unreachable, e.g. mixed content).
+        this.vpsUrl = window.SOLARFLOW_CONFIG ? window.SOLARFLOW_CONFIG.getVpsUrl() : null;
+        this.pollInterval = (window.SOLARFLOW_CONFIG && window.SOLARFLOW_CONFIG.pollIntervals.vpsHealth) || 60000;
         this.connected = false;
         this.lastUpdate = null;
         this.neuralStatus = null;
         this.retryCount = 0;
         this.maxRetries = 3;
-        
+
         console.log('🚀 VPS Neural Connector initialized');
         this.startMonitoring();
     }
-    
+
     async checkConnection() {
         try {
             const response = await fetch(`${this.vpsUrl}/api/health`, {
@@ -26,7 +28,7 @@ class VPSNeuralConnector {
                 },
                 signal: AbortSignal.timeout(5000)  // 5 second timeout
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 this.connected = true;
@@ -44,7 +46,7 @@ class VPSNeuralConnector {
             return null;
         }
     }
-    
+
     async getNeuralStatus() {
         try {
             const response = await fetch(`${this.vpsUrl}/api/neural/status`, {
@@ -52,7 +54,7 @@ class VPSNeuralConnector {
                 mode: 'cors',
                 signal: AbortSignal.timeout(5000)
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 this.neuralStatus = data.neural;
@@ -66,7 +68,7 @@ class VPSNeuralConnector {
             return null;
         }
     }
-    
+
     async getOptimizationMetrics() {
         try {
             const response = await fetch(`${this.vpsUrl}/api/neural/optimization`, {
@@ -74,7 +76,7 @@ class VPSNeuralConnector {
                 mode: 'cors',
                 signal: AbortSignal.timeout(5000)
             });
-            
+
             if (response.ok) {
                 return await response.json();
             } else {
@@ -85,7 +87,7 @@ class VPSNeuralConnector {
             return null;
         }
     }
-    
+
     async getRepositoryStatus() {
         try {
             const response = await fetch(`${this.vpsUrl}/api/neural/repositories`, {
@@ -93,7 +95,7 @@ class VPSNeuralConnector {
                 mode: 'cors',
                 signal: AbortSignal.timeout(5000)
             });
-            
+
             if (response.ok) {
                 return await response.json();
             } else {
@@ -104,7 +106,7 @@ class VPSNeuralConnector {
             return null;
         }
     }
-    
+
     async getStandards() {
         try {
             const response = await fetch(`${this.vpsUrl}/api/standards`, {
@@ -112,7 +114,7 @@ class VPSNeuralConnector {
                 mode: 'cors',
                 signal: AbortSignal.timeout(10000)  // Longer timeout for standards
             });
-            
+
             if (response.ok) {
                 return await response.json();
             } else {
@@ -123,7 +125,7 @@ class VPSNeuralConnector {
             return null;
         }
     }
-    
+
     async getCERProducts() {
         try {
             const response = await fetch(`${this.vpsUrl}/api/cer/products`, {
@@ -131,7 +133,7 @@ class VPSNeuralConnector {
                 mode: 'cors',
                 signal: AbortSignal.timeout(10000)  // Longer timeout for products
             });
-            
+
             if (response.ok) {
                 return await response.json();
             } else {
@@ -142,7 +144,7 @@ class VPSNeuralConnector {
             return null;
         }
     }
-    
+
     async triggerOptimization() {
         try {
             const response = await fetch(`${this.vpsUrl}/api/neural/optimize`, {
@@ -153,7 +155,7 @@ class VPSNeuralConnector {
                 },
                 signal: AbortSignal.timeout(10000)
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 console.log('🔧 Neural optimization triggered:', data.message);
@@ -166,7 +168,7 @@ class VPSNeuralConnector {
             return null;
         }
     }
-    
+
     updateStatusIndicator() {
         // Update the footer status indicator
         const statusElement = document.getElementById('neural-status');
@@ -179,42 +181,56 @@ class VPSNeuralConnector {
                     Packages: ${this.neuralStatus.packages || 0} |
                     Optimization: ${(this.neuralStatus.optimization_level || 0).toFixed(1)}%
                 `;
+            } else if (!this.vpsUrl) {
+                statusElement.innerHTML = '<span style="color: #9ca3af;">⚪ VPS not configured for this host</span>';
             } else {
                 const retryText = this.retryCount > 0 ? ` (Retry ${this.retryCount}/${this.maxRetries})` : '';
                 statusElement.innerHTML = `<span style="color: #f87171;">🔴 VPS Disconnected${retryText}</span>`;
             }
         }
     }
-    
+
     async startMonitoring() {
+        if (!this.vpsUrl) {
+            console.log('⏹️  VPS neural monitoring disabled: ' + (window.SOLARFLOW_CONFIG ? window.SOLARFLOW_CONFIG.vps.reason : 'no config'));
+            this.updateStatusIndicator();
+            return;
+        }
         console.log('🔄 Starting VPS monitoring...');
-        
+
         // Initial connection check
         await this.checkConnection();
-        await this.getNeuralStatus();
+        if (this.connected) await this.getNeuralStatus();
         this.updateStatusIndicator();
-        
-        // Monitor every 30 seconds
-        setInterval(async () => {
+
+        this.monitorTimer = setInterval(async () => {
             await this.checkConnection();
-            await this.getNeuralStatus();
+            if (this.connected) await this.getNeuralStatus();
             this.updateStatusIndicator();
-            
-            // Stop retrying if max retries exceeded
-            if (this.retryCount >= this.maxRetries) {
-                console.log('⏹️  Max retries exceeded, monitoring paused');
-                return;
+
+            // Actually stop polling once the retry budget is spent.
+            if (!this.connected && this.retryCount >= this.maxRetries) {
+                clearInterval(this.monitorTimer);
+                this.monitorTimer = null;
+                console.log('⏹️  VPS unreachable after ' + this.maxRetries + ' attempts; monitoring paused');
             }
-        }, 30000);
-        
+        }, this.pollInterval);
+
         console.log('✅ VPS monitoring started');
     }
-    
+
+    stopMonitoring() {
+        if (this.monitorTimer) {
+            clearInterval(this.monitorTimer);
+            this.monitorTimer = null;
+        }
+    }
+
     // Utility methods for the UI
     isConnected() {
         return this.connected;
     }
-    
+
     getConnectionStatus() {
         return {
             connected: this.connected,
@@ -235,10 +251,10 @@ let vpsNeuralConnector;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🌐 Initializing VPS Neural Integration...');
     vpsNeuralConnector = new VPSNeuralConnector();
-    
+
     // Make it globally available
     window.vpsNeuralConnector = vpsNeuralConnector;
-    
+
     // Add status indicator to footer if it exists
     const footer = document.querySelector('footer') || document.querySelector('.footer');
     if (footer && !document.getElementById('neural-status')) {

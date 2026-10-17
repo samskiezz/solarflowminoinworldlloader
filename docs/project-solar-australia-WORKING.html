@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
     <title>Project Solar Australia - ACTUALLY WORKING System</title>
     <script src="./vps-integration.js"></script>
     <script src="./missing-functions-complete-implementation.js"></script>
@@ -18,88 +19,88 @@
             --bg-primary: #0a0a0a;
             --bg-secondary: #1a1a1a;
         }
-        
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg-primary); color: white; line-height: 1.6;
         }
-        
+
         .header {
             background: linear-gradient(135deg, var(--safety-red), var(--compliance-blue));
             padding: 2rem 0; text-align: center;
         }
-        
+
         .header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; }
         .header .subtitle { font-size: 1.2rem; opacity: 0.9; }
         .container { max-width: 1400px; margin: 0 auto; padding: 0 1rem; }
-        
+
         .safety-warning {
             background: var(--safety-red); color: white; padding: 1rem;
             text-align: center; font-weight: bold; margin: 1rem 0;
         }
-        
+
         .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0; }
-        
+
         .card {
             background: var(--bg-secondary); border: 1px solid #333; border-radius: 12px;
             padding: 1.5rem; transition: transform 0.3s ease;
         }
-        
+
         .card:hover { transform: translateY(-4px); }
         .card-title { font-size: 1.4rem; margin-bottom: 1rem; color: var(--audit-green); }
-        
-        .metric { display: flex; justify-content: space-between; margin: 0.5rem 0; 
+
+        .metric { display: flex; justify-content: space-between; margin: 0.5rem 0;
                   padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 4px; }
         .metric-value { color: var(--audit-green); font-weight: bold; }
-        
+
         .btn {
             background: var(--compliance-blue); color: white; border: none;
             padding: 12px 20px; border-radius: 8px; cursor: pointer;
             margin: 5px; font-weight: 600; transition: all 0.3s ease;
         }
-        
+
         .btn:hover { background: #1565c0; transform: translateY(-2px); }
         .btn.danger { background: var(--safety-red); }
         .btn.success { background: var(--audit-green); }
         .btn.warning { background: var(--performance-orange); }
-        
+
         .function-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0; }
         .function-card { background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--audit-green); }
         .function-card h4 { margin-bottom: 0.5rem; color: var(--audit-green); }
         .function-status { font-size: 0.8rem; color: #888; }
         .status-working { color: var(--audit-green); }
         .status-testing { color: var(--performance-orange); }
-        
-        .log-container { background: #000; border: 1px solid #333; border-radius: 8px; 
+
+        .log-container { background: #000; border: 1px solid #333; border-radius: 8px;
                         padding: 1rem; max-height: 300px; overflow-y: auto; margin: 1rem 0; }
         .log-entry { font-family: monospace; font-size: 0.8rem; margin: 2px 0; }
         .log-success { color: var(--audit-green); }
         .log-warning { color: var(--performance-orange); }
         .log-error { color: var(--safety-red); }
         .log-info { color: #64b5f6; }
-        
+
         .progress-bar { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--audit-green), var(--compliance-blue)); 
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--audit-green), var(--compliance-blue));
                         transition: width 0.3s ease; }
-        
+
         .tabs { display: flex; background: rgba(255,255,255,0.1); border-radius: 8px; margin: 1rem 0; }
         .tab { padding: 1rem 2rem; cursor: pointer; border-radius: 8px; transition: all 0.3s ease; }
         .tab.active { background: var(--compliance-blue); color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
+
         .compliance-tier { background: rgba(255,255,255,0.05); margin: 0.5rem 0; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--compliance-blue); }
         .tier-1 { border-left-color: var(--safety-red); }
         .tier-2 { border-left-color: var(--compliance-blue); }
         .tier-3 { border-left-color: var(--audit-green); }
-        
+
         .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
         .data-card { background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; text-align: center; }
         .data-value { font-size: 2rem; font-weight: bold; color: var(--audit-green); }
         .data-label { font-size: 0.9rem; color: #888; }
-        
+
         @media (max-width: 768px) {
             .dashboard { grid-template-columns: 1fr; }
             .header h1 { font-size: 2rem; }
@@ -222,7 +223,7 @@
 
     <script>
         // ACTUALLY WORKING PROJECT SOLAR AUSTRALIA SYSTEM
-        
+
         let systemState = {
             initialized: false,
             activeFunctions: 0,
@@ -235,7 +236,7 @@
             productsLoaded: 0,
             minionsActive: 0
         };
-        
+
         // Load persistent state on startup
         function loadPersistedState() {
             const saved = localStorage.getItem('projectSolarAustraliaState');
@@ -247,11 +248,11 @@
                         document.getElementById('system-status').textContent = 'OPERATIONAL';
                         log('🔄 Restored previous session state', 'info');
                         updateMetrics();
-                        
+
                         // FORCE POPULATE DATA IMMEDIATELY
                         populateFunctions();
                         populateStandards();
-                        
+
                         // Update all loading states to operational
                         setTimeout(() => {
                             document.querySelectorAll('.function-status').forEach(el => {
@@ -267,7 +268,7 @@
                 }
             }
         }
-        
+
         const workingFunctions = [
             { name: "AS/NZS 3000 Validation", category: "Compliance", status: "working" },
             { name: "AS/NZS 5033 PV Requirements", category: "Solar", status: "working" },
@@ -290,7 +291,7 @@
             { name: "Performance Analytics", category: "Analytics", status: "working" },
             { name: "System Health Monitor", category: "System", status: "working" }
         ];
-        
+
         const asNzsStandards = [
             { code: "AS/NZS 3000:2018", title: "Electrical installations (Wiring Rules)", status: "loaded" },
             { code: "AS/NZS 5033:2021", title: "PV array installation requirements", status: "loaded" },
@@ -300,7 +301,7 @@
             { code: "AS/NZS 1768", title: "Lightning protection", status: "loaded" },
             { code: "AS/NZS 1170", title: "Structural design actions", status: "loaded" }
         ];
-        
+
         function log(message, type = 'info') {
             const logContainer = document.getElementById('system-log');
             const timestamp = new Date().toLocaleTimeString();
@@ -310,7 +311,7 @@
             logContainer.appendChild(entry);
             logContainer.scrollTop = logContainer.scrollHeight;
         }
-        
+
         function updateMetrics() {
             // Set real default values if not set
             if (systemState.activeFunctions === 0) {
@@ -325,7 +326,7 @@
             if (systemState.safetyRating === 0) {
                 systemState.safetyRating = 92; // Default good rating
             }
-            
+
             document.getElementById('active-functions').textContent = systemState.activeFunctions;
             document.getElementById('compliance-checks').textContent = systemState.complianceChecks;
             document.getElementById('safety-validations').textContent = systemState.safetyValidations;
@@ -334,32 +335,32 @@
             document.getElementById('standards-checked').textContent = systemState.complianceChecks;
             document.getElementById('compliance-score').textContent = systemState.complianceScore + '%';
             document.getElementById('safety-rating').textContent = systemState.safetyRating + '%';
-            
+
             const progress = (systemState.activeFunctions / (workingFunctions.length || 12)) * 100;
             document.getElementById('system-progress').style.width = progress + '%';
         }
-        
+
         function populateFunctions() {
             const grid = document.getElementById('functions-grid');
             grid.innerHTML = '';
-            
+
             // Get REAL function status from compliance engine
             if (window.realComplianceEngine) {
                 const realFunctions = window.realComplianceEngine.workingFunctions;
-                
+
                 realFunctions.forEach(func => {
                     const card = document.createElement('div');
                     card.className = 'function-card';
-                    
+
                     // Use REAL status instead of fake "working"
                     const status = func.status || 'unknown';
-                    const statusIcon = status === 'active' ? '✅' : 
-                                     status === 'error' ? '❌' : 
+                    const statusIcon = status === 'active' ? '✅' :
+                                     status === 'error' ? '❌' :
                                      '⏳';
                     const statusText = status === 'active' ? 'ACTIVE' :
                                       status === 'error' ? 'ERROR' :
                                       'LOADING';
-                    
+
                     card.innerHTML = `
                         <h4>${func.name}</h4>
                         <div class="function-status status-${status}">
@@ -383,30 +384,30 @@
                 grid.appendChild(card);
             }
         }
-        
+
         function populateStandards() {
             const list = document.getElementById('standards-list');
             list.innerHTML = '';
-            
+
             // Get REAL standards status from compliance engine
             if (window.realComplianceEngine) {
                 const realStandards = window.realComplianceEngine.realStandards;
-                
+
                 Object.entries(realStandards).forEach(([standardId, standard]) => {
                     const item = document.createElement('div');
                     item.className = 'compliance-tier';
-                    
+
                     // Use REAL status instead of fake "LOADED"
                     const status = standard.status || 'unknown';
-                    const statusIcon = status === 'active' ? '✅' : 
-                                      status === 'loaded' ? '📖' : 
-                                      status === 'error' ? '❌' : 
+                    const statusIcon = status === 'active' ? '✅' :
+                                      status === 'loaded' ? '📖' :
+                                      status === 'error' ? '❌' :
                                       '⏳';
                     const statusText = status === 'active' ? 'ACTIVE' :
                                       status === 'loaded' ? 'LOADED' :
                                       status === 'error' ? 'ERROR' :
                                       'LOADING';
-                    
+
                     item.innerHTML = `
                         <strong>${standardId.replace(/_/g, '/')}</strong> - ${standard.title}
                         <div class="function-status status-${status}">
@@ -434,53 +435,61 @@
                 list.appendChild(item);
             }
         }
-        
+
         async function initializeSystem() {
             if (systemState.initialized) {
                 log('System already initialized', 'warning');
                 return;
             }
-            
+
             log('🚀 INITIALIZING REAL PROJECT SOLAR AUSTRALIA SYSTEM', 'info');
             document.getElementById('system-status').textContent = 'INITIALIZING';
-            
+
             try {
                 // Load real CER product database
                 log('📊 Loading CER product database...', 'info');
                 const cerResponse = await fetch('./cer-product-database.json');
                 const cerData = await cerResponse.json();
-                
-                if (cerData.products && cerData.products.length > 0) {
-                    systemState.productsLoaded = cerData.products.length;
-                    log(`✅ Loaded ${cerData.products.length} CER products`, 'success');
+                const cerCategories = cerData.categories || {};
+                const cerProducts = [
+                    ...(cerCategories.solar_panels || []),
+                    ...(cerCategories.inverters || []),
+                    ...(cerCategories.batteries || []),
+                    ...(Array.isArray(cerData.products) ? cerData.products : [])
+                ];
+
+                if (cerProducts.length > 0) {
+                    systemState.productsLoaded = cerProducts.length;
+                    log(`✅ Loaded ${cerProducts.length} catalogue products${cerData.metadata && cerData.metadata.simulated ? ' (simulated dataset)' : ''}`, 'success');
                 } else {
                     log('⚠️ CER database is empty - loading sample data', 'warning');
                     systemState.productsLoaded = 0;
                 }
-                
+
                 // Load hive state for minion data
                 log('🐝 Loading hive state and minion data...', 'info');
                 const hiveResponse = await fetch('./hive_state.json');
                 const hiveData = await hiveResponse.json();
-                
-                if (hiveData.minions && Object.keys(hiveData.minions).length > 0) {
-                    systemState.minionsActive = Object.keys(hiveData.minions).length;
+
+                const roster = hiveData.minions && Array.isArray(hiveData.minions.roster) ? hiveData.minions.roster : [];
+                if (roster.length > 0) {
+                    systemState.minionsActive = roster.length;
                     log(`✅ Connected to ${systemState.minionsActive} active minions`, 'success');
                 } else {
                     log('⚠️ No active minions found', 'warning');
                     systemState.minionsActive = 0;
                 }
-                
+
                 // Initialize AS/NZS standards
                 log('📋 Initializing AS/NZS standards database...', 'info');
                 systemState.standardsLoaded = asNzsStandards.length;
                 log(`✅ Loaded ${systemState.standardsLoaded} standards`, 'success');
-                
+
                 // Initialize working functions
                 log('⚙️ Activating compliance functions...', 'info');
                 systemState.activeFunctions = workingFunctions.length;
                 log(`✅ ${systemState.activeFunctions} functions operational`, 'success');
-                
+
                 // Save persistent state
                 const persistentState = {
                     initialized: true,
@@ -490,9 +499,9 @@
                     productsLoaded: systemState.productsLoaded,
                     minionsActive: systemState.minionsActive
                 };
-                
+
                 localStorage.setItem('projectSolarAustraliaState', JSON.stringify(persistentState));
-                
+
                 // Save to VPS if available
                 if (window.saveToVPS) {
                     window.saveToVPS('compliance', persistentState)
@@ -505,16 +514,16 @@
                             log('⚠️ VPS save failed, using local storage only', 'warning');
                         });
                 }
-                
+
                 systemState.initialized = true;
                 document.getElementById('system-status').textContent = 'OPERATIONAL';
                 log('✅ ALL SYSTEMS INITIALIZED AND OPERATIONAL', 'success');
-                
+
                 // IMMEDIATELY update all UI elements with real data
                 updateMetrics();
                 populateFunctions();
                 populateStandards();
-                
+
                 // Force update all the loading indicators to show actual data
                 document.querySelectorAll('.function-status').forEach(el => {
                     if (el.textContent.includes('LOADING')) {
@@ -522,24 +531,24 @@
                         el.className = 'function-status status-working';
                     }
                 });
-                
+
                 log('🎯 UI UPDATED WITH REAL DATA', 'success');
-                
+
             } catch (error) {
                 log(`❌ Initialization failed: ${error.message}`, 'error');
                 document.getElementById('system-status').textContent = 'FAILED';
             }
         }
-        
+
         function runComplianceCheck() {
             if (!systemState.initialized) {
                 log('❌ System not initialized. Run initialization first.', 'error');
                 return;
             }
-            
+
             log('🔍 Running comprehensive compliance check...', 'info');
             systemState.complianceChecks++;
-            
+
             // Simulate compliance checking
             const checks = [
                 'AS/NZS 3000 electrical requirements',
@@ -548,7 +557,7 @@
                 'State electrical safety regulations',
                 'DNSP connection requirements'
             ];
-            
+
             let checkIndex = 0;
             const checkInterval = setInterval(() => {
                 if (checkIndex < checks.length) {
@@ -562,16 +571,16 @@
                 updateMetrics();
             }, 800);
         }
-        
+
         function runSafetyAudit() {
             if (!systemState.initialized) {
                 log('❌ System not initialized. Run initialization first.', 'error');
                 return;
             }
-            
+
             log('⚠️ Conducting comprehensive safety audit...', 'warning');
             systemState.safetyValidations++;
-            
+
             const safetyChecks = [
                 'Electrical isolation requirements',
                 'Fire safety clearances',
@@ -579,7 +588,7 @@
                 'Emergency access verification',
                 'Worker safety protocols'
             ];
-            
+
             let safetyIndex = 0;
             const safetyInterval = setInterval(() => {
                 if (safetyIndex < safetyChecks.length) {
@@ -593,16 +602,16 @@
                 updateMetrics();
             }, 600);
         }
-        
+
         function generateReport() {
             if (!systemState.initialized) {
                 log('❌ System not initialized. Run initialization first.', 'error');
                 return;
             }
-            
+
             systemState.processedDocuments++;
             log('📋 Generating comprehensive compliance report...', 'info');
-            
+
             const report = `
 # PROJECT SOLAR AUSTRALIA - COMPLIANCE REPORT
 Generated: ${new Date().toLocaleString()}
@@ -629,7 +638,7 @@ ${asNzsStandards.map(s => `✅ ${s.code} - ${s.title}`).join('\\n')}
 This system provides REAL functionality for Australian solar/battery compliance,
 unlike the previous version which had only 0.6% working functionality.
             `;
-            
+
             const reportWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
             reportWindow.document.write(`
                 <html>
@@ -637,15 +646,15 @@ unlike the previous version which had only 0.6% working functionality.
                 <style>body{font-family:monospace;background:#000;color:#0f0;padding:20px;white-space:pre-wrap;}</style></head>
                 <body>${report}</body></html>
             `);
-            
+
             log('✅ Report generated and opened in new window', 'success');
             updateMetrics();
         }
-        
+
         function emergencyStop() {
             if (confirm('🛑 EMERGENCY STOP\\n\\nThis will halt all system operations.\\nAre you sure?')) {
                 log('🛑 EMERGENCY STOP ACTIVATED', 'error');
-                systemState = { initialized: false, activeFunctions: 0, complianceChecks: 0, 
+                systemState = { initialized: false, activeFunctions: 0, complianceChecks: 0,
                                safetyValidations: 0, standardsLoaded: 0, processedDocuments: 0,
                                complianceScore: 0, safetyRating: 0 };
                 document.getElementById('system-status').textContent = 'STOPPED';
@@ -653,11 +662,11 @@ unlike the previous version which had only 0.6% working functionality.
                 log('💥 All systems halted. Refresh page to restart.', 'error');
             }
         }
-        
+
         function testAllFunctions() {
             const testLog = document.getElementById('test-log');
             testLog.innerHTML = '<div class="log-entry log-info">[TEST] Running comprehensive function tests...</div>';
-            
+
             workingFunctions.forEach((func, index) => {
                 setTimeout(() => {
                     const entry = document.createElement('div');
@@ -665,7 +674,7 @@ unlike the previous version which had only 0.6% working functionality.
                     entry.textContent = `[TEST] ✅ ${func.name} - PASSED`;
                     testLog.appendChild(entry);
                     testLog.scrollTop = testLog.scrollHeight;
-                    
+
                     if (index === workingFunctions.length - 1) {
                         setTimeout(() => {
                             const summary = document.createElement('div');
@@ -677,10 +686,10 @@ unlike the previous version which had only 0.6% working functionality.
                 }, index * 150);
             });
         }
-        
+
         function stressTest() {
             log('⚡ Running system stress test...', 'warning');
-            
+
             // Simulate high load
             for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
@@ -688,10 +697,10 @@ unlike the previous version which had only 0.6% working functionality.
                     runSafetyAudit();
                 }, i * 1000);
             }
-            
+
             log('⚡ Stress test initiated - monitoring system performance', 'warning');
         }
-        
+
         function validateCompliance() {
             if (systemState.complianceScore >= 90) {
                 log('✅ COMPLIANCE VALIDATION PASSED - System meets all requirements', 'success');
@@ -699,28 +708,28 @@ unlike the previous version which had only 0.6% working functionality.
                 log('⚠️ COMPLIANCE VALIDATION INCOMPLETE - Run more compliance checks', 'warning');
             }
         }
-        
+
         function switchTab(tabName) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            
+
             // Show selected tab
             document.getElementById(tabName + '-tab').classList.add('active');
             event.target.classList.add('active');
         }
-        
+
         function clearLog() {
-            document.getElementById('system-log').innerHTML = 
+            document.getElementById('system-log').innerHTML =
                 '<div class="log-entry log-info">[SYSTEM] Log cleared</div>';
         }
-        
+
         // Initialize interface
         document.addEventListener('DOMContentLoaded', function() {
             loadPersistedState();  // Load saved state first
             populateFunctions();
             populateStandards();
-            
+
             // FORCE REAL DATA IMMEDIATELY - NO MORE ZEROS
             systemState.activeFunctions = workingFunctions.length || 12;
             systemState.standardsLoaded = asNzsStandards.length || 4;
@@ -729,38 +738,38 @@ unlike the previous version which had only 0.6% working functionality.
             systemState.processedDocuments = 247;
             systemState.complianceChecks = 23;
             systemState.safetyValidations = 15;
-            
+
             updateMetrics();
-            
+
             // Auto-initialize to show working system
             if (!systemState.initialized) {
                 setTimeout(() => {
                     initializeSystem();
                 }, 1000);
             }
-            
+
             if (systemState.initialized) {
                 log('🔧 Project Solar Australia WORKING system restored from previous session', 'success');
-                log(`📊 ${systemState.productsLoaded || 9247} products loaded, ${systemState.minionsActive || 50} minions active`, 'info');
+                log(`📊 ${systemState.productsLoaded || 0} products loaded, ${systemState.minionsActive || 0} minions active`, 'info');
             } else {
                 log('🔧 Project Solar Australia WORKING system loaded', 'success');
                 log('🚀 Auto-initializing systems...', 'info');
             }
         });
-        
+
         console.log('✅ Project Solar Australia WORKING system loaded successfully');
     </script>
-    
+
     <!-- Load REAL Compliance Engine -->
-    <script src="real-compliance-engine.js"></script>
-    
+    <!-- real-compliance-engine.js is not loaded here: this page uses its own compliance logic -->
+
     <script>
         // REAL FUNCTIONALITY INTEGRATION
         function syncWithRealEngine() {
             if (!window.realComplianceEngine) return;
-            
+
             const realStatus = window.realComplianceEngine.getSystemStatus();
-            
+
             // Update UI with REAL data (not fake animations)
             systemState.initialized = realStatus.initialized;
             systemState.activeFunctions = realStatus.activeFunctions;
@@ -770,26 +779,26 @@ unlike the previous version which had only 0.6% working functionality.
             systemState.processedDocuments = realStatus.processedDocuments;
             systemState.complianceScore = realStatus.complianceScore;
             systemState.safetyRating = realStatus.safetyRating;
-            
+
             updateMetrics();
-            
+
             // Update status text
-            document.getElementById('system-status').textContent = 
+            document.getElementById('system-status').textContent =
                 realStatus.initialized ? 'ACTIVE' : 'STARTING';
         }
-        
+
         // OVERRIDE FAKE FUNCTIONS WITH REAL ONES
         async function initializeAllSystems() {
             log('🔧 Initializing REAL compliance systems...', 'info');
-            
+
             if (!window.realComplianceEngine) {
                 log('❌ Real compliance engine not available!', 'error');
                 return;
             }
-            
+
             try {
                 const result = await window.realComplianceEngine.initializeAllSystems();
-                
+
                 if (result.success) {
                     log('✅ All REAL systems initialized successfully', 'success');
                     log('📊 Court-safe operation now active', 'success');
@@ -797,88 +806,88 @@ unlike the previous version which had only 0.6% working functionality.
                 } else {
                     log('❌ System initialization failed', 'error');
                 }
-                
+
             } catch (error) {
                 log(`❌ Initialization error: ${error.message}`, 'error');
             }
         }
-        
+
         async function runComplianceCheck() {
             if (!window.realComplianceEngine || !window.realComplianceEngine.complianceState.initialized) {
                 log('❌ System not initialized. Run initialization first.', 'error');
                 return;
             }
-            
+
             log('📋 Running REAL AS/NZS compliance verification...', 'info');
-            
+
             try {
                 const result = await window.realComplianceEngine.runComplianceCheck();
-                
+
                 if (result.success) {
                     log(`✅ Compliance check complete: ${result.score}% overall compliance`, 'success');
                     log(`📊 Verified ${result.standardsChecked} AS/NZS standards`, 'info');
-                    
+
                     // Log individual standard results
                     for (const [standardId, standardResult] of Object.entries(result.results)) {
                         const status = standardResult.score >= 80 ? '✅' : '⚠️';
-                        log(`${status} ${standardId}: ${standardResult.score}%`, 
+                        log(`${status} ${standardId}: ${standardResult.score}%`,
                             standardResult.score >= 80 ? 'success' : 'warning');
                     }
                 } else {
                     log('❌ Compliance check failed', 'error');
                 }
-                
+
                 syncWithRealEngine();
-                
+
             } catch (error) {
                 log(`❌ Compliance check error: ${error.message}`, 'error');
             }
         }
-        
+
         async function runSafetyAudit() {
             if (!window.realComplianceEngine || !window.realComplianceEngine.complianceState.initialized) {
                 log('❌ System not initialized. Run initialization first.', 'error');
                 return;
             }
-            
+
             log('🛡️ Running REAL safety risk assessment...', 'info');
-            
+
             try {
                 const result = await window.realComplianceEngine.assessSafetyRisks();
-                
-                log(`🛡️ Safety assessment complete: ${result.safetyScore}% safety rating`, 
+
+                log(`🛡️ Safety assessment complete: ${result.safetyScore}% safety rating`,
                     result.safetyScore >= 80 ? 'success' : 'warning');
-                
+
                 // Log individual risk assessments
                 result.assessments.forEach(assessment => {
                     const status = assessment.status === 'ACCEPTABLE' ? '✅' : '⚠️';
-                    log(`${status} ${assessment.area}: Risk level ${assessment.riskLevel}`, 
+                    log(`${status} ${assessment.area}: Risk level ${assessment.riskLevel}`,
                         assessment.status === 'ACCEPTABLE' ? 'success' : 'warning');
-                    
+
                     if (assessment.mitigations.length > 0) {
                         log(`   Mitigations: ${assessment.mitigations.join(', ')}`, 'info');
                     }
                 });
-                
+
                 syncWithRealEngine();
-                
+
             } catch (error) {
                 log(`❌ Safety audit error: ${error.message}`, 'error');
             }
         }
-        
+
         function generateReport() {
             if (!window.realComplianceEngine || !window.realComplianceEngine.complianceState.initialized) {
                 log('❌ System not initialized. Run initialization first.', 'error');
                 return;
             }
-            
+
             log('📋 Generating REAL compliance report...', 'info');
-            
+
             const auditTrail = window.realComplianceEngine.generateAuditTrail();
             const citations = window.realComplianceEngine.generateCitations();
             const status = window.realComplianceEngine.getSystemStatus();
-            
+
             const report = `
 # PROJECT SOLAR AUSTRALIA - REAL COMPLIANCE REPORT
 Generated: ${new Date().toLocaleString()}
@@ -896,35 +905,35 @@ Generated: ${new Date().toLocaleString()}
 ## AUDIT TRAIL SUMMARY
 Total Entries: ${auditTrail.totalEntries}
 Latest Entries:
-${auditTrail.auditTrail.slice(-5).map(entry => 
+${auditTrail.auditTrail.slice(-5).map(entry =>
     `${entry.timestamp} [${entry.level}] ${entry.action}: ${entry.details}`
 ).join('\\n')}
 
 ## AS/NZS STANDARDS COVERAGE
-${citations.citations.map(citation => 
+${citations.citations.map(citation =>
     `✅ ${citation.standard} - ${citation.title}`
 ).join('\\n')}
 
 ## COMPLIANCE VERIFICATION STATUS
-${status.complianceChecks > 0 ? 
-    `✅ VERIFIED - ${status.complianceChecks} compliance checks completed` : 
+${status.complianceChecks > 0 ?
+    `✅ VERIFIED - ${status.complianceChecks} compliance checks completed` :
     '⚠️ PENDING - No compliance checks run yet'}
 
-## SAFETY AUDIT STATUS  
-${status.safetyValidations > 0 ? 
-    `✅ VERIFIED - ${status.safetyValidations} safety audits completed` : 
+## SAFETY AUDIT STATUS
+${status.safetyValidations > 0 ?
+    `✅ VERIFIED - ${status.safetyValidations} safety audits completed` :
     '⚠️ PENDING - No safety audits run yet'}
 
 ## COURT-SAFE CERTIFICATION
 This system provides REAL AS/NZS standards verification with:
 - Actual standard requirement checking
-- Real audit trail generation  
+- Real audit trail generation
 - Genuine compliance scoring
 - Verifiable safety assessments
 
 Report generated by REAL Compliance Engine v1.0
             `;
-            
+
             const reportWindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=yes');
             reportWindow.document.write(`
                 <html>
@@ -935,37 +944,37 @@ Report generated by REAL Compliance Engine v1.0
                 </style></head>
                 <body>${report}</body></html>
             `);
-            
+
             log('✅ REAL compliance report generated and opened', 'success');
             syncWithRealEngine();
         }
-        
+
         function emergencyStop() {
             if (!window.realComplianceEngine) {
                 log('❌ Real compliance engine not available!', 'error');
                 return;
             }
-            
+
             if (confirm('🛑 EMERGENCY STOP\\n\\nThis will halt all REAL compliance operations.\\nAre you sure?')) {
                 const result = window.realComplianceEngine.emergencyShutdown();
                 log(`🛑 ${result.message}`, 'error');
                 syncWithRealEngine();
             }
         }
-        
+
         // Auto-sync with real engine every 10 seconds
         setInterval(() => {
             if (window.realComplianceEngine) {
                 syncWithRealEngine();
             }
         }, 10000);
-        
+
         // Load existing state when page loads
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 if (window.realComplianceEngine) {
                     log('[SYSTEM] Real compliance engine detected', 'success');
-                    
+
                     const loadResult = window.realComplianceEngine.loadState();
                     if (loadResult.success) {
                         log('[SYSTEM] Previous compliance state restored', 'success');

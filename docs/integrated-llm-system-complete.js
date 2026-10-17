@@ -364,7 +364,7 @@ function initializeCompleteSystem() {
     console.log('🚀 Initializing complete integrated system...');
     
     // Initialize LLM system
-    if (window.globalLLM) {
+    if (window.globalLLM && typeof window.globalLLM.init === 'function') {
         window.globalLLM.init();
     }
     

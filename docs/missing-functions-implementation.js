@@ -802,4 +802,11 @@ function updateMinionDisplay(minionId) {
         
         // Update last activity
         const lastActivityEl = minionCard.querySelector('.minion-last-activity');
-        if (lastActivityEl
+        if (lastActivityEl) {
+            const last = minion.lastActivity || minion.last_activity || minion.lastSeen;
+            lastActivityEl.textContent = last ? new Date(last).toLocaleString() : 'No recent activity';
+        }
+    }
+
+    return true;
+}

@@ -1,468 +1,579 @@
 /**
- * PRODUCTION SERVER - CLEAN VERSION
- * Fixed initialization issues and cleaned syntax
+ * SolarFlow API server.
+ *
+ * Serves the static site in docs/ and a small JSON API. PostgreSQL is
+ * optional: without DATABASE_URL the server still serves the site, the CER
+ * product catalogue (from the bundled JSON), the standards reference data
+ * and the file-backed shared state.
  */
+'use strict';
+
+require('dotenv').config();
 
 const express = require('express');
 const http = require('http');
-const WebSocket = require('ws');
 const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 const compression = require('compression');
-const winston = require('winston');
-require('dotenv').config();
+const WebSocket = require('ws');
 
-// Import our services
+const config = require('./src/config');
+const logger = require('./src/logger');
 const DatabaseService = require('./src/database/DatabaseService');
 const SecurityService = require('./src/security/SecurityService');
 const RealStandardsService = require('./src/standards/RealStandardsService');
+const CerProductStore = require('./src/data/CerProductStore');
+const StateStore = require('./src/data/StateStore');
+const BusinessService = require('./src/business/BusinessService');
 
-// Configure logging
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.errors({ stack: true }),
-        winston.format.json()
-    ),
-    defaultMeta: { service: 'solarflow-server' },
-    transports: [
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/combined.log' }),
-        new winston.transports.Console({
-            format: winston.format.simple()
-        })
-    ]
-});
+const STATE_KEY = 'frontend-state';
+/** Feature areas built for the thousand-feature programme: each exports mount(app, deps); a missing area is skipped. */
+const AREAS = ['platform', 'reliability', 'governance', 'accounts', 'documents', 'telemetry', 'notify'];
+
+function asyncRoute(handler) {
+    return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
+}
+
+function parseBoolean(value) {
+    if (value === undefined) return undefined;
+    if (value === 'true' || value === '1') return true;
+    if (value === 'false' || value === '0') return false;
+    return undefined;
+}
 
 class SolarFlowServer {
-    constructor() {
+    constructor(options = {}) {
+        this.options = options;
         this.app = express();
         this.server = http.createServer(this.app);
-        this.wss = new WebSocket.Server({ server: this.server });
-        
-        this.db = new DatabaseService();
-        this.security = new SecurityService();
-        this.standards = new RealStandardsService();
-        
+        this.wss = new WebSocket.Server({ server: this.server, maxPayload: config.websocket.maxPayloadBytes });
+
+        this.db = options.db || new DatabaseService();
+        this.security = options.security || new SecurityService();
+        this.standards = options.standards || new RealStandardsService();
+        this.products = options.products || new CerProductStore();
+        this.state = options.state || new StateStore(path.join(config.dataDir, 'state'));
+        this.business = options.business || new BusinessService();
+
         this.clients = new Set();
-        
+        this.dbRetryTimer = null;
+        this.dbAttempts = 0;
+        this.shuttingDown = false;
+        this.startedAt = Date.now();
+
         this.setupMiddleware();
         this.setupRoutes();
-        this.setupWebSocket();
+        this.setupStatic();
         this.setupErrorHandling();
+        this.setupWebSocket();
     }
+
+    // ------------------------------------------------------------ middleware
 
     setupMiddleware() {
-        // Security middleware
-        this.app.use(this.security.getCORSConfig());
-        this.app.use(this.security.getCSPConfig());
-        
-        // Rate limiting
-        const rateLimiters = this.security.getRateLimiters();
-        this.app.use('/api/auth', rateLimiters.auth);
-        this.app.use('/api', rateLimiters.general);
-        
-        // General middleware
-        this.app.use(compression());
-        this.app.use(express.json({ limit: '10mb' }));
-        this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-        
-        // Request logging
-        this.app.use(this.security.middleware().logRequest);
-        
-        // Static files
-        this.app.use(express.static(path.join(__dirname, 'docs')));
-        
-        logger.info('✅ Middleware configured');
+        const app = this.app;
+        app.disable('x-powered-by');
+        if (config.trustProxy) app.set('trust proxy', 1);
+
+        app.use((req, res, next) => {
+            req.id = req.get('X-Request-Id') || crypto.randomUUID();
+            res.setHeader('X-Request-Id', req.id);
+            next();
+        });
+
+        app.use(this.security.getSecurityHeaders());
+        app.use(this.security.getCORSConfig());
+        app.use(compression());
+        app.use(express.json({ limit: config.bodyLimit }));
+        app.use(express.urlencoded({ extended: false, limit: config.bodyLimit }));
+        app.use(this.security.middleware().logRequest);
+
+        const limiters = this.security.getRateLimiters();
+        this.limiters = limiters;
+        app.use('/api/auth', limiters.auth);
+        app.use('/api', limiters.general);
     }
+
+    requestMeta(req) {
+        return { ip: req.ip, userAgent: req.get('User-Agent'), userId: req.user ? req.user.userId : null };
+    }
+
+    // ---------------------------------------------------------------- routes
 
     setupRoutes() {
-        // Authentication routes
-        this.app.post('/api/auth/register', async (req, res) => {
-            try {
-                const userData = this.security.validateAndSanitize(req.body, this.security.getSchemas().user);
-                const user = await this.db.createUser(userData.email, userData.password);
-                
-                res.status(201).json({
-                    success: true,
-                    message: 'User created successfully',
-                    user: { id: user.id, email: user.email, role: user.role }
-                });
-            } catch (error) {
-                logger.error('Registration failed:', error);
-                res.status(400).json({ error: error.message });
-            }
-        });
+        const app = this.app;
+        const { authenticate, requireRole } = this.security.middleware();
+        const schemas = this.security.getSchemas();
+        const modify = this.limiters.modify;
 
-        this.app.post('/api/auth/login', async (req, res) => {
-            try {
-                const { email, password } = req.body;
-                const ip = req.ip || req.connection.remoteAddress;
-                
-                // Check brute force protection
-                const bruteCheck = this.security.checkBruteForce(ip, email);
-                if (!bruteCheck.allowed) {
-                    return res.status(429).json({
-                        error: 'Too many failed attempts',
-                        retryAfter: Math.ceil(bruteCheck.remaining / 1000)
-                    });
-                }
-                
-                try {
-                    const authResult = await this.db.authenticateUser(email, password);
-                    this.security.clearFailedAttempts(ip, email);
-                    
-                    res.json({
-                        success: true,
-                        token: authResult.token,
-                        user: authResult.user
-                    });
-                } catch (authError) {
-                    this.security.recordFailedAttempt(ip, email);
-                    throw authError;
-                }
-            } catch (error) {
-                logger.error('Login failed:', error);
-                res.status(401).json({ error: 'Authentication failed' });
-            }
-        });
-
-        // Protected data routes
-        const auth = this.security.middleware().authenticate;
-        
-        this.app.get('/api/data/:key', auth, async (req, res) => {
-            try {
-                if (!this.db) {
-                    return res.status(503).json({ error: "Database unavailable" });
-                }
-                
-                const data = await this.db.getData(req.params.key, req.user.userId);
-                res.json({ success: true, data });
-            } catch (error) {
-                logger.error('Data retrieval failed:', error);
-                res.status(500).json({ error: 'Data retrieval failed' });
-            }
-        });
-
-        this.app.post('/api/data/:key', auth, async (req, res) => {
-            try {
-                if (!this.db) {
-                    return res.status(503).json({ error: "Database unavailable" });
-                }
-                
-                const saveResult = await this.db.saveData(req.params.key, req.body, req.user.userId);
-                
-                // Broadcast to WebSocket clients
-                this.broadcast({
-                    type: 'data_update',
-                    key: req.params.key,
-                    userId: req.user.userId,
-                    timestamp: new Date().toISOString()
-                });
-                
-                res.json(saveResult);
-            } catch (error) {
-                logger.error('Data save failed:', error);
-                res.status(500).json({ error: 'Data save failed' });
-            }
-        });
-
-        // CER Products API
-        this.app.get('/api/cer-products', async (req, res) => {
-            try {
-                if (!this.db) {
-                    return res.status(503).json({ error: "Database unavailable" });
-                }
-                
-                const filters = {
-                    manufacturer: req.query.manufacturer,
-                    productType: req.query.type,
-                    verified: req.query.verified === 'true',
-                    limit: parseInt(req.query.limit) || 100
-                };
-                
-                const products = await this.db.getCERProducts(filters);
-                res.json({ success: true, products, count: products.length });
-            } catch (error) {
-                logger.error('CER products retrieval failed:', error);
-                res.status(500).json({ error: 'Failed to retrieve CER products' });
-            }
-        });
-
-        this.app.post('/api/cer-products', auth, async (req, res) => {
-            try {
-                const productData = this.security.validateAndSanitize(req.body, this.security.getSchemas().cerProduct);
-                const product = await this.db.saveCERProduct(productData);
-                
-                res.status(201).json({ success: true, product });
-            } catch (error) {
-                logger.error('CER product creation failed:', error);
-                res.status(400).json({ error: error.message });
-            }
-        });
-
-        // Standards API
-        this.app.get('/api/standards', async (req, res) => {
-            try {
-                const standardsList = await this.standards.getLocalStandards();
-                res.json({ success: true, standards: standardsList });
-            } catch (error) {
-                logger.error('Standards retrieval failed:', error);
-                res.status(500).json({ error: 'Failed to retrieve standards' });
-            }
-        });
-
-        this.app.post('/api/standards/refresh', auth, async (req, res) => {
-            try {
-                const refreshedStandards = await this.standards.fetchPublicStandardsContent();
-                res.json({ success: true, standards: refreshedStandards, message: 'Standards refreshed successfully' });
-            } catch (error) {
-                logger.error('Standards refresh failed:', error);
-                res.status(500).json({ error: 'Failed to refresh standards' });
-            }
-        });
-
-        // Compliance checking API
-        this.app.post('/api/compliance/check', auth, async (req, res) => {
-            try {
-                const { installation_data, standard_code } = req.body;
-                
-                if (!installation_data || !standard_code) {
-                    return res.status(400).json({ error: 'Missing installation_data or standard_code' });
-                }
-                
-                const complianceResult = await this.standards.checkCompliance(installation_data, standard_code);
-                
-                // Record compliance check
-                if (installation_data.product_id) {
-                    await this.db.recordComplianceCheck(
-                        standard_code,
-                        installation_data.product_id,
-                        complianceResult.overall_status,
-                        complianceResult,
-                        req.user.email
-                    );
-                }
-                
-                res.json({ success: true, compliance: complianceResult });
-            } catch (error) {
-                logger.error('Compliance check failed:', error);
-                res.status(500).json({ error: error.message });
-            }
-        });
-
-        // Audit log API
-        this.app.get('/api/audit', auth, this.security.middleware().requireRole('admin'), async (req, res) => {
-            try {
-                const auditFilters = {
-                    userId: req.query.userId,
-                    action: req.query.action,
-                    startDate: req.query.startDate
-                };
-                
-                const logs = await this.db.getAuditLog(auditFilters);
-                res.json({ success: true, logs, count: logs.length });
-            } catch (error) {
-                logger.error('Audit log retrieval failed:', error);
-                res.status(500).json({ error: 'Failed to retrieve audit logs' });
-            }
-        });
-
-        // Backup API
-        this.app.post('/api/backup', auth, this.security.middleware().requireRole('admin'), async (req, res) => {
-            try {
-                const backup = await this.db.createBackup();
-                res.json({ success: true, backup });
-            } catch (error) {
-                logger.error('Backup failed:', error);
-                res.status(500).json({ error: 'Backup failed' });
-            }
-        });
-
-        // Health check
-        this.app.get('/health', async (req, res) => {
-            const health = {
-                status: 'healthy',
+        // Health -------------------------------------------------------------
+        const health = (req, res) => {
+            const dbState = !this.db.isConfigured() ? 'disabled' : this.db.isReady() ? 'connected' : 'unavailable';
+            const degraded = this.db.isConfigured() && !this.db.isReady();
+            res.status(degraded ? 503 : 200).json({
+                status: degraded ? 'degraded' : 'healthy',
+                version: config.version,
                 timestamp: new Date().toISOString(),
-                uptime: process.uptime(),
-                memory: process.memoryUsage(),
-                database: this.db ? 'connected' : 'unavailable',
-                services: {
-                    database: this.db ? 'healthy' : 'unavailable',
-                    standards: 'healthy',
-                    security: 'healthy'
-                }
-            };
-            
-            res.json(health);
-        });
-
-        // Serve main application
-        this.app.get('/', (req, res) => {
-            res.sendFile(path.join(__dirname, 'docs', 'index.html'));
-        });
-
-        logger.info('✅ Routes configured');
-    }
-
-    setupWebSocket() {
-        this.wss.on('connection', (ws, req) => {
-            logger.info(`WebSocket client connected: ${req.socket.remoteAddress}`);
-            this.clients.add(ws);
-            
-            ws.on('message', (message) => {
-                try {
-                    const data = JSON.parse(message);
-                    logger.debug('WebSocket message received:', data);
-                    
-                    // Handle different message types
-                    switch (data.type) {
-                        case 'ping':
-                            ws.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
-                            break;
-                        case 'subscribe':
-                            ws.subscriptions = data.channels || [];
-                            break;
-                        default:
-                            logger.warn('Unknown WebSocket message type:', data.type);
-                    }
-                } catch (error) {
-                    logger.error('WebSocket message error:', error);
-                }
+                uptime: Math.round(process.uptime()),
+                memory: { rss: process.memoryUsage().rss, heapUsed: process.memoryUsage().heapUsed },
+                database: dbState,
+                databaseError: degraded && this.db.lastError ? this.db.lastError.message : undefined,
+                websocketClients: this.clients.size,
+                services: { database: dbState, standards: 'healthy', security: 'healthy', products: this.products.products ? 'loaded' : 'lazy' }
             });
-            
-            ws.on('close', () => {
-                logger.info('WebSocket client disconnected');
-                this.clients.delete(ws);
-            });
-            
-            ws.on('error', (error) => {
-                logger.error('WebSocket error:', error);
-                this.clients.delete(ws);
-            });
-        });
-        
-        logger.info('✅ WebSocket server configured');
-    }
+        };
+        app.get('/health', health);
+        app.get('/api/health', health);
+        app.get('/ready', (req, res) => res.status(this.shuttingDown ? 503 : 200).json({ ready: !this.shuttingDown }));
+        app.get('/api/version', (req, res) => res.json({ version: config.version, node: process.version, env: config.env }));
 
-    broadcast(message) {
-        const payload = JSON.stringify(message);
-        this.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(payload);
+        // Auth ---------------------------------------------------------------
+        app.post('/api/auth/register', asyncRoute(async (req, res) => {
+            const userData = this.security.validateAndSanitize(req.body, schemas.user);
+            const user = await this.db.createUser(userData.email, userData.password, 'user', this.requestMeta(req));
+            res.status(201).json({ success: true, user });
+        }));
+
+        app.post('/api/auth/login', asyncRoute(async (req, res) => {
+            const { email, password } = this.security.validateAndSanitize(req.body, schemas.login);
+            const bruteCheck = this.security.checkBruteForce(req.ip, email);
+            if (!bruteCheck.allowed) {
+                res.setHeader('Retry-After', Math.ceil(bruteCheck.remaining / 1000));
+                return res.status(429).json({ error: 'Too many failed attempts', retryAfter: Math.ceil(bruteCheck.remaining / 1000) });
             }
+            try {
+                const authResult = await this.db.authenticateUser(email, password, this.requestMeta(req));
+                this.security.clearFailedAttempts(req.ip, email);
+                return res.json({ success: true, token: authResult.token, user: authResult.user });
+            } catch (error) {
+                if (error.status === 401) {
+                    this.security.recordFailedAttempt(req.ip, email);
+                    return res.status(401).json({ error: 'Authentication failed' });
+                }
+                throw error;
+            }
+        }));
+
+        app.get('/api/auth/me', authenticate, (req, res) => {
+            res.json({ user: { id: req.user.userId, email: req.user.email, role: req.user.role } });
         });
+
+        // Per-user key/value data -------------------------------------------
+        app.get('/api/data/:key', authenticate, asyncRoute(async (req, res) => {
+            const { key } = this.security.validateAndSanitize({ key: req.params.key }, { key: schemas.systemData.key });
+            const data = await this.db.getData(key, req.user.userId);
+            res.json({ success: true, key, data });
+        }));
+
+        app.post('/api/data/:key', authenticate, modify, asyncRoute(async (req, res) => {
+            const { key, value } = this.security.validateAndSanitize({ key: req.params.key, value: req.body }, schemas.systemData);
+            const saveResult = await this.db.saveData(key, value, req.user.userId, this.requestMeta(req));
+            this.broadcast({ type: 'data_update', key, userId: req.user.userId, timestamp: new Date().toISOString() }, 'data');
+            res.json(saveResult);
+        }));
+
+        // Shared front-end state (used by the bootloaders on every page) -----
+        app.get('/api/state', asyncRoute(async (req, res) => {
+            const state = await this.state.get(STATE_KEY);
+            res.setHeader('Cache-Control', 'no-store');
+            // Tells the front end whether anonymous POSTs would be accepted, so it
+            // can skip them instead of collecting a 403 on every page load.
+            res.setHeader('X-State-Writable', String(config.state.allowAnonymousWrites));
+            if (!state) return res.status(204).end();
+            return res.json(state);
+        }));
+
+        app.post('/api/state', modify, asyncRoute(async (req, res) => {
+            const authHeader = req.headers.authorization || '';
+            let authorised = config.state.allowAnonymousWrites;
+            if (!authorised && authHeader.startsWith('Bearer ')) {
+                try {
+                    req.user = this.security.validateJWT(authHeader.slice(7));
+                    authorised = true;
+                } catch (error) {
+                    return res.status(401).json({ error: error.message });
+                }
+            }
+            if (!authorised) {
+                return res.status(403).json({ error: 'State writes require authentication (or ALLOW_ANONYMOUS_STATE_WRITES=true)' });
+            }
+            if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+                return res.status(400).json({ error: 'State must be a JSON object' });
+            }
+            const bytes = Buffer.byteLength(JSON.stringify(req.body));
+            if (bytes > config.state.maxBytes) {
+                return res.status(413).json({ error: `State too large (${bytes} bytes, limit ${config.state.maxBytes})` });
+            }
+            const saved = await this.state.set(STATE_KEY, { ...req.body, savedAt: new Date().toISOString() });
+            this.broadcast({ type: 'state_update', timestamp: new Date().toISOString(), bytes: saved.bytes }, 'state');
+            return res.json({ success: true, bytes: saved.bytes });
+        }));
+
+        // CER products ------------------------------------------------------
+        app.get('/api/cer-products/summary', (req, res) => {
+            res.setHeader('Cache-Control', 'public, max-age=300');
+            res.json({ success: true, ...this.products.getSummary() });
+        });
+
+        app.get('/api/cer-products', asyncRoute(async (req, res) => {
+            const filters = {
+                manufacturer: req.query.manufacturer,
+                category: req.query.category || req.query.type,
+                q: req.query.q,
+                verified: parseBoolean(req.query.verified),
+                limit: req.query.limit,
+                offset: req.query.offset
+            };
+
+            if (req.query.source === 'db' || (this.db.isReady() && req.query.source !== 'file')) {
+                if (!this.db.isReady()) return res.status(503).json({ error: 'Database unavailable' });
+                const result = await this.db.getCERProducts({ ...filters, productType: filters.category });
+                return res.json({ success: true, source: 'database', ...result, count: result.products.length });
+            }
+
+            const result = this.products.query(filters);
+            res.setHeader('Cache-Control', 'public, max-age=60');
+            return res.json({ success: true, source: 'file', ...result, count: result.products.length });
+        }));
+
+        app.get('/api/cer-products/:id', (req, res) => {
+            const product = this.products.getById(req.params.id);
+            if (!product) return res.status(404).json({ error: 'Product not found' });
+            res.setHeader('Cache-Control', 'public, max-age=300');
+            return res.json({ success: true, product });
+        });
+
+        app.post('/api/cer-products', authenticate, requireRole(['auditor', 'admin']), modify, asyncRoute(async (req, res) => {
+            const productData = this.security.validateAndSanitize(req.body, schemas.cerProduct);
+            const product = await this.db.saveCERProduct(productData, this.requestMeta(req));
+            res.status(201).json({ success: true, product });
+        }));
+
+        // Standards ---------------------------------------------------------
+        app.get('/api/standards', asyncRoute(async (req, res) => {
+            const standardsList = await this.standards.getLocalStandards();
+            res.setHeader('Cache-Control', 'public, max-age=300');
+            res.json({ success: true, ...standardsList });
+        }));
+
+        app.post('/api/standards/refresh', authenticate, requireRole('admin'), asyncRoute(async (req, res) => {
+            const refreshed = await this.standards.fetchPublicStandardsContent();
+            res.json({ success: true, count: (refreshed.standards || []).length, remote_fetch: refreshed.remote_fetch || 'completed' });
+        }));
+
+        // Compliance --------------------------------------------------------
+        app.post('/api/compliance/check', authenticate, modify, asyncRoute(async (req, res) => {
+            const { installation_data: installation, standard_code: standardCode } =
+                this.security.validateAndSanitize(req.body, schemas.complianceCheck);
+            const compliance = await this.standards.checkCompliance(installation, standardCode);
+
+            let recordId = null;
+            if (installation.product_id && this.db.isReady()) {
+                const record = await this.db.recordComplianceCheck(compliance.standard, installation.product_id, compliance.overall_status, compliance, req.user.email);
+                recordId = record.compliance_check_id;
+            }
+            res.json({ success: true, compliance, record_id: recordId });
+        }));
+
+        // Admin -------------------------------------------------------------
+        app.get('/api/audit', authenticate, requireRole('admin'), asyncRoute(async (req, res) => {
+            const logs = await this.db.getAuditLog({
+                userId: req.query.userId,
+                action: req.query.action,
+                startDate: req.query.startDate,
+                limit: req.query.limit
+            });
+            res.json({ success: true, logs, count: logs.length });
+        }));
+
+        // Business (read-only connectors -> model) ---------------------------
+        // Either a logged-in user (JWT) or the static BUSINESS_API_TOKEN may read.
+        const businessAuth = (req, res, next) => {
+            const header = req.headers.authorization || '';
+            const token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
+            const staticToken = config.business.token;
+            if (staticToken && token && token.length === staticToken.length && crypto.timingSafeEqual(Buffer.from(token), Buffer.from(staticToken))) {
+                req.user = { role: 'admin', email: 'business-token' };
+                return next();
+            }
+            return authenticate(req, res, next);
+        };
+        app.get('/api/business/status', businessAuth, asyncRoute(async (req, res) => { res.json(await this.business.status()); }));
+        app.get('/api/business/model', businessAuth, asyncRoute(async (req, res) => {
+            const model = await this.business.model();
+            if (!model) return res.status(204).end();
+            res.setHeader('cache-control', 'private, no-store');
+            return res.json(model);
+        }));
+        app.post('/api/business/sync', businessAuth, requireRole('admin'), modify, asyncRoute(async (req, res) => {
+            const only = Array.isArray(req.body && req.body.only) ? req.body.only.filter((x) => typeof x === 'string') : null;
+            const configured = this.business.configured();
+            const started = Object.entries(configured).filter(([id, ok]) => ok && (!only || only.includes(id))).map(([id]) => id);
+            const run = this.business.sync({ only });
+            if (req.query.wait === '1') return res.json(await run);
+            run.catch(() => {});
+            return res.status(202).json({ started, configured });
+        }));
+        app.post('/api/business/import', businessAuth, requireRole('admin'), modify, asyncRoute(async (req, res) => {
+            if (!req.body || typeof req.body !== 'object') return res.status(400).json({ error: 'JSON body required' });
+            let model; try { model = await this.business.build(req.body); } catch (error) { if (error.status && error.status < 500) return res.status(error.status).json({ error: error.message }); throw error; }
+            return res.json({ generatedAt: model.generatedAt, jobs: model.jobs.length, sites: model.sites.length, findings: model.insights.length });
+        }));
+        app.post('/api/business/social/publish', businessAuth, requireRole('admin'), modify, asyncRoute(async (req, res) => {
+            try { res.json(await this.business.publishSocial(req.body || {})); }
+            catch (error) { if (error.status && error.status < 500) return res.status(error.status).json({ error: error.message }); throw error; }
+        }));
+        app.get('/api/business/raw/:source', businessAuth, requireRole('admin'), asyncRoute(async (req, res) => {
+            const data = await this.business.raw(req.params.source);
+            if (!data) return res.status(204).end();
+            return res.json(data);
+        }));
+
+        app.post('/api/backup', authenticate, requireRole('admin'), asyncRoute(async (req, res) => {
+            const backup = await this.db.createBackup();
+            res.json({ success: true, backup: { backupId: backup.backupId, timestamp: backup.timestamp, size: backup.size } });
+        }));
+
+        this.mountAreas();
     }
+
+    /** Mount every programme area under src/<area>/routes.js that exists. */
+    mountAreas() {
+        this.areas = {};
+        const deps = { security: this.security, store: this.state, config, logger, db: this.db, business: this.business, products: this.products, standards: this.standards, wss: this.wss, server: this };
+        for (const area of AREAS) {
+            const file = path.join(__dirname, 'src', area, 'routes.js');
+            if (!fs.existsSync(file)) continue;
+            try {
+                const mod = require(file);
+                if (typeof mod.mount !== 'function') continue;
+                this.areas[area] = mod.mount(this.app, deps) || true;
+                logger.info(`Area mounted: ${area}`);
+            } catch (error) {
+                logger.error(`Area failed to mount: ${area}`, { message: error.message, stack: error.stack });
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- static
+
+    setupStatic() {
+        const app = this.app;
+        app.get('/', (req, res) => res.sendFile(path.join(config.docsDir, 'index.html')));
+        app.get('/favicon.ico', (req, res) => {
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+            res.sendFile(path.join(config.docsDir, 'favicon.svg'));
+        });
+        // Browser ES modules for the experimental 3D engine (docs/dominion-engine.html
+        // imports ../src/core/*). Only the browser-side folders are exposed.
+        for (const folder of ['core', 'world', 'actors']) {
+            app.use(`/src/${folder}`, express.static(path.join(config.rootDir, 'src', folder), { dotfiles: 'ignore', maxAge: '1h' }));
+        }
+        app.use(express.static(config.docsDir, {
+            dotfiles: 'ignore',
+            etag: true,
+            lastModified: true,
+            setHeaders: (res, filePath) => {
+                if (/[\\/]vendor[\\/]/.test(filePath)) {
+                    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+                } else if (/\.(json)$/.test(filePath)) {
+                    res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
+                } else if (/\.(js|css|svg|png|jpg|webp)$/.test(filePath)) {
+                    res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+                } else {
+                    res.setHeader('Cache-Control', 'no-cache');
+                }
+            }
+        }));
+    }
+
+    // ---------------------------------------------------------------- errors
 
     setupErrorHandling() {
-        // Global error handler
-        this.app.use((error, req, res, next) => {
-            logger.error('Unhandled error:', error);
-            
-            if (res.headersSent) {
-                return next(error);
+        const app = this.app;
+
+        app.use((req, res) => {
+            if (req.path.startsWith('/api/') || req.accepts(['html', 'json']) === 'json') {
+                return res.status(404).json({ error: 'Not found', path: req.path, method: req.method, requestId: req.id });
             }
-            
-            res.status(500).json({
-                error: 'Internal server error',
+            const notFoundPage = path.join(config.docsDir, '404.html');
+            if (fs.existsSync(notFoundPage)) return res.status(404).sendFile(notFoundPage);
+            return res.status(404).type('text').send('Not found');
+        });
+
+        // eslint-disable-next-line no-unused-vars
+        app.use((error, req, res, next) => {
+            const explicit = Boolean(error.status || error.statusCode);
+            const status = error.status || error.statusCode || (error.type === 'entity.parse.failed' ? 400 : 500);
+            if (!explicit) {
+                logger.error('Unhandled request error', { requestId: req.id, path: req.path, message: error.message, stack: error.stack });
+            } else {
+                logger.warn('Request rejected', { requestId: req.id, path: req.path, status, message: error.message });
+            }
+            if (res.headersSent) return;
+            res.status(status).json({
+                // Only errors that deliberately set a status expose their message.
+                error: explicit ? error.message : 'Internal server error',
+                details: error.errors,
                 requestId: req.id,
                 timestamp: new Date().toISOString()
             });
         });
-
-        // 404 handler
-        this.app.use((req, res) => {
-            res.status(404).json({
-                error: 'Not found',
-                path: req.path,
-                method: req.method
-            });
-        });
-
-        // Process error handling
-        process.on('uncaughtException', (error) => {
-            logger.error('Uncaught exception:', error);
-            process.exit(1);
-        });
-
-        process.on('unhandledRejection', (reason, promise) => {
-            logger.error('Unhandled rejection at:', promise, 'reason:', reason);
-        });
-
-        logger.info('✅ Error handling configured');
     }
 
-    async start() {
-        const port = process.env.PORT || 3000;
-        
-        try {
-            // Start HTTP server first (always succeeds)
-            await this.startHttpServer(port);
-        } catch (err) {
-            logger.error("❌ HTTP server failed to start", err);
-            process.exit(1);
-        }
+    // ------------------------------------------------------------- websocket
 
-        // DB connects AFTER server is alive
-        this.initDatabase();
-    }
+    setupWebSocket() {
+        this.wss.on('connection', (ws, req) => {
+            ws.isAlive = true;
+            ws.subscriptions = new Set();
+            this.clients.add(ws);
+            logger.debug('WebSocket client connected', { ip: req.socket.remoteAddress, clients: this.clients.size });
 
-    async startHttpServer(port) {
-        return new Promise((resolve, reject) => {
-            this.server.listen(port, (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    logger.info(`🚀 SolarFlow server running on port ${port}`);
-                    logger.info(`📊 Health check: http://localhost:${port}/health`);
-                    logger.info(`🌐 Application: http://localhost:${port}`);
-                    logger.info(`🔗 WebSocket: ws://localhost:${port}`);
-                    resolve();
+            ws.on('pong', () => { ws.isAlive = true; });
+            ws.on('message', (message) => {
+                let data;
+                try {
+                    data = JSON.parse(message);
+                } catch (error) {
+                    return ws.send(JSON.stringify({ type: 'error', error: 'Invalid JSON' }));
+                }
+                switch (data && data.type) {
+                    case 'ping':
+                        return ws.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
+                    case 'subscribe':
+                        ws.subscriptions = new Set(Array.isArray(data.channels) ? data.channels.map(String).slice(0, 20) : []);
+                        return ws.send(JSON.stringify({ type: 'subscribed', channels: Array.from(ws.subscriptions) }));
+                    default:
+                        return ws.send(JSON.stringify({ type: 'error', error: `Unknown message type: ${data && data.type}` }));
                 }
             });
+            ws.on('close', () => this.clients.delete(ws));
+            ws.on('error', (error) => {
+                logger.warn('WebSocket error', { message: error.message });
+                this.clients.delete(ws);
+            });
+
+            ws.send(JSON.stringify({ type: 'system_status', status: 'connected', version: config.version, timestamp: new Date().toISOString() }));
         });
+
+        this.heartbeat = setInterval(() => {
+            for (const ws of this.clients) {
+                if (!ws.isAlive) {
+                    ws.terminate();
+                    this.clients.delete(ws);
+                    continue;
+                }
+                ws.isAlive = false;
+                ws.ping();
+            }
+        }, config.websocket.heartbeatMs);
+        if (this.heartbeat.unref) this.heartbeat.unref();
     }
 
-    async initDatabase() {
-        try {
-            await this.db.initializeTables();
-            logger.info("✅ Database connected");
-        } catch (err) {
-            logger.error("❌ Database unavailable", err);
-            this.db = null;
-
-            // Retry loop (Google style)
-            logger.info("🔄 Retrying database connection in 10 seconds...");
-            setTimeout(() => this.initDatabase(), 10000);
+    /** Sends `message` to every client, or only to clients subscribed to `channel`. */
+    broadcast(message, channel = null) {
+        const payload = JSON.stringify(message);
+        for (const client of this.clients) {
+            if (client.readyState !== WebSocket.OPEN) continue;
+            if (channel && client.subscriptions.size > 0 && !client.subscriptions.has(channel)) continue;
+            client.send(payload);
         }
+    }
+
+    // ------------------------------------------------------------- lifecycle
+
+    async start(port = config.port, host = config.host) {
+        await this.state.init();
+        await this.business.init();
+        this.business.schedule();
+        await new Promise((resolve, reject) => {
+            this.server.once('error', reject);
+            this.server.listen(port, host, () => {
+                this.server.off('error', reject);
+                resolve();
+            });
+        });
+        const address = this.server.address();
+        logger.info(`SolarFlow ${config.version} listening on ${address.address}:${address.port} (${config.env})`);
+        this.initDatabase();
+        return this;
+    }
+
+    initDatabase() {
+        if (!this.db.isConfigured()) return;
+        this.dbAttempts++;
+        this.db.initializeTables()
+            .then(() => {
+                this.dbAttempts = 0;
+                this.broadcast({ type: 'system_status', status: 'database_connected', timestamp: new Date().toISOString() });
+            })
+            .catch((error) => {
+                const { maxRetries, retryDelayMs } = config.database;
+                logger.error('Database unavailable', { attempt: this.dbAttempts, message: error.message });
+                if (this.shuttingDown || (maxRetries > 0 && this.dbAttempts >= maxRetries)) return;
+                const delay = Math.min(retryDelayMs * Math.pow(2, Math.min(this.dbAttempts - 1, 5)), 5 * 60 * 1000);
+                logger.info(`Retrying database connection in ${Math.round(delay / 1000)}s`);
+                this.dbRetryTimer = setTimeout(() => this.initDatabase(), delay);
+                if (this.dbRetryTimer.unref) this.dbRetryTimer.unref();
+            });
     }
 
     async stop() {
-        logger.info('🛑 Shutting down server...');
-        
-        // Close WebSocket connections
-        this.clients.forEach(client => {
-            client.close();
-        });
-        
-        // Close database connection
-        if (this.db && this.db.close) {
-            await this.db.close();
+        if (this.shuttingDown) return;
+        this.shuttingDown = true;
+        logger.info('Shutting down server');
+        clearTimeout(this.dbRetryTimer);
+        clearInterval(this.heartbeat);
+        this.business.stop();
+        this.security.dispose();
+        for (const [area, handle] of Object.entries(this.areas || {})) { if (handle && typeof handle.stop === 'function') { try { await handle.stop(); } catch (error) { logger.warn(`Area stop failed: ${area}`, { message: error.message }); } } }
+
+        for (const client of this.clients) {
+            try { client.close(1001, 'Server shutting down'); } catch (error) { /* ignore */ }
         }
-        
-        // Close HTTP server
-        this.server.close(() => {
-            logger.info('✅ Server stopped');
-            process.exit(0);
+        this.clients.clear();
+
+        await new Promise((resolve) => {
+            const timer = setTimeout(() => {
+                logger.warn('Forcing close of remaining connections');
+                if (this.server.closeAllConnections) this.server.closeAllConnections();
+                resolve();
+            }, config.shutdownTimeoutMs);
+            this.server.close(() => { clearTimeout(timer); resolve(); });
         });
+
+        await this.db.close().catch((error) => logger.warn('Error closing database', { message: error.message }));
+        logger.info('Server stopped');
     }
 }
 
-// Start server
-const server = new SolarFlowServer();
+module.exports = SolarFlowServer;
 
-// Graceful shutdown
-process.on('SIGTERM', () => server.stop());
-process.on('SIGINT', () => server.stop());
+if (require.main === module) {
+    const server = new SolarFlowServer();
 
-server.start();
+    const shutdown = (signal) => {
+        logger.info(`${signal} received`);
+        server.stop().then(() => process.exit(0)).catch((error) => {
+            logger.error('Shutdown failed', { message: error.message });
+            process.exit(1);
+        });
+    };
+    process.once('SIGTERM', () => shutdown('SIGTERM'));
+    process.once('SIGINT', () => shutdown('SIGINT'));
+
+    process.on('uncaughtException', (error) => {
+        logger.error('Uncaught exception', { message: error.message, stack: error.stack });
+        shutdown('uncaughtException');
+    });
+    process.on('unhandledRejection', (reason) => {
+        logger.error('Unhandled rejection', { reason: reason instanceof Error ? reason.stack : String(reason) });
+    });
+
+    server.start().catch((error) => {
+        logger.error('Failed to start server', { message: error.message });
+        process.exit(1);
+    });
+}

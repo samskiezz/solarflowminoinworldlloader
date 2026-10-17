@@ -538,7 +538,9 @@
                 
                 // Create minion geometry
                 // ADVANCED FUTURISTIC HUMANOID MINION (NOT MATRIX!)
-                const bodyGeometry = new THREE.CapsuleGeometry(0.8, 2.5, 4, 8);
+                const bodyGeometry = THREE.CapsuleGeometry
+                    ? new THREE.CapsuleGeometry(0.8, 2.5, 4, 8)
+                    : new THREE.CylinderGeometry(0.8, 0.8, 2.5 + 1.6, 8); // r128 fallback
                 const bodyMaterial = new THREE.MeshPhongMaterial({ 
                     color: new THREE.Color().setHSL(i / minionNames.length, 0.8, 0.6),
                     shininess: 100

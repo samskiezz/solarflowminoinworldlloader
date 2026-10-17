@@ -1,29 +1,45 @@
 [Unit]
-Description=SolarFlow Quantum Consciousness System
-After=network.target
-Wants=network.target
+Description=SolarFlow API server
+Documentation=https://github.com/samskiezz/solarflowminoinworldlloader
+After=network-online.target postgresql.service
+Wants=network-online.target
 
 [Service]
 Type=simple
 User=solarflow
 Group=solarflow
 WorkingDirectory=/opt/solarflow
+# Secrets (JWT_SECRET, DATABASE_URL, ...) live in the env file, not here.
+EnvironmentFile=-/opt/solarflow/.env
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=TRUST_PROXY=true
+Environment=DATA_DIR=/var/lib/solarflow
+Environment=LOG_DIR=/var/log/solarflow
 ExecStart=/usr/bin/node server.js
 Restart=always
-RestartSec=10
-Environment=NODE_ENV=production
-Environment=PORT=8080
-Environment=QUANTUM_PERSISTENCE=true
-Environment=VPS_MODE=true
+RestartSec=5
+TimeoutStopSec=20
+KillSignal=SIGTERM
 
 # Resource limits
 LimitNOFILE=65536
 LimitNPROC=4096
 
-# Logging
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/solarflow /var/log/solarflow
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=solarflow-quantum
+SyslogIdentifier=solarflow
 
 [Install]
 WantedBy=multi-user.target

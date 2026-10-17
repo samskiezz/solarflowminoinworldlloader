@@ -1,0 +1,27 @@
+{
+  "standard_id": "AS/NZS 3000:2018",
+  "title": "Electrical installations (Wiring Rules)",
+  "publication_date": "2018-06-26",
+  "edition": "2018 (with amendments)",
+  "document_status": "CURRENT",
+  "scope": {
+    "primary": "Fundamental standard for electrical installations in Australia and New Zealand",
+    "relevance_to_solar": "Primary wiring and electrical safety standard for all solar installations"
+  },
+  "document_structure": {
+    "key_sections": [
+      "General requirements and definitions",
+      "Protection against electric shock",
+      "Protection against thermal effects",
+      "Protection against overcurrent",
+      "Protection against voltage disturbances",
+      "Isolation and switching",
+      "Earthing arrangements",
+      "Selection and erection of equipment"
+    ]
+  },
+  "technical_committees": "Joint Technical Committee EL-001",
+  "extracted_from": "docs/as-nzs-standards-scraped.json (public summary data)",
+  "extraction_method": "Reference summary only; the standard text is copyrighted and must be purchased from Standards Australia.",
+  "document_significance": "Primary wiring and electrical safety standard referenced by AS/NZS 5033, 4777.1 and 5139."
+}

@@ -83,7 +83,7 @@
                 // Test 1: Load hive_state.json
                 await this.testHiveState();
                 
-                // Test 2: Load real-cer-product-database.json  
+                // Test 2: Load cer-product-database.json  
                 await this.testCERDatabase();
                 
                 // Test 3: Calculate real statistics
@@ -132,9 +132,9 @@
             }
 
             async testCERDatabase() {
-                this.log('loadingResults', '📥 Testing real-cer-product-database.json...');
+                this.log('loadingResults', '📥 Testing cer-product-database.json...');
                 try {
-                    const response = await fetch('./real-cer-product-database.json');
+                    const response = await fetch('./cer-product-database.json');
                     if (!response.ok) {
                         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     }
@@ -217,7 +217,7 @@
                         
                         <h4>🎯 Key Fixes Applied:</h4>
                         <ul style="margin: 15px 0; padding-left: 20px;">
-                            <li>🔧 Fixed JavaScript to load real-cer-product-database.json properly</li>
+                            <li>🔧 Fixed JavaScript to load cer-product-database.json properly</li>
                             <li>🔧 Fixed HTML element IDs to match JavaScript expectations</li>
                             <li>🔧 Added comprehensive error handling and debugging</li>
                             <li>🔧 Replaced all hardcoded fake numbers with dynamic calculations</li>

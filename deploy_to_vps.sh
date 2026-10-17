@@ -128,7 +128,11 @@ log_info "Step 7: Database Setup"
 # PostgreSQL setup
 sudo -u postgres createdb solarflow 2>/dev/null || true
 sudo -u postgres createuser solarflow 2>/dev/null || true
-sudo -u postgres psql -c "ALTER USER solarflow WITH ENCRYPTED PASSWORD 'solarflow_password';" 2>/dev/null || true
+DB_PASSWORD="${SOLARFLOW_DB_PASSWORD:-$(openssl rand -hex 24)}"
+sudo -u postgres psql -c "ALTER USER solarflow WITH ENCRYPTED PASSWORD '${DB_PASSWORD}';" 2>/dev/null || true
+printf 'DATABASE_URL=postgresql://solarflow:%s@localhost/solarflow\n' "$DB_PASSWORD" > "$INSTALL_DIR/.env.database"
+chmod 600 "$INSTALL_DIR/.env.database"
+log_info "Database password written to $INSTALL_DIR/.env.database"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE solarflow TO solarflow;" 2>/dev/null || true
 
 # Redis setup
@@ -179,7 +183,7 @@ app.add_middleware(
 )
 
 # Database setup
-DATABASE_URL = "postgresql://solarflow:solarflow_password@localhost/solarflow"
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://solarflow@localhost/solarflow")
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -190,7 +194,7 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=T
 # Models
 class Repository(Base):
     __tablename__ = "repositories"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     url = Column(String)
@@ -202,7 +206,7 @@ class Repository(Base):
 
 class NeuralTask(Base):
     __tablename__ = "neural_tasks"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     task_type = Column(String)
     status = Column(String, default="queued")
@@ -235,7 +239,7 @@ async def neural_status(db: Session = Depends(get_db)):
         cluster_dir = Path("neural_cluster_200")
         repositories = []
         total_size = 0.0
-        
+
         if cluster_dir.exists():
             for repo_path in cluster_dir.iterdir():
                 if repo_path.is_dir():
@@ -247,12 +251,12 @@ async def neural_status(db: Session = Depends(get_db)):
                         "status": "installed"
                     })
                     total_size += size_mb
-        
+
         # Check ML libraries
         ml_libraries = []
         test_imports = [
             ("numpy", "numpy"),
-            ("pandas", "pandas"), 
+            ("pandas", "pandas"),
             ("scikit-learn", "sklearn"),
             ("tensorflow", "tensorflow"),
             ("pytorch", "torch"),
@@ -262,14 +266,14 @@ async def neural_status(db: Session = Depends(get_db)):
             ("streamlit", "streamlit"),
             ("jupyter", "jupyter"),
         ]
-        
+
         for lib_name, import_name in test_imports:
             try:
                 __import__(import_name)
                 ml_libraries.append({"name": lib_name, "status": "installed"})
             except ImportError:
                 ml_libraries.append({"name": lib_name, "status": "missing"})
-        
+
         return {
             "neural_cluster_active": True,
             "repositories": {
@@ -296,7 +300,7 @@ async def list_repositories():
     cluster_dir = Path("neural_cluster_200")
     if not cluster_dir.exists():
         return {"repositories": [], "total": 0}
-    
+
     repositories = []
     for repo_path in cluster_dir.iterdir():
         if repo_path.is_dir():
@@ -311,7 +315,7 @@ async def list_repositories():
                             description = ' '.join(lines).strip()[:200] + "..."
                     except:
                         pass
-                
+
                 repositories.append({
                     "name": repo_path.name,
                     "path": str(repo_path),
@@ -325,7 +329,7 @@ async def list_repositories():
                     "description": "Repository access error",
                     "error": str(e)
                 })
-    
+
     return {
         "repositories": sorted(repositories, key=lambda x: x["name"]),
         "total": len(repositories)
@@ -335,7 +339,7 @@ async def list_repositories():
 async def run_optimization(background_tasks: BackgroundTasks, target: str = "general"):
     """Run neural optimization task"""
     task_id = f"opt_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
-    
+
     # Store in Redis for tracking
     redis_client.hset(f"task:{task_id}", mapping={
         "status": "running",
@@ -343,10 +347,10 @@ async def run_optimization(background_tasks: BackgroundTasks, target: str = "gen
         "target": target,
         "started": datetime.utcnow().isoformat()
     })
-    
+
     # Background optimization task
     background_tasks.add_task(perform_optimization, task_id, target)
-    
+
     return {
         "task_id": task_id,
         "status": "started",
@@ -359,7 +363,7 @@ async def perform_optimization(task_id: str, target: str):
         for progress in [10, 25, 50, 75, 90, 100]:
             await asyncio.sleep(2)  # Simulate processing
             redis_client.hset(f"task:{task_id}", "progress", str(progress))
-            
+
             if progress == 100:
                 redis_client.hset(f"task:{task_id}", mapping={
                     "status": "completed",
@@ -379,7 +383,7 @@ async def get_task_status(task_id: str):
     task_data = redis_client.hgetall(f"task:{task_id}")
     if not task_data:
         raise HTTPException(status_code=404, detail="Task not found")
-    
+
     return {
         "task_id": task_id,
         **task_data
@@ -411,7 +415,7 @@ if __name__ == "__main__":
     print("🚀 Starting SolarFlow Neural Cluster API...")
     print("📊 API Documentation: http://localhost:8000/docs")
     print("🌐 Dashboard: http://localhost:8000/dashboard")
-    
+
     uvicorn.run(
         "neural_production_api:app",
         host="0.0.0.0",
@@ -436,7 +440,7 @@ class RealNeuralAPI {
         this.isConnected = false;
         this.lastStatus = null;
     }
-    
+
     async testConnection() {
         try {
             const response = await fetch(`${this.apiBase}/system/health`);
@@ -449,7 +453,7 @@ class RealNeuralAPI {
             return null;
         }
     }
-    
+
     async getNeuralStatus() {
         try {
             const response = await fetch(`${this.apiBase}/neural/status`);
@@ -465,7 +469,7 @@ class RealNeuralAPI {
             };
         }
     }
-    
+
     async getRepositories() {
         try {
             const response = await fetch(`${this.apiBase}/neural/repositories`);
@@ -475,7 +479,7 @@ class RealNeuralAPI {
             return { repositories: [], total: 0 };
         }
     }
-    
+
     async startOptimization(target = 'general') {
         try {
             const response = await fetch(`${this.apiBase}/neural/optimize`, {
@@ -489,7 +493,7 @@ class RealNeuralAPI {
             return { error: 'Failed to start optimization' };
         }
     }
-    
+
     async getTaskStatus(taskId) {
         try {
             const response = await fetch(`${this.apiBase}/neural/tasks/${taskId}`);
@@ -513,15 +517,15 @@ window.startNeuralOptimization = (target) => neuralAPI.startOptimization(target)
 async function updateRealNeuralStatus() {
     const statusElement = document.getElementById('system-status');
     if (!statusElement) return;
-    
+
     try {
         const status = await neuralAPI.getNeuralStatus();
-        
+
         if (status.neural_cluster_active) {
             const repoCount = status.repositories.installed;
             const totalSize = status.repositories.total_size_gb;
             const mlLibs = status.ml_libraries.filter(lib => lib.status === 'installed').length;
-            
+
             statusElement.innerHTML = `
                 <div style="font-size: 1rem; margin-bottom: 5px;">🧠 <span style="color: #00ff00;">Neural Cluster ACTIVE</span></div>
                 <div style="font-size: 0.9rem; opacity: 0.9;">
@@ -544,13 +548,13 @@ async function updateRealNeuralStatus() {
 // Start real neural monitoring
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🧠 Real Neural API integration loaded');
-    
+
     // Test connection
     neuralAPI.testConnection().then(health => {
         if (health) {
             console.log('✅ Neural API connected:', health);
             updateRealNeuralStatus();
-            
+
             // Update status every 30 seconds
             setInterval(updateRealNeuralStatus, 30000);
         } else {
@@ -565,14 +569,14 @@ cat > /etc/nginx/sites-available/solarflow << 'EOF'
 server {
     listen 80;
     server_name _;
-    
+
     # Static files
     location / {
         root /opt/solarflow/solarflowminoinworldlloader/docs;
         index index.html;
         try_files $uri $uri/ /index.html;
     }
-    
+
     # API proxy
     location /api/ {
         proxy_pass http://127.0.0.1:8000/;
@@ -581,7 +585,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
-    
+
     # WebSocket support for real-time updates
     location /ws/ {
         proxy_pass http://127.0.0.1:8000/;

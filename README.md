@@ -1,590 +1,269 @@
 # SolarFlow Minion World Loader
 
-**Version**: 2.3.0  
-**Status**: Production Ready  
-**Last Updated**: 2026-02-08
+**Version**: 2.4.0 · **Live site**: https://samskiezz.github.io/solarflowminoinworldlloader/
 
----
+SolarFlow is a solar and battery compliance workspace for the Australian market, wrapped in a
+"minion realm" simulation. It has two parts:
 
-## Overview
+| Part | What it is | Runs on |
+| --- | --- | --- |
+| `docs/` | Static front end: dashboard, product catalogue, AS/NZS standards references, minion roster, 3D realm, simulations | GitHub Pages (or any static host) |
+| `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
+| `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-SolarFlow is a production-grade solar and battery compliance management system with real-time monitoring, AI-powered document processing, and full AS/NZS standards integration.
+## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0, the library in 2.10.0, Ultron and the big map in 2.11.0, the thousand-feature Programme in 2.12.0)
 
-**100% Real Data - Zero Fake Statistics**
+`docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
+third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
+minions walk the streets on their own – to the Design Workshop, the Standards Library, the campfire, the
+cafe, their bunks at the Guild Hall at night, and to the houses they are assigned to – and every house is a
+real solar job that visibly builds up: a "SOLAR?" sign on the lot, plans, scaffolding, panels appearing on
+the roof, an inverter and battery on the wall, then a green glow once it is commissioned. Day and night,
+storms and heatwaves come from the simulated world clock. WoW-style `!`/`?` quest markers float over houses,
+an objective tracker runs an in-world tutorial, and the window system (hotbar 1–9, hotkeys, draggable windows)
+is the game's UI, as in a deep RPG.
 
----
+The original realm is in it: the 24-minion roster (tiers, specialties, identicon portraits) lives in town, six as
+your founding crew and the rest recruitable; the Minion Cognition Engine returns as an optional language-model
+adapter (Settings › AI) that gives every minion a persona, memories and clause context; the Sims-style needs
+widgets appear when you hover or click a minion.
 
-## Features
+Minions are aware: they face and greet you when you approach, talk to each other at the campfire from their
+memories and the standards, shelter from storms and remark on jobs that need attention. Sound is synthesised in
+the browser (off by default), touch controls appear on phones and tablets, graphics quality is adjustable, and
+cloud save works through the API server's `/api/state` (Settings › Data).
 
-### ✅ Real Working Systems (18)
+Everything behind the windows is real work:
 
-**Core Systems**:
-- Minion Roster (24 real minions from minions.json)
-- 3D Realm (WebGL visualization)
-- Data Persistence (localStorage + optional VPS sync)
-- Central Data Loader (singleton, cached)
+- **Real product data** – the Clean Energy Council approved module, inverter and battery lists
+  (`docs/data/cec-products.json`, regenerated with `node scripts/import-cec-lists.js`).
+- **Engineering with clause references** – string sizing (AS/NZS 5033 Voc correction, MPPT window, 1000 V
+  domestic limit), voltage rise (AS/NZS 4777.1 2 %, AS/NZS 3008 mV/A·m), d.c. cable drop, battery location
+  (AS/NZS 5139 restricted locations and clearances), STCs (zone × deeming × kW) and battery STCs,
+  yield/NPV/IRR/LCOE, phase balance, inverter main-switch rule, export limits, roof layout.
+- **Job pipeline** – nine stages with gates, checklists (52 items citing clauses), commissioning test
+  sheet (13 tests), serial register, DNSP connection application, labels, proposal/quote with the STC
+  discount, handover pack (owner's manual, maintenance schedule, warranty register) and a printable report.
+- **A crew that behaves** – utility-AI needs with response curves, traits, skills with XP, a memory stream
+  with retrieval and reflection, GOAP planning that turns into *suggestions*, a credit economy earned only
+  from verified work, achievements and quests derived from real jobs. Talk to anyone (E) and they answer from
+  their mood and memories.
+- **Verifiable feature count** – every feature registers a self-test. `npm run features:realm` writes
+  `docs/realm/FEATURES.md`; `npm run smoke:realm` runs all of them in Chromium (WebGL via SwiftShader) plus
+  an end-to-end play-through; the in-app **System check** window does the same for players.
 
-**Solar Compliance**:
-- Project Solar Australia (real AS/NZS checks)
-- CER Products Database (9,247 real products)
-- AS/NZS Standards (real requirements)
-- Document Processing (actual PDF processing)
+The game needs WebGL; without it the same windows still work as a workstation. Research notes behind the
+design (standards, incentives, market, game-UI and agent-AI references) are in `docs/realm/RESEARCH.md`.
 
-**Advanced Features**:
-- Autonomous World (real browser metrics)
-- Neural Processor (Web Workers + real AI)
-- Compliance Engine (real verification)
-- Health Monitor (actual performance tracking)
+### Your real business in the game (2.6.0)
 
-**Utilities**:
-- System Diagnostics (real tests)
-- Activity Feed (event-driven, no fake data)
-- Minion Control (real work queues)
-- Error Handler (global error capture)
-- Security Utils (XSS prevention, validation)
-- Performance Monitor (real metrics)
+Read-only connectors for ServiceM8, Xero, Gmail, Google Drive, Google Calendar and a bank feed build one
+cross-linked business model on your API server; the game loads it, turns every real site into a house in
+the suburbs of Solarhaven, and the minions run 34 rules over it to find mistakes and improvements
+(overdue invoices, sold work never scheduled, customers waiting on replies, installs without handover
+packs, cash runway, labour share, lead-farm economics…). Findings become quests. Nothing is written
+back and no customer data enters the repo or the public site. Setup, windows and the API are in
+`docs/realm/BUSINESS.md`; `node scripts/business-snapshot.mjs` builds the model from exports without
+the server (`--encrypt` seals it with a passphrase).
 
----
+### Families, epochs and social media (2.7.0)
 
-## Quick Start
+Minions carry digital DNA, make friends and rivals, pair up and have children who inherit genes, looks and
+skills, grow up in town, become elders and are remembered at the memorial (Crew › Family). The company
+climbs 24 real solar-business epochs. Facebook Pages and Instagram Business are read like the other
+connectors: the crew finds unanswered enquiries, drafts posts from real installs and waits for your
+approval before anything is published (Social, Shift+J).
 
-### Local Development
+### The complete business (2.8.0)
+
+Every ServiceM8 job with its full record, every Xero invoice and bill down to the line item (classified
+by what was sold or bought), the whole mailbox, every handover folder listed directly, the full bank
+feed and the calendar from the first month. Finance › Invoices shows outstanding totals, product mix,
+spend by supplier and invoiced by month; the per-item findings that would otherwise number in the
+hundreds roll up so the queue stays readable.
+
+### The engines (2.9.0)
+
+The project's own engines – the six-tier regulatory hierarchy with auto-citation, the court-safe
+framework with its five defensibility tests, the AS/NZS 5033:2021 check, the document and data
+pipeline, the narrative engine and the 100-minion shift roster – are built into the running world as
+tested modules (`docs/realm/js/domain/hierarchy.js`, `courtsafe.js`, `compliance.js`, `pipeline.js`,
+`sim/narrative.js`, `sim/shifts.js`, `core/bridge.js`). The original standalone scripts stay in
+`docs/*.js` for reference; the Realm versions are the ones that run.
+
+| Window | Key | Shows |
+|---|---|---|
+| Compliance engine | Shift+R | ask any question: governing tier, Codex and DNSP evidence, court-safe answer, the five tests, disclaimer and audit trail; the six tiers and precedence; the AS/NZS 5033:2021 check on the current job; the tier validator; engine health, the honest function catalogue and minion capabilities |
+| Chronicle | Shift+U | the stories the town tells, every minion's archetype, quests and journey, the conflicts and philosophical debates |
+| Shift roster | Shift+V | who is on which shift and what they are doing, study tasks and work cycles, purses, the shop and purchases |
+
+Every answer the engine gives is governed by the highest regulatory tier that applies, cites its
+authority, is rewritten in court-safe language and must pass the personal, coroner, regulator, judge
+and insurer tests; beyond the competency envelope it refuses with conservative guidance instead.
+
+### Ultron and the big map (2.11.0)
+
+Ultron leads the Workforce: a chief of staff, twelve managers from the named crew and a thousand
+workers in teams. Every job task, business finding and book becomes a task that is researched,
+executed, audited, reviewed and signed off, with hand-offs between teams and rework when an audit
+fails (Ultron, Shift+P). The map grows to ±300 m with the Ultron Campus, the Old Town, the Industrial
+Yard and solar farm, the Solar Park and civic corners, built from your own Jarvis model library
+(Tripo and Kenney kits, compressed) with a physical sky, bloom and 700 instanced plants.
+
+### Real models (2.10.0)
+
+The town is built from CC0 model kits by Kenney (suburban and commercial buildings, cars, rigged mini
+characters, nature), shipped with their licences under `docs/realm/assets/models/`. Houses, landmarks,
+trees, cars and every minion are real textured models; minions play the kit's own animation clips and
+wear a hard hat coloured by role. The procedural look remains as the instant first frame and the
+fallback.
+
+### The library (2.10.0)
+
+The crew compile their own knowledge. `node scripts/knowledge-harvest.mjs --discover` sends the
+librarians out: for every book on the shelf (`docs/data/knowledge-sources.json`) it searches the web,
+fetches every public source (publisher pages, regulator advisories, CEC/SAA guidelines, CER rules, DNSP
+connection standards, WHS codes), reads HTML and PDF, and compiles passages, clause references and
+facts into `docs/data/knowledge/`. The Library window (Shift+X) shows coverage per book, searches by
+words or clause, and logs what each minion has studied; the Compliance engine cites the passages with
+their source; minions on shift read from it between jobs.
+
+AS/NZS standards are sold by Standards Australia and their text is never scraped. Put the PDFs you hold
+licences for in `data/knowledge/inbox/` and run the harvester with `--inbox`: every clause is indexed
+into a private file on your machine (gitignored) that you import in Library › Harvest.
+
+### The Programme (2.12.0)
+
+The 1,000-item feature list lives in `docs/data/programme-list.txt`; `npm run programme` classifies every
+item (`docs/data/programme.json`) and runs it through Ultron's workforce headless, writing
+`docs/data/programme-state.json`. Inside the realm, **Alt+P** opens the Programme (progress by domain, every
+item with its backing and evidence, the specifications the minions wrote), **Alt+R** the Registers (165 typed
+registers with history, export and due alerts) and **Alt+O** the Policies (129 policies, 8 feature flags,
+enforced in the shell). Status meanings, honestly: *live* = a named self-tested realm feature does it;
+*register* = a typed register implements it; *policy* = a configurable, enforced setting; *specified* = the
+static realm cannot run it (server, device or external system), so the minions research it against the
+library and write a specification record for whoever builds it.
+
+## What the data is (and is not)
+
+- **Product catalogue** (`docs/cer-product-database.json`, 9,247 records) is a **simulated dataset**
+  generated by `create-realistic-cer-db.js` so the UI has realistic volume to search and page through.
+  It is *not* the Clean Energy Council approved products lists. The official lists are published by the
+  [Clean Energy Council](https://www.cleanenergycouncil.org.au/industry-programs/products-program).
+  The UI labels the dataset as simulated wherever it is shown.
+- **AS/NZS standards** data (`docs/as-nzs-standards-scraped.json`, `docs/standards/*.json`) contains
+  public summaries, scopes and section references only. The standards themselves are copyrighted and
+  must be purchased from Standards Australia.
+- **Minions, hive state, progress** (`docs/hive_state.json` and the files derived from it) are the
+  simulation's own data.
+- **Browser metrics** shown on the dashboard (health score, memory, latency) are measured in your browser.
+
+## Quick start
+
+### Static site only
 
 ```bash
-# Clone repository
 git clone https://github.com/samskiezz/solarflowminoinworldlloader.git
 cd solarflowminoinworldlloader
-
-# Serve with any HTTP server
-python -m http.server 8000
-# OR
-npx http-server -p 8000
-
-# Open browser
+python3 -m http.server 8000      # or: npx http-server -p 8000
 open http://localhost:8000/docs/
 ```
 
-### Production Deployment (GitHub Pages)
-
-Already deployed at: `https://samskiezz.github.io/solarflowminoinworldlloader/`
-
-**Auto-deploys** on push to `main` branch.
-
-### VPS Deployment
+### API server
 
 ```bash
-# SSH to VPS
-ssh user@projectsolar.cloud
-
-# Pull latest
-cd /var/www/solarflow
-git pull
-
-# Restart nginx
-sudo systemctl restart nginx
+npm ci
+cp .env.example .env             # set JWT_SECRET (32+ chars); DATABASE_URL is optional
+npm start                        # http://localhost:3000  (serves docs/ and the API)
 ```
 
----
+Without `DATABASE_URL` the server still serves the site, `/api/cer-products`, `/api/standards`,
+`/api/compliance/check` and the shared `/api/state`. Users, audit log and backups need PostgreSQL.
 
-## Architecture
+### Docker
 
-### Data Flow
-
-```
-User Action
-    ↓
-Security Validation (XSS, rate limits)
-    ↓
-Central Data Loader (cached, singleton)
-    ↓
-Unified Credit System (fair calculation)
-    ↓
-Real Health Monitor (browser metrics)
-    ↓
-Performance Tracking (all operations)
-    ↓
-Error Handler (auto-recovery)
-    ↓
-localStorage Persistence
-    ↓
-Event Broadcast (real-time updates)
+```bash
+cp .env.example .env && echo "JWT_SECRET=$(openssl rand -hex 32)" >> .env
+docker compose up --build        # API on :3000 + PostgreSQL
 ```
 
-### Module Load Order
+## Developer workflow
 
-```
-1. error-handler.js     (catches all errors)
-2. security-utils.js     (validates inputs)
-3. performance-monitor.js (tracks metrics)
-4. central-data-loader.js (loads data once)
-5. unified-credit-system.js (fair credits)
-6. working-persistence.js (saves state)
-7. real-vps-integration.js (VPS sync)
-8. real-health-monitor.js (browser health)
-9. real-neural-processor.js (AI processing)
-10. real-compliance-engine.js (AS/NZS checks)
+```bash
+npm run lint        # eslint (server code)
+npm run check       # syntax-check every JS file, validate every JSON file, verify local links in docs/
+npm test            # node:test suite (security, standards, stores, API, VPS server)
+npm run verify      # all of the above (same as CI)
+npm run build:cer   # regenerate the simulated catalogue + summary (deterministic)
+npm run build       # regenerate the hive-derived pages (status.html, roster.html, feeds)
 ```
 
----
-
-## Key Systems
-
-### Central Data Loader
-
-**Purpose**: Single source of truth for all data loading
-
-```javascript
-// Automatic initialization
-await centralDataLoader.init();
-
-// Get cached data (instant)
-const minions = centralDataLoader.get('minions');
-
-// Subscribe to changes
-centralDataLoader.subscribe('minions', (data) => {
-    console.log('Minions updated:', data.length);
-});
-
-// Manual load
-const cerProducts = await centralDataLoader.loadCERProducts();
-```
-
-**Benefits**:
-- 66% reduction in network requests
-- Instant access to cached data
-- Automatic deduplication
-- Event-driven updates
-
----
-
-### Unified Credit System
-
-**Purpose**: Fair, consistent credit calculation
-
-```javascript
-// Award credits
-unifiedCreditSystem.awardCredits(
-    'ATLAS',           // minionId
-    25,                // amount (validated)
-    'Document Processing',
-    { product: 'Fronius Primo' }
-);
-
-// Get stats
-const stats = unifiedCreditSystem.getStats();
-// { totalCredits: 5420, totalTransactions: 247, ... }
-
-// Get top earners
-const top = unifiedCreditSystem.getTopEarners(10);
-```
-
-**Credit Rates**:
-- Document Processing: 10 + (tier × 5)
-- Task Completion: 8 + (tier × 5)
-- Knowledge Sharing: 3 + (tier × 2.5)
-
----
-
-### Real Health Monitor
-
-**Purpose**: Track actual browser performance
-
-```javascript
-// Get current metrics
-const health = realHealthMonitor.getCurrentMetrics();
-
-// Access scores
-console.log('Overall Health:', health.overallHealth.score);
-console.log('Memory Usage:', health.performance.memory.usagePercent);
-console.log('Network Latency:', health.network.latency);
-
-// Subscribe to updates
-window.addEventListener('health-metrics-update', (e) => {
-    const { overallHealth } = e.detail;
-    updateUI(overallHealth.score);
-});
-```
-
-**Measures**:
-- Browser performance (load time, paint metrics)
-- Memory usage (heap size, percentage)
-- Network quality (latency, connection type)
-- Feature support (WebGL, Workers, etc.)
-
----
-
-### Real Neural Processor
-
-**Purpose**: Actual AI processing using Web Workers
-
-```javascript
-// Analyze text
-const result = await realNeuralProcessor.analyzeText('Solar panel efficiency');
-// { wordCount: 3, complexity: 45, themes: {...} }
-
-// Process document
-const processed = await realNeuralProcessor.processDocument({
-    content: '...',
-    type: 'solar_spec'
-});
-// { extracted: { power: 440, voltage: 48.5 }, ... }
-
-// Get metrics
-const metrics = realNeuralProcessor.getMetrics();
-// { processedDocuments: 47, cacheHits: 12, successRate: 98.5 }
-```
-
-**Workers**: Uses actual Web Workers (not fake simulation)
-
----
-
-### Real Compliance Engine
-
-**Purpose**: AS/NZS standards verification
-
-```javascript
-// Verify system
-const result = await realComplianceEngine.verifySystem({
-    electrical: {
-        earthResistance: 0.3,
-        insulationResistance: 2000000
-    },
-    solar: {
-        dcIsolator: { distance: 2.5, accessible: true },
-        arrayEarthing: { earthed: true, resistance: 0.4 }
-    },
-    gridConnection: {
-        inverterModel: 'Fronius Primo 5.0',
-        protectionSettings: { overVoltage: 258, ... }
-    },
-    battery: {
-        location: 'garage',
-        ventilation: { type: 'natural', adequate: true }
-    }
-});
-
-// Result shows pass/fail for each test
-console.log('Overall Pass:', result.overallPass);
-console.log('Critical Issues:', result.criticalIssues.length);
-```
-
-**Standards**: Real AS/NZS 3000, 5033, 4777, 5139 requirements
-
----
-
-## Security
-
-### Input Validation
-
-All user inputs validated:
-
-```javascript
-// Validate minion ID (alphanumeric, 2-50 chars)
-securityUtils.validateMinionId(id);
-
-// Validate credit amount (0-1,000,000)
-securityUtils.validateCreditAmount(amount);
-
-// Validate progress (0-100)
-securityUtils.validateProgress(progress);
-
-// Sanitize HTML (prevent XSS)
-const safe = securityUtils.sanitizeHTML(userInput);
-```
-
-### Rate Limiting
-
-```javascript
-rateLimiters = {
-    creditAward: 60/min,
-    localStorage: 100/min,
-    apiCall: 30/min,
-    stateUpdate: 10/sec
-}
-```
-
-### Security Logging
-
-All suspicious events logged:
-
-```javascript
-// View security log
-const log = securityUtils.getSecurityLog();
-
-// Events include:
-// - Rate limit violations
-// - Invalid input attempts
-// - Failed validations
-```
-
----
-
-## Performance
-
-### Monitoring
-
-```javascript
-// Get performance summary
-const summary = performanceMonitor.getSummary();
-
-console.log('Page load:', summary.pageLoad.fullLoad + 'ms');
-console.log('Avg API time:', summary.apiCalls.avgDuration + 'ms');
-console.log('Avg render:', summary.renders.avgDuration + 'ms');
-console.log('Memory:', summary.memory.percentage);
-```
-
-### Optimization
-
-```javascript
-// Optimize localStorage
-const report = performanceMonitor.optimizeLocalStorage();
-
-console.log('Total size:', report.totalSizeKB);
-console.log('Old items:', report.oldKeys.length);
-```
-
-### Thresholds
-
-- Slow render: >16ms (60fps target)
-- Slow API: >1000ms
-- High memory: >50% of heap
-
----
-
-## Error Handling
-
-### Global Error Capture
-
-All errors automatically captured:
-
-```javascript
-// View errors
-const errors = errorHandler.getErrors(50);
-
-// Get statistics
-const stats = errorHandler.getErrorStats();
-// { total: 47, last24h: 12, topErrors: [...] }
-```
-
-### Automatic Recovery
-
-- **localStorage quota exceeded** → Clears old data (>7 days)
-- **Network failure** → Uses cached data, queues retry
-- **JSON parse error** → Removes corrupted entry, logs event
-
-### Error Boundaries
-
-```javascript
-// Wrap risky functions
-const safeFn = errorHandler.createErrorBoundary(riskyFn, fallback);
-
-// Wrap async
-const safeAsync = errorHandler.wrapAsync(asyncFn);
-```
-
----
-
-## Data Sources
-
-### Real Data Files
-
-1. **minions.json** (24 real minions)
-2. **cer-product-database.json** (9,247 CER products)
-3. **as-nzs-standards-scraped.json** (Australian standards)
-4. **hive_state.json** (system state)
-5. **progress.json** (work progress)
-
-### All data loaded via Central Data Loader (cached)
-
----
-
-## localStorage Structure
-
-```
-central-data-loader/
-├─ fallback-minions
-├─ fallback-cerProducts
-├─ fallback-standards
-├─ fallback-hiveState
-└─ fallback-progress
-
-unified-credits/
-└─ unified-credits
-
-minion-states/
-├─ minion-state-ATLAS
-├─ minion-state-LUMEN
-└─ ... (one per minion)
-
-progress-tracking/
-├─ minion-progress-{id}
-├─ task-progress-{id}
-└─ task-complete-{id}
-
-metadata/
-├─ minions-count
-├─ cer-products-count
-├─ standards-count
-└─ cer-products-loaded
-
-logs/
-├─ error-log
-└─ security-log
-```
-
----
-
-## Troubleshooting
-
-### Data not loading?
-
-```javascript
-// Check central data loader status
-const status = centralDataLoader.getStatus();
-console.log('Initialized:', status.initialized);
-console.log('Cached:', status.cached);
-console.log('Loading:', status.loading);
-```
-
-### Credits not awarded?
-
-```javascript
-// Check security validation
-console.log('Valid ID:', securityUtils.validateMinionId(id));
-console.log('Valid amount:', securityUtils.validateCreditAmount(amount));
-
-// Check rate limit
-console.log('Rate limit OK:', rateLimiters.creditAward());
-```
-
-### Performance issues?
-
-```javascript
-// Check for slow operations
-const slow = performanceMonitor.getMetrics().slowOperations;
-console.log('Slow ops:', slow);
-
-// Optimize storage
-performanceMonitor.optimizeLocalStorage();
-```
-
-### Errors occurring?
-
-```javascript
-// Check error log
-const errors = errorHandler.getErrors();
-console.log('Recent errors:', errors.slice(0, 10));
-
-// Check error stats
-const stats = errorHandler.getErrorStats();
-console.log('Error frequency:', stats.topErrors);
-```
-
----
-
-## API Reference
-
-See individual module documentation:
-- [Central Data Loader API](./docs/central-data-loader.js)
-- [Unified Credit System API](./docs/unified-credit-system.js)
-- [Security Utils API](./docs/security-utils.js)
-- [Performance Monitor API](./docs/performance-monitor.js)
-- [Error Handler API](./docs/error-handler.js)
-
----
-
-## Testing
-
-### Run System Test
-
-```javascript
-// From browser console
-runSystemTest();
-```
-
-Checks:
-- Health monitor initialization
-- Neural processor functionality
-- Compliance engine status
-- VPS integration
-- Data persistence
-- CER database load
-- Browser feature support
-
----
+CI (`.github/workflows/ci.yml`) runs lint, checks, tests, a server smoke test and a Docker build on
+Node 18/20/22 for every push and pull request.
+
+## API overview
+
+| Method | Path | Auth | Notes |
+| --- | --- | --- | --- |
+| GET | `/health`, `/api/health` | – | `503 degraded` while a configured database is unreachable |
+| GET | `/api/version` | – | |
+| POST | `/api/auth/register`, `/api/auth/login` | – | rate limited, brute-force lockout |
+| GET | `/api/auth/me` | user | |
+| GET/POST | `/api/data/:key` | user | per-user JSON documents (PostgreSQL) |
+| GET | `/api/state` | – | shared front-end state (file backed) |
+| POST | `/api/state` | user* | *or `ALLOW_ANONYMOUS_STATE_WRITES=true` |
+| GET | `/api/cer-products` | – | `q`, `category`, `manufacturer`, `verified`, `limit` (≤500), `offset` |
+| GET | `/api/cer-products/summary`, `/api/cer-products/:id` | – | |
+| POST | `/api/cer-products` | auditor/admin | |
+| GET | `/api/standards` | – | bundled summaries; never fetches remotely |
+| POST | `/api/standards/refresh` | admin | remote fetch only with `STANDARDS_REMOTE_FETCH=true` |
+| POST | `/api/compliance/check` | user | `{ standard_code, installation_data }` → PASS / WARNING / FAIL / INCOMPLETE |
+| GET | `/api/audit` | admin | |
+| POST | `/api/backup` | admin | writes `DATA_DIR/backups/backup-*.json` |
+| WS | `/` | – | `{type:"ping"}`, `{type:"subscribe",channels:[...]}` |
+
+All configuration is documented in `.env.example` and read in `src/config.js`.
+
+## Front-end architecture
+
+Scripts on the dashboard load in this order (see `docs/index.html`):
+
+1. `solarflow-config.js` – runtime config (VPS URL, polling intervals, feature flags)
+2. Foundation: `storage-manager.js`, `event-manager.js`, `error-handler.js`, `security-utils.js`, `performance-monitor.js`
+3. Core: `central-data-loader.js` (loads each data file once), `unified-credit-system.js`
+4. `init-orchestrator.js` – initialises the above in dependency order and emits `solarflow-ready`
+5. Persistence: `universal-bootloader.js`, `working-persistence.js`
+6. Monitors: `real-vps-integration.js`, `real-health-monitor.js`, `real-neural-processor.js`, `real-compliance-engine.js`
+
+The VPS backend is only contacted when `solarflow-config.js` resolves a URL the page is allowed to
+call (an `http://` backend is never attempted from an `https://` page because the browser would
+block it). Everything else works in "local mode".
 
 ## Deployment
 
-### GitHub Pages (Current)
+- **GitHub Pages**: push to `main`; the site is served from `docs/`.
+- **VPS**: `DOMAIN=example.com ADMIN_EMAIL=you@example.com ./deploy.sh` installs the systemd
+  service (`systemd/solarflow-quantum.service`) behind nginx (`nginx/solarflow.conf`) with Let's Encrypt.
+  See `DEPLOYMENT.md` for details.
 
-Auto-deploys on push to `main`:
-- URL: `https://samskiezz.github.io/solarflowminoinworldlloader/`
-- Branch: `gh-pages`
-- Build: Static files from `/docs`
+## Repository layout
 
-### VPS Deployment
-
-1. Clone repo to VPS
-2. Configure nginx to serve `/docs`
-3. Setup SSL with Let's Encrypt
-4. Configure VPS endpoints in `real-vps-integration.js`
-
----
-
-## Contributing
-
-1. Fork repository
-2. Create feature branch
-3. Make changes (no fake data!)
-4. Run system test
-5. Submit pull request
-
-**Guidelines**:
-- All statistics must be backed by real measurements
-- No `Math.random()` for business logic
-- Use Central Data Loader for all data
-- Validate all inputs with Security Utils
-- Track performance with Performance Monitor
-- Handle errors with Error Handler
-
----
-
-## Support
-
-**Issues**: https://github.com/samskiezz/solarflowminoinworldlloader/issues  
-**Discussions**: https://github.com/samskiezz/solarflowminoinworldlloader/discussions
-
----
-
-## License
-
-MIT License - See LICENSE file
-
----
+```
+docs/                 static site (GitHub Pages root)
+  standards/          public AS/NZS summaries used by the minion knowledge pages
+  vendor/three/       pinned three.js build
+server.js, src/       Express API server (config, logger, data stores, security, standards)
+server/               VPS persistence server
+scripts/              build pipeline (hive → pages/feeds), check-* scripts, scrapers
+tests/                node:test suite
+artifacts/            document pipeline outputs (JSON), kept for reference
+apps/, genesis/       experimental Fastify/Next.js and Python prototypes (not part of the build)
+```
 
 ## Changelog
 
-### v2.3.0 (2026-02-08)
-- ✅ Eliminated all 26 fake data generators
-- ✅ Removed demo/simulation code
-- ✅ Centralized data loading (Central Data Loader)
-- ✅ Unified credit system
-- ✅ Added security layer (validation, rate limiting)
-- ✅ Added performance monitoring
-- ✅ Added global error handling
-- ✅ 100% real data - zero fake statistics
+See `CHANGELOG.md`. The 2.4.0 entry and `IMPROVEMENTS.md` list all 142 fixes made in the audit release.
 
-### v2.2.0 (2026-02-07)
-- Production infrastructure complete
-- Real neural processor with Web Workers
-- Real compliance engine with AS/NZS standards
-- Real health monitor with browser metrics
+## License
 
-### v2.1.0 (2026-02-06)
-- Fixed data persistence issues
-- Added real VPS integration
-- Enhanced CER product database
-
----
-
-**Built with evidence-first principles. Every statistic backed by real measurements.**
+MIT – see `LICENSE`.

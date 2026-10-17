@@ -12,58 +12,61 @@ class PerformanceMonitor {
             memorySnapshots: [],
             slowOperations: []
         };
-        
+
         this.thresholds = {
             slowRender: 16, // 60fps = 16.67ms per frame
             slowAPI: 1000,  // 1 second
             highMemory: 50  // 50% of heap
         };
-        
+
         this.initialized = false;
         console.log('📊 Performance Monitor initialized');
     }
-    
+
     init() {
         if (this.initialized) return;
-        
+
         // Capture page load performance
         this.capturePageLoad();
-        
+
         // Start monitoring
         this.startMemoryMonitoring();
         this.monitorLongTasks();
-        
+
         this.initialized = true;
         console.log('✅ Performance monitoring active');
     }
-    
+
     capturePageLoad() {
-        if (!window.performance || !window.performance.timing) {
-            console.warn('⚠️ Performance API not available');
+        // Navigation Timing Level 2 (performance.timing is deprecated).
+        const navigation = window.performance && performance.getEntriesByType
+            ? performance.getEntriesByType('navigation')[0]
+            : null;
+        if (!navigation) {
+            console.warn('⚠️ Navigation timing not available');
             return;
         }
-        
-        const timing = performance.timing;
-        const navigation = performance.getEntriesByType('navigation')[0];
-        
+
+        const ms = (value) => Math.round(value);
         this.metrics.pageLoad = {
-            dns: timing.domainLookupEnd - timing.domainLookupStart,
-            tcp: timing.connectEnd - timing.connectStart,
-            request: timing.responseStart - timing.requestStart,
-            response: timing.responseEnd - timing.responseStart,
-            domParse: timing.domInteractive - timing.domLoading,
-            domReady: timing.domContentLoadedEventEnd - timing.navigationStart,
-            fullLoad: timing.loadEventEnd - timing.navigationStart,
-            type: navigation ? navigation.type : 'unknown'
+            dns: ms(navigation.domainLookupEnd - navigation.domainLookupStart),
+            tcp: ms(navigation.connectEnd - navigation.connectStart),
+            request: ms(navigation.responseStart - navigation.requestStart),
+            response: ms(navigation.responseEnd - navigation.responseStart),
+            domParse: ms(navigation.domInteractive - navigation.responseEnd),
+            domReady: ms(navigation.domContentLoadedEventEnd),
+            fullLoad: ms(navigation.loadEventEnd),
+            transferSize: navigation.transferSize || 0,
+            type: navigation.type || 'unknown'
         };
-        
+
         console.log('📊 Page Load Metrics:', this.metrics.pageLoad);
     }
-    
+
     // Measure API call performance
     measureAPICall(name, promise) {
         const start = performance.now();
-        
+
         return promise.then(
             result => {
                 const duration = performance.now() - start;
@@ -77,7 +80,7 @@ class PerformanceMonitor {
             }
         );
     }
-    
+
     recordAPICall(name, duration, success) {
         const record = {
             name: name,
@@ -85,14 +88,14 @@ class PerformanceMonitor {
             success: success,
             timestamp: Date.now()
         };
-        
+
         this.metrics.apiCalls.push(record);
-        
+
         // Keep only last 100 calls
         if (this.metrics.apiCalls.length > 100) {
             this.metrics.apiCalls.shift();
         }
-        
+
         // Log slow API calls
         if (duration > this.thresholds.slowAPI) {
             console.warn(`🐌 Slow API call: ${name} took ${duration.toFixed(0)}ms`);
@@ -104,11 +107,11 @@ class PerformanceMonitor {
             });
         }
     }
-    
+
     // Measure render performance
     measureRender(name, fn) {
         const start = performance.now();
-        
+
         try {
             const result = fn();
             const duration = performance.now() - start;
@@ -120,21 +123,21 @@ class PerformanceMonitor {
             throw error;
         }
     }
-    
+
     recordRender(name, duration) {
         const record = {
             name: name,
             duration: duration,
             timestamp: Date.now()
         };
-        
+
         this.metrics.renderTimes.push(record);
-        
+
         // Keep only last 100 renders
         if (this.metrics.renderTimes.length > 100) {
             this.metrics.renderTimes.shift();
         }
-        
+
         // Log slow renders
         if (duration > this.thresholds.slowRender) {
             console.warn(`🐌 Slow render: ${name} took ${duration.toFixed(1)}ms (target: ${this.thresholds.slowRender}ms)`);
@@ -146,19 +149,19 @@ class PerformanceMonitor {
             });
         }
     }
-    
+
     // Monitor memory usage
     startMemoryMonitoring() {
         if (!performance.memory) {
             console.warn('⚠️ Memory monitoring not available');
             return;
         }
-        
+
         // Clear existing interval if any
         if (this.memoryMonitorInterval) {
             clearInterval(this.memoryMonitorInterval);
         }
-        
+
         // Sample memory every 30 seconds
         this.memoryMonitorInterval = setInterval(() => {
             const snapshot = {
@@ -168,28 +171,28 @@ class PerformanceMonitor {
                 percentage: (performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100,
                 timestamp: Date.now()
             };
-            
+
             this.metrics.memorySnapshots.push(snapshot);
-            
+
             // Keep only last 100 snapshots
             if (this.metrics.memorySnapshots.length > 100) {
                 this.metrics.memorySnapshots.shift();
             }
-            
+
             // Warn on high memory usage
             if (snapshot.percentage > this.thresholds.highMemory) {
                 console.warn(`⚠️ High memory usage: ${snapshot.percentage.toFixed(1)}%`);
             }
         }, 30000);
     }
-    
+
     // Monitor long tasks
     monitorLongTasks() {
         if (!window.PerformanceObserver) {
             console.warn('⚠️ PerformanceObserver not available');
             return;
         }
-        
+
         try {
             const observer = new PerformanceObserver((list) => {
                 for (const entry of list.getEntries()) {
@@ -202,25 +205,25 @@ class PerformanceMonitor {
                     });
                 }
             });
-            
+
             observer.observe({ entryTypes: ['longtask'] });
         } catch (error) {
             // longtask type not supported in all browsers
             console.warn('⚠️ Long task monitoring not supported');
         }
     }
-    
+
     // Get performance summary
     getSummary() {
         const apiCalls = this.metrics.apiCalls;
         const renders = this.metrics.renderTimes;
         const memory = this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1];
-        
+
         return {
             pageLoad: this.metrics.pageLoad,
             apiCalls: {
                 total: apiCalls.length,
-                avgDuration: apiCalls.length > 0 ? 
+                avgDuration: apiCalls.length > 0 ?
                     apiCalls.reduce((sum, c) => sum + c.duration, 0) / apiCalls.length : 0,
                 slowCalls: apiCalls.filter(c => c.duration > this.thresholds.slowAPI).length
             },
@@ -238,12 +241,12 @@ class PerformanceMonitor {
             slowOperations: this.metrics.slowOperations.length
         };
     }
-    
+
     // Get detailed metrics
     getMetrics() {
         return { ...this.metrics };
     }
-    
+
     // Clear metrics
     clearMetrics() {
         this.metrics = {
@@ -255,7 +258,7 @@ class PerformanceMonitor {
         };
         console.log('🗑️ Performance metrics cleared');
     }
-    
+
     // Cleanup method
     shutdown() {
         if (this.memoryMonitorInterval) {
@@ -264,14 +267,14 @@ class PerformanceMonitor {
         }
         console.log('🛑 Performance monitor shut down');
     }
-    
+
     // Optimize localStorage usage
     optimizeLocalStorage() {
         console.log('🔧 Optimizing localStorage...');
-        
+
         let totalSize = 0;
         const items = [];
-        
+
         // Calculate size of each item
         for (let key in localStorage) {
             if (localStorage.hasOwnProperty(key)) {
@@ -280,21 +283,21 @@ class PerformanceMonitor {
                 items.push({ key, size });
             }
         }
-        
+
         // Sort by size
         items.sort((a, b) => b.size - a.size);
-        
+
         console.log(`📊 Total localStorage: ${(totalSize / 1024).toFixed(2)}KB`);
         console.log('📊 Top 5 largest items:');
         items.slice(0, 5).forEach(item => {
             console.log(`  - ${item.key}: ${(item.size / 1024).toFixed(2)}KB`);
         });
-        
+
         // Recommend cleanup
         const oldKeys = [];
         const now = Date.now();
         const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
-        
+
         for (let key in localStorage) {
             if (key.includes('timestamp') || key.includes('lastUpdate')) {
                 try {
@@ -307,11 +310,11 @@ class PerformanceMonitor {
                 }
             }
         }
-        
+
         if (oldKeys.length > 0) {
             console.log(`🗑️ Found ${oldKeys.length} old items (>7 days)`);
         }
-        
+
         return {
             totalSize: totalSize,
             totalSizeKB: (totalSize / 1024).toFixed(2),
@@ -320,7 +323,7 @@ class PerformanceMonitor {
             oldKeys: oldKeys
         };
     }
-    
+
     // Debounce helper
     debounce(fn, delay) {
         let timeoutId;
@@ -329,7 +332,7 @@ class PerformanceMonitor {
             timeoutId = setTimeout(() => fn.apply(this, args), delay);
         };
     }
-    
+
     // Throttle helper
     throttle(fn, limit) {
         let inThrottle;

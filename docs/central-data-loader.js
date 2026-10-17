@@ -10,153 +10,182 @@ class CentralDataLoader {
         this.loading = new Map();
         this.listeners = new Map();
         this.initialized = false;
-        
+
         console.log('📂 Central Data Loader initialized');
     }
-    
+
     async init() {
         if (this.initialized) {
             console.log('⚠️ Central Data Loader already initialized');
             return;
         }
-        
+
         console.log('🚀 Loading all core data...');
-        
-        // Load all core data in parallel
+
+        // The lightweight summary loads first so the UI can show counts
+        // immediately; the full catalogue follows.
         await Promise.all([
             this.loadMinions(),
+            this.loadCERSummary().catch(() => null),
             this.loadCERProducts(),
             this.loadStandards(),
             this.loadHiveState(),
             this.loadProgress()
         ]);
-        
+
         this.initialized = true;
         console.log('✅ Central Data Loader ready');
-        
-        // Broadcast ready event
+
         window.dispatchEvent(new CustomEvent('central-data-ready', {
             detail: {
                 minions: this.cache.get('minions'),
                 cerProducts: this.cache.get('cerProducts'),
+                cerSummary: this.cache.get('cerSummary'),
                 standards: this.cache.get('standards'),
                 hiveState: this.cache.get('hiveState'),
                 progress: this.cache.get('progress')
             }
         }));
     }
-    
+
+    // Storage helper: namespaced via storageManager when present, legacy key otherwise.
+    _store(key, value) {
+        try {
+            if (window.storageManager && window.storageManager.initialized) {
+                window.storageManager.set(key, value);
+            } else {
+                localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+            }
+        } catch (error) {
+            console.warn(`Could not persist ${key}:`, error.message);
+        }
+    }
+
+    _read(key) {
+        try {
+            if (window.storageManager && window.storageManager.initialized && window.storageManager.has(key)) {
+                return window.storageManager.get(key);
+            }
+            const raw = localStorage.getItem(key);
+            if (raw === null) return null;
+            try { return JSON.parse(raw); } catch (e) { return raw; }
+        } catch (error) {
+            return null;
+        }
+    }
+
     async loadMinions() {
         return this.loadData('minions', './minions.json', (data) => {
-            // Validate structure
             if (!data.minions || !Array.isArray(data.minions)) {
                 throw new Error('Invalid minions.json structure - expected { minions: [...] }');
             }
-            
             if (data.minions.length === 0) {
                 throw new Error('minions.json is empty - no minions found');
             }
-            
-            // Validate each minion
+
             data.minions.forEach((minion, index) => {
                 if (!minion.id) throw new Error(`Minion at index ${index} missing id`);
-                // Use id as name if name not provided
-                if (!minion.name) {
-                    minion.name = minion.id;
-                }
+                if (!minion.name) minion.name = minion.id;
                 if (minion.tier === undefined) throw new Error(`Minion ${minion.id} missing tier`);
             });
-            
-            localStorage.setItem('minions-count', data.minions.length.toString());
+
+            this._store('minions-count', data.minions.length.toString());
             console.log(`✅ Validated ${data.minions.length} minions`);
             return data.minions;
-        });
+        }, { small: true });
     }
-    
+
+    async loadCERSummary() {
+        return this.loadData('cerSummary', './cer-product-summary.json', (data) => {
+            if (typeof data.totalProducts !== 'number') throw new Error('Invalid summary file');
+            return data;
+        }, { small: true });
+    }
+
     async loadCERProducts() {
         return this.loadData('cerProducts', './cer-product-database.json', (data) => {
-            // CER database has structure: { categories: { solar_panels: [], inverters: [], batteries: [] } }
-            // Flatten into single array
+            // Structure: { metadata, categories: { solar_panels: [], inverters: [], batteries: [] } }
+            const categories = data.categories || {};
             const allProducts = [
-                ...(data.categories?.solar_panels || []),
-                ...(data.categories?.inverters || []),
-                ...(data.categories?.batteries || [])
+                ...(categories.solar_panels || []),
+                ...(categories.inverters || []),
+                ...(categories.batteries || [])
             ];
-            
+
             if (allProducts.length === 0) {
                 throw new Error('CER database loaded but contains no products');
             }
-            
-            localStorage.setItem('cer-products-count', allProducts.length.toString());
-            localStorage.setItem('cer-products-loaded', 'true');
-            
-            console.log(`✅ Loaded ${allProducts.length} CER products from database`);
+
+            this._store('cer-products-count', allProducts.length.toString());
+            this._store('cer-products-loaded', 'true');
+            if (data.metadata) {
+                this.cache.set('cerMetadata', data.metadata);
+                if (!this.cache.has('cerSummary')) {
+                    this.cache.set('cerSummary', { totalProducts: allProducts.length, simulated: Boolean(data.metadata.simulated) });
+                }
+            }
+
+            console.log(`✅ Loaded ${allProducts.length} products from catalogue${data.metadata && data.metadata.simulated ? ' (simulated dataset)' : ''}`);
             return allProducts;
         });
     }
-    
+
     async loadStandards() {
         return this.loadData('standards', './as-nzs-standards-scraped.json', (data) => {
-            // Validate structure
-            if (!data.standards || typeof data.standards !== 'object') {
-                throw new Error('Invalid standards file structure - expected { standards: {...} }');
-            }
-            
-            const standardCount = Object.keys(data.standards).length;
+            // File is grouped by topic: { metadata, electrical_installations: {...}, solar_specific_standards: {...}, ... }
+            // Older builds used { standards: {...} }; accept both.
+            const groups = data.standards && typeof data.standards === 'object'
+                ? data.standards
+                : Object.fromEntries(Object.entries(data).filter(([key, value]) => key !== 'metadata' && value && typeof value === 'object'));
+
+            const standardCount = Object.keys(groups).length;
             if (standardCount === 0) {
                 throw new Error('Standards file is empty');
             }
-            
-            localStorage.setItem('standards-count', standardCount.toString());
-            console.log(`✅ Validated ${standardCount} standards`);
-            return data.standards;
-        });
+
+            this._store('standards-count', standardCount.toString());
+            console.log(`✅ Validated ${standardCount} standards groups`);
+            return groups;
+        }, { small: true });
     }
-    
+
     async loadHiveState() {
         return this.loadData('hiveState', './hive_state.json', (data) => {
-            // Merge with localStorage state
-            const localState = localStorage.getItem('solarflow-state');
-            if (localState) {
-                const parsed = JSON.parse(localState);
-                return { ...data, ...parsed };
+            // Only the hive_state sub-object of the persisted page state is
+            // relevant here; the rest of that state has an unrelated shape.
+            const localState = this._read('solarflow-state');
+            if (localState && localState.hive_state && typeof localState.hive_state === 'object') {
+                return { ...data, local: localState.hive_state };
             }
             return data;
-        });
+        }, { small: true });
     }
-    
+
     async loadProgress() {
         return this.loadData('progress', './progress.json', (data) => {
-            // Don't overwrite if local progress is newer
-            const localProgress = localStorage.getItem('progress-state');
-            if (localProgress) {
-                const local = JSON.parse(localProgress);
-                if (local.lastUpdate > data.lastUpdate) {
-                    console.log('📊 Using local progress (newer)');
-                    return local;
-                }
+            const local = this._read('progress-state');
+            const remoteUpdated = Date.parse((data.meta && data.meta.updatedAt) || data.lastUpdate || 0) || 0;
+            const localUpdated = local ? (Date.parse((local.meta && local.meta.updatedAt) || local.lastUpdate || 0) || 0) : 0;
+            if (local && localUpdated > remoteUpdated) {
+                console.log('📊 Using local progress (newer)');
+                return local;
             }
             return data;
-        });
+        }, { small: true });
     }
-    
-    async loadData(key, url, transformer = null) {
-        // Check cache first
+
+    async loadData(key, url, transformer = null, options = {}) {
         if (this.cache.has(key)) {
-            console.log(`📂 ${key}: Using cached data`);
             return this.cache.get(key);
         }
-        
-        // Check if already loading
+
         if (this.loading.has(key)) {
-            console.log(`⏳ ${key}: Waiting for existing load...`);
             return this.loading.get(key);
         }
-        
-        // Start loading
-        const loadPromise = this._loadFromSource(key, url, transformer);
+
+        const loadPromise = this._loadFromSource(key, url, transformer, options);
         this.loading.set(key, loadPromise);
-        
+
         try {
             const data = await loadPromise;
             this.cache.set(key, data);
@@ -168,64 +197,57 @@ class CentralDataLoader {
             throw error;
         }
     }
-    
-    async _loadFromSource(key, url, transformer) {
+
+    async _loadFromSource(key, url, transformer, options) {
         try {
             console.log(`📥 ${key}: Loading from ${url}...`);
-            
-            // Performance tracking
-            const fetchPromise = fetch(url + '?t=' + Date.now());
-            const trackedFetch = window.performanceMonitor ? 
-                window.performanceMonitor.measureAPICall(`load-${key}`, fetchPromise) : 
-                fetchPromise;
-            
+
+            // Small files: revalidate with the server (ETag) every time.
+            // Large files (the product catalogue): let the HTTP cache work; the
+            // old `?t=Date.now()` query string forced a full download on every visit.
+            const fetchPromise = fetch(url, { cache: options.small ? 'no-cache' : 'default' });
+            const trackedFetch = window.performanceMonitor
+                ? window.performanceMonitor.measureAPICall(`load-${key}`, fetchPromise)
+                : fetchPromise;
+
             const response = await trackedFetch;
-            
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            
+
             const data = await response.json();
-            
-            // Rate limiting check
-            if (window.rateLimiters && !window.rateLimiters.apiCall()) {
-                console.warn('🚫 API rate limit exceeded for data loading');
-            }
-            
             const transformed = transformer ? transformer(data) : data;
-            
             console.log(`✅ ${key}: Loaded successfully`);
             return transformed;
-            
+
         } catch (error) {
             console.error(`❌ ${key}: Failed to load from ${url}:`, error);
-            
-            // Try localStorage fallback
-            const fallbackKey = `fallback-${key}`;
-            const fallback = localStorage.getItem(fallbackKey);
-            
+
+            const fallback = this._read(`fallback-${key}`);
             if (fallback) {
                 console.log(`📂 ${key}: Using localStorage fallback`);
-                return JSON.parse(fallback);
+                return fallback;
             }
-            
             throw error;
         }
     }
-    
-    // Subscribe to data changes
+
     subscribe(key, callback) {
         if (!this.listeners.has(key)) {
             this.listeners.set(key, []);
         }
         this.listeners.get(key).push(callback);
-        
-        // If data already loaded, call immediately
+
         if (this.cache.has(key)) {
             callback(this.cache.get(key));
         }
+        return () => {
+            const list = this.listeners.get(key) || [];
+            const index = list.indexOf(callback);
+            if (index >= 0) list.splice(index, 1);
+        };
     }
-    
+
     notifyListeners(key, data) {
         const listeners = this.listeners.get(key) || [];
         listeners.forEach(callback => {
@@ -236,28 +258,23 @@ class CentralDataLoader {
             }
         });
     }
-    
-    // Get data synchronously (returns null if not loaded)
+
     get(key) {
         return this.cache.get(key) || null;
     }
-    
-    // Update cached data
+
     update(key, data) {
         this.cache.set(key, data);
-        
-        // Save to localStorage as fallback
-        const fallbackKey = `fallback-${key}`;
-        try {
-            localStorage.setItem(fallbackKey, JSON.stringify(data));
-        } catch (error) {
-            console.warn(`Failed to save fallback for ${key}:`, error);
+
+        // The product catalogue is far too large for localStorage; only
+        // small datasets get a fallback copy.
+        if (key !== 'cerProducts') {
+            this._store(`fallback-${key}`, data);
         }
-        
+
         this.notifyListeners(key, data);
     }
-    
-    // Clear cache
+
     clearCache(key = null) {
         if (key) {
             this.cache.delete(key);
@@ -267,8 +284,7 @@ class CentralDataLoader {
             console.log('🗑️ Cleared all cache');
         }
     }
-    
-    // Get status
+
     getStatus() {
         return {
             initialized: this.initialized,
@@ -286,6 +302,4 @@ class CentralDataLoader {
 window.centralDataLoader = new CentralDataLoader();
 
 // Don't auto-initialize - let init-orchestrator control startup
-// Will be initialized by init-orchestrator.js in correct order
-
 console.log('✅ Central Data Loader module loaded');

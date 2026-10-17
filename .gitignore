@@ -1,3 +1,42 @@
-.DS_Store
+# Dependencies
+node_modules/
+apps/*/node_modules/
+server/node_modules/
+
+# Environment & secrets
 .env
+.env.*
+!.env.example
+
+# Logs, runtime state
+logs/
+*.log
+*.pid
+/data/
+!docs/data/
+backups/
+restart-count.json
+
+# Python
+__pycache__/
+*.pyc
+neural_env/
 neural_cluster_200/
+venv/
+.venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Build output
+dist/
+coverage/
+.nyc_output/
+apps/web/.next/
+
+# Generated caches
+docs/.cache-bust

@@ -10,72 +10,74 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
 
     class SolarFlowUniversalBootloader {
         constructor() {
-            this.version = '2.2.0';
+            this.version = (window.SOLARFLOW_CONFIG && window.SOLARFLOW_CONFIG.version) || '2.4.0';
+            // Same-origin /api/state only exists when the Node server hosts the site.
+            this.apiAvailable = !window.SOLARFLOW_CONFIG || window.SOLARFLOW_CONFIG.sameOriginApi;
             this.initialized = false;
             this.state = {};
             this.autoSaveInterval = null;
             this.sessionId = 'solarflow-' + Date.now();
             this.pageName = this.detectPageName();
-            
+
             console.log('🚀 SolarFlow Universal Bootloader v' + this.version + ' starting on:', this.pageName);
             this.init();
         }
-        
+
         detectPageName() {
             const path = window.location.pathname;
             const filename = path.split('/').pop() || 'index.html';
             return filename.replace('.html', '');
         }
-        
+
         async init() {
             try {
                 console.log('🔧 Initializing universal bootloader...');
-                
+
                 // 1. Load existing state
                 await this.loadState();
-                
+
                 // 2. Initialize systems if first run or data is missing
                 if (!this.state.initialized || this.shouldReinitialize()) {
                     await this.initializeSystemData();
                 }
-                
+
                 // 3. Update page visit tracking
                 this.trackPageVisit();
-                
+
                 // 4. Setup auto-save
                 this.setupAutoSave();
-                
+
                 // 5. Setup before unload handler
                 this.setupBeforeUnload();
-                
+
                 // 6. Mark as initialized
                 this.initialized = true;
                 this.state.lastBootTime = Date.now();
                 this.state.lastPage = this.pageName;
                 await this.saveState();
-                
+
                 console.log('✅ Universal Bootloader ready on', this.pageName);
                 console.log('📊 State loaded:', Object.keys(this.state).length, 'sections');
                 console.log('💾 Auto-save enabled every 30 seconds');
-                
+
                 // Fire ready event for pages to listen to
-                window.dispatchEvent(new CustomEvent('solarflow-ready', { 
+                window.dispatchEvent(new CustomEvent('solarflow-ready', {
                     detail: { bootloader: this, state: this.state }
                 }));
-                
+
             } catch (error) {
                 console.error('❌ Universal Bootloader initialization failed:', error);
             }
         }
-        
+
         shouldReinitialize() {
             const lastBoot = this.state.lastBootTime || 0;
             const timeSinceLastBoot = Date.now() - lastBoot;
             const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-            
+
             return timeSinceLastBoot > maxAge;
         }
-        
+
         async loadState() {
             try {
                 // Try localStorage first (primary storage for static hosting)
@@ -83,18 +85,24 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 if (localData) {
                     this.state = JSON.parse(localData);
                     console.log('📂 State loaded from localStorage (' + Math.round(localData.length/1024) + 'KB)');
-                    
+
                     // Validate state structure
                     if (!this.state.version) {
                         this.state.version = this.version;
                     }
                     return;
                 }
-                
+
                 // Try API endpoint if available (for VPS hosting)
                 try {
-                    const response = await fetch('/api/state');
-                    if (response.ok) {
+                    if (!this.apiAvailable) throw new Error('static host');
+                    const response = await fetch('/api/state', { headers: { 'Accept': 'application/json' } });
+                    if (response.headers.get('X-State-Writable') === 'false') {
+                        this.apiWritable = false; // anonymous writes disabled server-side
+                    }
+                    if (response.status === 204) {
+                        console.log('📂 No shared state on the server yet');
+                    } else if (response.ok) {
                         this.state = await response.json();
                         console.log('📂 State loaded from API');
                         // Also save to localStorage as backup
@@ -104,17 +112,17 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 } catch (apiError) {
                     // API not available, continue with localStorage
                 }
-                
+
                 // Initialize empty state
                 this.state = this.getDefaultState();
                 console.log('📂 Initialized empty state');
-                
+
             } catch (error) {
                 console.error('⚠️ State loading error:', error);
                 this.state = this.getDefaultState();
             }
         }
-        
+
         getDefaultState() {
             return {
                 version: this.version,
@@ -123,32 +131,32 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 lastUpdate: Date.now(),
                 sessionCount: 0,
                 pageVisits: {},
-                
+
                 // Core system data
                 minions: [],
                 activities: [],
                 conversations: {},
                 documents: [],
-                
+
                 // Autonomous world state
                 autonomous: {
                     population: 24,
                     energyCredits: 2765,
                     activeWorkers: 18,
                     shiftRotation: 'Alpha',
-                    productivity: 94.2,
+                    productivity: 0, // calculated from real activity, never seeded
                     lastUpdate: Date.now(),
                     events: [],
                     milestones: []
                 },
-                
+
                 // Minion chat state
                 minionChat: {
                     conversations: {},
                     lastActive: Date.now(),
                     totalMessages: 0
                 },
-                
+
                 // Dominion city state
                 dominionCity: {
                     buildings: [],
@@ -156,7 +164,7 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                     resources: { energy: 500, materials: 300, research: 150 },
                     lastUpdate: Date.now()
                 },
-                
+
                 // Consciousness engine state
                 consciousness: {
                     level: 0.75,
@@ -164,14 +172,14 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                     insights: [],
                     lastEvolution: Date.now()
                 },
-                
+
                 // 3D realm state
                 realm3D: {
                     avatarPositions: {},
                     lastInteraction: Date.now(),
                     activeMinions: []
                 },
-                
+
                 // Hive state (unified system state)
                 hive_state: {
                     version: this.version,
@@ -185,39 +193,39 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 }
             };
         }
-        
+
         async initializeSystemData() {
             try {
                 console.log('🔧 Initializing system data...');
-                
+
                 // Initialize minions if empty
                 if (!this.state.minions || this.state.minions.length === 0) {
                     this.state.minions = await this.loadMinions();
                 }
-                
+
                 // Initialize activities if empty
                 if (!this.state.activities || this.state.activities.length === 0) {
                     this.state.activities = this.generateInitialActivities();
                 }
-                
+
                 // Ensure all subsystems have valid states
                 this.validateSubsystemStates();
-                
+
                 // Update timestamps
                 this.state.initialized = true;
                 this.state.lastUpdate = Date.now();
                 this.state.sessionCount = (this.state.sessionCount || 0) + 1;
-                
+
                 console.log('✅ System data initialized');
-                
+
             } catch (error) {
                 console.error('❌ System initialization failed:', error);
             }
         }
-        
+
         validateSubsystemStates() {
             const defaults = this.getDefaultState();
-            
+
             // Ensure all major subsystems exist
             const subsystems = ['autonomous', 'minionChat', 'dominionCity', 'consciousness', 'realm3D'];
             for (const subsystem of subsystems) {
@@ -227,7 +235,7 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 }
             }
         }
-        
+
         async loadMinions() {
             try {
                 const response = await fetch('./minions.json');
@@ -239,7 +247,7 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
             } catch (error) {
                 console.log('⚠️ Could not load minions.json, using defaults');
             }
-            
+
             // Return default minions
             return [
                 { id: 'ATLAS', tier: 'Alpha', specialty: 'Architecture', status: 'active', energy: 100, lastSeen: Date.now() },
@@ -250,7 +258,7 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 { id: 'ORBIT', tier: 'Gamma', specialty: 'Navigation', status: 'active', energy: 85, lastSeen: Date.now() }
             ];
         }
-        
+
         generateInitialActivities() {
             const now = Date.now();
             return [
@@ -272,53 +280,60 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 }
             ];
         }
-        
+
         trackPageVisit() {
             if (!this.state.pageVisits) this.state.pageVisits = {};
             if (!this.state.pageVisits[this.pageName]) {
                 this.state.pageVisits[this.pageName] = { count: 0, firstVisit: Date.now() };
             }
-            
+
             this.state.pageVisits[this.pageName].count++;
             this.state.pageVisits[this.pageName].lastVisit = Date.now();
-            
+
             console.log('📊 Page visit tracked:', this.pageName, 'visits:', this.state.pageVisits[this.pageName].count);
         }
-        
+
         async saveState() {
             try {
                 this.state.lastUpdate = Date.now();
                 this.state.lastSavedFrom = this.pageName;
-                
+
                 // Save to localStorage (primary for static hosting)
                 const stateJson = JSON.stringify(this.state);
                 localStorage.setItem('solarflow-state', stateJson);
-                
+
                 console.log('💾 State saved from', this.pageName, '(' + Math.round(stateJson.length/1024) + 'KB)');
-                
+
                 // Try to save to API if available (for VPS hosting)
                 try {
-                    await fetch('/api/state', {
+                    if (!this.apiAvailable || this.apiWritable === false) throw new Error('state API not writable');
+                    const apiResponse = await fetch('/api/state', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: stateJson
                     });
-                    console.log('🌐 State also saved to API');
+                    if (apiResponse.ok) {
+                        console.log('🌐 State also saved to API');
+                    } else if ([401, 403, 404, 405].includes(apiResponse.status)) {
+                        // Not writable here (static host, anonymous writes disabled...): don't retry every 30s.
+                        this.apiWritable = false;
+                        console.log('🌐 API state writes unavailable (HTTP ' + apiResponse.status + '); using localStorage only');
+                    }
                 } catch (apiError) {
                     // API not available, localStorage save is sufficient
                 }
-                
+
             } catch (error) {
                 console.error('❌ State save failed:', error);
             }
         }
-        
+
         setupAutoSave() {
             // Clear any existing auto-save
             if (this.autoSaveInterval) {
                 clearInterval(this.autoSaveInterval);
             }
-            
+
             // Save state every 30 seconds
             this.autoSaveInterval = setInterval(() => {
                 if (this.initialized) {
@@ -326,7 +341,7 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 }
             }, 30000);
         }
-        
+
         setupBeforeUnload() {
             // Save state when leaving page
             window.addEventListener('beforeunload', () => {
@@ -337,7 +352,7 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                     console.log('💾 State saved on page unload from', this.pageName);
                 }
             });
-            
+
             // Also save on visibility change (tab switching)
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'hidden' && this.initialized) {
@@ -345,23 +360,23 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 }
             });
         }
-        
+
         // Public API for pages to use
-        getState() { 
+        getState() {
             return JSON.parse(JSON.stringify(this.state)); // Deep copy to prevent mutation
         }
-        
+
         async updateState(updates) {
             // Deep merge updates into state
             this.deepMerge(this.state, updates);
             await this.saveState();
-            
+
             // Fire update event
-            window.dispatchEvent(new CustomEvent('solarflow-state-updated', { 
+            window.dispatchEvent(new CustomEvent('solarflow-state-updated', {
                 detail: { updates, newState: this.getState() }
             }));
         }
-        
+
         deepMerge(target, source) {
             for (const key in source) {
                 if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
@@ -372,7 +387,7 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 }
             }
         }
-        
+
         // Subsystem getters
         getMinions() { return this.state.minions || []; }
         getActivities() { return this.state.activities || []; }
@@ -381,43 +396,43 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
         getDominionCityState() { return this.state.dominionCity || {}; }
         getConsciousnessState() { return this.state.consciousness || {}; }
         getRealm3DState() { return this.state.realm3D || {}; }
-        
+
         // Activity management
         async addActivity(activity) {
             if (!this.state.activities) this.state.activities = [];
-            
+
             const newActivity = {
                 id: 'activity-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
                 timestamp: Date.now(),
                 page: this.pageName,
                 ...activity
             };
-            
+
             this.state.activities.unshift(newActivity);
-            
+
             // Keep only last 200 activities
             if (this.state.activities.length > 200) {
                 this.state.activities = this.state.activities.slice(0, 200);
             }
-            
+
             await this.saveState();
-            
+
             console.log('📝 Activity added from', this.pageName, ':', activity.message || activity.type);
         }
-        
+
         // Page-specific state management
         getPageState(pageName = this.pageName) {
             if (!this.state.pageStates) this.state.pageStates = {};
             if (!this.state.pageStates[pageName]) this.state.pageStates[pageName] = {};
             return this.state.pageStates[pageName];
         }
-        
+
         async setPageState(pageState, pageName = this.pageName) {
             if (!this.state.pageStates) this.state.pageStates = {};
             this.state.pageStates[pageName] = pageState;
             await this.saveState();
         }
-        
+
         // Cross-page communication
         async sendMessage(targetPage, message) {
             const msg = {
@@ -428,23 +443,23 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
                 message: message,
                 read: false
             };
-            
+
             if (!this.state.crossPageMessages) this.state.crossPageMessages = [];
             this.state.crossPageMessages.unshift(msg);
-            
+
             // Keep only last 50 cross-page messages
             if (this.state.crossPageMessages.length > 50) {
                 this.state.crossPageMessages = this.state.crossPageMessages.slice(0, 50);
             }
-            
+
             await this.saveState();
         }
-        
+
         getMessagesFor(targetPage = this.pageName) {
             if (!this.state.crossPageMessages) return [];
             return this.state.crossPageMessages.filter(msg => msg.to === targetPage && !msg.read);
         }
-        
+
         async markMessageRead(messageId) {
             if (!this.state.crossPageMessages) return;
             const msg = this.state.crossPageMessages.find(m => m.id === messageId);
@@ -457,19 +472,19 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
 
     // Initialize bootloader when DOM loads or immediately if DOM is ready
     let SOLARFLOW_BOOTLOADER = null;
-    
+
     function initBootloader() {
         if (SOLARFLOW_BOOTLOADER) return; // Already initialized
-        
+
         SOLARFLOW_BOOTLOADER = new SolarFlowUniversalBootloader();
-        
+
         // Make bootloader globally accessible
         window.SolarFlow = {
             bootloader: SOLARFLOW_BOOTLOADER,
             getState: () => SOLARFLOW_BOOTLOADER.getState(),
             saveState: (updates) => SOLARFLOW_BOOTLOADER.updateState(updates),
             addActivity: (activity) => SOLARFLOW_BOOTLOADER.addActivity(activity),
-            
+
             // Subsystem accessors
             getMinions: () => SOLARFLOW_BOOTLOADER.getMinions(),
             getActivities: () => SOLARFLOW_BOOTLOADER.getActivities(),
@@ -478,20 +493,20 @@ if (!window.SOLARFLOW_BOOTLOADER_INITIALIZED) {
             getDominionCity: () => SOLARFLOW_BOOTLOADER.getDominionCityState(),
             getConsciousness: () => SOLARFLOW_BOOTLOADER.getConsciousnessState(),
             getRealm3D: () => SOLARFLOW_BOOTLOADER.getRealm3DState(),
-            
+
             // Page-specific state
             getPageState: (page) => SOLARFLOW_BOOTLOADER.getPageState(page),
             setPageState: (state, page) => SOLARFLOW_BOOTLOADER.setPageState(state, page),
-            
+
             // Cross-page communication
             sendMessage: (target, message) => SOLARFLOW_BOOTLOADER.sendMessage(target, message),
             getMessages: (target) => SOLARFLOW_BOOTLOADER.getMessagesFor(target),
             markRead: (messageId) => SOLARFLOW_BOOTLOADER.markMessageRead(messageId)
         };
-        
+
         console.log('🌐 SolarFlow global API available');
     }
-    
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initBootloader);
     } else {

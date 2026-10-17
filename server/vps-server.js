@@ -1,410 +1,363 @@
 /**
- * VPS SERVER FOR OPENCLAW HOSTINGER DEPLOYMENT
- * Real-time data persistence and knowledge growth system
+ * Lightweight VPS persistence server.
+ *
+ * Stores named JSON "state" documents and a growing knowledge base on disk
+ * and pushes updates to WebSocket clients. Designed to run alongside the
+ * static site on a small VPS with no database.
+ *
+ * Environment:
+ *   PORT            listen port (default 3000)
+ *   DATA_DIR        where state files live (default ./data/vps)
+ *   CORS_ORIGIN     comma-separated allowed origins ("*" allows any)
+ *   VPS_WRITE_KEY   if set, POST requests must send it as X-Api-Key
+ *   STATIC_DIR      static site directory to serve (default ../docs)
  */
+'use strict';
 
 const express = require('express');
+const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs').promises;
 const path = require('path');
+const crypto = require('crypto');
+
+const STATE_TYPES = ['quantum', 'civilization', 'minions'];
+const MAX_LIST_ITEMS = 5000;
+const SAFE_TYPE = /^[a-z][a-z0-9_-]{0,40}$/;
+const VERSION = (() => {
+    try { return require('../package.json').version; } catch (error) { return require('./package.json').version; }
+})();
+
+function timingSafeEqual(a, b) {
+    const left = Buffer.from(String(a));
+    const right = Buffer.from(String(b));
+    return left.length === right.length && crypto.timingSafeEqual(left, right);
+}
 
 class OpenClawVPSServer {
-    constructor() {
+    constructor(options = {}) {
         this.app = express();
-        this.dataPath = '/opt/openclaw/data';
-        this.knowledgeBase = {};
+        this.dataPath = options.dataPath || process.env.DATA_DIR || path.join(__dirname, '..', 'data', 'vps');
+        this.staticDir = options.staticDir || process.env.STATIC_DIR || path.join(__dirname, '..', 'docs');
+        this.writeKey = options.writeKey !== undefined ? options.writeKey : (process.env.VPS_WRITE_KEY || '');
+        this.allowedOrigins = options.allowedOrigins || (process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim()).filter(Boolean) : ['*']);
+        this.heartbeatMs = options.heartbeatMs || 30000;
+        this.knowledgeBase = null;
         this.clients = new Set();
-        
+        this.writeLocks = new Map();
+        this.server = null;
+        this.wss = null;
+
         this.setupMiddleware();
         this.setupRoutes();
-        this.initializeData();
     }
-    
+
+    // ------------------------------------------------------------ middleware
+
     setupMiddleware() {
-        this.app.use(express.json({ limit: '50mb' }));
-        this.app.use(express.static('docs'));
-        
-        // CORS for development
+        this.app.disable('x-powered-by');
+        this.app.set('trust proxy', 1);
+
+        // CORS first, including preflight, so every response (static or API) carries it.
         this.app.use((req, res, next) => {
-            res.header('Access-Control-Allow-Origin', '*');
-            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            res.header('Access-Control-Allow-Headers', 'Content-Type');
-            next();
+            const origin = req.headers.origin;
+            const allowAny = this.allowedOrigins.includes('*');
+            if (origin && (allowAny || this.allowedOrigins.includes(origin))) {
+                res.header('Access-Control-Allow-Origin', allowAny ? '*' : origin);
+                res.header('Vary', 'Origin');
+                res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+                res.header('Access-Control-Allow-Headers', 'Content-Type, X-Api-Key');
+                res.header('Access-Control-Max-Age', '86400');
+            }
+            if (req.method === 'OPTIONS') return res.sendStatus(204);
+            return next();
         });
-        
-        console.log('🔧 VPS Server middleware configured');
+
+        this.app.use(express.json({ limit: '5mb' }));
+        this.app.use(express.static(this.staticDir, { dotfiles: 'ignore', maxAge: '5m' }));
     }
-    
+
+    requireWriteKey(req, res, next) {
+        if (!this.writeKey) return next();
+        const provided = req.get('X-Api-Key') || '';
+        if (!provided || !timingSafeEqual(provided, this.writeKey)) {
+            return res.status(401).json({ success: false, error: 'Invalid or missing X-Api-Key' });
+        }
+        return next();
+    }
+
+    // ---------------------------------------------------------------- routes
+
     setupRoutes() {
-        // Quantum consciousness state
-        this.app.get('/api/quantum/state', (req, res) => {
-            this.getState('quantum', res);
-        });
-        
-        this.app.post('/api/quantum/state', (req, res) => {
-            this.saveState('quantum', req.body, res);
-        });
-        
-        // Autonomous civilization state
-        this.app.get('/api/civilization/state', (req, res) => {
-            this.getState('civilization', res);
-        });
-        
-        this.app.post('/api/civilization/state', (req, res) => {
-            this.saveState('civilization', req.body, res);
-        });
-        
-        // Minion roster state
-        this.app.get('/api/minions/state', (req, res) => {
-            this.getState('minions', res);
-        });
-        
-        this.app.post('/api/minions/state', (req, res) => {
-            this.saveState('minions', req.body, res);
-        });
-        
-        // Knowledge base (growing knowledge system)
-        this.app.get('/api/knowledge/state', (req, res) => {
-            this.getKnowledge(res);
-        });
-        
-        this.app.post('/api/knowledge/state', (req, res) => {
-            this.saveKnowledge(req.body, res);
-        });
-        
-        // Health check
-        this.app.get('/api/health', (req, res) => {
+        const app = this.app;
+        const guard = (req, res, next) => this.requireWriteKey(req, res, next);
+
+        for (const type of STATE_TYPES) {
+            app.get(`/api/${type}/state`, (req, res) => this.getState(type, res));
+            app.post(`/api/${type}/state`, guard, (req, res) => this.saveState(type, req.body, res));
+        }
+
+        app.get('/api/knowledge/state', (req, res) => this.getKnowledge(res));
+        app.post('/api/knowledge/state', guard, (req, res) => this.saveKnowledge(req.body, res));
+
+        const health = (req, res) => {
             res.json({
                 status: 'healthy',
+                version: VERSION,
                 timestamp: new Date().toISOString(),
-                uptime: process.uptime(),
-                memory: process.memoryUsage(),
-                clients: this.clients.size
+                uptime: Math.round(process.uptime()),
+                memory: { rss: process.memoryUsage().rss },
+                clients: this.clients.size,
+                writeProtected: Boolean(this.writeKey)
             });
+        };
+        app.get('/api/health', health);
+        app.get('/health', health);
+
+        app.use('/api', (req, res) => res.status(404).json({ success: false, error: 'Not found', path: req.path }));
+
+        // eslint-disable-next-line no-unused-vars
+        app.use((error, req, res, next) => {
+            const status = error.type === 'entity.parse.failed' ? 400 : error.status || 500;
+            if (status >= 500) console.error('Request failed:', error);
+            res.status(status).json({ success: false, error: status === 400 ? 'Invalid JSON body' : status >= 500 ? 'Internal server error' : error.message });
         });
-        
-        console.log('🛣️  VPS Server routes configured');
     }
-    
-    async initializeData() {
+
+    // ------------------------------------------------------------------ data
+
+    filePath(name) {
+        if (!SAFE_TYPE.test(name)) throw new Error(`Invalid state name: ${name}`);
+        return path.join(this.dataPath, `${name}.json`);
+    }
+
+    async writeJsonAtomic(name, value) {
+        const target = this.filePath(name);
+        const payload = JSON.stringify(value, null, 2);
+        const previous = this.writeLocks.get(name) || Promise.resolve();
+        const next = previous.catch(() => {}).then(async () => {
+            const tmp = `${target}.${process.pid}.${Date.now()}.tmp`;
+            await fs.writeFile(tmp, payload, 'utf8');
+            await fs.rename(tmp, target);
+        });
+        this.writeLocks.set(name, next);
         try {
-            await fs.mkdir(this.dataPath, { recursive: true });
-            
-            // Load existing knowledge base
-            try {
-                const knowledgeFile = path.join(this.dataPath, 'knowledge.json');
-                const data = await fs.readFile(knowledgeFile, 'utf8');
-                this.knowledgeBase = JSON.parse(data);
-                console.log('📚 Knowledge base loaded from VPS storage');
-            } catch (error) {
-                this.knowledgeBase = {
-                    documents: [],
-                    compliance_data: { checks_performed: [], standards_verified: [] },
-                    user_interactions: { button_clicks: [], page_visits: [] },
-                    learning_patterns: { common_workflows: [], error_patterns: [] },
-                    created: new Date().toISOString()
-                };
-                console.log('🆕 Initialized new knowledge base');
-            }
-            
-            console.log('✅ VPS data storage initialized');
-        } catch (error) {
-            console.error('❌ Failed to initialize VPS data:', error);
+            await next;
+        } finally {
+            if (this.writeLocks.get(name) === next) this.writeLocks.delete(name);
         }
     }
-    
+
+    async readJson(name) {
+        try {
+            return JSON.parse(await fs.readFile(this.filePath(name), 'utf8'));
+        } catch (error) {
+            if (error.code === 'ENOENT') return null;
+            throw error;
+        }
+    }
+
+    async initializeData() {
+        await fs.mkdir(this.dataPath, { recursive: true });
+        this.knowledgeBase = (await this.readJson('knowledge').catch(() => null)) || {
+            documents: [],
+            compliance_data: { checks_performed: [], standards_verified: [] },
+            user_interactions: { button_clicks: [], page_visits: [] },
+            learning_patterns: { common_workflows: [], error_patterns: [] },
+            created: new Date().toISOString()
+        };
+        console.log(`✅ VPS data storage initialised at ${this.dataPath}`);
+    }
+
     async getState(type, res) {
         try {
-            const filePath = path.join(this.dataPath, `${type}-state.json`);
-            
-            try {
-                const data = await fs.readFile(filePath, 'utf8');
-                const state = JSON.parse(data);
-                
-                res.json({
-                    success: true,
-                    state: state,
-                    lastUpdated: state.timestamp || null
-                });
-                
-                console.log(`📤 Sent ${type} state to client`);
-                
-            } catch (error) {
-                // File doesn't exist or is invalid
-                res.json({
-                    success: true,
-                    state: null,
-                    message: 'No saved state found'
-                });
-            }
-            
+            const state = await this.readJson(`${type}-state`);
+            res.setHeader('Cache-Control', 'no-store');
+            res.json({ success: true, state, lastUpdated: state ? state.timestamp || null : null, message: state ? undefined : 'No saved state found' });
         } catch (error) {
             console.error(`Error getting ${type} state:`, error);
-            res.status(500).json({
-                success: false,
-                error: error.message
-            });
+            res.status(500).json({ success: false, error: 'Failed to read state' });
         }
     }
-    
+
     async saveState(type, data, res) {
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
+            return res.status(400).json({ success: false, error: 'State must be a JSON object' });
+        }
         try {
-            const filePath = path.join(this.dataPath, `${type}-state.json`);
-            
-            const stateData = {
-                ...data,
-                timestamp: new Date().toISOString(),
-                version: '1.0',
-                source: 'openclaw-frontend'
-            };
-            
-            await fs.writeFile(filePath, JSON.stringify(stateData, null, 2));
-            
-            // Broadcast update to connected clients
+            const stateData = { ...data, timestamp: new Date().toISOString(), version: '1.1', source: 'openclaw-frontend' };
+            await this.writeJsonAtomic(`${type}-state`, stateData);
             this.broadcastUpdate(type, stateData);
-            
-            res.json({
-                success: true,
-                message: `${type} state saved successfully`,
-                timestamp: stateData.timestamp
-            });
-            
-            console.log(`💾 Saved ${type} state to VPS storage`);
-            
+            return res.json({ success: true, message: `${type} state saved successfully`, timestamp: stateData.timestamp });
         } catch (error) {
             console.error(`Error saving ${type} state:`, error);
-            res.status(500).json({
-                success: false,
-                error: error.message
-            });
+            return res.status(500).json({ success: false, error: 'Failed to save state' });
         }
     }
-    
+
+    knowledgeStats() {
+        const kb = this.knowledgeBase || {};
+        return {
+            documents: (kb.documents || []).length,
+            compliance_checks: ((kb.compliance_data || {}).checks_performed || []).length,
+            interactions: ((kb.user_interactions || {}).button_clicks || []).length
+        };
+    }
+
     async getKnowledge(res) {
-        try {
-            res.json({
-                success: true,
-                state: this.knowledgeBase,
-                lastUpdated: this.knowledgeBase.lastUpdated || null,
-                stats: {
-                    documents: this.knowledgeBase.documents?.length || 0,
-                    compliance_checks: this.knowledgeBase.compliance_data?.checks_performed?.length || 0,
-                    interactions: this.knowledgeBase.user_interactions?.button_clicks?.length || 0
-                }
-            });
-            
-            console.log('🧠 Sent knowledge base to client');
-            
-        } catch (error) {
-            console.error('Error getting knowledge:', error);
-            res.status(500).json({
-                success: false,
-                error: error.message
-            });
-        }
+        if (!this.knowledgeBase) await this.initializeData();
+        res.setHeader('Cache-Control', 'no-store');
+        res.json({ success: true, state: this.knowledgeBase, lastUpdated: this.knowledgeBase.lastUpdated || null, stats: this.knowledgeStats() });
     }
-    
+
     async saveKnowledge(newData, res) {
+        if (!newData || typeof newData !== 'object' || Array.isArray(newData)) {
+            return res.status(400).json({ success: false, error: 'Knowledge update must be a JSON object' });
+        }
         try {
-            // Merge new knowledge with existing
+            if (!this.knowledgeBase) await this.initializeData();
             this.mergeKnowledgeData(newData);
-            
-            // Save to file
-            const filePath = path.join(this.dataPath, 'knowledge.json');
-            await fs.writeFile(filePath, JSON.stringify(this.knowledgeBase, null, 2));
-            
-            // Broadcast knowledge update
-            this.broadcastUpdate('knowledge', this.knowledgeBase);
-            
-            res.json({
-                success: true,
-                message: 'Knowledge base updated successfully',
-                timestamp: this.knowledgeBase.lastUpdated,
-                stats: {
-                    documents: this.knowledgeBase.documents?.length || 0,
-                    compliance_checks: this.knowledgeBase.compliance_data?.checks_performed?.length || 0
-                }
-            });
-            
-            console.log('🧠 Knowledge base updated and saved to VPS');
-            
+            await this.writeJsonAtomic('knowledge', this.knowledgeBase);
+            this.broadcastUpdate('knowledge', { lastUpdated: this.knowledgeBase.lastUpdated, stats: this.knowledgeStats() });
+            return res.json({ success: true, message: 'Knowledge base updated successfully', timestamp: this.knowledgeBase.lastUpdated, stats: this.knowledgeStats() });
         } catch (error) {
             console.error('Error saving knowledge:', error);
-            res.status(500).json({
-                success: false,
-                error: error.message
-            });
+            return res.status(500).json({ success: false, error: 'Failed to save knowledge' });
         }
     }
-    
+
+    /** Appends items to a list while keeping it bounded to MAX_LIST_ITEMS. */
+    static appendBounded(target, items) {
+        if (!Array.isArray(items) || items.length === 0) return target;
+        const merged = target.concat(items);
+        return merged.length > MAX_LIST_ITEMS ? merged.slice(merged.length - MAX_LIST_ITEMS) : merged;
+    }
+
     mergeKnowledgeData(newData) {
-        this.knowledgeBase.lastUpdated = new Date().toISOString();
-        
-        // Merge documents
-        if (newData.documents) {
-            this.knowledgeBase.documents = this.knowledgeBase.documents || [];
-            newData.documents.forEach(doc => {
-                if (!this.knowledgeBase.documents.find(existing => existing.id === doc.id)) {
-                    this.knowledgeBase.documents.push(doc);
-                }
-            });
+        const kb = this.knowledgeBase;
+        kb.lastUpdated = new Date().toISOString();
+
+        if (Array.isArray(newData.documents)) {
+            kb.documents = kb.documents || [];
+            const known = new Set(kb.documents.map((doc) => doc && doc.id));
+            const fresh = newData.documents.filter((doc) => doc && doc.id && !known.has(doc.id));
+            kb.documents = OpenClawVPSServer.appendBounded(kb.documents, fresh);
         }
-        
-        // Merge compliance data
-        if (newData.compliance_data) {
-            this.knowledgeBase.compliance_data = this.knowledgeBase.compliance_data || {
-                checks_performed: [], standards_verified: []
-            };
-            
-            if (newData.compliance_data.checks_performed) {
-                this.knowledgeBase.compliance_data.checks_performed.push(
-                    ...newData.compliance_data.checks_performed
-                );
-            }
-            
-            if (newData.compliance_data.standards_verified) {
-                this.knowledgeBase.compliance_data.standards_verified.push(
-                    ...newData.compliance_data.standards_verified
-                );
+
+        if (newData.compliance_data && typeof newData.compliance_data === 'object') {
+            kb.compliance_data = kb.compliance_data || { checks_performed: [], standards_verified: [] };
+            kb.compliance_data.checks_performed = OpenClawVPSServer.appendBounded(kb.compliance_data.checks_performed || [], newData.compliance_data.checks_performed);
+            const verified = new Set([...(kb.compliance_data.standards_verified || []), ...(newData.compliance_data.standards_verified || [])]);
+            kb.compliance_data.standards_verified = Array.from(verified);
+        }
+
+        if (newData.user_interactions && typeof newData.user_interactions === 'object') {
+            kb.user_interactions = kb.user_interactions || { button_clicks: [], page_visits: [] };
+            for (const [key, list] of Object.entries(newData.user_interactions)) {
+                if (!SAFE_TYPE.test(key) || !Array.isArray(list)) continue;
+                kb.user_interactions[key] = OpenClawVPSServer.appendBounded(kb.user_interactions[key] || [], list);
             }
         }
-        
-        // Merge user interactions
-        if (newData.user_interactions) {
-            this.knowledgeBase.user_interactions = this.knowledgeBase.user_interactions || {
-                button_clicks: [], page_visits: []
-            };
-            
-            Object.keys(newData.user_interactions).forEach(key => {
-                if (Array.isArray(newData.user_interactions[key])) {
-                    this.knowledgeBase.user_interactions[key] = 
-                        this.knowledgeBase.user_interactions[key] || [];
-                    this.knowledgeBase.user_interactions[key].push(
-                        ...newData.user_interactions[key]
-                    );
-                }
-            });
-        }
-        
-        // Merge learning patterns
-        if (newData.learning_patterns) {
-            this.knowledgeBase.learning_patterns = this.knowledgeBase.learning_patterns || {};
-            Object.assign(this.knowledgeBase.learning_patterns, newData.learning_patterns);
+
+        if (newData.learning_patterns && typeof newData.learning_patterns === 'object') {
+            kb.learning_patterns = { ...(kb.learning_patterns || {}), ...newData.learning_patterns };
         }
     }
-    
+
+    // ------------------------------------------------------------- websocket
+
     setupWebSocket(server) {
-        const wss = new WebSocket.Server({ server });
-        
+        const wss = new WebSocket.Server({ server, maxPayload: 64 * 1024 });
+
         wss.on('connection', (ws) => {
+            ws.isAlive = true;
             this.clients.add(ws);
-            console.log(`📡 New VPS client connected (${this.clients.size} total)`);
-            
-            ws.on('close', () => {
-                this.clients.delete(ws);
-                console.log(`📡 VPS client disconnected (${this.clients.size} remaining)`);
-            });
-            
+            ws.on('pong', () => { ws.isAlive = true; });
+            ws.on('close', () => this.clients.delete(ws));
+            ws.on('error', () => this.clients.delete(ws));
             ws.on('message', (message) => {
                 try {
-                    const data = JSON.parse(message);
-                    this.handleClientMessage(ws, data);
+                    this.handleClientMessage(ws, JSON.parse(message));
                 } catch (error) {
-                    console.error('Invalid WebSocket message:', error);
+                    ws.send(JSON.stringify({ type: 'error', error: 'Invalid JSON' }));
                 }
             });
-            
-            // Send initial connection success
-            ws.send(JSON.stringify({
-                type: 'connection_established',
-                timestamp: new Date().toISOString(),
-                message: 'VPS persistence layer active'
-            }));
+            ws.send(JSON.stringify({ type: 'connection_established', timestamp: new Date().toISOString(), message: 'VPS persistence layer active' }));
         });
-        
-        console.log('🔌 WebSocket server initialized');
+
+        this.heartbeat = setInterval(() => {
+            for (const ws of this.clients) {
+                if (!ws.isAlive) { ws.terminate(); this.clients.delete(ws); continue; }
+                ws.isAlive = false;
+                ws.ping();
+            }
+        }, this.heartbeatMs);
+        if (this.heartbeat.unref) this.heartbeat.unref();
+
+        this.wss = wss;
         return wss;
     }
-    
+
     handleClientMessage(ws, data) {
-        switch (data.type) {
+        switch (data && data.type) {
             case 'ping':
                 ws.send(JSON.stringify({ type: 'pong', timestamp: new Date().toISOString() }));
                 break;
-                
             case 'request_sync':
-                // Send current state to requesting client
                 this.sendFullSync(ws);
                 break;
+            default:
+                ws.send(JSON.stringify({ type: 'error', error: `Unknown message type: ${data && data.type}` }));
         }
     }
-    
+
     async sendFullSync(ws) {
-        try {
-            // Send all current states
-            const states = ['quantum', 'civilization', 'minions'];
-            
-            for (const type of states) {
-                const filePath = path.join(this.dataPath, `${type}-state.json`);
-                try {
-                    const data = await fs.readFile(filePath, 'utf8');
-                    const state = JSON.parse(data);
-                    
-                    ws.send(JSON.stringify({
-                        type: `${type}_update`,
-                        data: state,
-                        timestamp: new Date().toISOString()
-                    }));
-                } catch (error) {
-                    // State file doesn't exist, skip
-                }
-            }
-            
-            // Send knowledge base
-            ws.send(JSON.stringify({
-                type: 'knowledge_update',
-                data: this.knowledgeBase,
-                timestamp: new Date().toISOString()
-            }));
-            
-            console.log('📤 Full sync sent to client');
-            
-        } catch (error) {
-            console.error('Error sending full sync:', error);
+        for (const type of STATE_TYPES) {
+            const state = await this.readJson(`${type}-state`).catch(() => null);
+            if (state) ws.send(JSON.stringify({ type: `${type}_update`, data: state, timestamp: new Date().toISOString() }));
+        }
+        if (!this.knowledgeBase) await this.initializeData();
+        ws.send(JSON.stringify({ type: 'knowledge_update', data: { stats: this.knowledgeStats(), lastUpdated: this.knowledgeBase.lastUpdated }, timestamp: new Date().toISOString() }));
+    }
+
+    broadcastUpdate(type, data) {
+        const message = JSON.stringify({ type: `${type}_update`, data, timestamp: new Date().toISOString() });
+        for (const client of this.clients) {
+            if (client.readyState === WebSocket.OPEN) client.send(message);
         }
     }
-    
-    broadcastUpdate(type, data) {
-        const message = JSON.stringify({
-            type: `${type}_update`,
-            data: data,
-            timestamp: new Date().toISOString()
+
+    // ------------------------------------------------------------- lifecycle
+
+    async start(port = Number(process.env.PORT) || 3000, host = '0.0.0.0') {
+        await this.initializeData();
+        this.server = http.createServer(this.app);
+        this.setupWebSocket(this.server);
+        await new Promise((resolve, reject) => {
+            this.server.once('error', reject);
+            this.server.listen(port, host, () => { this.server.off('error', reject); resolve(); });
         });
-        
-        this.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(message);
-            }
-        });
-        
-        console.log(`📡 Broadcasted ${type} update to ${this.clients.size} clients`);
+        console.log(`🚀 OpenClaw VPS Server ${VERSION} listening on ${host}:${this.server.address().port}${this.writeKey ? ' (writes protected)' : ' (writes OPEN - set VPS_WRITE_KEY)'}`);
+        return this.server;
     }
-    
-    start(port = 3000) {
-        const server = this.app.listen(port, () => {
-            console.log(`🚀 OpenClaw VPS Server running on port ${port}`);
-        });
-        
-        this.setupWebSocket(server);
-        
-        return server;
+
+    async stop() {
+        clearInterval(this.heartbeat);
+        for (const client of this.clients) client.close(1001, 'Server shutting down');
+        this.clients.clear();
+        if (this.server) await new Promise((resolve) => this.server.close(resolve));
     }
 }
 
 module.exports = OpenClawVPSServer;
 
-// If running directly
 if (require.main === module) {
     const server = new OpenClawVPSServer();
-    server.start(process.env.PORT || 3000);
+    server.start().catch((error) => {
+        console.error('Failed to start VPS server:', error);
+        process.exit(1);
+    });
+    const shutdown = () => server.stop().then(() => process.exit(0));
+    process.once('SIGTERM', shutdown);
+    process.once('SIGINT', shutdown);
 }

@@ -1,10 +1,44 @@
+# Local full-stack: API server + PostgreSQL.
+#   cp .env.example .env   (set JWT_SECRET)
+#   docker compose up --build
 services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      TRUST_PROXY: "false"
+      DATABASE_URL: postgresql://solarflow:${POSTGRES_PASSWORD:-solarflow-dev-password}@db:5432/solarflow
+      DATA_DIR: /app/data
+      LOG_DIR: /app/logs
+    volumes:
+      - app-data:/app/data
+      - app-logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
   db:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: solarflow
       POSTGRES_USER: solarflow
-      POSTGRES_HOST_AUTH_METHOD: trust
-    ports:
-      - "5432:5432"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-solarflow-dev-password}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U solarflow -d solarflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
+
+volumes:
+  app-data:
+  app-logs:
+  db-data:

@@ -237,12 +237,17 @@ sudo /var/www/solarflow/deploy.sh
 
 ### Step 7: Configure VPS Integration
 
-Update `/var/www/solarflow/docs/real-vps-integration.js`:
+The front end reads its backend URL from `docs/solarflow-config.js`. Set `vpsApiUrl` there (it must
+be `https://` when the site is served over https, otherwise browsers block the request), or override
+it per browser without editing files:
 
 ```javascript
-// Change VPS endpoint
-this.vpsEndpoint = 'https://projectsolar.cloud/api';
+localStorage.setItem('solarflow-config', JSON.stringify({ vpsApiUrl: 'https://projectsolar.cloud' }));
 ```
+
+The API server itself is configured through `.env` (see `.env.example`): set `JWT_SECRET`,
+`CORS_ORIGIN` (include `https://samskiezz.github.io` if GitHub Pages should call it) and
+`TRUST_PROXY=true` behind nginx. `./deploy.sh` does this for you.
 
 ---
 

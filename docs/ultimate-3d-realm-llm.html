@@ -242,9 +242,15 @@
         };
         
         // Initialize everything
+        // The loading element is removed once the canvas mounts; later status
+        // updates must not throw.
+        function setLoadStatus(text) {
+            const el = document.getElementById('load-status');
+            if (el) el.textContent = text;
+        }
         async function init() {
             try {
-                document.getElementById('load-status').textContent = 'Loading Three.js...';
+                setLoadStatus('Loading Three.js...');
                 
                 // Load Three.js
                 await loadThreeJS();
@@ -254,7 +260,7 @@
                     throw new Error('THREE.js failed to load from all sources');
                 }
                 
-                document.getElementById('load-status').textContent = 'Creating 3D scene...';
+                setLoadStatus('Creating 3D scene...');
                 
                 // Create scene
                 scene = new THREE.Scene();
@@ -278,7 +284,7 @@
                 container.innerHTML = '';
                 container.appendChild(renderer.domElement);
                 
-                document.getElementById('load-status').textContent = 'Setting up lighting...';
+                setLoadStatus('Setting up lighting...');
                 
                 // Lighting
                 const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
@@ -291,7 +297,7 @@
                 directionalLight.shadow.mapSize.height = 2048;
                 scene.add(directionalLight);
                 
-                document.getElementById('load-status').textContent = 'Creating environment...';
+                setLoadStatus('Creating environment...');
                 
                 // Create platform
                 const platformGeometry = new THREE.CylinderGeometry(20, 20, 0.5, 32);
@@ -325,7 +331,7 @@
                     scene.add(building);
                 }
                 
-                document.getElementById('load-status').textContent = 'Creating minions...';
+                setLoadStatus('Creating minions...');
                 
                 // Create minions
                 const minionNames = Object.keys(minionPersonalities);
@@ -363,7 +369,7 @@
                     createNameLabel(name, x, 4, z);
                 }
                 
-                document.getElementById('load-status').textContent = 'Setting up interactions...';
+                setLoadStatus('Setting up interactions...');
                 
                 // Setup interactions
                 raycaster = new THREE.Raycaster();

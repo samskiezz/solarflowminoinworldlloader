@@ -742,7 +742,9 @@ function initializeIntegratedLLM() {
     console.log('🚀 Initializing integrated LLM system...');
     
     // Initialize LLM
-    window.globalLLM.init();
+    if (window.globalLLM && typeof window.globalLLM.init === 'function') {
+        window.globalLLM.init();
+    }
     
     // Enhance autonomous world if present
     enhanceAutonomousWorld();
@@ -760,6 +762,65 @@ function initializeIntegratedLLM() {
 function showLLMConfig() {
     const config = window.globalLLM.getConfiguration();
     const currentKey = localStorage.getItem('llm_api_key') || '';
-    
+
     const modal = document.createElement('div');
-    modal.style.
+    modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center;';
+
+    const panel = document.createElement('div');
+    panel.style.cssText = 'background: #1a1a1a; color: #fff; padding: 24px; border-radius: 12px; width: min(480px, 90vw); font-family: system-ui, sans-serif;';
+
+    const title = document.createElement('h3');
+    title.textContent = 'LLM Configuration';
+    title.style.marginTop = '0';
+
+    const info = document.createElement('p');
+    info.style.cssText = 'font-size: 13px; opacity: 0.8;';
+    info.textContent = 'Provider: ' + config.provider + ' | Model: ' + config.model + ' | Key stored: ' + (config.hasApiKey ? 'yes' : 'no');
+
+    const label = document.createElement('label');
+    label.textContent = 'API key (stored only in this browser\'s localStorage)';
+    label.style.cssText = 'display:block; font-size: 13px; margin-bottom: 6px;';
+
+    const input = document.createElement('input');
+    input.type = 'password';
+    input.value = currentKey;
+    input.autocomplete = 'off';
+    input.style.cssText = 'width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box;';
+
+    const actions = document.createElement('div');
+    actions.style.cssText = 'display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px;';
+
+    const cancel = document.createElement('button');
+    cancel.textContent = 'Cancel';
+    cancel.style.cssText = 'padding: 8px 14px; border-radius: 8px; border: 1px solid #555; background: transparent; color: #fff; cursor: pointer;';
+    cancel.onclick = () => modal.remove();
+
+    const clear = document.createElement('button');
+    clear.textContent = 'Remove key';
+    clear.style.cssText = cancel.style.cssText;
+    clear.onclick = () => {
+        localStorage.removeItem('llm_api_key');
+        if (typeof window.globalLLM.setAPIKey === 'function') window.globalLLM.setAPIKey('');
+        modal.remove();
+    };
+
+    const save = document.createElement('button');
+    save.textContent = 'Save';
+    save.style.cssText = 'padding: 8px 14px; border-radius: 8px; border: none; background: #4CAF50; color: #fff; cursor: pointer;';
+    save.onclick = () => {
+        const key = input.value.trim();
+        if (key && typeof window.globalLLM.setAPIKey === 'function') {
+            window.globalLLM.setAPIKey(key);
+        } else if (key) {
+            localStorage.setItem('llm_api_key', key);
+        }
+        modal.remove();
+    };
+
+    actions.append(cancel, clear, save);
+    panel.append(title, info, label, input, actions);
+    modal.appendChild(panel);
+    modal.addEventListener('click', (event) => { if (event.target === modal) modal.remove(); });
+    document.body.appendChild(modal);
+    input.focus();
+}

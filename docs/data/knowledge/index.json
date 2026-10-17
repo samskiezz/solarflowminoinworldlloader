@@ -1,0 +1,463 @@
+{
+ "version": 1,
+ "harvestedAt": "2026-10-17T13:16:08.507Z",
+ "books": [
+  {
+   "id": "cec_saa_guidelines",
+   "code": "SAA/CEC guidelines",
+   "title": "Solar Accreditation Australia and Clean Energy Council installer guidelines",
+   "tier": 4,
+   "licence": "public",
+   "codexId": null,
+   "sources": 3,
+   "sourcesOk": 3,
+   "chars": 174171,
+   "passages": 194,
+   "clauses": 68,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amendment 2"
+    ],
+    "published": [],
+    "supersedes": [],
+    "transition": [
+     "transition period of six (6) months where installers can"
+    ],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T12:03:43.486Z"
+  },
+  {
+   "id": "cer_sres",
+   "code": "CER / SRES",
+   "title": "Clean Energy Regulator – Small-scale Renewable Energy Scheme and Cheaper Home Batteries rules",
+   "tier": 5,
+   "licence": "public",
+   "codexId": null,
+   "sources": 8,
+   "sourcesOk": 7,
+   "chars": 163713,
+   "passages": 176,
+   "clauses": 8,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [
+     "1 April 2022"
+    ],
+    "supersedes": [],
+    "transition": [
+     "transitional period ended on 31 August 2025"
+    ],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T12:03:43.486Z"
+  },
+  {
+   "id": "dnsp_connection",
+   "code": "DNSP connection standards",
+   "title": "Distribution network connection standards for inverter energy systems",
+   "tier": 3,
+   "licence": "public",
+   "codexId": null,
+   "sources": 25,
+   "sourcesOk": 20,
+   "chars": 521786,
+   "passages": 473,
+   "clauses": 68,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amendment 4"
+    ],
+    "published": [
+     "16 July 2025"
+    ],
+    "supersedes": [],
+    "transition": [
+     "transitional period of 18 months for the application of Clause 3"
+    ],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T12:03:43.486Z"
+  },
+  {
+   "id": "as_nzs_5033_2021",
+   "code": "AS/NZS 5033:2021",
+   "title": "Installation and safety requirements for photovoltaic (PV) arrays",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": "AS_NZS_5033_2021",
+   "sources": 9,
+   "sourcesOk": 7,
+   "chars": 187545,
+   "passages": 229,
+   "clauses": 55,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amd 2:2018",
+     "Amd 1:2018"
+    ],
+    "published": [
+     "19/11/2021"
+    ],
+    "supersedes": [
+     "AS/NZS 5033:2021"
+    ],
+    "transition": [
+     "TRANSITION PERIOD",
+     "transition period of six (6) months where installers can",
+     "transition period either standard (AS/NZS 5033:2014 or AS/NZS",
+     "transitional period’ will be made clear in the preface of the standard"
+    ],
+    "pages": 131
+   },
+   "harvestedAt": "2026-10-17T12:09:40.365Z"
+  },
+  {
+   "id": "as_nzs_5139_2019",
+   "code": "AS/NZS 5139:2019",
+   "title": "Electrical installations – Safety of battery systems for use with power conversion equipment",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": "AS_NZS_5139_2019",
+   "sources": 14,
+   "sourcesOk": 8,
+   "chars": 48679,
+   "passages": 91,
+   "clauses": 43,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amendment 1 to AS/NZS 5139:2019 introduces updates to battery energy st",
+     "Amendment 1 to AS/NZS 5139:2019 Battery Standard and to assist electric",
+     "Amendment 1 to AS/NZS 5139:2019 was published on 19 December 2025 and i",
+     "Amd 1:2025",
+     "Amendment 1",
+     "Amendment 1 introduces updates and clarifications across a number of cl",
+     "Amendment 1 to AS/NZS 5139:2019 – ‘Electrical installations – Safety of"
+    ],
+    "published": [
+     "02 February 2021",
+     "19/12/2025"
+    ],
+    "supersedes": [
+     "AS/NZS 5139:2019"
+    ],
+    "transition": [
+     "transition period, both the previous and revised editions are acceptable"
+    ],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T12:11:29.664Z"
+  },
+  {
+   "id": "whs_solar",
+   "code": "WHS / electrical safety law",
+   "title": "Work health and safety and electrical safety law for solar and battery work",
+   "tier": 1,
+   "licence": "public",
+   "codexId": null,
+   "sources": 22,
+   "sourcesOk": 7,
+   "chars": 54536,
+   "passages": 59,
+   "clauses": 1,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T12:14:59.470Z"
+  },
+  {
+   "id": "as_nzs_3008_1_1",
+   "code": "AS/NZS 3008.1.1:2025",
+   "title": "Selection of cables – Cables for alternating voltages up to and including 0.6/1 kV",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": "AS_NZS_3008_1_1",
+   "sources": 13,
+   "sourcesOk": 9,
+   "chars": 58259,
+   "passages": 89,
+   "clauses": 13,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [
+     "19/12/2025",
+     "02/02/2017"
+    ],
+    "supersedes": [],
+    "transition": [],
+    "pages": 139
+   },
+   "harvestedAt": "2026-10-17T12:25:48.421Z"
+  },
+  {
+   "id": "as_nzs_3017_2022",
+   "code": "AS/NZS 3017:2022",
+   "title": "Electrical installations – Verification by inspection and testing",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": "AS_NZS_3017_2022",
+   "sources": 4,
+   "sourcesOk": 2,
+   "chars": 4694,
+   "passages": 7,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [
+     "02/12/2022"
+    ],
+    "supersedes": [],
+    "transition": [],
+    "pages": 96
+   },
+   "harvestedAt": "2026-10-17T12:28:05.833Z"
+  },
+  {
+   "id": "as_nzs_3012_2019",
+   "code": "AS/NZS 3012:2019",
+   "title": "Electrical installations – Construction and demolition sites",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": null,
+   "sources": 8,
+   "sourcesOk": 5,
+   "chars": 48324,
+   "passages": 53,
+   "clauses": 17,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amd 1:2020",
+     "Amd 1:2015"
+    ],
+    "published": [
+     "04/11/2019"
+    ],
+    "supersedes": [],
+    "transition": [],
+    "pages": 63
+   },
+   "harvestedAt": "2026-10-17T12:29:12.018Z"
+  },
+  {
+   "id": "as_nzs_4836_2023",
+   "code": "AS/NZS 4836:2023",
+   "title": "Safe working on or near low-voltage and extra-low voltage electrical installations and equipment",
+   "tier": 1,
+   "licence": "copyright",
+   "codexId": null,
+   "sources": 9,
+   "sourcesOk": 5,
+   "chars": 40650,
+   "passages": 44,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amd 1:2017"
+    ],
+    "published": [
+     "03/03/2023"
+    ],
+    "supersedes": [],
+    "transition": [],
+    "pages": 85
+   },
+   "harvestedAt": "2026-10-17T12:30:19.428Z"
+  },
+  {
+   "id": "as_nzs_3000_2018",
+   "code": "AS/NZS 3000:2018",
+   "title": "Electrical installations (Wiring Rules)",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": "AS_NZS_3000_2018",
+   "sources": 18,
+   "sourcesOk": 10,
+   "chars": 46128,
+   "passages": 53,
+   "clauses": 17,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amd 3:2023",
+     "Amd 2:2021",
+     "Amd 1:2020",
+     "Amd 1:2024",
+     "Amendment 1",
+     "Amendment 1, subject to the following modification:",
+     "Amendment 1, subject to the following modifications:"
+    ],
+    "published": [
+     "26/06/2018",
+     "19-May-2023",
+     "26-Jun-2018",
+     "18-Jun-2021",
+     "25-Jun-2021",
+     "30-Apr-2021"
+    ],
+    "supersedes": [],
+    "transition": [],
+    "pages": 574
+   },
+   "harvestedAt": "2026-10-17T12:32:19.185Z"
+  },
+  {
+   "id": "as_nzs_4777_1_2024",
+   "code": "AS/NZS 4777.1:2024",
+   "title": "Grid connection of energy systems via inverters – Installation requirements",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": "AS_NZS_4777_1_2024",
+   "sources": 9,
+   "sourcesOk": 5,
+   "chars": 24702,
+   "passages": 29,
+   "clauses": 6,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [
+     "23/08/2024"
+    ],
+    "supersedes": [],
+    "transition": [],
+    "pages": 86
+   },
+   "harvestedAt": "2026-10-17T12:35:38.921Z"
+  },
+  {
+   "id": "as_nzs_4777_2_2020",
+   "code": "AS/NZS 4777.2:2020",
+   "title": "Grid connection of energy systems via inverters – Inverter requirements",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": "AS_NZS_4777_2_2020",
+   "sources": 11,
+   "sourcesOk": 6,
+   "chars": 82619,
+   "passages": 93,
+   "clauses": 10,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [
+     "Amd 2:2024",
+     "Amd 1:2021",
+     "Amdt 2:2024"
+    ],
+    "published": [
+     "18/12/2020",
+     "24 September 2021"
+    ],
+    "supersedes": [],
+    "transition": [
+     "transition period for the new amendment with AS/NZS 4777",
+     "transition period where both versions of the standard for inverters may be installed and eligible for small-scale technology certificates",
+     "transition period where inverters that meet both revisions of the Australian Standard may be covered by an electrical safety certificate"
+    ],
+    "pages": 132
+   },
+   "harvestedAt": "2026-10-17T12:36:49.095Z"
+  },
+  {
+   "id": "as_nzs_3760_2022",
+   "code": "AS/NZS 3760:2022",
+   "title": "In-service safety inspection and testing of electrical equipment and RCDs",
+   "tier": 2,
+   "licence": "copyright",
+   "codexId": null,
+   "sources": 6,
+   "sourcesOk": 3,
+   "chars": 9290,
+   "passages": 11,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T12:38:53.185Z"
+  },
+  {
+   "id": "opensolar",
+   "code": "OpenSolar",
+   "title": "OpenSolar – design, proposals, projects, pricing and integrations (help centre)",
+   "tier": 6,
+   "licence": "public",
+   "codexId": null,
+   "sources": 25,
+   "sourcesOk": 19,
+   "chars": 175279,
+   "passages": 166,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T13:13:02.521Z"
+  },
+  {
+   "id": "servicem8",
+   "code": "ServiceM8",
+   "title": "ServiceM8 – jobs, scheduling, forms, invoicing and the API (help centre)",
+   "tier": 6,
+   "licence": "public",
+   "codexId": null,
+   "sources": 25,
+   "sourcesOk": 24,
+   "chars": 114127,
+   "passages": 131,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T13:15:37.178Z"
+  },
+  {
+   "id": "xero",
+   "code": "Xero",
+   "title": "Xero – invoicing, bank reconciliation, reports and the API (Xero Central)",
+   "tier": 6,
+   "licence": "public",
+   "codexId": null,
+   "sources": 19,
+   "sourcesOk": 5,
+   "chars": 94078,
+   "passages": 99,
+   "clauses": 0,
+   "privatePassages": 0,
+   "facts": {
+    "amendments": [],
+    "published": [],
+    "supersedes": [],
+    "transition": [],
+    "pages": null
+   },
+   "harvestedAt": "2026-10-17T13:16:08.507Z"
+  }
+ ]
+}

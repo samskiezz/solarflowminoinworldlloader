@@ -178,7 +178,7 @@ if [ -f "/opt/openclaw/app/server/vps-server.js" ]; then
     if [ ! -f "package.json" ]; then
         npm init -y
     fi
-    npm install express ws
+    (cd server && npm install --omit=dev)
     
     # Create PM2 ecosystem file
     cat > ecosystem.config.js << 'EOFPM2'

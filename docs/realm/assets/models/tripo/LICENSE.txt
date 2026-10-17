@@ -1,0 +1,2 @@
+
+	Tripo-generated models and Jarvis models from the samskiezz/jarvis-app repository, owned by the repository owner (Project Solar). Compressed with glTF Transform (meshopt, WebP textures).

@@ -1,0 +1,419 @@
+{
+  "version": 1,
+  "note": "The shelf: every book the crew studies. 'copyright' books are AS/NZS standards sold by Standards Australia – the harvester compiles everything public about them (scope, contents, amendments, regulator and industry guidance) and never copies the standard's own text unless you drop a licensed PDF in data/knowledge/inbox (indexed privately, never committed). 'public' books are free regulatory and industry documents whose text is compiled in full locally and as passages in docs/data/knowledge.",
+  "allowDomains": [
+    "standards.org.au",
+    "store.standards.org.au",
+    "standards.govt.nz",
+    "cleanenergycouncil.org.au",
+    "assets.cleanenergycouncil.org.au",
+    "solaraccreditation.com.au",
+    "cer.gov.au",
+    "dcceew.gov.au",
+    "legislation.gov.au",
+    "energysafe.vic.gov.au",
+    "esv.vic.gov.au",
+    "nsw.gov.au",
+    "fairtrading.nsw.gov.au",
+    "worksafe.qld.gov.au",
+    "electricalsafety.qld.gov.au",
+    "safework.nsw.gov.au",
+    "safeworkaustralia.gov.au",
+    "erac.gov.au",
+    "cbos.tas.gov.au",
+    "ausgrid.com.au",
+    "energex.com.au",
+    "ergon.com.au",
+    "sapowernetworks.com.au",
+    "endeavourenergy.com.au",
+    "essentialenergy.com.au",
+    "ausnetservices.com.au",
+    "westernpower.com.au",
+    "jemena.com.au",
+    "evoenergy.com.au",
+    "tasnetworks.com.au",
+    "ewrb.govt.nz",
+    "worksafe.govt.nz",
+    "intertekinform.com",
+    "saiglobal.com",
+    "accuristech.com",
+    "webstore.ansi.org",
+    "vgls.vic.gov.au",
+    "accc.gov.au",
+    "energy.gov.au",
+    "aemo.com.au",
+    "arena.gov.au",
+    "sa.gov.au",
+    "wa.gov.au",
+    "nt.gov.au",
+    "act.gov.au",
+    "opensolar.com",
+    "support.opensolar.com",
+    "help.opensolar.com",
+    "docs.opensolar.com",
+    "servicem8.com",
+    "support.servicem8.com",
+    "help.servicem8.com",
+    "xero.com",
+    "central.xero.com",
+    "developer.xero.com",
+    "solarquotes.com.au",
+    "sunwiz.com.au",
+    "cleanenergyregulator.gov.au"
+  ],
+  "books": [
+    {
+      "id": "as_nzs_3000_2018",
+      "code": "AS/NZS 3000:2018",
+      "title": "Electrical installations (Wiring Rules)",
+      "tier": 2,
+      "licence": "copyright",
+      "codexId": "AS_NZS_3000_2018",
+      "seeds": [
+        "https://store.standards.org.au/product/as-nzs-3000-2018",
+        "https://www.standards.govt.nz/shop/asnzs-30002018",
+        "https://www.standards.org.au/flagship-projects/wiring-rules",
+        "https://www.standards.org.au/news/wiring-rules-refined",
+        "https://www.standards.org.au/news/2018-wiring-rules-are-now-available-for-licensed-electrical-practitioners",
+        "https://store.standards.org.au/explore-catalogue/construction",
+        "https://www.ewrb.govt.nz/resources-2/toolbox/changes-to-the-wiring-rules",
+        "https://webstore.ansi.org/standards/sai/nzs30002018",
+        "https://www.standards.govt.nz/shop/asnzs-30002018-amd-3-2023",
+        "https://store.standards.org.au/product/as-nzs-3000-2018-amd-3-2023"
+      ],
+      "queries": [
+        "AS/NZS 3000:2018 amendment 3 changes",
+        "AS/NZS 3000 wiring rules guidance electrical safety regulator",
+        "AS/NZS 3000:2018 RCD requirements summary",
+        "wiring rules 3000 2018 main switch requirements",
+        "AS/NZS 3000:2018 free preview pdf saiglobal",
+        "Energy Safe Victoria wiring rules amendment guidance",
+        "electrical safety office QLD AS/NZS 3000 amendment"
+      ]
+    },
+    {
+      "id": "as_nzs_5033_2021",
+      "code": "AS/NZS 5033:2021",
+      "title": "Installation and safety requirements for photovoltaic (PV) arrays",
+      "tier": 2,
+      "licence": "copyright",
+      "codexId": "AS_NZS_5033_2021",
+      "seeds": [
+        "https://assets.cleanenergycouncil.org.au/documents/accreditation/Advice-on-ASNZS-5033_V2.pdf",
+        "https://assets.cleanenergycouncil.org.au/documents/Advice-on-ASNZS-5033.pdf",
+        "https://www.standards.org.au/news/australian-solar-standard-as-nzs-5033-revised-to-support-growing-solar-industry",
+        "https://store.standards.org.au/product/as-nzs-5033-2021",
+        "https://cleanenergycouncil.org.au/industry-programs/products-program/modules/standards-change",
+        "https://store.accuristech.com/standards/as-nzs-5033-2021?product_id=2239774",
+        "https://www.standards.govt.nz/shop/asnzs-50332021"
+      ],
+      "queries": [
+        "AS/NZS 5033:2021 changes rooftop isolator",
+        "AS/NZS 5033:2021 maximum array voltage 1000V domestic",
+        "AS/NZS 5033 arc fault detection requirements",
+        "AS/NZS 5033:2021 disconnection points PV array",
+        "AS/NZS 5033:2021 free preview pdf saiglobal"
+      ]
+    },
+    {
+      "id": "as_nzs_4777_1_2024",
+      "code": "AS/NZS 4777.1:2024",
+      "title": "Grid connection of energy systems via inverters – Installation requirements",
+      "tier": 2,
+      "licence": "copyright",
+      "codexId": "AS_NZS_4777_1_2024",
+      "seeds": [
+        "https://store.standards.org.au/product/as-nzs-4777-1-2024",
+        "https://www.standards.org.au/standards-catalogue/standard-details?designation=as-nzs-4777-1-2024",
+        "https://www.standards.govt.nz/shop/asnzs-477712024",
+        "https://www.energysafe.vic.gov.au/industry-guidance/electrical/electrical-installations/solar-installations"
+      ],
+      "queries": [
+        "AS/NZS 4777.1:2024 changes summary",
+        "AS/NZS 4777.1 2024 voltage rise inverter 2 percent",
+        "AS/NZS 4777.1:2024 multiple inverters installation requirements",
+        "AS/NZS 4777.1 2024 transition period",
+        "AS/NZS 4777.1:2024 free preview pdf saiglobal",
+        "Energy Safe Victoria AS/NZS 4777.1:2024",
+        "SA Power Networks AS/NZS 4777.1 2024 requirements"
+      ]
+    },
+    {
+      "id": "as_nzs_4777_2_2020",
+      "code": "AS/NZS 4777.2:2020",
+      "title": "Grid connection of energy systems via inverters – Inverter requirements",
+      "tier": 2,
+      "licence": "copyright",
+      "codexId": "AS_NZS_4777_2_2020",
+      "seeds": [
+        "https://store.standards.org.au/product/as-nzs-4777-2-2020",
+        "https://cer.gov.au/document/solar-pv-inspection-checklist",
+        "https://www.standards.govt.nz/shop/asnzs-477722020"
+      ],
+      "queries": [
+        "AS/NZS 4777.2:2020 Australia A B C region settings",
+        "AS/NZS 4777.2:2020 volt-watt volt-var response modes",
+        "AS/NZS 4777.2 2020 amendment 2 2024 changes",
+        "CEC approved inverter list 4777.2",
+        "AS/NZS 4777.2:2020 free preview pdf saiglobal",
+        "AEMO DER inverter standard 4777.2 2020 explained"
+      ]
+    },
+    {
+      "id": "as_nzs_5139_2019",
+      "code": "AS/NZS 5139:2019",
+      "title": "Electrical installations – Safety of battery systems for use with power conversion equipment",
+      "tier": 2,
+      "licence": "copyright",
+      "codexId": "AS_NZS_5139_2019",
+      "seeds": [
+        "https://www.nsw.gov.au/housing-and-construction/compliance-and-regulation/electricians/electrical-standards-rules-and-notes/changes-to-battery-standard",
+        "https://www.energysafe.vic.gov.au/battery-storage",
+        "https://www.erac.gov.au/wp-content/uploads/2021/03/Battery_Energy_Storage_System_02Feb2021.pdf",
+        "https://www.cbos.tas.gov.au/__data/assets/pdf_file/0008/614555/ERAC-Battery-Energy-Storage-System-Installation-Requirements.PDF",
+        "https://store.standards.org.au/product/as-nzs-5139-2019-amd-1-2025",
+        "https://www.intertekinform.com/en-au/resources/blog/as-nzs-5139-2019-battery-systems-safety",
+        "https://www.standards.govt.nz/shop/asnzs-51392019"
+      ],
+      "queries": [
+        "AS/NZS 5139:2019 restricted locations clearances 600mm",
+        "AS/NZS 5139 amendment 1 2025 changes",
+        "AS/NZS 5139 non-combustible barrier habitable room",
+        "battery energy storage installation requirements ERAC",
+        "AS/NZS 5139:2019 free preview pdf saiglobal"
+      ]
+    },
+    {
+      "id": "as_nzs_3008_1_1",
+      "code": "AS/NZS 3008.1.1:2025",
+      "title": "Selection of cables – Cables for alternating voltages up to and including 0.6/1 kV",
+      "tier": 2,
+      "licence": "copyright",
+      "codexId": "AS_NZS_3008_1_1",
+      "seeds": [
+        "https://www.intertekinform.com/en-us/resources/standards-information/as-nzs-3008-1-1-2025-cable-selection",
+        "https://store.standards.org.au/product/as-nzs-3008-1-1-2025",
+        "https://store.standards.org.au/product/as-nzs-3008-1-1-2017",
+        "https://www.standards.govt.nz/shop/asnzs-3008112017",
+        "https://www.standards.govt.nz/shop/asnzs-3008112025"
+      ],
+      "queries": [
+        "AS/NZS 3008.1.1:2025 changes DC cable ratings",
+        "AS/NZS 3008.1.1 current carrying capacity voltage drop method",
+        "AS/NZS 3008.1.1 2017 cable selection scope",
+        "AS/NZS 3008.1.1 free preview pdf saiglobal",
+        "AS/NZS 3008.1.1:2025 standards.govt.nz",
+        "cable current carrying capacity AS/NZS 3008 derating guidance"
+      ]
+    },
+    {
+      "id": "as_nzs_3017_2022",
+      "code": "AS/NZS 3017:2022",
+      "title": "Electrical installations – Verification by inspection and testing",
+      "tier": 2,
+      "licence": "copyright",
+      "codexId": "AS_NZS_3017_2022",
+      "seeds": [
+        "https://store.standards.org.au/product/as-nzs-3017-2022",
+        "https://www.standards.govt.nz/shop/asnzs-30172022"
+      ],
+      "queries": [
+        "AS/NZS 3017:2022 verification testing changes",
+        "AS/NZS 3017 mandatory tests electrical installation",
+        "AS/NZS 3017 insulation resistance earth continuity test",
+        "AS/NZS 3017:2022 free preview pdf saiglobal",
+        "AS/NZS 3017 testing electrical installation guidance regulator",
+        "AS/NZS 3017:2022 standards.govt.nz"
+      ]
+    },
+    {
+      "id": "as_nzs_4836_2023",
+      "code": "AS/NZS 4836:2023",
+      "title": "Safe working on or near low-voltage and extra-low voltage electrical installations and equipment",
+      "tier": 1,
+      "licence": "copyright",
+      "seeds": [
+        "https://www.intertekinform.com/en-au/resources/blog/as-4836-2023-safe-working-low-voltage-electrical",
+        "https://webstore.ansi.org/standards/sai/nzs48362023",
+        "https://i2.saiglobal.com/mpc2v/preview/1154365521844.pdf?nsai_sku=as-nzs-4836-2023-116019_saig_as_as_3228447&sku=116019_SAIG_AS_AS_3228447",
+        "https://store.standards.org.au/product/as-nzs-4836-2023",
+        "https://www.standards.govt.nz/shop/asnzs-48362023"
+      ],
+      "queries": [
+        "AS/NZS 4836:2023 changes safe working low voltage",
+        "AS/NZS 4836 test before touch isolation procedure",
+        "AS/NZS 4836 risk assessment electrical work",
+        "AS/NZS 4836:2023 free preview pdf saiglobal",
+        "AS/NZS 4836 safe working regulator guidance electrical"
+      ]
+    },
+    {
+      "id": "as_nzs_3760_2022",
+      "code": "AS/NZS 3760:2022",
+      "title": "In-service safety inspection and testing of electrical equipment and RCDs",
+      "tier": 2,
+      "licence": "copyright",
+      "seeds": [
+        "https://www.standards.org.au/standards-catalogue/standard-details?designation=as-nzs-3760-2022",
+        "https://www.intertekinform.com/en-gb/resources/blog/as-nzs-3760-2022-safety-inspection-and-testing-of-electrical-equipment",
+        "https://www.safework.nsw.gov.au/hazards-a-z/electrical-and-power/electrical-inspection-and-testing",
+        "https://www.standards.govt.nz/shop/asnzs-37602022"
+      ],
+      "queries": [
+        "AS/NZS 3760:2022 test and tag intervals",
+        "AS/NZS 3760 2022 changes",
+        "AS/NZS 3760:2022 free preview pdf saiglobal"
+      ]
+    },
+    {
+      "id": "as_nzs_3012_2019",
+      "code": "AS/NZS 3012:2019",
+      "title": "Electrical installations – Construction and demolition sites",
+      "tier": 2,
+      "licence": "copyright",
+      "seeds": [
+        "https://store.standards.org.au/product/as-nzs-3012-2019",
+        "https://www.standards.govt.nz/shop/asnzs-30122019"
+      ],
+      "queries": [
+        "AS/NZS 3012:2019 construction site electrical requirements",
+        "AS/NZS 3012 RCD testing construction sites",
+        "AS/NZS 3012:2019 free preview pdf saiglobal",
+        "AS/NZS 3012 construction wiring regulator guidance"
+      ]
+    },
+    {
+      "id": "cec_saa_guidelines",
+      "code": "SAA/CEC guidelines",
+      "title": "Solar Accreditation Australia and Clean Energy Council installer guidelines",
+      "tier": 4,
+      "licence": "public",
+      "seeds": [
+        "https://assets.cleanenergycouncil.org.au/documents/accreditation/V14_CEC-Guidelines-for-grid-connected-solar-pv-systems-no-storage-MAY-2022.pdf",
+        "https://assets.cleanenergycouncil.org.au/documents/accreditation/technical-information/Grid-Connect-Install-and-Supervise-Guidelines-Iss-13_Apr-2019_2021-Warning.pdf",
+        "https://assets.cleanenergycouncil.org.au/documents/member-and-installer-only/Accreditaiton-guidelines-and-advice/30-100kw-grid-connected-solar-no-battery-design-guidelines-2016.pdf"
+      ],
+      "queries": [
+        "Solar Accreditation Australia installer guidelines pdf",
+        "CEC battery install guidelines pdf accredited installers",
+        "SAA installation requirements daily install limit",
+        "CEC grid connected PV design guidelines 2022"
+      ]
+    },
+    {
+      "id": "cer_sres",
+      "code": "CER / SRES",
+      "title": "Clean Energy Regulator – Small-scale Renewable Energy Scheme and Cheaper Home Batteries rules",
+      "tier": 5,
+      "licence": "public",
+      "seeds": [
+        "https://cer.gov.au/schemes/renewable-energy-target/renewable-energy-target-participants-and-industry/solar-battery-installers-and-designers",
+        "https://cer.gov.au/schemes/renewable-energy-target/renewable-energy-target-participants-and-industry/rooftop-solar-installers-and-designers",
+        "https://cer.gov.au/schemes/renewable-energy-target/small-scale-renewable-energy-scheme/small-scale-renewable-energy-systems/solar-batteries",
+        "https://cer.gov.au/schemes/renewable-energy-target/small-scale-renewable-energy-scheme/small-scale-renewable-energy-systems",
+        "https://cer.gov.au/news-and-media/media/2022/april/changes-to-small-scale-renewable-energy-scheme-take-effect-today-1-april-2022",
+        "https://cer.gov.au/document/solar-pv-inspection-checklist",
+        "https://www.dcceew.gov.au/energy/programs/cheaper-home-batteries",
+        "https://www.legislation.gov.au/F2025L00765/asmade/2025-06-27/text/original/pdf"
+      ],
+      "queries": [
+        "Clean Energy Regulator STC written statement installer",
+        "CER solar PV inspection checklist",
+        "Cheaper Home Batteries Program eligibility rules",
+        "CER serial number ledger solar panels"
+      ]
+    },
+    {
+      "id": "dnsp_connection",
+      "code": "DNSP connection standards",
+      "title": "Distribution network connection standards for inverter energy systems",
+      "tier": 3,
+      "licence": "public",
+      "seeds": [
+        "https://www.energex.com.au/__data/assets/pdf_file/0010/1072549/Standard-for-Small-IES-Connections-2970697.pdf",
+        "https://www.ausgrid.com.au/asp-and-contractors/technical-document-library/ns194"
+      ],
+      "queries": [
+        "Ausgrid NS194 embedded generation connection pdf",
+        "SA Power Networks TS129 small embedded generation",
+        "Endeavour Energy embedded generation connection standard",
+        "Essential Energy CEOP8046 solar connection",
+        "AusNet embedded generation basic connection export limit",
+        "Western Power embedded generation requirements inverter"
+      ]
+    },
+    {
+      "id": "whs_solar",
+      "code": "WHS / electrical safety law",
+      "title": "Work health and safety and electrical safety law for solar and battery work",
+      "tier": 1,
+      "licence": "public",
+      "seeds": [
+        "https://www.worksafe.qld.gov.au/__data/assets/pdf_file/0016/23506/construction-and-operation-of-solar-farms-cop.pdf",
+        "https://www.worksafe.qld.gov.au/resources/videos/webinars/electrical-solar-and-battery-installer-safety-webinar-2026"
+      ],
+      "queries": [
+        "Safe Work Australia guide managing risks rooftop solar installation",
+        "Electrical Safety Act 2002 QLD solar installation requirements",
+        "Electricity (Consumer Safety) Act 2004 NSW solar",
+        "Energy Safe Victoria solar installation requirements",
+        "working at heights solar installation code of practice"
+      ]
+    },
+    {
+      "id": "opensolar",
+      "code": "OpenSolar",
+      "title": "OpenSolar – design, proposals, projects, pricing and integrations (help centre)",
+      "tier": 6,
+      "licence": "public",
+      "seeds": [
+        "https://support.opensolar.com/hc/en-us",
+        "https://www.opensolar.com/",
+        "https://support.opensolar.com/hc/en-us/categories/360002031771",
+        "https://support.opensolar.com/hc/en-us/sections/360005443712"
+      ],
+      "queries": [
+        "OpenSolar help centre design tool",
+        "OpenSolar proposal pricing payment options help",
+        "OpenSolar project workflow stages help",
+        "OpenSolar integrations ServiceM8 Xero",
+        "OpenSolar 3D design shading tutorial",
+        "OpenSolar API developer docs"
+      ]
+    },
+    {
+      "id": "servicem8",
+      "code": "ServiceM8",
+      "title": "ServiceM8 – jobs, scheduling, forms, invoicing and the API (help centre)",
+      "tier": 6,
+      "licence": "public",
+      "seeds": [
+        "https://support.servicem8.com/hc/en-us",
+        "https://developer.servicem8.com/docs"
+      ],
+      "queries": [
+        "ServiceM8 help job statuses quote work order",
+        "ServiceM8 forms checklists help",
+        "ServiceM8 API jobs endpoint docs",
+        "ServiceM8 scheduling dispatch help"
+      ]
+    },
+    {
+      "id": "xero",
+      "code": "Xero",
+      "title": "Xero – invoicing, bank reconciliation, reports and the API (Xero Central)",
+      "tier": 6,
+      "licence": "public",
+      "seeds": [
+        "https://central.xero.com/s/",
+        "https://developer.xero.com/documentation/api/accounting/overview"
+      ],
+      "queries": [
+        "Xero Central bank reconciliation help",
+        "Xero invoices overdue reminders help",
+        "Xero API invoices endpoint",
+        "Xero aged receivables report help"
+      ]
+    }
+  ]
+}

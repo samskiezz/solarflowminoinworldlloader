@@ -1,0 +1,1020 @@
+ACCOUNTS AND ORGANIZATIONS
+1. Email verification
+2. Password reset
+3. Passkey authentication
+4. Authenticator app support
+5. MFA recovery codes
+6. Enterprise SAML login
+7. OpenID Connect login
+8. Team invitation links
+9. Expiring invitations
+10. Organization switching
+11. Custom organization roles
+12. Project-specific permissions
+13. Field-level access controls
+14. Temporary contractor access
+15. Customer guest accounts
+16. Read-only auditor accounts
+17. Active session management
+18. Remote session revocation
+19. Suspicious login alerts
+20. Login history dashboard
+21. Configurable session timeouts
+22. Trusted device management
+23. Account recovery workflow
+24. Account deletion requests
+25. Account data export
+26. User profile photos
+27. User timezone preferences
+28. User language preferences
+29. Notification preference profiles
+30. Delegated organization administration
+31. Organization domain verification
+32. Domain-based invitation restrictions
+33. Automated employee provisioning
+34. Automated employee deprovisioning
+35. Service account management
+36. API token expiration
+37. API token scopes
+38. API token usage history
+39. Organization ownership transfer
+40. Inactive account suspension
+41. User access reviews
+42. Permission change history
+43. Terms acceptance tracking
+44. Privacy consent history
+45. Installer identity verification
+46. Accreditation profile management
+47. Accreditation expiry reminders
+48. Organization branding settings
+49. Team membership directory
+50. Emergency administrator recovery
+PROJECTS AND COLLABORATION
+51. Reusable project templates
+52. Project cloning wizard
+53. Bulk project creation
+54. Project archive workflow
+55. Archived project restoration
+56. Configurable project stages
+57. Stage entry requirements
+58. Stage exit approvals
+59. Project dependency tracking
+60. Project milestone calendar
+61. Project baseline snapshots
+62. Project change requests
+63. Change impact summaries
+64. Project risk register
+65. Project issue register
+66. Project decision log
+67. Project assumptions register
+68. Project stakeholder directory
+69. Project responsibility matrix
+70. Project discussion threads
+71. Contextual user mentions
+72. Comment resolution workflow
+73. Comment attachment support
+74. Shared project bookmarks
+75. Project activity subscriptions
+76. Project workload forecasts
+77. Project budget baselines
+78. Budget variance alerts
+79. Project time tracking
+80. Project profitability reports
+81. Project handover checklist
+82. Customer approval milestones
+83. Contractor onboarding checklist
+84. Multi-site project grouping
+85. Portfolio dependency views
+86. Project geographic map
+87. Project ownership transfer
+88. Project merge assistance
+89. Duplicate project detection
+90. Project completeness scoring
+91. Custom project fields
+92. Conditional project forms
+93. Project naming conventions
+94. Project document requirements
+95. Project escalation policies
+96. Project communication log
+97. Project status digest
+98. Cross-project resource allocation
+99. Project cancellation workflow
+100. Project closure approvals
+SITE SURVEYS AND SOLAR DESIGN
+101. Guided site survey forms
+102. Geotagged survey photographs
+103. Roof geometry capture
+104. Roof pitch measurement
+105. Roof azimuth measurement
+106. Roof material classification
+107. Roof condition assessment
+108. Structural load inputs
+109. Roof exclusion zones
+110. Panel placement editor
+111. Panel spacing validation
+112. Roof setback configuration
+113. Shading obstacle mapping
+114. Seasonal shading analysis
+115. Horizon profile import
+116. Satellite imagery overlays
+117. Drone survey import
+118. LiDAR survey import
+119. Multiple roof planes
+120. Array orientation comparison
+121. String layout editor
+122. String voltage calculations
+123. String current calculations
+124. MPPT allocation planning
+125. Inverter sizing assistance
+126. DC oversizing analysis
+127. Cable route planning
+128. Cable voltage-drop calculations
+129. Cable ampacity calculations
+130. Temperature derating calculations
+131. Conduit fill calculations
+132. Earthing layout editor
+133. Switchboard capacity assessment
+134. Existing circuit inventory
+135. Single-line diagram generation
+136. Design revision comparison
+137. Design approval signatures
+138. Design assumption annotations
+139. Wind region inputs
+140. Corrosion exposure classification
+141. Bushfire exposure assessment
+142. Flood exposure assessment
+143. Heritage constraint tracking
+144. Site access constraints
+145. Fall protection planning
+146. Equipment clearance visualization
+147. Installation material takeoffs
+148. Design alternatives comparison
+149. Survey completeness validation
+150. Survey-to-design traceability
+BATTERIES AND ELECTRIFICATION
+151. Battery capacity sizing
+152. Battery chemistry comparison
+153. Battery cycle-life modelling
+154. Battery degradation forecasts
+155. Battery warranty modelling
+156. Battery location assessment
+157. Battery clearance diagrams
+158. Battery ventilation assessment
+159. Battery enclosure selection
+160. Battery fire barrier planning
+161. Battery signage planning
+162. Battery shutdown mapping
+163. Backup circuit selection
+164. Critical load inventory
+165. Backup runtime estimates
+166. Black-start capability tracking
+167. Islanding configuration review
+168. Transfer switch compatibility
+169. Hybrid inverter compatibility
+170. Parallel battery compatibility
+171. Battery firmware compatibility
+172. Battery commissioning records
+173. Battery state-of-health trends
+174. Battery imbalance detection
+175. Battery temperature alerts
+176. Battery recall matching
+177. Battery replacement planning
+178. Battery recycling records
+179. EV charger sizing
+180. EV charging schedules
+181. Solar surplus EV charging
+182. Dynamic charger load balancing
+183. Vehicle charging priorities
+184. Vehicle-to-home compatibility tracking
+185. Vehicle-to-grid eligibility tracking
+186. Charger installation checklists
+187. Heat pump load modelling
+188. Electric hot-water scheduling
+189. Household electrification scenarios
+190. Maximum demand calculations
+191. Phase balancing analysis
+192. Flexible load inventory
+193. Load shedding priorities
+194. Demand response participation settings
+195. Virtual power plant comparison
+196. VPP contract constraint tracking
+197. Battery reserve configuration
+198. Storm preparation charging
+199. Storage expansion scenarios
+200. Electrification upgrade roadmaps
+COMPLIANCE AND STANDARDS
+201. Versioned compliance rule packs
+202. Standards effective-date tracking
+203. Standards supersession mapping
+204. Clause-level source citations
+205. Licensed standards access controls
+206. Standards amendment notifications
+207. Jurisdiction-specific rule selection
+208. Installation-date rule selection
+209. Product-date eligibility checks
+210. Rule applicability explanations
+211. Machine-readable rule definitions
+212. Rule dependency graphs
+213. Conflicting rule detection
+214. Missing-input result states
+215. Uncertain-result classifications
+216. Compliance exception requests
+217. Exception approval workflows
+218. Exception expiry tracking
+219. Approved alternative evidence
+220. Human reviewer sign-off
+221. Reviewer competency requirements
+222. Separation-of-duties enforcement
+223. Compliance evidence matrices
+224. Evidence freshness checks
+225. Evidence provenance records
+226. Compliance calculation explanations
+227. Rule execution traces
+228. Repeatable assessment snapshots
+229. Assessment revision comparison
+230. Bulk compliance reassessment
+231. Standards change impact reports
+232. Compliance remediation tasks
+233. Remediation deadline tracking
+234. Remediation verification workflow
+235. Nonconformance severity configuration
+236. Nonconformance root-cause tracking
+237. Corrective action registers
+238. Preventive action registers
+239. Inspection sampling plans
+240. Inspection checklist versioning
+241. Accredited reviewer assignment
+242. Regulatory submission packaging
+243. Submission receipt tracking
+244. Compliance certificate revocation
+245. Certificate authenticity verification
+246. Clause interpretation notes
+247. Interpretation approval history
+248. Compliance coverage reporting
+249. Rule regression test fixtures
+250. Independent assessment reconciliation
+PRODUCTS AND SUPPLY CHAIN
+251. Manufacturer identity normalization
+252. Product model alias matching
+253. Product duplicate resolution
+254. Product approval history
+255. Product listing expiry alerts
+256. Product delisting notifications
+257. Product recall notifications
+258. Official source freshness indicators
+259. Product source reconciliation
+260. Catalog ingestion change previews
+261. Catalog ingestion approvals
+262. Catalog rollback snapshots
+263. Product specification versioning
+264. Datasheet authenticity tracking
+265. Datasheet checksum verification
+266. Certificate expiry monitoring
+267. Certificate issuer validation
+268. Product compatibility matrices
+269. Connector compatibility checks
+270. Mounting system compatibility
+271. Optimizer compatibility matching
+272. Microinverter compatibility matching
+273. Warranty condition comparison
+274. Product lifecycle status
+275. Discontinued product alternatives
+276. Product substitution approvals
+277. Supplier directory management
+278. Supplier accreditation tracking
+279. Supplier quotation requests
+280. Supplier quote comparison
+281. Supplier lead-time tracking
+282. Supplier performance scorecards
+283. Inventory stock levels
+284. Inventory reservation workflow
+285. Serial number inventory
+286. Batch number tracking
+287. Warehouse location tracking
+288. Purchase order generation
+289. Purchase order approvals
+290. Goods receipt reconciliation
+291. Delivery discrepancy reports
+292. Damaged equipment records
+293. Return merchandise workflows
+294. Warranty claim workflows
+295. Installed product traceability
+296. Counterfeit product reporting
+297. Product comparison exports
+298. Product watchlists
+299. Product environmental declarations
+300. Embodied carbon comparison
+DOCUMENTS AND EVIDENCE
+301. Drag-and-drop document batches
+302. Resumable document uploads
+303. Upload integrity checks
+304. Document malware scanning
+305. Encrypted document storage
+306. Document retention policies
+307. Document legal holds
+308. Document version histories
+309. Document checkout locking
+310. Document approval workflows
+311. Document supersession warnings
+312. Document duplicate detection
+313. Scanned PDF OCR
+314. Handwritten form recognition
+315. Table structure extraction
+316. Diagram region extraction
+317. PDF page rotation correction
+318. OCR language selection
+319. Extraction confidence displays
+320. Low-confidence review queues
+321. Manual extraction corrections
+322. Correction audit histories
+323. Document classification suggestions
+324. Custom document categories
+325. Required document checklists
+326. Missing document reminders
+327. Document expiry reminders
+328. Document redaction tools
+329. Redaction verification previews
+330. Document watermarking
+331. Document access receipts
+332. Expiring document share links
+333. Password-protected document sharing
+334. Document download restrictions
+335. Page-level evidence annotations
+336. Clause-to-document cross-links
+337. Document comparison overlays
+338. Signed document verification
+339. Electronic signature requests
+340. Signature completion tracking
+341. Photo metadata preservation
+342. Photo tampering indicators
+343. Evidence capture timestamps
+344. Evidence custody histories
+345. Bulk metadata editing
+346. Document package generation
+347. Searchable PDF exports
+348. Document translation review
+349. Source document citation links
+350. Document accessibility remediation
+AI MINIONS AND AUTOMATION
+351. Explicit minion capability profiles
+352. Capability-based task routing
+353. Minion tool permission scopes
+354. Per-task execution sandboxes
+355. Per-task cost budgets
+356. Per-task token budgets
+357. Per-task time limits
+358. Task approval checkpoints
+359. Destructive action approval gates
+360. External action previews
+361. Task execution dry runs
+362. Durable task checkpoints
+363. Interrupted task resumption
+364. Idempotent task execution
+365. Task dependency scheduling
+366. Task priority inheritance
+367. Queue fairness controls
+368. Queue congestion alerts
+369. Worker concurrency limits
+370. Worker resource quotas
+371. Failed task quarantine
+372. Task retry policies
+373. Retry backoff controls
+374. Task cancellation propagation
+375. Multi-minion handoff records
+376. Minion disagreement resolution
+377. Human escalation rules
+378. Output citation requirements
+379. Unsupported claim detection
+380. Prompt injection detection
+381. Retrieved content trust labels
+382. Sensitive output redaction
+383. Model provider selection
+384. Provider failover policies
+385. Model version pinning
+386. Prompt template versioning
+387. Prompt change approvals
+388. Agent evaluation datasets
+389. Agent quality scorecards
+390. Task outcome feedback
+391. Memory retention controls
+392. Memory source attribution
+393. Memory correction workflows
+394. Cross-project memory isolation
+395. Agent tool call replay
+396. Agent decision summaries
+397. Agent execution trace exports
+398. Automation rollback actions
+399. Autonomous operation schedules
+400. Global automation emergency stop
+KNOWLEDGE AND RESEARCH
+401. Unified knowledge search
+402. Semantic document retrieval
+403. Exact clause lookup
+404. Hybrid keyword-semantic ranking
+405. Search result source badges
+406. Source publication dates
+407. Source reliability classifications
+408. Knowledge freshness scoring
+409. Stale knowledge warnings
+410. Conflicting source detection
+411. Contradiction review queues
+412. Answer citation previews
+413. Page-specific answer citations
+414. Answer confidence calibration
+415. Unanswerable question handling
+416. Follow-up question suggestions
+417. Saved research collections
+418. Research collection sharing
+419. Research question histories
+420. Knowledge gap reporting
+421. Missing-source requests
+422. Expert answer approval
+423. Approved answer libraries
+424. Answer expiry policies
+425. Knowledge taxonomy management
+426. Controlled vocabulary support
+427. Equipment synonym dictionaries
+428. Standards terminology dictionaries
+429. Acronym expansion support
+430. Unit-aware knowledge extraction
+431. Knowledge graph navigation
+432. Equipment relationship mapping
+433. Clause relationship mapping
+434. Research provenance graphs
+435. Source licensing metadata
+436. Source usage restrictions
+437. Licensed content retrieval filters
+438. Knowledge access permissions
+439. Tenant-specific retrieval indexes
+440. Retrieval relevance feedback
+441. Search evaluation dashboards
+442. Query rewrite previews
+443. Research summary exports
+444. Source change subscriptions
+445. Approved website ingestion
+446. Ingestion robots-policy checks
+447. Ingestion rate controls
+448. Ingestion failure diagnostics
+449. Knowledge import previews
+450. Knowledge deletion propagation
+3D REALM AND MINION INTERACTION
+451. Guided realm onboarding
+452. Searchable minion selection
+453. Minion focus camera
+454. Keyboard realm navigation
+455. Touch realm navigation
+456. Custom camera bookmarks
+457. Camera collision avoidance
+458. Adjustable camera sensitivity
+459. Reduced motion mode
+460. Photosensitivity-friendly effects
+461. Accessible 2D realm alternative
+462. Screen-reader minion summaries
+463. Minion task status overlays
+464. Minion workload visualization
+465. Task dependency visualization
+466. Work queue building views
+467. Compliance issue map overlays
+468. Knowledge flow visualization
+469. Real execution event animations
+470. Historical realm playback
+471. Realm event timeline
+472. Realm pause inspection
+473. Minion interaction histories
+474. Minion appearance customization
+475. Organization realm themes
+476. User-defined realm layouts
+477. Shared realm layouts
+478. Realm layout versioning
+479. Realm object annotations
+480. Realm screenshot exports
+481. Realm video capture
+482. Selectable graphics presets
+483. Automatic graphics adaptation
+484. Frame-rate target controls
+485. GPU memory budget controls
+486. Asset streaming priorities
+487. Progressive realm loading
+488. WebGL context recovery
+489. Unsupported graphics fallback
+490. Avatar level-of-detail controls
+491. Distance-based animation throttling
+492. Audio volume categories
+493. Audio caption support
+494. Positional audio preferences
+495. Realm collaboration cursors
+496. Shared presentation mode
+497. Minion event filtering
+498. Realm performance diagnostics
+499. Deterministic realm replay
+500. Realm state export
+INSTALLATION AND COMMISSIONING
+501. Installer daily job sheets
+502. Crew assignment calendar
+503. Crew skill matching
+504. Site arrival check-in
+505. Site departure check-out
+506. Location-verified attendance
+507. Job safety analysis forms
+508. Toolbox talk attendance
+509. Weather-related work alerts
+510. Permit-to-work tracking
+511. Isolation procedure checklists
+512. Lockout-tagout records
+513. Pre-install equipment verification
+514. Barcode equipment scanning
+515. QR equipment identification
+516. Serial-to-project assignment
+517. Installation photo prompts
+518. Mandatory photo angle guides
+519. Hidden-work evidence capture
+520. Installation sequence checklists
+521. Torque setting records
+522. Fastener inspection records
+523. Cable label verification
+524. Connector assembly verification
+525. Earth continuity records
+526. Insulation resistance records
+527. Polarity test records
+528. Open-circuit voltage records
+529. String current test records
+530. Inverter protection test records
+531. Anti-islanding test records
+532. Export limit verification
+533. Battery shutdown testing
+534. Backup transfer testing
+535. Commissioning instrument registry
+536. Instrument calibration tracking
+537. Measurement unit validation
+538. Measurement outlier warnings
+539. Commissioning witness signatures
+540. Defect punch lists
+541. Defect photo annotation
+542. Defect reassignment workflow
+543. Installation variation requests
+544. Materials consumption tracking
+545. Installation progress photographs
+546. Customer handover scheduling
+547. Customer operating instructions
+548. Emergency procedure handover
+549. As-built drawing capture
+550. Final installation acceptance
+MONITORING AND MAINTENANCE
+551. Inverter telemetry connectors
+552. Battery telemetry connectors
+553. Smart meter ingestion
+554. Weather station ingestion
+555. Telemetry quality indicators
+556. Missing telemetry alerts
+557. Sensor calibration histories
+558. Timestamp drift detection
+559. Telemetry unit normalization
+560. Duplicate reading suppression
+561. Historical reading backfill
+562. Expected generation baselines
+563. Weather-adjusted performance ratios
+564. Underperformance detection
+565. String mismatch detection
+566. Inverter clipping analysis
+567. Shading loss detection
+568. Soiling loss estimates
+569. Thermal anomaly records
+570. Arc fault event tracking
+571. Ground fault event tracking
+572. Grid outage histories
+573. Export curtailment histories
+574. Battery cycling analytics
+575. Battery efficiency analytics
+576. Battery reserve breach alerts
+577. Equipment fault code translation
+578. Fault severity classification
+579. Fault recurrence analysis
+580. Maintenance ticket creation
+581. Preventive maintenance schedules
+582. Condition-based maintenance triggers
+583. Technician dispatch planning
+584. Spare parts recommendations
+585. Service visit histories
+586. Maintenance cost tracking
+587. Maintenance SLA timers
+588. Warranty coverage checks
+589. Remote diagnosis sessions
+590. Authorized remote setting changes
+591. Remote change approval workflows
+592. Remote change rollback
+593. Firmware update inventory
+594. Firmware rollout scheduling
+595. Firmware update verification
+596. Equipment end-of-life forecasts
+597. Fleet health comparisons
+598. Customer outage notifications
+599. Maintenance completion evidence
+600. Post-maintenance performance verification
+ENERGY ECONOMICS AND PROPOSALS
+601. Electricity bill import
+602. Bill line-item extraction
+603. Interval consumption import
+604. Consumption profile reconstruction
+605. Tariff plan modelling
+606. Time-of-use tariff support
+607. Demand charge modelling
+608. Feed-in tariff modelling
+609. Dynamic tariff simulations
+610. Tariff effective-date tracking
+611. Retailer plan comparison
+612. Solar yield forecasts
+613. Weather year selection
+614. Generation uncertainty bands
+615. Self-consumption forecasts
+616. Export revenue forecasts
+617. Battery arbitrage modelling
+618. Demand reduction modelling
+619. Energy price escalation scenarios
+620. Equipment degradation assumptions
+621. Maintenance cost assumptions
+622. Replacement cost assumptions
+623. Project cash-flow forecasts
+624. Discounted payback calculations
+625. Net present value calculations
+626. Internal rate-of-return calculations
+627. Financing repayment scenarios
+628. Lease payment scenarios
+629. Power purchase agreement scenarios
+630. Sensitivity analysis charts
+631. Incentive eligibility screening
+632. Incentive rate versioning
+633. Incentive application tracking
+634. Certificate quantity estimates
+635. Certificate valuation scenarios
+636. Quote line-item editor
+637. Quote approval thresholds
+638. Quote expiry reminders
+639. Quote revision comparison
+640. Customer proposal generation
+641. Proposal design alternatives
+642. Proposal acceptance signatures
+643. Deposit request workflows
+644. Progress payment schedules
+645. Invoice reconciliation
+646. Variation pricing approvals
+647. Savings guarantee tracking
+648. Forecast-versus-actual savings
+649. Financial assumption disclosures
+650. Customer investment summaries
+NOTIFICATIONS AND WORKFLOWS
+651. In-app notification inbox
+652. Notification read receipts
+653. Email notification delivery
+654. SMS notification delivery
+655. Browser push notifications
+656. Mobile push notifications
+657. Notification delivery histories
+658. Failed notification retries
+659. Notification deduplication
+660. Notification quiet hours
+661. User-configured digest schedules
+662. Project-specific notification rules
+663. Severity-based notification routing
+664. Alert acknowledgement tracking
+665. Unacknowledged alert escalation
+666. On-call contact schedules
+667. Backup escalation contacts
+668. Alert suppression windows
+669. Planned maintenance silencing
+670. Notification template editor
+671. Template localization support
+672. Notification preview testing
+673. Workflow visual editor
+674. Event-triggered workflow execution
+675. Scheduled workflow execution
+676. Conditional workflow branches
+677. Parallel workflow branches
+678. Workflow dependency joins
+679. Workflow delay steps
+680. Workflow approval steps
+681. Workflow timeout handling
+682. Workflow compensation steps
+683. Workflow version histories
+684. Workflow publication approvals
+685. Workflow execution histories
+686. Workflow failure replay
+687. Workflow test mode
+688. Workflow execution quotas
+689. Workflow ownership transfer
+690. Workflow usage analytics
+691. Calendar event synchronization
+692. Meeting reminder generation
+693. Appointment availability windows
+694. Customer appointment booking
+695. Appointment rescheduling workflow
+696. Appointment cancellation notifications
+697. Recurring task templates
+698. Business-day deadline calculations
+699. Holiday-aware task schedules
+700. Cross-timezone scheduling previews
+SEARCH, DASHBOARDS, AND REPORTS
+701. Global command palette
+702. Cross-entity search results
+703. Typo-tolerant search
+704. Faceted search filters
+705. Natural-language project search
+706. Saved search definitions
+707. Shared saved searches
+708. Search subscription alerts
+709. Search result highlighting
+710. Search access filtering
+711. Custom dashboard builder
+712. Role-specific dashboard presets
+713. Dashboard widget rearrangement
+714. Dashboard date-range controls
+715. Dashboard comparison periods
+716. Dashboard drill-down navigation
+717. Metric definition tooltips
+718. Metric source links
+719. Metric freshness timestamps
+720. Missing-data visual indicators
+721. Configurable KPI targets
+722. KPI threshold notifications
+723. Project funnel reports
+724. Installation throughput reports
+725. Compliance failure trend reports
+726. Remediation aging reports
+727. Reviewer turnaround reports
+728. Agent productivity reports
+729. Agent cost attribution reports
+730. Document processing quality reports
+731. Product approval coverage reports
+732. Customer satisfaction reports
+733. Contractor performance reports
+734. Portfolio generation reports
+735. Avoided emissions reports
+736. Emissions factor versioning
+737. Report methodology disclosures
+738. Custom report builder
+739. Scheduled report delivery
+740. Report parameter templates
+741. Report access permissions
+742. Report approval workflows
+743. Report snapshot histories
+744. PDF report exports
+745. Spreadsheet report exports
+746. Machine-readable report exports
+747. Background report generation
+748. Report export progress tracking
+749. Export expiry policies
+750. Export download audit records
+MOBILE, OFFLINE, AND ACCESSIBILITY
+751. Installable progressive web app
+752. Offline project workspaces
+753. Offline checklist completion
+754. Offline photo capture
+755. Offline document annotation
+756. Offline search indexes
+757. Selective offline downloads
+758. Offline storage usage controls
+759. Pending synchronization indicators
+760. Synchronization retry controls
+761. Record-level conflict detection
+762. Conflict resolution interface
+763. Field-level merge previews
+764. Offline permission expiry
+765. Encrypted offline data
+766. Lost-device data revocation
+767. Low-bandwidth operating mode
+768. Compressed photo upload options
+769. Metered connection preferences
+770. Background upload queues
+771. Mobile camera document scanning
+772. Voice-to-text field notes
+773. Large-touch-target mode
+774. Glove-friendly field interface
+775. Sunlight-readable interface theme
+776. Full keyboard navigation
+777. Visible keyboard focus
+778. Skip-navigation links
+779. Accessible modal dialogs
+780. Screen-reader form errors
+781. Accessible data tables
+782. Accessible chart descriptions
+783. Non-color status indicators
+784. High-contrast interface mode
+785. Adjustable text sizing
+786. Reflow at high zoom
+787. Reduced animation preferences
+788. Accessible drag alternatives
+789. Accessible file upload controls
+790. Video instruction captions
+791. Audio instruction transcripts
+792. Plain-language error explanations
+793. Form progress preservation
+794. Session timeout warnings
+795. Accessible authentication recovery
+796. Localization string management
+797. Regional number formatting
+798. Regional measurement preferences
+799. Right-to-left layout support
+800. Accessibility feedback reporting
+INTEGRATIONS AND DEVELOPER TOOLS
+801. Published OpenAPI specification
+802. Interactive API documentation
+803. Versioned public API routes
+804. API deprecation notices
+805. API compatibility policies
+806. Scoped integration credentials
+807. Integration credential rotation
+808. Per-integration rate limits
+809. API usage dashboards
+810. API request correlation IDs
+811. Cursor-based list pagination
+812. Consistent API error formats
+813. Idempotency key support
+814. Conditional update requests
+815. Bulk API operations
+816. Asynchronous operation status APIs
+817. Outbound webhook subscriptions
+818. Webhook signature verification
+819. Webhook retry schedules
+820. Webhook dead-letter queues
+821. Webhook delivery inspection
+822. Webhook event replay
+823. Webhook schema versioning
+824. Integration sandbox environments
+825. Integration connection testing
+826. Integration health monitoring
+827. Integration permission previews
+828. Integration installation approvals
+829. Integration disconnect cleanup
+830. Accounting platform connectors
+831. CRM platform connectors
+832. Job management connectors
+833. Customer support connectors
+834. Cloud document storage connectors
+835. Electronic signature connectors
+836. GIS platform connectors
+837. Weather data connectors
+838. Electricity retailer connectors
+839. Network distributor connectors
+840. Manufacturer portal connectors
+841. MQTT telemetry ingestion
+842. Modbus gateway ingestion
+843. SunSpec device mapping
+844. OCPP charger integration
+845. CSV import field mapping
+846. Import validation previews
+847. Import error correction queues
+848. Export schema selection
+849. Supported JavaScript SDK
+850. Supported Python SDK
+SECURITY, PRIVACY, AND GOVERNANCE
+851. Tenant isolation verification
+852. Central authorization policies
+853. Object-level authorization checks
+854. Attribute-based access policies
+855. Privileged action reauthentication
+856. Administrator action approval
+857. Security event dashboards
+858. Tamper-evident audit storage
+859. Audit retention configuration
+860. Audit log external forwarding
+861. Sensitive field classification
+862. Sensitive field masking
+863. Personal data discovery
+864. Personal data access requests
+865. Personal data correction requests
+866. Personal data deletion workflows
+867. Consent withdrawal handling
+868. Data residency controls
+869. Cross-border transfer records
+870. Data processing inventories
+871. Subprocessor register management
+872. Privacy impact assessments
+873. Breach response workflows
+874. Breach notification timers
+875. Security incident evidence storage
+876. Encryption key rotation
+877. Organization-managed encryption keys
+878. Secret access auditing
+879. Credential leak detection
+880. Session fixation protection
+881. CSRF protection controls
+882. Nonce-based content security policies
+883. Trusted HTML rendering policies
+884. Server-side request destination controls
+885. File upload type verification
+886. Archive extraction safety checks
+887. Dependency vulnerability triage
+888. Dependency license policies
+889. Software bill-of-materials exports
+890. Signed release artifacts
+891. Build provenance verification
+892. Security exception registers
+893. Penetration test finding tracking
+894. Security training acknowledgements
+895. Access certification evidence
+896. Retention policy simulations
+897. Automated retention enforcement
+898. Data deletion verification reports
+899. Security control ownership records
+900. Governance policy acceptance tracking
+RELIABILITY AND DATA INTEGRITY
+901. Reproducible dependency installation
+902. Pinned runtime toolchains
+903. Startup configuration validation
+904. Required secret readiness checks
+905. Database migration planning
+906. Migration rollback procedures
+907. Migration execution locks
+908. Database connection health checks
+909. Connection pool saturation alerts
+910. Transaction retry policies
+911. Database consistency checks
+912. Referential integrity monitoring
+913. Duplicate record detection
+914. Data repair review queues
+915. Background job persistence
+916. Job lease expiration
+917. Stalled worker recovery
+918. Graceful server shutdown
+919. Readiness probe endpoints
+920. Liveness probe endpoints
+921. Dependency health summaries
+922. Structured application logging
+923. Distributed request tracing
+924. Trace-to-error navigation
+925. Service-level objective dashboards
+926. Error budget tracking
+927. Latency percentile monitoring
+928. Resource exhaustion alerts
+929. Storage capacity forecasts
+930. Automated backup scheduling
+931. Backup encryption verification
+932. Backup integrity verification
+933. Automated restore drills
+934. Point-in-time database recovery
+935. Disaster recovery runbooks
+936. Recovery objective reporting
+937. Cross-region recovery planning
+938. Deployment preflight checks
+939. Staging environment parity checks
+940. Canary release controls
+941. Blue-green deployment support
+942. Automated release rollback
+943. Feature flag management
+944. Feature flag expiry tracking
+945. Configuration change histories
+946. Configuration drift detection
+947. Cache invalidation diagnostics
+948. Cache consistency checks
+949. Load shedding controls
+950. Dependency circuit breakers
+TESTING AND PRODUCT ADMINISTRATION
+951. Verified first-run setup wizard
+952. Role-specific onboarding tours
+953. Sample project isolation
+954. Clearly labelled demonstration data
+955. Demonstration data reset
+956. Production data provenance badges
+957. Contextual help panels
+958. Searchable user documentation
+959. In-product release notes
+960. Feature discovery announcements
+961. User feedback collection
+962. Feature request voting
+963. Support ticket submission
+964. Redacted diagnostic bundle export
+965. Support access consent
+966. Time-limited support access
+967. Customer satisfaction surveys
+968. Product usage analytics controls
+969. Organization usage quotas
+970. Storage quota warnings
+971. Compute quota warnings
+972. Subscription entitlement management
+973. Plan change previews
+974. Billing contact management
+975. Billing invoice access
+976. Automated entitlement reconciliation
+977. End-to-end authentication tests
+978. End-to-end project lifecycle tests
+979. End-to-end commissioning tests
+980. Compliance rule golden datasets
+981. Document extraction benchmark suites
+982. Agent regression evaluation suites
+983. Browser compatibility test matrix
+984. Mobile device test matrix
+985. Automated accessibility audits
+986. Visual regression comparisons
+987. API contract compatibility tests
+988. Database migration rehearsal tests
+989. Backup restoration acceptance tests
+990. Offline synchronization failure tests
+991. Multi-tenant isolation tests
+992. Permission boundary regression tests
+993. Concurrent editing stress tests
+994. Telemetry ingestion load tests
+995. Long-running worker stability tests
+996. Network interruption recovery tests
+997. Third-party outage simulation tests
+998. Release acceptance checklists
+999. Production smoke-test automation
+1000. Feature acceptance evidence tracking

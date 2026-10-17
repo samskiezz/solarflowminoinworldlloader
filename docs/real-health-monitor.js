@@ -9,33 +9,33 @@ class RealHealthMonitor {
         this.history = [];
         this.alerts = [];
         this.monitoring = false;
-        this.updateInterval = 15000; // 15 seconds
+        this.updateInterval = (window.SOLARFLOW_CONFIG && window.SOLARFLOW_CONFIG.pollIntervals.healthMonitor) || 30000;
         this.maxHistory = 100; // Keep last 100 measurements
-        
+
         this.init();
     }
-    
+
     init() {
         console.log('🔍 Initializing Real Health Monitor...');
         this.startMonitoring();
         this.setupEventListeners();
     }
-    
+
     startMonitoring() {
         if (this.monitoring) return;
-        
+
         this.monitoring = true;
         console.log('📊 Starting real-time health monitoring');
-        
+
         // Initial measurement
         this.updateMetrics();
-        
+
         // Regular monitoring
         this.monitoringInterval = setInterval(() => {
             this.updateMetrics();
         }, this.updateInterval);
     }
-    
+
     stopMonitoring() {
         if (this.monitoringInterval) {
             clearInterval(this.monitoringInterval);
@@ -43,47 +43,54 @@ class RealHealthMonitor {
             console.log('⏹️ Health monitoring stopped');
         }
     }
-    
-    updateMetrics() {
+
+    async updateMetrics() {
+        if (this.updating) return this.metrics;
+        this.updating = true;
         const timestamp = Date.now();
-        
-        // Collect real metrics
-        const metrics = {
-            timestamp: timestamp,
-            browser: this.getBrowserMetrics(),
-            performance: this.getPerformanceMetrics(),
-            storage: this.getStorageMetrics(),
-            network: this.getNetworkMetrics(),
-            features: this.getFeatureMetrics(),
-            system: this.getSystemMetrics()
-        };
-        
+
+        // Collect real metrics (network probing is asynchronous)
+        let metrics;
+        try {
+            metrics = {
+                timestamp: timestamp,
+                browser: this.getBrowserMetrics(),
+                performance: this.getPerformanceMetrics(),
+                storage: this.getStorageMetrics(),
+                network: await this.getNetworkMetrics(),
+                features: this.getFeatureMetrics(),
+                system: this.getSystemMetrics()
+            };
+        } finally {
+            this.updating = false;
+        }
+
         // Calculate health scores
         metrics.healthScores = this.calculateHealthScores(metrics);
         metrics.overallHealth = this.calculateOverallHealth(metrics.healthScores);
-        
+
         // Store current metrics
         this.metrics = metrics;
-        
+
         // Add to history
         this.history.push(metrics);
         if (this.history.length > this.maxHistory) {
             this.history.shift();
         }
-        
+
         // Check for alerts
         this.checkAlerts(metrics);
-        
+
         // Broadcast update
         this.broadcastUpdate(metrics);
-        
+
         return metrics;
     }
-    
+
     getBrowserMetrics() {
         const nav = navigator;
         const perf = performance;
-        
+
         return {
             userAgent: nav.userAgent,
             platform: nav.platform,
@@ -100,22 +107,22 @@ class RealHealthMonitor {
             } : null
         };
     }
-    
+
     getPerformanceMetrics() {
         const perf = performance;
-        const timing = perf.timing;
+        // Navigation Timing Level 2; performance.timing is deprecated.
         const navigation = perf.getEntriesByType('navigation')[0];
-        
+
         const metrics = {
             timeOrigin: perf.timeOrigin,
             now: perf.now(),
-            navigationStart: timing.navigationStart,
-            loadComplete: timing.loadEventEnd - timing.navigationStart,
-            domContentLoaded: timing.domContentLoadedEventEnd - timing.domContentLoadedEventStart,
+            navigationStart: perf.timeOrigin,
+            loadComplete: navigation ? Math.round(navigation.loadEventEnd) : 0,
+            domContentLoaded: navigation ? Math.round(navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart) : 0,
             firstPaint: 0,
             firstContentfulPaint: 0
         };
-        
+
         // Get paint timing
         const paintEntries = perf.getEntriesByType('paint');
         paintEntries.forEach(entry => {
@@ -125,7 +132,7 @@ class RealHealthMonitor {
                 metrics.firstContentfulPaint = entry.startTime;
             }
         });
-        
+
         // Memory metrics
         if (perf.memory) {
             metrics.memory = {
@@ -135,10 +142,10 @@ class RealHealthMonitor {
                 usagePercent: (perf.memory.usedJSHeapSize / perf.memory.jsHeapSizeLimit) * 100
             };
         }
-        
+
         return metrics;
     }
-    
+
     getStorageMetrics() {
         const metrics = {
             localStorage: this.testStorage('localStorage'),
@@ -146,18 +153,18 @@ class RealHealthMonitor {
             indexedDB: this.testIndexedDB(),
             total: 0
         };
-        
+
         // Calculate total usage
         metrics.total = (metrics.localStorage.used || 0) + (metrics.sessionStorage.used || 0);
-        
+
         return metrics;
     }
-    
+
     testStorage(storageType) {
         try {
             const storage = window[storageType];
             if (!storage) return { available: false, error: 'Not supported' };
-            
+
             // Calculate current usage
             let used = 0;
             for (let key in storage) {
@@ -165,22 +172,22 @@ class RealHealthMonitor {
                     used += (storage[key].length + key.length) * 2; // Rough estimate in bytes
                 }
             }
-            
+
             // Test write capability
             const testKey = `health-test-${Date.now()}`;
             const testValue = 'test-data';
             const writeStart = performance.now();
             storage.setItem(testKey, testValue);
             const writeTime = performance.now() - writeStart;
-            
+
             // Test read capability
             const readStart = performance.now();
             const readValue = storage.getItem(testKey);
             const readTime = performance.now() - readStart;
-            
+
             // Cleanup
             storage.removeItem(testKey);
-            
+
             return {
                 available: true,
                 used: used,
@@ -189,7 +196,7 @@ class RealHealthMonitor {
                 integrity: readValue === testValue,
                 itemCount: storage.length
             };
-            
+
         } catch (error) {
             return {
                 available: false,
@@ -197,12 +204,12 @@ class RealHealthMonitor {
             };
         }
     }
-    
+
     testIndexedDB() {
         if (typeof indexedDB === 'undefined') {
             return { available: false, error: 'Not supported' };
         }
-        
+
         try {
             // Basic IndexedDB availability test
             return {
@@ -216,7 +223,7 @@ class RealHealthMonitor {
             };
         }
     }
-    
+
     async getNetworkMetrics() {
         const metrics = {
             onLine: navigator.onLine,
@@ -230,32 +237,33 @@ class RealHealthMonitor {
             throughput: 0,
             apis: {}
         };
-        
-        // Test API response times
+
+        // Probe small files only. The product catalogue is several MB and
+        // was previously re-downloaded every 15 seconds just to time it.
         const testApis = [
             './progress.json',
-            './cer-product-database.json',
-            './hive_state.json'
+            './cer-product-summary.json',
+            './status.json'
         ];
-        
+
         for (const api of testApis) {
             try {
                 const start = performance.now();
-                const response = await fetch(api, { cache: 'no-cache' });
+                const response = await fetch(api, { cache: 'no-cache', method: 'HEAD' });
                 const end = performance.now();
-                
+
                 metrics.apis[api] = {
                     responseTime: end - start,
                     status: response.status,
                     ok: response.ok,
                     size: response.headers.get('content-length')
                 };
-                
+
                 // Update average latency
                 if (response.ok) {
                     metrics.latency = (metrics.latency + (end - start)) / 2;
                 }
-                
+
             } catch (error) {
                 metrics.apis[api] = {
                     error: error.message,
@@ -263,10 +271,10 @@ class RealHealthMonitor {
                 };
             }
         }
-        
+
         return metrics;
     }
-    
+
     getFeatureMetrics() {
         const features = {
             webWorkers: typeof Worker !== 'undefined',
@@ -286,10 +294,10 @@ class RealHealthMonitor {
             indexedDB: typeof indexedDB !== 'undefined',
             webAssembly: typeof WebAssembly !== 'undefined'
         };
-        
+
         const supported = Object.values(features).filter(Boolean).length;
         const total = Object.keys(features).length;
-        
+
         return {
             features: features,
             supported: supported,
@@ -297,7 +305,7 @@ class RealHealthMonitor {
             supportPercent: (supported / total) * 100
         };
     }
-    
+
     testWebGL() {
         try {
             const canvas = document.createElement('canvas');
@@ -307,7 +315,7 @@ class RealHealthMonitor {
             return false;
         }
     }
-    
+
     testWebGL2() {
         try {
             const canvas = document.createElement('canvas');
@@ -317,7 +325,7 @@ class RealHealthMonitor {
             return false;
         }
     }
-    
+
     testCanvas() {
         try {
             const canvas = document.createElement('canvas');
@@ -326,16 +334,13 @@ class RealHealthMonitor {
             return false;
         }
     }
-    
+
     testAsyncAwait() {
-        try {
-            eval('(async () => {})');
-            return true;
-        } catch (e) {
-            return false;
-        }
+        // This file is itself written with async/await, so if it parsed the
+        // feature exists. No eval() needed (and CSP forbids it).
+        return true;
     }
-    
+
     getSystemMetrics() {
         const metrics = {
             timestamp: Date.now(),
@@ -347,7 +352,7 @@ class RealHealthMonitor {
             visibilityState: document.visibilityState,
             hidden: document.hidden
         };
-        
+
         // Screen metrics
         if (screen) {
             metrics.screen = {
@@ -360,20 +365,20 @@ class RealHealthMonitor {
                 orientation: screen.orientation ? screen.orientation.type : 'unknown'
             };
         }
-        
+
         // Viewport metrics
         metrics.viewport = {
             width: window.innerWidth,
             height: window.innerHeight,
             devicePixelRatio: window.devicePixelRatio
         };
-        
+
         return metrics;
     }
-    
+
     calculateHealthScores(metrics) {
         const scores = {};
-        
+
         // Performance score (0-100)
         let perfScore = 100;
         if (metrics.performance.memory) {
@@ -382,33 +387,33 @@ class RealHealthMonitor {
             else if (memUsage > 60) perfScore -= 15;
             else if (memUsage > 40) perfScore -= 5;
         }
-        
+
         if (metrics.performance.loadComplete > 5000) perfScore -= 20; // Slow load
         if (metrics.performance.firstContentfulPaint > 3000) perfScore -= 10; // Slow FCP
-        
+
         scores.performance = Math.max(0, perfScore);
-        
+
         // Storage score (0-100)
         let storageScore = 100;
         if (!metrics.storage.localStorage.available) storageScore -= 50;
         if (!metrics.storage.sessionStorage.available) storageScore -= 30;
         if (!metrics.storage.indexedDB.available) storageScore -= 20;
-        
+
         scores.storage = Math.max(0, storageScore);
-        
+
         // Network score (0-100)
         let networkScore = navigator.onLine ? 100 : 0;
         if (metrics.network.latency > 1000) networkScore -= 30;
         else if (metrics.network.latency > 500) networkScore -= 15;
-        
+
         scores.network = Math.max(0, networkScore);
-        
+
         // Feature support score (0-100)
         scores.features = metrics.features.supportPercent;
-        
+
         return scores;
     }
-    
+
     calculateOverallHealth(scores) {
         const weights = {
             performance: 0.3,
@@ -416,12 +421,12 @@ class RealHealthMonitor {
             network: 0.2,
             features: 0.3
         };
-        
+
         let overallScore = 0;
         for (const [metric, score] of Object.entries(scores)) {
             overallScore += score * (weights[metric] || 0);
         }
-        
+
         // Determine health status
         let status, color;
         if (overallScore >= 80) {
@@ -440,7 +445,7 @@ class RealHealthMonitor {
             status = 'critical';
             color = '#d32f2f';
         }
-        
+
         return {
             score: Math.round(overallScore),
             status: status,
@@ -448,10 +453,10 @@ class RealHealthMonitor {
             timestamp: Date.now()
         };
     }
-    
+
     checkAlerts(metrics) {
         const newAlerts = [];
-        
+
         // Memory usage alert
         if (metrics.performance.memory && metrics.performance.memory.usagePercent > 90) {
             newAlerts.push({
@@ -460,7 +465,7 @@ class RealHealthMonitor {
                 timestamp: Date.now()
             });
         }
-        
+
         // Network alert
         if (!navigator.onLine) {
             newAlerts.push({
@@ -475,7 +480,7 @@ class RealHealthMonitor {
                 timestamp: Date.now()
             });
         }
-        
+
         // Storage alerts
         if (!metrics.storage.localStorage.available) {
             newAlerts.push({
@@ -484,41 +489,41 @@ class RealHealthMonitor {
                 timestamp: Date.now()
             });
         }
-        
+
         // Add new alerts
         this.alerts = [...newAlerts, ...this.alerts.slice(0, 9)]; // Keep last 10 alerts
     }
-    
+
     broadcastUpdate(metrics) {
         // Broadcast to all listening components
         window.dispatchEvent(new CustomEvent('health-metrics-update', {
             detail: metrics
         }));
-        
+
         // Update specific UI elements
         this.updateUI(metrics);
     }
-    
+
     updateUI(metrics) {
         // Update health score displays
         document.querySelectorAll('.health-score').forEach(el => {
             el.textContent = metrics.overallHealth.score + '%';
             el.style.color = metrics.overallHealth.color;
         });
-        
+
         // Update health status displays
         document.querySelectorAll('.health-status').forEach(el => {
             el.textContent = metrics.overallHealth.status.toUpperCase();
             el.style.color = metrics.overallHealth.color;
         });
-        
+
         // Update progress bars
         document.querySelectorAll('.health-progress-bar').forEach(el => {
             const fill = el.querySelector('.progress-fill') || el;
             fill.style.width = metrics.overallHealth.score + '%';
             fill.style.backgroundColor = metrics.overallHealth.color;
         });
-        
+
         // Update individual metric displays
         for (const [metric, score] of Object.entries(metrics.healthScores)) {
             const elements = document.querySelectorAll(`[data-metric="${metric}"]`);
@@ -527,47 +532,54 @@ class RealHealthMonitor {
             });
         }
     }
-    
+
     setupEventListeners() {
-        // Listen for page visibility changes
+        // Pause polling while the tab is hidden; resume (and refresh) when visible.
         document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && this.monitoring) {
-                // Page became visible, update metrics immediately
+            if (document.hidden) {
+                if (this.monitoringInterval) {
+                    clearInterval(this.monitoringInterval);
+                    this.monitoringInterval = null;
+                }
+            } else if (this.monitoring) {
                 this.updateMetrics();
+                if (!this.monitoringInterval) {
+                    this.monitoringInterval = setInterval(() => this.updateMetrics(), this.updateInterval);
+                }
             }
         });
-        
+
         // Listen for online/offline events
         window.addEventListener('online', () => {
             this.updateMetrics();
         });
-        
+
         window.addEventListener('offline', () => {
             this.updateMetrics();
         });
     }
-    
+
     // Public API
     getCurrentMetrics() {
         return { ...this.metrics };
     }
-    
+
     getHistory() {
         return [...this.history];
     }
-    
+
     getAlerts() {
         return [...this.alerts];
     }
-    
+
     clearAlerts() {
         this.alerts = [];
     }
-    
+
     generateReport() {
         const metrics = this.getCurrentMetrics();
         const timestamp = new Date().toLocaleString();
-        
+
         return {
             title: 'Real System Health Report',
             timestamp: timestamp,
@@ -585,26 +597,26 @@ class RealHealthMonitor {
             recommendations: this.generateRecommendations(metrics)
         };
     }
-    
+
     generateRecommendations(metrics) {
         const recommendations = [];
-        
+
         if (metrics.healthScores.performance < 70) {
             recommendations.push('Consider closing unused browser tabs to improve performance');
         }
-        
+
         if (!metrics.storage.localStorage.available) {
             recommendations.push('Enable localStorage for full functionality');
         }
-        
+
         if (metrics.healthScores.network < 50) {
             recommendations.push('Check network connection for optimal experience');
         }
-        
+
         if (metrics.features.supportPercent < 80) {
             recommendations.push('Update browser for better feature support');
         }
-        
+
         return recommendations;
     }
 }
