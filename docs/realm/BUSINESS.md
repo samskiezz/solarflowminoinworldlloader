@@ -98,7 +98,9 @@ Export from each system (or use the server's raw files) into a folder and run
 node scripts/business-snapshot.mjs data/business/raw data/business/model.json
 ```
 
-The script lists the file names it understands. Import the result in the game under
+The script lists the file names it understands; per-job detail records go in `details/*.json`, extra
+Gmail pages in `gmail-pages/*.json` and per-folder Drive listings in `drive-folders/*.json` (merge them
+into `drive.json` → `files` keyed by folder id). Import the result in the game under
 **Settings › Business › Import a snapshot file**; it stays in the browser's private cache. `data/` is
 gitignored, so neither the exports nor the model can reach the public site by accident.
 

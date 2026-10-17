@@ -5,11 +5,11 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **728** |
-| Verified in Node (this run) | 407 passed, 0 failed |
-| Browser-verified (DOM) features | 321 |
+| Registered features | **731** |
+| Verified in Node (this run) | 409 passed, 0 failed |
+| Browser-verified (DOM) features | 322 |
 | Modules | 115 |
-| Generated | 2026-10-11T14:58:45.233Z |
+| Generated | 2026-10-12T03:18:35.503Z |
 
 ## By area
 
@@ -18,8 +18,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | Core shell | 104 |
 | Solar engineering domain | 124 |
 | Crew simulation | 101 |
-| Shell | 81 |
-| Windows (game UI) | 239 |
+| Shell | 83 |
+| Windows (game UI) | 240 |
 | 3D game world | 79 |
 
 ## business/bank (3)
@@ -106,7 +106,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 8 | `biz.schema.extract` | Job numbers and street addresses can be lifted out of free text | node + browser |
 | 9 | `biz.schema.dates` | Day and business-day arithmetic | node + browser |
 
-## business/servicem8 (5)
+## business/servicem8 (6)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -114,7 +114,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `biz.sm8.stages` | Status plus billing flags map to realm stages (quote, approval, install, claim, handover, complete, lost) | node + browser |
 | 3 | `biz.sm8.sites` | Jobs at the same address collapse into one site that knows if it is installed | node + browser |
 | 4 | `biz.sm8.summaries` | Job summaries supply invoice, payment, schedule and customer-response flags | node + browser |
-| 5 | `biz.sm8.stats` | Job statistics: win rate, pipeline value, awaiting payment, installed base | node + browser |
+| 5 | `biz.sm8.details` | A job known only from a summary is completed by its detail record (title, address, description, checklist) | node + browser |
+| 6 | `biz.sm8.stats` | Job statistics: win rate, pipeline value, awaiting payment, installed base | node + browser |
 
 ## business/social (4)
 
@@ -143,14 +144,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `biz.sync.encrypted` | Encrypted snapshots import with a passphrase and export sealed; a wrong passphrase is refused | node + browser |
 | 6 | `biz.sync.world` | Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links | node + browser |
 
-## business/xero (4)
+## business/xero (5)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
 | 1 | `biz.xero.invoice` | Xero invoices normalise and link to the ServiceM8 job and site via the reference | node + browser |
 | 2 | `biz.xero.kpis` | Finance KPIs: margins, monthly run-rate, runway, DSO, labour share, customer concentration | node + browser |
-| 3 | `biz.xero.bills` | Bills normalise with reimbursement detection | node + browser |
-| 4 | `biz.xero.unreconciled` | Unreconciled bank entries normalise from the API shape and the table shape | node + browser |
+| 3 | `biz.xero.lines` | Invoice and bill line items are kept and classified (battery, solar, ev, labour), feeding product mix and supplier spend | node + browser |
+| 4 | `biz.xero.bills` | Bills normalise with reimbursement detection | node + browser |
+| 5 | `biz.xero.unreconciled` | Unreconciled bank entries normalise from the API shape and the table shape | node + browser |
 
 ## core/audio (4)
 
@@ -1029,7 +1031,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `win.documents.missing` | Missing tab lists installed sites without a pack with a jump to the site file | browser |
 | 3 | `win.documents.standard` | Standard tab lists the ten required documents | browser |
 
-## windows/finance (5)
+## windows/finance (6)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -1037,7 +1039,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `win.finance.receivables` | Receivables tab ages every invoice and links overdue ones to jobs | browser |
 | 3 | `win.finance.pnl` | P&L tab lists income, cost of sales and every expense account with share of income | browser |
 | 4 | `win.finance.invoices` | Invoices and bills tables with job links | browser |
-| 5 | `win.finance.bank` | Bank tab: balances, variance, recurring payments, unreconciled queue and transactions | browser |
+| 5 | `win.finance.mix` | Invoices tab shows outstanding totals, what was sold by line-item kind, spend by supplier and invoiced by month | browser |
+| 6 | `win.finance.bank` | Bank tab: balances, variance, recurring payments, unreconciled queue and transactions | browser |
 
 ## windows/handover (4)
 

@@ -14,12 +14,12 @@
  *
  *   servicem8-jobs-*.json      { jobs: [...] }                 (one or more lists)
  *   servicem8-summaries*.json  { job_summaries: [...] }
- *   servicem8-details*.json    [ { job: {...}, cards: [...] } ]
+ *   servicem8-details*.json    [ { job: {...}, cards: [...] } ]   (also details/*.json)
  *   servicem8-staff.json       { staff: [...] }
  *   xero-summary.json          { org, pnl, position, cash, agedReceivables, agedPayables, topCustomers }
  *   xero-invoices*.json        { columns, rows } or { invoices: [...] }
  *   xero-bills*.json, xero-unreconciled*.json
- *   gmail-*.json               { threads: [...] }
+ *   gmail-*.json               { threads: [...] }               (also gmail-pages/*.json)
  *   drive.json                 { root, folders, files }
  *   calendar.json              { calendars, events }
  *   bank.json                  { banks, accounts, transactions }
@@ -44,6 +44,8 @@ const { encryptJson, isModel } = { ...(await import(path.join(ROOT, 'docs/realm/
 
 const read = (f) => JSON.parse(fs.readFileSync(path.join(rawDir, f), 'utf8'));
 const files = fs.existsSync(rawDir) ? fs.readdirSync(rawDir).filter((f) => f.endsWith('.json')).sort() : [];
+/** JSON files inside a sub-folder of rawDir (details/, gmail-pages/), relative to rawDir. */
+const sub = (dir) => { const d = path.join(rawDir, dir); return fs.existsSync(d) ? fs.readdirSync(d).filter((f) => f.endsWith('.json')).sort().map((f) => path.join(dir, f)) : []; };
 const pick = (re) => files.filter((f) => re.test(f));
 
 const raw = {};
@@ -52,15 +54,16 @@ if (Object.keys(company).length) raw.company = company;
 
 if (files.includes('servicem8.json')) raw.servicem8 = read('servicem8.json');
 else {
-    const lists = pick(/^servicem8-jobs-.*\.json$/).map(read); const summaries = pick(/^servicem8-summaries.*\.json$/).map(read); const details = pick(/^servicem8-details.*\.json$/).flatMap((f) => { const d = read(f); return Array.isArray(d) ? d : [d]; });
-    const staff = files.includes('servicem8-staff.json') ? read('servicem8-staff.json').staff : [];
-    if (lists.length || summaries.length) raw.servicem8 = { lists, summaries, details, staff, queues: files.includes('servicem8-queues.json') ? read('servicem8-queues.json').data || [] : [], categories: [] };
+    const lists = pick(/^servicem8-jobs-.*\.json$/).map(read); const summaries = pick(/^servicem8-summaries.*\.json$/).map(read); const details = [...pick(/^servicem8-details.*\.json$/), ...sub('details')].flatMap((f) => { const d = read(f); return Array.isArray(d) ? d : [d]; });
+    const staffFile = files.includes('servicem8-staff.json') ? read('servicem8-staff.json') : {};
+    const queues = files.includes('servicem8-queues.json') ? read('servicem8-queues.json').data || [] : staffFile.queues || [];
+    if (lists.length || summaries.length) raw.servicem8 = { lists, summaries, details, staff: staffFile.staff || [], queues, categories: staffFile.categories || [] };
 }
 if (files.includes('xero.json')) raw.xero = read('xero.json');
 else if (files.includes('xero-summary.json') || pick(/^xero-invoices/).length) raw.xero = { summary: files.includes('xero-summary.json') ? read('xero-summary.json') : null, invoices: pick(/^xero-invoices.*\.json$/).map(read), bills: pick(/^xero-bills.*\.json$/).map(read), unreconciled: pick(/^xero-unreconciled.*\.json$/).map(read) };
 if (files.includes('google.json')) { const g = read('google.json'); if (g.gmail) raw.gmail = { pages: g.gmail.pages }; if (g.drive) raw.drive = g.drive; if (g.calendar) raw.calendar = g.calendar; }
 else {
-    const pages = pick(/^gmail-.*\.json$/).map(read); if (pages.length) raw.gmail = { pages };
+    const pages = [...pick(/^gmail-.*\.json$/), ...sub('gmail-pages')].map(read); if (pages.length) raw.gmail = { pages };
     if (files.includes('drive.json')) raw.drive = read('drive.json');
     if (files.includes('calendar.json')) raw.calendar = read('calendar.json');
 }

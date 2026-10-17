@@ -1,7 +1,7 @@
 {
- "at": "2026-10-11T14:34:06.645Z",
- "total": 698,
- "passed": 698,
+ "at": "2026-10-12T03:21:55.739Z",
+ "total": 731,
+ "passed": 731,
  "failed": 0,
  "results": [
   {
@@ -1591,7 +1591,7 @@
   {
    "id": "events.achievementCatalogue",
    "module": "sim/events",
-   "title": "Achievement catalogue (12)",
+   "title": "Achievement catalogue (15)",
    "status": "passed"
   },
   {
@@ -1640,6 +1640,12 @@
    "id": "agent.efficiency",
    "module": "sim/agent",
    "title": "Efficiency combines needs and traits",
+   "status": "passed"
+  },
+  {
+   "id": "agent.genes",
+   "module": "sim/agent",
+   "title": "Agents carry DNA, family fields and skill aptitudes that scale XP; all of it round-trips",
    "status": "passed"
   },
   {
@@ -1700,6 +1706,30 @@
    "id": "world.serialise",
    "module": "sim/world",
    "title": "World round-trips through JSON",
+   "status": "passed"
+  },
+  {
+   "id": "world.lifecycle",
+   "module": "sim/world",
+   "title": "Over time minions befriend each other, pair up and have children who grow, inherit and can be recruited when grown",
+   "status": "passed"
+  },
+  {
+   "id": "world.death",
+   "module": "sim/world",
+   "title": "The old die and are remembered at the memorial; the next child born carries their soul and a share of their skills",
+   "status": "passed"
+  },
+  {
+   "id": "world.arrangeMatch",
+   "module": "sim/world",
+   "title": "The player can arrange a match between two adults for credits; family and the already-partnered are refused",
+   "status": "passed"
+  },
+  {
+   "id": "world.epoch",
+   "module": "sim/world",
+   "title": "The world reports its company epoch from installed work, crew and resolved findings",
    "status": "passed"
   },
   {
@@ -1766,6 +1796,66 @@
    "id": "roster.uniqueTitles",
    "module": "sim/roster",
    "title": "Every minion has a distinct solar title",
+   "status": "passed"
+  },
+  {
+   "id": "genes.dna",
+   "module": "sim/genetics",
+   "title": "Every minion carries deterministic digital DNA (768 base pairs over 23 loci)",
+   "status": "passed"
+  },
+  {
+   "id": "genes.traits",
+   "module": "sim/genetics",
+   "title": "Loci project to stable traits in [0, 1]; the named personality traits and skill aptitudes derive from them",
+   "status": "passed"
+  },
+  {
+   "id": "genes.breed",
+   "module": "sim/genetics",
+   "title": "Breeding is crossover plus mutation: children are related to both parents and never identical to either",
+   "status": "passed"
+  },
+  {
+   "id": "genes.appearance",
+   "module": "sim/genetics",
+   "title": "Looks (hue, height, build, skin) come from the genes so families resemble each other",
+   "status": "passed"
+  },
+  {
+   "id": "life.stages",
+   "module": "sim/lifecycle",
+   "title": "Minions age through infant, child, adolescent, adult and elder with rising capability; founders arrive grown",
+   "status": "passed"
+  },
+  {
+   "id": "life.social",
+   "module": "sim/lifecycle",
+   "title": "Encounters build friendships or rivalries from genetic compatibility and can turn close adult friends into partners",
+   "status": "passed"
+  },
+  {
+   "id": "life.breed",
+   "module": "sim/lifecycle",
+   "title": "Partners breed a child that inherits genes, looks, two traits, a quarter of each parent's skills and a surname; family links and cooldowns apply",
+   "status": "passed"
+  },
+  {
+   "id": "life.death",
+   "module": "sim/lifecycle",
+   "title": "Only the very old die, probabilistically past their genetic lifespan; the family tree lists the living and the remembered",
+   "status": "passed"
+  },
+  {
+   "id": "epochs.ladder",
+   "module": "sim/epochs",
+   "title": "Twenty-four company epochs with rising thresholds, each with a theme and a gift",
+   "status": "passed"
+  },
+  {
+   "id": "epochs.progress",
+   "module": "sim/epochs",
+   "title": "The company index places the business on the ladder with progress to the next milestone",
    "status": "passed"
   },
   {
@@ -1967,6 +2057,12 @@
    "status": "passed"
   },
   {
+   "id": "biz.sm8.details",
+   "module": "business/servicem8",
+   "title": "A job known only from a summary is completed by its detail record (title, address, description, checklist)",
+   "status": "passed"
+  },
+  {
    "id": "biz.sm8.stats",
    "module": "business/servicem8",
    "title": "Job statistics: win rate, pipeline value, awaiting payment, installed base",
@@ -1982,6 +2078,12 @@
    "id": "biz.xero.kpis",
    "module": "business/xero",
    "title": "Finance KPIs: margins, monthly run-rate, runway, DSO, labour share, customer concentration",
+   "status": "passed"
+  },
+  {
+   "id": "biz.xero.lines",
+   "module": "business/xero",
+   "title": "Invoice and bill line items are kept and classified (battery, solar, ev, labour), feeding product mix and supplier spend",
    "status": "passed"
   },
   {
@@ -2189,9 +2291,63 @@
    "status": "passed"
   },
   {
+   "id": "biz.sync.social",
+   "module": "business/sync",
+   "title": "Social drafts wait for approval, can be edited and dismissed, open enquiries are tracked, and publishing goes through the server only once approved",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sync.encrypted",
+   "module": "business/sync",
+   "title": "Encrypted snapshots import with a passphrase and export sealed; a wrong passphrase is refused",
+   "status": "passed"
+  },
+  {
    "id": "biz.sync.world",
    "module": "business/sync",
    "title": "Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links",
+   "status": "passed"
+  },
+  {
+   "id": "biz.social.import",
+   "module": "business/social",
+   "title": "Facebook pages and Instagram accounts import into one feed of posts, comments and messages with engagement",
+   "status": "passed"
+  },
+  {
+   "id": "biz.social.unanswered",
+   "module": "business/social",
+   "title": "Unanswered questions and price enquiries in comments and messages are found and flagged as leads",
+   "status": "passed"
+  },
+  {
+   "id": "biz.social.stats",
+   "module": "business/social",
+   "title": "Cadence, engagement rate and best posting day/hour are measured from the history",
+   "status": "passed"
+  },
+  {
+   "id": "biz.social.drafts",
+   "module": "business/social",
+   "title": "Minions draft posts from recent installs (suburb and system, never the customer), the market and the season, plus suggested replies",
+   "status": "passed"
+  },
+  {
+   "id": "biz.crypto.roundtrip",
+   "module": "business/crypto",
+   "title": "A snapshot seals with AES-256-GCM under a PBKDF2 passphrase, gzipped, and opens again byte for byte",
+   "status": "passed"
+  },
+  {
+   "id": "biz.crypto.wrongKey",
+   "module": "business/crypto",
+   "title": "A wrong passphrase or a tampered envelope is refused, never half-decrypted",
+   "status": "passed"
+  },
+  {
+   "id": "biz.crypto.passphrase",
+   "module": "business/crypto",
+   "title": "Generated passphrases are five words and a number",
    "status": "passed"
   },
   {
@@ -2330,6 +2486,12 @@
    "id": "win.crew.hireNeedsCredits",
    "module": "windows/crew",
    "title": "Hiring is refused without credits",
+   "status": "passed"
+  },
+  {
+   "id": "win.crew.family",
+   "module": "windows/crew",
+   "title": "Family tab shows population, the company epoch, the family tree, genes and lets the player arrange a match",
    "status": "passed"
   },
   {
@@ -3515,6 +3677,12 @@
    "status": "passed"
   },
   {
+   "id": "win.finance.mix",
+   "module": "windows/finance",
+   "title": "Invoices tab shows outstanding totals, what was sold by line-item kind, spend by supplier and invoiced by month",
+   "status": "passed"
+  },
+  {
    "id": "win.finance.bank",
    "module": "windows/finance",
    "title": "Bank tab: balances, variance, recurring payments, unreconciled queue and transactions",
@@ -3590,6 +3758,36 @@
    "id": "win.staff.cost",
    "module": "windows/staff",
    "title": "Cost tab ranks labour cost with revenue per labour dollar",
+   "status": "passed"
+  },
+  {
+   "id": "win.social.overview",
+   "module": "windows/social",
+   "title": "Overview shows every account with followers, cadence, engagement, open enquiries and drafts ready",
+   "status": "passed"
+  },
+  {
+   "id": "win.social.inbox",
+   "module": "windows/social",
+   "title": "Inbox lists unanswered comments and messages, leads first, with a suggested reply, mark-replied and lead-job creation",
+   "status": "passed"
+  },
+  {
+   "id": "win.social.drafts",
+   "module": "windows/social",
+   "title": "Drafts can be edited, given platforms and an image, approved into the queue or dismissed",
+   "status": "passed"
+  },
+  {
+   "id": "win.social.queue",
+   "module": "windows/social",
+   "title": "Queue shows approved drafts with publish/copy and explains when the server has publishing off",
+   "status": "passed"
+  },
+  {
+   "id": "win.social.posts",
+   "module": "windows/social",
+   "title": "Posts tab lists the history across platforms with engagement and links",
    "status": "passed"
   },
   {

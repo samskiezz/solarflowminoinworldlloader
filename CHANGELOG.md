@@ -2,6 +2,36 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.8.0] - 2026-10-12
+
+### The whole business, not a sample
+
+The first real model was built from the first 100 jobs per status, 90 days of email and summary-only
+finance. This release pulls everything the connectors hold and makes the importers keep it.
+
+- **ServiceM8, complete**: every job the account has (all four saved filters plus the action-required,
+  awaiting-approval, quotes and awaiting-payment system filters, de-duplicated by uuid) and a full job
+  record for each one – title, address, description, checklist, photos – so summary-only jobs are
+  completed by their detail record (`biz.sm8.details`). Staff, queues and categories ride in one file.
+- **Xero, line by line**: every sales invoice and bill since the organisation started, with line items
+  classified by what was sold or bought (battery, solar, EV, electrical, labour, adjustment, vehicle,
+  overhead), an address and job number recovered from the first line when the reference is empty,
+  amount paid, tax and days overdue. New KPIs: outstanding receivables and payables from the invoices
+  themselves, product mix, invoiced and billed by month, customer and supplier spend tables. The chart
+  of accounts, every contact and the unreconciled queue back to the first month are exported too. The
+  server adapter maps Xero line items the same way.
+- **Gmail, the whole mailbox**: inbox and sent, before and after the 90-day window, paged until the end
+  (`gmail-pages/`). Customers waiting more than 30 business days roll up into one finding instead of
+  one each, so the live queue stays readable.
+- **Drive, every folder**: each handover folder is listed directly (`drive-folders/`), so pack scores
+  come from the real contents rather than title searches.
+- **Bank**: the full feed for both accounts; duplicate-payment findings under $1,000 roll up into one.
+- **Calendar**: every event from the first month, not just the next quarter.
+- Finance › Invoices now shows outstanding totals, what was sold by line-item kind, spend by supplier,
+  invoiced by customer and by month; invoice rows carry their line items for search. Two new rules:
+  supplier concentration and unpaid invoices by customer. The snapshot script reads `details/` and
+  `gmail-pages/` sub-folders and queues/categories from the staff file.
+
 ## [2.7.0] - 2026-10-11
 
 ### Minions that breed, a company that climbs epochs, and social media run by the crew

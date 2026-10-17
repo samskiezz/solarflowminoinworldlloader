@@ -11,7 +11,7 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0)
+## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0)
 
 `docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
 third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
@@ -73,6 +73,14 @@ skills, grow up in town, become elders and are remembered at the memorial (Crew 
 climbs 24 real solar-business epochs. Facebook Pages and Instagram Business are read like the other
 connectors: the crew finds unanswered enquiries, drafts posts from real installs and waits for your
 approval before anything is published (Social, Shift+J).
+
+### The complete business (2.8.0)
+
+Every ServiceM8 job with its full record, every Xero invoice and bill down to the line item (classified
+by what was sold or bought), the whole mailbox, every handover folder listed directly, the full bank
+feed and the calendar from the first month. Finance › Invoices shows outstanding totals, product mix,
+spend by supplier and invoiced by month; the per-item findings that would otherwise number in the
+hundreds roll up so the queue stays readable.
 
 ## What the data is (and is not)
 
