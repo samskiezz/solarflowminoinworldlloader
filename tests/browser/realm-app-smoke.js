@@ -14,7 +14,9 @@ server.listen(port, async () => {
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
-    page.on('console', (m) => { if (m.type() === 'error') errors.push(`console: ${m.text()}`); });
+    // Optional resources the site probes for (a sealed business snapshot shipped next to it) may legitimately be absent.
+    const optional = /business-snapshot\.enc\.json/;
+    page.on('console', (m) => { if (m.type() === 'error' && !(optional.test((m.location() && m.location().url) || '') && /404/.test(m.text()))) errors.push(`console: ${m.text()}`); });
     try {
         await page.goto(`http://127.0.0.1:${port}/realm/index.html`);
         await page.waitForSelector('#realm-title:not(.hidden)', { timeout: 30000 });

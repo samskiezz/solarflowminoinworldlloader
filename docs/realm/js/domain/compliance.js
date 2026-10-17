@@ -12,6 +12,7 @@ import { searchStandards, findClause } from './standards.js';
 import { DNSPS, dnspById } from './dnsp.js';
 import { arrayMaxVoltage, systemVoltageLimit, stringCableCurrent, dcVoltageDrop, dcAcRatio, STRING_CABLE_CURRENT_FACTOR, DC_VOLTAGE_DROP_LIMIT_PCT } from './pv.js';
 import { requiredLabels } from './labels.js';
+import { searchLibrary, sourceOf } from './library.js';
 
 export const VERSION = '2.9.0';
 
@@ -78,6 +79,8 @@ export function processQuery(query, context = {}) {
     const wordHits = hits.length ? hits : rankedClauseHits(words).slice(0, 4);
     const dnsp = context.dnsp ? dnspById(context.dnsp) : null;
     const evidence = wordHits.map((h) => `${h.standard} Cl ${h.ref} (${h.title}): ${h.summary}`);
+    const libraryHits = context.library ? searchLibrary(context.library, q, { limit: 3 }) : [];
+    for (const p of libraryHits) { const src = sourceOf(context.library, p); evidence.push(`${p.code}${p.clauses && p.clauses.length ? ` Cl ${p.clauses[0]}` : ''} (${src && src.title ? src.title : 'library'}): ${p.text.slice(0, 260).replace(/\s+\S*$/, '')}…`); }
     if (dnsp) evidence.push(`${dnsp.name}: basic export allowance ${dnsp.exportLimitKw[1]} kW single-phase / ${dnsp.exportLimitKw[3]} kW three-phase. ${dnsp.notes || ''}`.trim());
     const hazards = context.hazards || detectHazards(q);
     const controls = context.controls || (hazards.length ? hazards.map((hz) => (/live|shock|arc/.test(hz) ? 'isolate and prove dead before work' : /fall/.test(hz) ? 'edge protection or harness' : /fire/.test(hz) ? 'isolation and clearances to AS/NZS standards' : /asbestos/.test(hz) ? 'licensed removalist and no cutting' : 'stop work until conditions clear')) : []);
@@ -90,7 +93,7 @@ export function processQuery(query, context = {}) {
     return {
         query: q, refused: assessed.verdict === 'refused', verdict: assessed.verdict,
         tier: cite.tier, reason: cite.reason, alsoApplies: cite.alsoApplies, citations: cite.citations, basis: cite.basis, conservativeDefault: cite.conservativeDefault,
-        evidence, hazards, controls, answer: assessed.courtSafeText, raw, tests: assessed.tests, disclaimer: assessed.disclaimer, legalFraming: assessed.legalFraming, conservativeAlternative: assessed.conservativeAlternative, refusal: assessed.refusal,
+        evidence, libraryHits: libraryHits.map((p) => ({ id: p.id, bookId: p.bookId, code: p.code, clauses: p.clauses, heading: p.heading, text: p.text, source: sourceOf(context.library, p) })), hazards, controls, answer: assessed.courtSafeText, raw, tests: assessed.tests, disclaimer: assessed.disclaimer, legalFraming: assessed.legalFraming, conservativeAlternative: assessed.conservativeAlternative, refusal: assessed.refusal,
         auditTrail: assessed.package.auditTrail, category, courtSafe: true, systemVersion: VERSION, timestamp
     };
 }
@@ -161,13 +164,14 @@ export function catalogue() {
 }
 
 /** A health record for the Engines tab: what is live, how much of the catalogue exists, the crew on duty and the last self-test. */
-export function systemHealth({ crew = 0, selfTest = null, llmConfigured = false, businessLoaded = false } = {}) {
+export function systemHealth({ crew = 0, selfTest = null, llmConfigured = false, businessLoaded = false, library = null } = {}) {
     const cat = catalogue();
     const engines = [
         { id: 'hierarchy', name: 'Six-tier regulatory hierarchy', status: 'active', detail: `${TIERS.length} tiers` },
         { id: 'courtsafe', name: 'Court-safe framework', status: 'active', detail: '5 critical tests' },
         { id: 'compliance', name: 'Compliance query engine', status: 'active', detail: `v${VERSION}` },
         { id: 'pipeline', name: 'Document and data pipeline', status: 'active', detail: 'classify · queue · knowledge · validate' },
+        { id: 'library', name: 'Library (web-compiled knowledge)', status: library && library.booksLoaded ? 'active' : 'standby', detail: library && library.booksLoaded ? `${library.booksLoaded} books · ${library.passages} passages` : 'run scripts/knowledge-harvest.mjs' },
         { id: 'narrative', name: 'Narrative engine', status: 'active', detail: 'archetypes · quests · conflicts' },
         { id: 'shifts', name: 'Shift roster', status: 'active', detail: 'three shifts · work cycles' },
         { id: 'llm', name: 'LLM bridge', status: llmConfigured ? 'active' : 'standby', detail: llmConfigured ? 'configured' : 'offline persona replies' },
@@ -180,11 +184,12 @@ export function systemHealth({ crew = 0, selfTest = null, llmConfigured = false,
 const INSTALL = { modulesPerString: 12, voc: 49.5, vmp: 41.2, isc: 13.9, imp: 13.2, tempCoeffVoc: -0.28, tMin: 2, installationClass: 'domestic', stringsInParallel: 2, cableRatingA: 30, cableMm2: 6, cableLengthM: 20, arrayKwDc: 10.56, inverterKwAc: 8.2, gridConnected: true, inverters: [{ model: 'G8', standard: 'AS/NZS 4777.2:2020' }], dcIsolatorAtInverter: true, arcDetection: false, labelsFitted: 8 };
 export const FEATURES = [
     { id: 'compliance.processQuery', title: 'A question comes back with its governing tier, Codex evidence, court-safe answer, five tests and audit trail', test: () => { const r = processQuery('What is the voltage rise limit at the inverter terminals?', { now: 0 }); return !r.refused && r.tier.tier === 2 && r.evidence.some((e) => /4777\.1.*Cl 3\.3/.test(e)) && r.tests.allPassed && /may be appropriate|appears to comply|should typically|governs/.test(r.answer) && r.auditTrail.timestamp === '1970-01-01T00:00:00.000Z' && r.courtSafe && r.category === 'design'; } },
+    { id: 'compliance.libraryEvidence', title: 'With a library loaded, the answer also cites the compiled passages and their sources', test: async () => { const { createLibrary, FIXTURE } = await import('./library.js'); const r = processQuery('Can the battery go within 600mm of the garage door opening?', { now: 0, library: createLibrary(FIXTURE) }); return r.libraryHits.length >= 1 && r.libraryHits[0].code === 'AS/NZS 5139:2019' && r.libraryHits[0].source.url.startsWith('https://') && r.evidence.some((e) => /garage door/.test(e)) && r.tests.allPassed; } },
     { id: 'compliance.hazardGate', title: 'A question that names a hazard is governed by safety law and carries controls for every hazard', test: () => { const r = processQuery('Can I swap the isolator while the string is live?', { now: 0 }); return r.tier.tier === 1 && r.hazards.includes('work on or near live conductors') && r.controls.length === r.hazards.length && r.tests.tests.find((t) => t.testId === 480).passed; } },
     { id: 'compliance.competencyRefusal', title: 'Beyond the envelope (read from the question or the context) the engine refuses with a court-safe refusal instead of an answer', test: () => { const r = processQuery('Design the string layout for the 2 MW farm', { params: { voltage: 1500 } }); const inferred = inferParams('Design the 1500 V strings for the 2 MW farm at 120 A'); return r.refused && r.refusal.type === 'COURT_SAFE_REFUSAL' && r.refusal.specificReasons.length === 2 && !r.answer && inferred.voltage === 1500 && inferred.powerKw === 2000 && inferred.current === 120 && !processQuery('How many STCs for a 6.6 kW system?').refused; } },
     { id: 'compliance.dnspEvidence', title: 'A network question with a DNSP in context cites that operator\'s allowance', test: () => { const r = processQuery('What export limit applies on single phase?', { dnsp: 'sapn', now: 0 }); return r.tier.tier === 3 && r.evidence.some((e) => /SA Power Networks/.test(e)) && r.citations.length === 1 && r.category === 'grid'; } },
     { id: 'compliance.as5033pass', title: 'AS/NZS 5033:2021 check runs the real calculators and passes a sound design', test: () => { const r = checkAS5033_2021(INSTALL); return r.compliant && r.checks.length === 8 && r.checks.find((c) => c.id === 'array_voltage').status === 'pass' && r.checks.find((c) => c.id === 'cable_current').status === 'pass' && r.checks.find((c) => c.id === 'arc_detection').status === 'advisory' && r.recommendations.length === 1 && /4\.2 – Array maximum voltage/.test(r.checks[0].citation); } },
     { id: 'compliance.as5033fail', title: 'Over-voltage strings, thin cable, a missing isolator and unlisted inverters fail with fixes', test: () => { const r = checkAS5033_2021({ ...INSTALL, modulesPerString: 24, cableRatingA: 15, dcIsolatorAtInverter: false, inverters: [{ model: 'X' }], labelsFitted: 2 }); const ids = r.checks.filter((c) => c.status === 'fail').map((c) => c.id); return !r.compliant && ids.includes('array_voltage') && ids.includes('cable_current') && ids.includes('dc_isolation') && ids.includes('inverter_standard') && ids.includes('labels') && r.recommendations.some((x) => /Reduce the string to \d+ modules/.test(x)) && r.criticalIssues.length === 5; } },
     { id: 'compliance.catalogue', title: 'The function catalogue is honest: reserved slots versus functions that exist', test: () => { const c = catalogue(); return c.reserved === 500 && c.domains.length === 7 && c.implemented > 50 && c.implemented < 100 && c.coveragePct === Math.round((c.implemented / 500) * 100) && c.domains.find((d) => d.id === 'critical').count === 5; } },
-    { id: 'compliance.health', title: 'System health lists the engines, coverage, crew and the compliance score with a sub-95 % alert', test: () => { const h = systemHealth({ crew: 6, selfTest: { passed: 700, total: 731 }, llmConfigured: false }); const ok = systemHealth({ crew: 6, selfTest: { passed: 731, total: 731 } }); return h.engines.length === 8 && h.engines.find((e) => e.id === 'llm').status === 'standby' && h.minionsOperational === 6 && h.complianceScore === 96 && h.alert === null && ok.complianceScore === 100 && systemHealth({ selfTest: { passed: 600, total: 731 } }).alert !== null && tierByNumber(1).id === 'safety_law'; } }
+    { id: 'compliance.health', title: 'System health lists the engines, coverage, crew and the compliance score with a sub-95 % alert', test: () => { const h = systemHealth({ crew: 6, selfTest: { passed: 700, total: 731 }, llmConfigured: false }); const ok = systemHealth({ crew: 6, selfTest: { passed: 731, total: 731 } }); return h.engines.length === 9 && h.engines.find((e) => e.id === 'llm').status === 'standby' && h.engines.find((e) => e.id === 'library').status === 'standby' && systemHealth({ library: { booksLoaded: 3, passages: 40 } }).engines.find((e) => e.id === 'library').status === 'active' && h.minionsOperational === 6 && h.complianceScore === 96 && h.alert === null && ok.complianceScore === 100 && systemHealth({ selfTest: { passed: 600, total: 731 } }).alert !== null && tierByNumber(1).id === 'safety_law'; } }
 ];

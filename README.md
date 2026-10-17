@@ -11,7 +11,7 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0)
+## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0, the library in 2.10.0)
 
 `docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
 third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
@@ -100,6 +100,28 @@ tested modules (`docs/realm/js/domain/hierarchy.js`, `courtsafe.js`, `compliance
 Every answer the engine gives is governed by the highest regulatory tier that applies, cites its
 authority, is rewritten in court-safe language and must pass the personal, coroner, regulator, judge
 and insurer tests; beyond the competency envelope it refuses with conservative guidance instead.
+
+### Real models (2.10.0)
+
+The town is built from CC0 model kits by Kenney (suburban and commercial buildings, cars, rigged mini
+characters, nature), shipped with their licences under `docs/realm/assets/models/`. Houses, landmarks,
+trees, cars and every minion are real textured models; minions play the kit's own animation clips and
+wear a hard hat coloured by role. The procedural look remains as the instant first frame and the
+fallback.
+
+### The library (2.10.0)
+
+The crew compile their own knowledge. `node scripts/knowledge-harvest.mjs --discover` sends the
+librarians out: for every book on the shelf (`docs/data/knowledge-sources.json`) it searches the web,
+fetches every public source (publisher pages, regulator advisories, CEC/SAA guidelines, CER rules, DNSP
+connection standards, WHS codes), reads HTML and PDF, and compiles passages, clause references and
+facts into `docs/data/knowledge/`. The Library window (Shift+X) shows coverage per book, searches by
+words or clause, and logs what each minion has studied; the Compliance engine cites the passages with
+their source; minions on shift read from it between jobs.
+
+AS/NZS standards are sold by Standards Australia and their text is never scraped. Put the PDFs you hold
+licences for in `data/knowledge/inbox/` and run the harvester with `--inbox`: every clause is indexed
+into a private file on your machine (gitignored) that you import in Library › Harvest.
 
 ## What the data is (and is not)
 

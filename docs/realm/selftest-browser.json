@@ -1,7 +1,7 @@
 {
- "at": "2026-10-17T11:43:34.612Z",
- "total": 789,
- "passed": 789,
+ "at": "2026-10-17T12:50:29.159Z",
+ "total": 808,
+ "passed": 808,
  "failed": 0,
  "results": [
   {
@@ -1373,6 +1373,12 @@
    "status": "passed"
   },
   {
+   "id": "compliance.libraryEvidence",
+   "module": "domain/compliance",
+   "title": "With a library loaded, the answer also cites the compiled passages and their sources",
+   "status": "passed"
+  },
+  {
    "id": "compliance.hazardGate",
    "module": "domain/compliance",
    "title": "A question that names a hazard is governed by safety law and carries controls for every hazard",
@@ -1454,6 +1460,42 @@
    "id": "pipeline.validateFail",
    "module": "domain/pipeline",
    "title": "Failures are reported per tier and the highest failing tier governs",
+   "status": "passed"
+  },
+  {
+   "id": "library.create",
+   "module": "domain/library",
+   "title": "A library is built from the shelf index and whichever books are loaded",
+   "status": "passed"
+  },
+  {
+   "id": "library.search",
+   "module": "domain/library",
+   "title": "Plain-word search ranks by terms and headings; clause numbers and codes boost their passages",
+   "status": "passed"
+  },
+  {
+   "id": "library.clause",
+   "module": "domain/library",
+   "title": "Clause lookup finds every passage citing a clause of a book",
+   "status": "passed"
+  },
+  {
+   "id": "library.coverage",
+   "module": "domain/library",
+   "title": "Coverage scores each book from sources, passages and clause refs, with a bonus for a private index",
+   "status": "passed"
+  },
+  {
+   "id": "library.study",
+   "module": "domain/library",
+   "title": "A study pick prefers the least-studied book and summarises the passage with its clause",
+   "status": "passed"
+  },
+  {
+   "id": "library.load",
+   "module": "domain/library",
+   "title": "loadLibrary fetches the shelf and every book it can, skipping the ones that fail",
    "status": "passed"
   },
   {
@@ -2213,6 +2255,12 @@
    "status": "passed"
   },
   {
+   "id": "shifts.library",
+   "module": "sim/shifts",
+   "title": "With a library on the shelf, each finished study task reads a real passage into the minion's memory",
+   "status": "passed"
+  },
+  {
    "id": "shifts.board",
    "module": "sim/shifts",
    "title": "The roster board shows every shift, who is on it and what they are doing",
@@ -2540,6 +2588,12 @@
    "id": "biz.model.digest",
    "module": "business/model",
    "title": "Model digest is compact and non-identifying; isModel tells built models from raw payloads",
+   "status": "passed"
+  },
+  {
+   "id": "biz.sync.shipped",
+   "module": "business/sync",
+   "title": "A sealed snapshot shipped with the site is probed, then unsealed with the passphrase into the model",
    "status": "passed"
   },
   {
@@ -4139,6 +4193,36 @@
    "status": "passed"
   },
   {
+   "id": "win.library.shelf",
+   "module": "windows/library",
+   "title": "The shelf shows every book with coverage, licence, facts and sources",
+   "status": "passed"
+  },
+  {
+   "id": "win.library.search",
+   "module": "windows/library",
+   "title": "Search by words or clause returns passages with their source",
+   "status": "passed"
+  },
+  {
+   "id": "win.library.study",
+   "module": "windows/library",
+   "title": "The study log lists what each minion has read from the library",
+   "status": "passed"
+  },
+  {
+   "id": "win.library.harvest",
+   "module": "windows/library",
+   "title": "The harvest tab explains the harvester and offers the private-index import",
+   "status": "passed"
+  },
+  {
+   "id": "win.library.empty",
+   "module": "windows/library",
+   "title": "With nothing harvested the shelf says so instead of breaking",
+   "status": "passed"
+  },
+  {
    "id": "shell.registerWindows",
    "module": "shell",
    "title": "All window modules register with the window manager",
@@ -4409,6 +4493,30 @@
    "status": "passed"
   },
   {
+   "id": "game.assets.manifest",
+   "module": "game/assets",
+   "title": "The asset manifest names every CC0 kit model the town uses, with houses, trees and landmark models mapped",
+   "status": "passed"
+  },
+  {
+   "id": "game.assets.fallback",
+   "module": "game/assets",
+   "title": "Before anything loads, instances are null and the status says so, so the town can fall back to its procedural look",
+   "status": "passed"
+  },
+  {
+   "id": "game.assets.fit",
+   "module": "game/assets",
+   "title": "fitTo scales an object to a footprint and stands it on the ground",
+   "status": "passed"
+  },
+  {
+   "id": "game.assets.load",
+   "module": "game/assets",
+   "title": "Models load from the site (GLB), clone with shadows, and rigged characters come with their animations",
+   "status": "passed"
+  },
+  {
    "id": "game.chibi.build",
    "module": "game/characters",
    "title": "Procedural chibi character with hard hat, vest, arms, legs and tool",
@@ -4436,6 +4544,12 @@
    "id": "game.chibi.deterministicSkin",
    "module": "game/characters",
    "title": "Skin tone and hat derive from id and role deterministically",
+   "status": "passed"
+  },
+  {
+   "id": "game.chibi.rigged",
+   "module": "game/characters",
+   "title": "With the character kit loaded, minions are rigged models with a hard hat, a vest stripe and real walk/sit/pick-up clips driven by the mixer",
    "status": "passed"
   },
   {

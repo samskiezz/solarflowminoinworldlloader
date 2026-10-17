@@ -5,6 +5,11 @@
  */
 import * as THREE from 'three';
 import { TOWN_SIZE, LANDMARKS, LOTS, ROADS, TREES, DISTRICT, lotForJob, houseState, doorOf } from './town.js';
+import { has, instance, fitTo, pickFor, HOUSE_TYPES, TREE_TYPES, LANDMARK_MODELS, MANIFEST, assetsReady } from './assets.js';
+import { RoomEnvironment } from '../../../vendor/three/examples/jsm/environments/RoomEnvironment.js';
+
+/** Soft image-based lighting so the kit models (and the procedural fallbacks) read with real shading. */
+function tuneMaterials(root, intensity = 0.35) { root.traverse((o) => { if (o.material) { const mats = Array.isArray(o.material) ? o.material : [o.material]; for (const m of mats) if ('envMapIntensity' in m) m.envMapIntensity = intensity; } }); }
 
 const mat = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.9, metalness: 0.02, ...extra });
 export const PHASE_SKY = { night: 0x0a1030, dawn: 0xf0a070, day: 0x8fd0ff, dusk: 0xf08050 };
@@ -16,6 +21,7 @@ export function createEngine(canvas, { pixelRatio = Math.min(2, globalThis.devic
     renderer.shadowMap.enabled = shadows; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
     const scene = new THREE.Scene();
+    try { const pmrem = new THREE.PMREMGenerator(renderer); scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture; pmrem.dispose(); } catch (error) { /* environment lighting is optional (software GL in tests) */ }
     scene.background = new THREE.Color(PHASE_SKY.day);
     scene.fog = new THREE.Fog(PHASE_FOG.day, 110, 260);
     const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 400);
@@ -72,10 +78,12 @@ function animateRain(points, dt) { const a = points.geometry.attributes.position
 
 /* ---------------- town ---------------- */
 function groundTexture() {
-    const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
-    g.fillStyle = '#4f8f3a'; g.fillRect(0, 0, 256, 256);
-    for (let i = 0; i < 900; i++) { g.fillStyle = `hsl(${100 + Math.random() * 20} ${40 + Math.random() * 25}% ${28 + Math.random() * 18}%)`; g.fillRect(Math.random() * 256, Math.random() * 256, 2 + Math.random() * 3, 2 + Math.random() * 3); }
-    const tex = new THREE.CanvasTexture(c); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(40, 40); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+    // Soft meadow: layered low-frequency blotches and fine blades instead of hard confetti squares.
+    const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d');
+    g.fillStyle = '#5c9a43'; g.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 220; i++) { const r = 18 + Math.random() * 40; const grad = g.createRadialGradient(0, 0, 0, 0, 0, r); grad.addColorStop(0, `hsla(${98 + Math.random() * 18} ${38 + Math.random() * 20}% ${34 + Math.random() * 14}% / 0.55)`); grad.addColorStop(1, 'hsla(100 40% 40% / 0)'); g.save(); g.translate(Math.random() * 512, Math.random() * 512); g.fillStyle = grad; g.beginPath(); g.arc(0, 0, r, 0, Math.PI * 2); g.fill(); g.restore(); }
+    g.lineWidth = 1; for (let i = 0; i < 2600; i++) { g.strokeStyle = `hsla(${96 + Math.random() * 24} ${45 + Math.random() * 25}% ${30 + Math.random() * 22}% / 0.5)`; const x = Math.random() * 512; const y = Math.random() * 512; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 3, y - 2 - Math.random() * 4); g.stroke(); }
+    const tex = new THREE.CanvasTexture(c); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(26, 26); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4; return tex;
 }
 
 function box(w, h, d, color, extra) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(color, extra)); m.castShadow = true; m.receiveShadow = true; return m; }
@@ -95,6 +103,16 @@ function sign(text, color = 0xffffff) {
 
 export function buildLandmark(l) {
     const g = new THREE.Group(); g.name = `landmark:${l.id}`; g.position.set(l.x, 0, l.z); g.userData = { landmark: l.id, interactable: true, kind: 'landmark' };
+    const modelKey = LANDMARK_MODELS[l.kind];
+    if (modelKey && has(modelKey)) {
+        const m = instance(modelKey); const fit = fitTo(m, { w: l.w, d: l.d, h: l.h * 1.8 }); m.name = 'model'; g.add(m); tuneMaterials(m); g.userData.model = modelKey; g.userData.fitted = fit;
+        if (l.kind === 'market' || l.kind === 'cafe') { const awn = instance('commercial/detail-awning'); if (awn) { fitTo(awn, { w: Math.min(l.w, 6) }); awn.position.set(0, Math.min(fit.h * 0.45, 3.2), fit.d / 2 + 0.3); g.add(awn); } }
+        const s = sign(l.name); s.position.set(0, Math.min(fit.h + 0.6, 4.2), fit.d / 2 + 0.2); g.add(s);
+        const dr = new THREE.Group(); dr.name = 'door'; dr.position.set(0, 0, fit.d / 2); g.add(dr);
+        const lamp = new THREE.PointLight(0xffd080, 0, 12); lamp.position.set(0, 3, fit.d / 2 + 1.5); lamp.userData.lamp = 1.4; g.add(lamp);
+        if (l.kind === 'cafe') { for (const x of [-2.2, 2.2]) { const para = instance('commercial/detail-awning'); if (para) { fitTo(para, { w: 1.8 }); para.position.set(x, 0, fit.d / 2 + 2.2); g.add(para); } } }
+        return g;
+    }
     if (l.kind === 'board') { const post = box(0.2, 2.2, 0.2, 0x6b4a2b); post.position.y = 1.1; g.add(post); const b = box(2.4, 1.4, 0.12, 0x8a6a3a); b.position.y = 1.9; g.add(b); const paper = new THREE.Mesh(new THREE.PlaneGeometry(2, 1.1), new THREE.MeshBasicMaterial({ color: 0xf4e3b2 })); paper.position.set(0, 1.9, 0.07); g.add(paper); return g; }
     if (l.kind === 'campfire') { for (let i = 0; i < 6; i++) { const stone = new THREE.Mesh(new THREE.DodecahedronGeometry(0.35), mat(0x777777)); stone.position.set(Math.cos((i / 6) * Math.PI * 2) * 1.2, 0.2, Math.sin((i / 6) * Math.PI * 2) * 1.2); g.add(stone); } for (let i = 0; i < 3; i++) { const log = box(1.4, 0.25, 0.25, 0x5a3a1b); log.position.y = 0.2; log.rotation.y = (i / 3) * Math.PI; g.add(log); } const fire = new THREE.Mesh(new THREE.ConeGeometry(0.5, 1.2, 8), new THREE.MeshBasicMaterial({ color: 0xff7a1a })); fire.position.y = 0.8; fire.name = 'flame'; g.add(fire); const light = new THREE.PointLight(0xff8a2a, 2.5, 14); light.position.y = 1.2; light.userData.flicker = true; g.add(light); for (let i = 0; i < 4; i++) { const seat = box(1.6, 0.4, 0.6, 0x7a5a3a); seat.position.set(Math.cos((i / 4) * Math.PI * 2 + 0.4) * 3, 0.2, Math.sin((i / 4) * Math.PI * 2 + 0.4) * 3); seat.rotation.y = -((i / 4) * Math.PI * 2 + 0.4); g.add(seat); } return g; }
     if (l.kind === 'training') { const pad = new THREE.Mesh(new THREE.BoxGeometry(l.w, 0.2, l.d), mat(0xb0a080)); pad.position.y = 0.1; pad.receiveShadow = true; g.add(pad); for (let i = 0; i < 3; i++) { const dummy = box(0.6, 1.6, 0.6, 0xd0b090); dummy.position.set(-3 + i * 3, 1, -2); g.add(dummy); } const flag = box(0.1, 4, 0.1, 0x444444); flag.position.set(4, 2, 3); g.add(flag); const cloth = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1), new THREE.MeshBasicMaterial({ color: 0xe2b14a, side: THREE.DoubleSide })); cloth.position.set(4.85, 3.5, 3); g.add(cloth); return g; }
@@ -116,21 +134,31 @@ export function buildHouse(job, lot) {
     const g = new THREE.Group(); g.name = `house:${job.id}`; g.position.set(lot.x, 0, lot.z); g.rotation.y = lot.facing; g.userData = { jobId: job.id, interactable: true, kind: 'house', lot };
     const hue = (job.id.split('').reduce((n, c) => n + c.charCodeAt(0), 0) % 6);
     const walls = [0xf1e6d2, 0xd9c7a8, 0xe8d5c0, 0xc9d6e2, 0xe6e0d0, 0xd8e2c9][hue];
-    const base = box(lot.w - 2, 3.2, lot.d - 2, walls); base.position.y = 1.6; g.add(base);
-    const roof = roofPyramid(lot.w - 1.5, lot.d - 1.5, 2.6, 0x6b3a2a); roof.position.y = 3.2 + 1.3; roof.name = 'roof'; g.add(roof);
-    const dr = door(lot.w - 2, 3.2, lot.d - 2); g.add(dr);
-    windowsFor(g, lot.w - 2, 3.2, lot.d - 2, { rows: 1, cols: 2, y: 1.6 });
+    const houseKey = `suburban/${pickFor(job.id, HOUSE_TYPES)}`;
+    let roofY = 3.2; let wallX = (lot.w - 2) / 2; let frontZ = (lot.d - 2) / 2;
+    if (has(houseKey)) {
+        const m = instance(houseKey); const fit = fitTo(m, { w: lot.w - 2, d: lot.d - 2 }); m.name = 'model'; g.add(m); tuneMaterials(m); g.userData.model = houseKey; g.userData.fitted = fit;
+        roofY = fit.h; wallX = fit.w / 2; frontZ = fit.d / 2;
+        const drive = instance('suburban/driveway-short'); if (drive) { fitTo(drive, { w: 3 }); drive.position.set(wallX - 0.5, 0.01, frontZ + 1.6); g.add(drive); }
+        const fence = instance('suburban/fence-low'); if (fence) { fitTo(fence, { w: lot.w - 2 }); fence.position.set(0, 0, -frontZ - 0.6); g.add(fence); }
+        const van = instance('cars/van'); if (van) { fitTo(van, { w: 2.1 }); van.position.set(wallX - 0.5, 0, frontZ + 1.8); van.rotation.y = Math.PI / 2; van.name = 'van'; van.visible = false; g.add(van); }
+    } else {
+        const base = box(lot.w - 2, 3.2, lot.d - 2, walls); base.position.y = 1.6; g.add(base);
+        const roof = roofPyramid(lot.w - 1.5, lot.d - 1.5, 2.6, 0x6b3a2a); roof.position.y = 3.2 + 1.3; roof.name = 'roof'; g.add(roof);
+        const dr = door(lot.w - 2, 3.2, lot.d - 2); g.add(dr);
+        windowsFor(g, lot.w - 2, 3.2, lot.d - 2, { rows: 1, cols: 2, y: 1.6 });
+    }
     const extras = new THREE.Group(); extras.name = 'extras'; g.add(extras);
     const panelGroup = new THREE.Group(); panelGroup.name = 'panels'; g.add(panelGroup);
-    const cols = 4; const rows = 2; const pw = (lot.w - 3) / cols; const ph = 1.2;
-    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { const p = box(pw - 0.08, 0.06, ph - 0.08, 0x12305a, { metalness: 0.7, roughness: 0.25, emissive: 0x0a2a6a, emissiveIntensity: 0 }); p.position.set(-((lot.w - 3) / 2) + pw / 2 + c * pw, 3.55 + r * 0.55 + 0.3, (lot.d - 1.5) / 4 - r * ph * 0.9 + 0.5); p.rotation.x = -0.52; p.visible = false; panelGroup.add(p); }
-    const inverter = box(0.5, 0.7, 0.25, 0xcccccc, { metalness: 0.4, roughness: 0.4 }); inverter.position.set(-(lot.w - 2) / 2 - 0.15, 1.4, -1); inverter.name = 'inverter'; inverter.visible = false; g.add(inverter);
-    const battery = box(0.7, 1.1, 0.3, 0xf5f5f5, { roughness: 0.4 }); battery.position.set(-(lot.w - 2) / 2 - 0.17, 0.55, 0.2); battery.name = 'battery'; battery.visible = false; g.add(battery);
+    const span = g.userData.model ? Math.max(3, wallX * 2 - 1.6) : lot.w - 3; const cols = 4; const rows = 2; const pw = span / cols; const ph = 1.2;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { const p = box(pw - 0.08, 0.06, ph - 0.08, 0x12305a, { metalness: 0.7, roughness: 0.25, emissive: 0x0a2a6a, emissiveIntensity: 0 }); p.position.set(-(span / 2) + pw / 2 + c * pw, (g.userData.model ? roofY * 0.68 : 3.55) + r * 0.55 + 0.3, (g.userData.model ? frontZ * 0.42 : (lot.d - 1.5) / 4) - r * ph * 0.9 + 0.5); p.rotation.x = -0.52; p.visible = false; panelGroup.add(p); }
+    const inverter = box(0.5, 0.7, 0.25, 0xcccccc, { metalness: 0.4, roughness: 0.4 }); inverter.position.set(-wallX - 0.15, 1.4, -1); inverter.name = 'inverter'; inverter.visible = false; g.add(inverter);
+    const battery = box(0.7, 1.1, 0.3, 0xf5f5f5, { roughness: 0.4 }); battery.position.set(-wallX - 0.17, 0.55, 0.2); battery.name = 'battery'; battery.visible = false; g.add(battery);
     const glow = new THREE.PointLight(0x3ddc84, 0, 10); glow.position.set(0, 4.5, 0); glow.name = 'glow'; g.add(glow);
     const forSale = new THREE.Group(); forSale.name = 'forSale'; const post = box(0.1, 1.6, 0.1, 0xffffff); post.position.y = 0.8; forSale.add(post); const board = sign('SOLAR?', 0xffffff); board.scale.set(0.5, 0.5, 0.5); board.position.set(0, 1.5, 0); forSale.add(board); forSale.position.set((lot.w - 2) / 2 + 0.8, 0, (lot.d - 2) / 2 + 0.5); g.add(forSale);
     const scaffold = new THREE.Group(); scaffold.name = 'scaffold'; for (const [x, z] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 4.2, 6), mat(0xb0b0b0, { metalness: 0.6 })); pole.position.set(x * ((lot.w - 2) / 2 + 0.6), 2.1, z * ((lot.d - 2) / 2 + 0.6)); scaffold.add(pole); } const plank = box(lot.w - 0.6, 0.08, 0.5, 0xc9a66b); plank.position.set(0, 3.0, (lot.d - 2) / 2 + 0.6); scaffold.add(plank); g.add(scaffold);
     const flag = new THREE.Group(); flag.name = 'flag'; const fp = box(0.08, 2.5, 0.08, 0x333333); fp.position.y = 5.6; flag.add(fp); const cloth = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.7), new THREE.MeshBasicMaterial({ color: 0x3ddc84, side: THREE.DoubleSide })); cloth.position.set(0.6, 6.5, 0); flag.add(cloth); g.add(flag);
-    const plans = box(1.2, 0.8, 0.8, 0x8a6a3a); plans.name = 'plans'; plans.position.set((lot.w - 2) / 2 + 1.2, 0.4, -1); g.add(plans);
+    const plans = box(1.2, 0.8, 0.8, 0x8a6a3a); plans.name = 'plans'; plans.position.set(wallX + 1.2, 0.4, -1); g.add(plans);
     updateHouse(g, job);
     return g;
 }
@@ -141,6 +169,7 @@ export function updateHouse(houseGroup, job) {
     const panels = get('panels').children; const n = Math.round(s.panelsPct * panels.length);
     panels.forEach((p, i) => { p.visible = i < n; p.material.emissiveIntensity = s.energised ? 0.6 : 0; });
     get('inverter').visible = s.inverter; get('battery').visible = s.battery; get('glow').intensity = s.energised ? 1.6 : 0;
+    const van = get('van'); if (van) van.visible = Boolean(s.scaffold) || (Boolean(s.inverter) && !s.complete);
     houseGroup.userData.state = s;
     return s;
 }
@@ -153,10 +182,26 @@ export function buildTown(scene, { jobs = [] } = {}) {
     const fountain = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.6, 0.8, 20), mat(0x8fa3b8)); fountain.position.set(0, 0.4, 6); town.add(fountain); const water = new THREE.Mesh(new THREE.CircleGeometry(2, 20), new THREE.MeshStandardMaterial({ color: 0x3aa0ff, roughness: 0.1, metalness: 0.3 })); water.rotation.x = -Math.PI / 2; water.position.set(0, 0.82, 6); town.add(water);
     const landmarks = new Map();
     for (const l of LANDMARKS) { const g = buildLandmark(l); landmarks.set(l.id, g); town.add(g); }
-    const trunk = new THREE.CylinderGeometry(0.25, 0.35, 2.2, 7); const leaves = new THREE.ConeGeometry(1.8, 3.6, 8); const tm = mat(0x6b4a2b); const lm = mat(0x2f7a3a); const lm2 = mat(0x3f9a4a);
-    for (const t of TREES) { const g = new THREE.Group(); const tr = new THREE.Mesh(trunk, tm); tr.position.y = 1.1; tr.castShadow = true; g.add(tr); const lv = new THREE.Mesh(leaves, Math.random() > 0.5 ? lm : lm2); lv.position.y = 3.6; lv.castShadow = true; g.add(lv); g.position.set(t.x, 0, t.z); g.scale.setScalar(t.s); town.add(g); }
-    for (const [x, z] of [[-10, -4], [10, -4], [-10, 10], [10, 10], [-50, -46], [50, -46], [-50, 48], [50, 48]]) { const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 4.5, 6), mat(0x333333)); pole.position.set(x, 2.25, z); town.add(pole); const head = new THREE.Mesh(new THREE.SphereGeometry(0.3, 10, 8), new THREE.MeshStandardMaterial({ color: 0xffe0a0, emissive: 0xffd080, emissiveIntensity: 0 })); head.position.set(x, 4.6, z); head.userData.windowGlow = true; town.add(head); const lamp = new THREE.PointLight(0xffd080, 0, 16); lamp.position.set(x, 4.4, z); lamp.userData.lamp = 1.8; town.add(lamp); }
-    for (const b of DISTRICT) { const g = new THREE.Group(); const body = box(b.w, b.h, b.d, b.colour, { roughness: 0.7 }); body.position.y = b.h / 2; g.add(body); const roof = box(b.w + 0.4, 0.4, b.d + 0.4, 0x333844); roof.position.y = b.h + 0.2; g.add(roof); windowsFor(g, b.w, b.h, b.d, { rows: Math.max(1, Math.floor(b.h / 3.2)), cols: 2, y: 1.8 }); g.position.set(b.x, 0, b.z); g.name = 'district'; town.add(g); }
+    const props = new THREE.Group(); props.name = 'props'; town.add(props);
+    const buildProps = () => {
+        while (props.children.length) props.remove(props.children[0]);
+        if (assetsReady() && TREE_TYPES.some((k) => has(k))) {
+            TREES.forEach((t, i) => { const key = TREE_TYPES.filter((k) => has(k))[i % TREE_TYPES.filter((k) => has(k)).length]; const m = instance(key); fitTo(m, { h: 3.2 * t.s }); m.position.set(t.x, 0, t.z); m.rotation.y = (i * 1.7) % (Math.PI * 2); tuneMaterials(m); props.add(m); });
+            const extras = ['nature/plant_bush', 'nature/plant_bushLarge', 'nature/flower_yellowA', 'nature/flower_purpleA', 'nature/flower_redA', 'nature/rock_smallA', 'nature/grass_large'].filter((k) => has(k));
+            for (let i = 0; i < 40 && extras.length; i++) { const a = (i / 40) * Math.PI * 2; const r = 20 + (i % 5) * 6; const m = instance(extras[i % extras.length]); fitTo(m, { h: 0.5 + (i % 3) * 0.25 }); m.position.set(Math.cos(a) * r + ((i * 7) % 5) - 2, 0, Math.sin(a) * r * 0.9 + ((i * 3) % 4) - 2); props.add(m); }
+            const cars = ['cars/sedan', 'cars/suv', 'cars/taxi', 'cars/hatchback-sports', 'cars/delivery', 'cars/truck'].filter((k) => has(k));
+            [[-18, -32, 0], [22, -32, 0], [-42, 14, Math.PI / 2], [44, 8, Math.PI / 2], [12, 44, 0], [-8, 44, 0]].forEach(([x, z, rot], i) => { if (!cars.length) return; const m = instance(cars[i % cars.length]); fitTo(m, { w: 2.2 }); m.position.set(x, 0, z); m.rotation.y = rot; props.add(m); });
+            const districtKeys = MANIFEST.commercial.map((n) => `commercial/${n}`).filter((k) => has(k) && !/detail/.test(k));
+            for (const b of DISTRICT) { if (!districtKeys.length) break; const m = instance(pickFor(`${b.x},${b.z}`, districtKeys)); fitTo(m, { w: b.w * 1.6, d: b.d * 1.6, h: b.h * 1.3 }); m.position.set(b.x, 0, b.z); tuneMaterials(m); props.add(m); }
+            return 'models';
+        }
+        const trunk = new THREE.CylinderGeometry(0.25, 0.35, 2.2, 7); const leaves = new THREE.ConeGeometry(1.8, 3.6, 8); const tm = mat(0x6b4a2b); const lm = mat(0x2f7a3a); const lm2 = mat(0x3f9a4a);
+    for (const t of TREES) { const g = new THREE.Group(); const tr = new THREE.Mesh(trunk, tm); tr.position.y = 1.1; tr.castShadow = true; g.add(tr); const lv = new THREE.Mesh(leaves, Math.random() > 0.5 ? lm : lm2); lv.position.y = 3.6; lv.castShadow = true; g.add(lv); g.position.set(t.x, 0, t.z); g.scale.setScalar(t.s); props.add(g); }
+    for (const [x, z] of [[-10, -4], [10, -4], [-10, 10], [10, 10], [-50, -46], [50, -46], [-50, 48], [50, 48]]) { const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 4.5, 6), mat(0x333333)); pole.position.set(x, 2.25, z); props.add(pole); const head = new THREE.Mesh(new THREE.SphereGeometry(0.3, 10, 8), new THREE.MeshStandardMaterial({ color: 0xffe0a0, emissive: 0xffd080, emissiveIntensity: 0 })); head.position.set(x, 4.6, z); head.userData.windowGlow = true; props.add(head); const lamp = new THREE.PointLight(0xffd080, 0, 16); lamp.position.set(x, 4.4, z); lamp.userData.lamp = 1.8; props.add(lamp); }
+    for (const b of DISTRICT) { const g = new THREE.Group(); const body = box(b.w, b.h, b.d, b.colour, { roughness: 0.7 }); body.position.y = b.h / 2; g.add(body); const roof = box(b.w + 0.4, 0.4, b.d + 0.4, 0x333844); roof.position.y = b.h + 0.2; g.add(roof); windowsFor(g, b.w, b.h, b.d, { rows: Math.max(1, Math.floor(b.h / 3.2)), cols: 2, y: 1.8 }); g.position.set(b.x, 0, b.z); g.name = 'district'; props.add(g); }
+        return 'procedural';
+    };
+    buildProps();
     const houses = new Map();
     const api = {
         group: town, landmarks, houses,
@@ -169,6 +214,13 @@ export function buildTown(scene, { jobs = [] } = {}) {
         updateHouse(job) { const g = houses.get(job.id); return g ? updateHouse(g, job) : null; },
         houseDoor(jobId, list) { const lot = lotForJob(list, jobId); return lot ? doorOf({ ...lot, w: lot.w - 2, d: lot.d - 2 }) : null; },
         interactables() { return [...landmarks.values(), ...houses.values()]; },
+        /** Rebuild everything model-dependent once the asset kits have loaded (landmarks, props, houses). */
+        refreshModels(list = []) {
+            for (const [id, g] of landmarks) { town.remove(g); const l = LANDMARKS.find((x) => x.id === id); const ng = buildLandmark(l); landmarks.set(id, ng); town.add(ng); }
+            const mode = buildProps();
+            for (const [, g] of houses) town.remove(g); houses.clear(); api.setJobs(list);
+            return { mode, landmarks: landmarks.size, houses: houses.size };
+        },
         flicker(elapsed) { for (const g of landmarks.values()) g.traverse((o) => { if (o.userData.flicker) o.intensity = 2.2 + Math.sin(elapsed * 17) * 0.4 + Math.sin(elapsed * 5) * 0.3; if (o.name === 'flame') o.scale.y = 1 + Math.sin(elapsed * 12) * 0.12; }); }
     };
     api.setJobs(jobs);
@@ -180,7 +232,7 @@ export const FEATURES = [
     { id: 'game.scene.engine', title: 'WebGL engine renders a frame', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: false }); e.renderOnce(); const ok = e.state.frames === 1 && e.renderer.getContext() !== null; e.dispose(); c.remove(); return ok; } },
     { id: 'game.scene.dayNight', title: 'Sun, sky, fog and lamps follow the world clock phase', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: false }); buildTown(e.scene); e.setPhase('day', 12); const dayLamp = e.scene.getObjectByProperty('userData', undefined); const sunDay = e.sun.intensity; e.setPhase('night', 23); const sunNight = e.sun.intensity; let lampOn = false; e.scene.traverse((o) => { if (o.userData.lamp && o.intensity > 0) lampOn = true; }); const sky = e.scene.background.getHex(); e.dispose(); c.remove(); return sunDay > 1 && sunNight === 0 && lampOn && sky === PHASE_SKY.night; } },
     { id: 'game.scene.weather', title: 'Storms rain and darken the sky; heatwaves warm it', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: false }); e.setPhase('day', 12); const clear = e.scene.background.getHex(); e.setWeather('storm'); const rain = e.scene.getObjectByName('rain').visible; const dark = e.scene.background.getHex() < clear; e.setWeather('none'); const back = !e.scene.getObjectByName('rain').visible; e.dispose(); c.remove(); return rain && dark && back; } },
-    { id: 'game.scene.town', title: 'Town builds ground, roads, square, ten landmarks, trees and lamps', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: false }); const t = buildTown(e.scene); const ok = t.landmarks.size === 10 && t.group.getObjectByName('ground') && t.group.getObjectByName('landmark:library').getObjectByName('door') && t.group.children.length > 60 && t.group.children.filter((c) => c.name === 'district').length === 22; e.dispose(); c.remove(); return Boolean(ok); } },
+    { id: 'game.scene.town', title: 'Town builds ground, roads, square, ten landmarks, trees and lamps', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: false }); const t = buildTown(e.scene); const props = t.group.getObjectByName('props'); const ok = t.landmarks.size === 10 && t.group.getObjectByName('ground') && t.group.getObjectByName('landmark:library').getObjectByName('door') && t.group.children.length + props.children.length > 60 && (props.children.filter((c) => c.name === 'district').length === 22 || props.children.length >= 22); e.dispose(); c.remove(); return Boolean(ok); } },
     { id: 'game.scene.houses', title: 'One house per job; it builds up with the job stage', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: false }); const t = buildTown(e.scene); const job = { id: 'J1', stage: 'lead', tasks: { 'lead:a': false, 'install:a': false, 'install:b': false }, batteryKwh: 13 }; t.setJobs([job]); const h = t.houses.get('J1'); const sale = h.getObjectByName('forSale').visible && !h.getObjectByName('scaffold').visible; job.stage = 'install'; job.tasks['install:a'] = true; t.updateHouse(job); const mid = h.getObjectByName('scaffold').visible && h.getObjectByName('panels').children.filter((p) => p.visible).length === 4 && h.getObjectByName('inverter').visible; job.stage = 'claim'; t.updateHouse(job); const lit = h.getObjectByName('glow').intensity > 0 && h.getObjectByName('battery').visible; t.setJobs([]); const gone = t.houses.size === 0; e.dispose(); c.remove(); return sale && mid && lit && gone; } },
     { id: 'game.scene.quality', title: 'Graphics quality: shadows and pixel ratio switch at runtime', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: true }); buildTown(e.scene); const q = e.setQuality({ shadows: false, pixelRatio: 1 }); const ok = q.shadows === false && e.renderer.shadowMap.enabled === false && e.sun.castShadow === false && e.renderer.getPixelRatio() === 1; e.renderOnce(); e.dispose(); c.remove(); return ok; } },
     { id: 'game.scene.picking', title: 'Ground and object picking from screen coordinates', dom: true, test: () => { const c = canvasForTest(); const e = createEngine(c, { shadows: false }); const t = buildTown(e.scene); e.camera.position.set(0, 30, 30); e.camera.lookAt(0, 0, 0); e.camera.updateMatrixWorld(); const g = e.groundPoint(0, 0); const hit = e.pick(0, 0, t.interactables().concat([t.group.getObjectByName('ground')])); const p = e.project({ x: 0, y: 0, z: 0 }); e.dispose(); c.remove(); return g && Math.abs(g.x) < 0.5 && Math.abs(g.z) < 0.5 && hit && Math.abs(p.x - 0.5) < 0.01; } }

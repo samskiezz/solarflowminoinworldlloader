@@ -65,6 +65,8 @@ export function createNpcs(engine, overlay, { ctx, town, obstacles = () => [] })
         },
         nearest(pos, maxDist = 2.6) { let best = null; for (const n of npcs.values()) { const d = dist(pos, n.pos); if (d <= maxDist && (!best || d < best.dist)) best = { npc: n, agent: n.agent, dist: d }; } return best; },
         chibis() { return [...npcs.values()].map((n) => n.chibi); },
+        /** Swap every minion's body for the rigged model once the character kit has loaded (position, heading and scale kept). */
+        refreshModels() { let n = 0; for (const npc of npcs.values()) { const old = npc.chibi; const fresh = buildChibi({ id: npc.agent.id, role: npc.agent.role, tier: npc.agent.tier }); fresh.position.copy(old.position); fresh.rotation.copy(old.rotation); fresh.scale.copy(old.scale); fresh.userData.agentId = npc.agent.id; fresh.userData.selected = old.userData.selected; engine.scene.remove(old); engine.scene.add(fresh); npc.chibi = fresh; const plate = overlay.get(`np:${npc.agent.id}`); if (plate) overlay.add(`np:${npc.agent.id}`, { el: plate, anchor: fresh, offsetY: 2.1 }); n++; } return n; },
         /** Show the needs widget for a hovered/selected minion (Sims-style). */
         setHover(agentId) { if (hovered === agentId) return; if (hovered && hovered !== selected) overlay.remove(`nw:${hovered}`); hovered = agentId; if (agentId) api.showNeeds(agentId); },
         setSelected(agentId) { if (selected && selected !== agentId) overlay.remove(`nw:${selected}`); selected = agentId; if (agentId) api.showNeeds(agentId); for (const n of npcs.values()) n.chibi.userData.parts.helmet.material.emissive?.setHex(n.agent.id === agentId ? 0x335577 : 0x000000); },

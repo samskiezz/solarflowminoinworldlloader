@@ -331,3 +331,10 @@ table.connectors tr.missing td { color: var(--muted); }
 .shift-head .panel-title { margin: 0; }
 .shift-head.on .panel-title { color: var(--ok); }
 .shift-table td, .study-table td, .goals-table td, .richest-table td { vertical-align: middle; }
+.shelf { display: grid; gap: 6px; }
+.book { border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; background: var(--panel-2); }
+.book > summary { cursor: pointer; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.book > summary .progress { flex-basis: 100%; }
+.book-body { padding: 6px 0 2px; } .sources li { margin: 2px 0; }
+.library-query { flex: 1; min-width: 260px; }
+.passage .finding-detail { white-space: pre-wrap; }

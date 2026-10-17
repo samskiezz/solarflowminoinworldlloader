@@ -42,6 +42,20 @@ export function createBusiness({ store, bus = null, world = null, fetchFn = (...
             })();
             return loading;
         },
+        /** A sealed snapshot shipped next to the site (data/business-snapshot.enc.json): probe it, then unseal it with the passphrase. The file is AES-256-GCM encrypted; the passphrase never leaves the browser. */
+        shippedUrl: null,
+        async probeShipped(url = '../data/business-snapshot.enc.json') {
+            try { const res = await fetchFn(url, { method: 'HEAD', cache: 'no-cache' }); if (res.ok) { api.shippedUrl = url; emit('shipped', { url }); return url; } } catch { /* not shipped */ }
+            try { const res = await fetchFn(url, { headers: { range: 'bytes=0-64' }, cache: 'no-cache' }); if (res.ok) { api.shippedUrl = url; emit('shipped', { url }); return url; } } catch { /* not shipped */ }
+            return null;
+        },
+        async unsealShipped(passphrase, url = api.shippedUrl || '../data/business-snapshot.enc.json') {
+            const res = await fetchFn(url, { cache: 'no-cache' }); if (!res.ok) throw new Error(`No sealed snapshot at ${url} (${res.status})`);
+            const envelope = await res.json(); if (!isEncrypted(envelope)) throw new Error('That file is not a sealed snapshot');
+            const key = typeof passphrase === 'function' ? await passphrase() : passphrase; if (!key) throw new Error('Passphrase needed');
+            const json = await decryptJson(envelope, key);
+            return api.setModel(json, { from: 'sealed' });
+        },
         async pullServer() {
             const base = configUrl(); if (!base) return null;
             const headers = {}; const token = store.get('ui.cloud.token', ''); if (token) headers.authorization = `Bearer ${token}`;
@@ -148,6 +162,7 @@ export function createBusiness({ store, bus = null, world = null, fetchFn = (...
 }
 
 export const FEATURES = [
+    { id: 'biz.sync.shipped', title: 'A sealed snapshot shipped with the site is probed, then unsealed with the passphrase into the model', test: async () => { const { encryptJson } = await import('./crypto.js'); const { SAMPLE_RAW } = await import('./model.js'); if (!globalThis.crypto?.subtle) return true; const envelope = await encryptJson(SAMPLE_RAW(), 'open-sesame-123'); const fetchFn = async (url, opts = {}) => (url.endsWith('business-snapshot.enc.json') ? { ok: true, status: 200, json: async () => envelope } : { ok: false, status: 404 }); const mem = { data: {}, get(p, f) { return this.data[p] ?? f; }, set(p, v) { this.data[p] = v; } }; const b = createBusiness({ store: mem, fetchFn, now: () => new Date('2026-10-12T00:00:00Z') }); const probed = await b.probeShipped(); let wrong = null; try { await b.unsealShipped('nope-nope-nope'); } catch (e) { wrong = e.message; } const m = await b.unsealShipped('open-sesame-123'); return probed === '../data/business-snapshot.enc.json' && wrong && m && b.model && mem.get('business.loadedFrom') === 'sealed'; } },
     { id: 'biz.sync.import', title: 'Importing a raw snapshot builds the model, caches it and reports a digest', test: async () => { const { Store, createMemoryStorage } = await import('../core/store.js'); const { SAMPLE_RAW } = await import('./model.js'); const store = new Store({ storage: createMemoryStorage() }); const b = createBusiness({ store, configUrl: () => null, now: () => new Date('2026-10-12') }); b.setModel(SAMPLE_RAW(), { persist: false }); const st = b.status(); return st.loaded && st.digest.sites === 4 && st.loadedFrom === 'import' && b.findings().length >= 10 && b.summary().score > 0; } },
     { id: 'biz.sync.server', title: 'The model loads from /api/business/model with the cloud token, falling back when absent', test: async () => { const { Store, createMemoryStorage } = await import('../core/store.js'); const { SAMPLE_RAW } = await import('./model.js'); const store = new Store({ storage: createMemoryStorage() }); store.set('ui.cloud.token', 'T'); const calls = []; const b = createBusiness({ store, configUrl: () => 'https://api.example', fetchFn: async (url, init) => { calls.push({ url, auth: init.headers.authorization }); return { ok: true, status: 200, json: async () => SAMPLE_RAW() }; }, now: () => new Date('2026-10-12') }); const m = await b.load(); const none = createBusiness({ store, configUrl: () => 'https://api.example', fetchFn: async () => ({ ok: false, status: 404 }) }); const r = await none.pullServer(); return m && m.jobs.length === 5 && calls[0].url.endsWith('/api/business/model') && calls[0].auth === 'Bearer T' && b.status().loadedFrom === 'server' && r === null; } },
     { id: 'biz.sync.state', title: 'Resolving a finding pays its quest reward and hides it; snoozing hides it for a while', test: async () => { const { Store, createMemoryStorage } = await import('../core/store.js'); const { World } = await import('../sim/world.js'); const { SAMPLE_RAW } = await import('./model.js'); const store = new Store({ storage: createMemoryStorage() }); const world = new World({ seed: 1 }); const b = createBusiness({ store, world, configUrl: () => null, now: () => new Date('2026-10-12') }); b.setModel(SAMPLE_RAW(), { persist: false }); const before = b.findings().length; const bal = world.ledger.balance; const f = b.findings()[0]; b.resolve(f.id); b.snooze(b.findings()[0].id, 7); const q = b.quests(); return b.findings().length === before - 2 && world.ledger.balance > bal && q.every((x) => x.id.startsWith('insight:')) && q.length < before; } },

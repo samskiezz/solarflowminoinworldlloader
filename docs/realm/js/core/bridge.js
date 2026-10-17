@@ -10,6 +10,7 @@ import { processQuery, systemHealth, catalogue } from '../domain/compliance.js';
 import { indexProducts, queryKnowledge, FACT_WORDS_LIST } from '../domain/pipeline.js';
 import { autoCite } from '../domain/hierarchy.js';
 import { archetypeFor, ARCHETYPES } from '../sim/narrative.js';
+import { stats as libraryStats } from '../domain/library.js';
 
 export const CAPABILITY_BY_TIER = { 3: { level: 'strategic', label: 'Strategic (orchestrates the others)' }, 2: { level: 'specialist', label: 'Specialist (owns a domain)' }, 1: { level: 'assistant', label: 'Assistant (learning the trade)' } };
 
@@ -54,7 +55,7 @@ export function createBridge(ctx) {
                 return { route, result: { hits, answer: hits.length ? hits[0].answer : 'No product in the catalogue matches that question.', tier: cite.tier, basis: cite.basis } };
             }
             metrics.compliance++;
-            const result = processQuery(question, { ...context, now: ctx.now() });
+            const result = processQuery(question, { library: ctx.library, ...context, now: ctx.now() });
             if (result.refused) metrics.refused++;
             return { route, result };
         },
@@ -72,7 +73,7 @@ export function createBridge(ctx) {
         },
         status() {
             const last = ctx.store.get('stats.lastSelfTest') || null;
-            return { ...systemHealth({ crew: ctx.world.crew().length, selfTest: last, llmConfigured: ctx.llm.configured(), businessLoaded: Boolean(ctx.business?.model) }), metrics: { ...metrics }, catalogue: catalogue(), products: ctx.products.list.length };
+            return { ...systemHealth({ crew: ctx.world.crew().length, selfTest: last, llmConfigured: ctx.llm.configured(), businessLoaded: Boolean(ctx.business?.model), library: libraryStats(ctx.library) }), metrics: { ...metrics }, catalogue: catalogue(), products: ctx.products.list.length };
         }
     };
     return bridge;
@@ -82,5 +83,5 @@ export const FEATURES = [
     { id: 'bridge.route', title: 'Questions route to product knowledge or the compliance pipeline', test: async () => { const { createContext } = await import('./context.js'); const ctx = createContext({ products: { categories: { inverters: [{ id: 'I1', manufacturer: 'Gamma', model: 'G5 Hybrid', category: 'inverter', cerApproved: true, specifications: { ac_power_kw: 5, max_dc_voltage: 600 } }] } } }); const b = createBridge(ctx); return b.route('What is the max dc voltage of the Gamma G5?') === 'product' && b.route('What export limit does Ausgrid allow?') === 'compliance' && b.route('') === 'empty' && b.route('what is the voc of this panel') === 'product'; } },
     { id: 'bridge.ask', title: 'Asking returns the product fact or the full court-safe compliance record and counts the metrics', test: async () => { const { createContext } = await import('./context.js'); const ctx = createContext({ products: { categories: { inverters: [{ id: 'I1', manufacturer: 'Gamma', model: 'G5 Hybrid', category: 'inverter', cerApproved: true, specifications: { ac_power_kw: 5, max_dc_voltage: 600 } }] } } }); const b = createBridge(ctx); const p = b.ask('What is the max dc voltage of the Gamma G5 Hybrid?'); const c = b.ask('What is the voltage rise limit at the inverter?'); const r = b.ask('Design the 2 MW farm', { params: { powerKw: 2000 } }); return p.route === 'product' && /600 V/.test(p.result.answer) && p.result.tier.tier >= 2 && p.result.basis && c.route === 'compliance' && c.result.tier.tier === 2 && c.result.tests.allPassed && r.result.refused && b.metrics.asked === 3 && b.metrics.product === 1 && b.metrics.compliance === 2 && b.metrics.refused === 1; } },
     { id: 'bridge.capabilities', title: 'Every crew minion reports a capability level, archetype and the engines they draw on', test: async () => { const { createContext } = await import('./context.js'); const ctx = createContext(); const caps = createBridge(ctx).capabilities(); const atlas = caps.find((c) => c.id === 'ATLAS'); return caps.length === 6 && atlas && atlas.capability === 'strategic' && atlas.integrations.includes('compliance') && atlas.integrations.includes('narrative') && !atlas.integrations.includes('llm') && caps.every((c) => c.archetype && c.label); } },
-    { id: 'bridge.status', title: 'Status rolls up engine health, the catalogue, metrics, products and the LLM state', test: async () => { const { createContext } = await import('./context.js'); const ctx = createContext(); const b = createBridge(ctx); const s = b.status(); const none = await b.askAs(ctx.world.agent('ATLAS'), 'hello'); return s.engines.length === 8 && s.engines.find((e) => e.id === 'llm').status === 'standby' && s.catalogue.reserved === 500 && s.metrics.asked === 0 && s.products === 0 && none === null && s.minionsOperational === 6; } }
+    { id: 'bridge.status', title: 'Status rolls up engine health, the catalogue, metrics, products and the LLM state', test: async () => { const { createContext } = await import('./context.js'); const ctx = createContext(); const b = createBridge(ctx); const s = b.status(); const none = await b.askAs(ctx.world.agent('ATLAS'), 'hello'); return s.engines.length === 9 && s.engines.find((e) => e.id === 'llm').status === 'standby' && s.catalogue.reserved === 500 && s.metrics.asked === 0 && s.products === 0 && none === null && s.minionsOperational === 6; } }
 ];

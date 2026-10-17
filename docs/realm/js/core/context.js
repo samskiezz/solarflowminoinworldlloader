@@ -19,6 +19,7 @@ import { createAudio } from './audio.js';
 import { createCloud } from './cloud.js';
 import { createBusiness } from '../business/sync.js';
 import { createBridge } from './bridge.js';
+import { createLibrary, loadLibrary, mergePrivate } from '../domain/library.js';
 
 export const LEGACY_DEFAULT_CREW = [
     { id: 'ATLAS', name: 'Atlas', role: 'Lead installer', tier: 2, traits: ['meticulous', 'steady'], avatar: '🧑‍🔧', skills: { installation: 450, commissioning: 220 } },
@@ -101,6 +102,9 @@ export function createContext({ storage = null, root = null, products = null, se
         }
     };
 
+    ctx.library = createLibrary(); world.library = ctx.library;
+    ctx.setLibrary = (lib) => { ctx.library = lib; world.library = lib; for (const b of Object.values(store.get('knowledge.private') || {})) mergePrivate(lib, b); bus.emit('library:loaded', { books: Object.keys(lib.books).length }); if (wm) wm.refreshAll(); return lib; };
+    ctx.loadLibrary = async (baseUrl) => { try { const lib = await loadLibrary(baseUrl); ctx.setLibrary(lib); return lib; } catch (error) { bus.emit('library:error', { error: error.message, baseUrl }); return ctx.library; } };
     ctx.bridge = createBridge(ctx);
     world.on((entry) => { bus.emit('world:event', entry); bus.emit(`world:${entry.type}`, entry); });
     if (products) ctx.setProducts(products);

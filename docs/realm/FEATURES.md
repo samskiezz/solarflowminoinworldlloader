@@ -5,22 +5,22 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **789** |
-| Verified in Node (this run) | 454 passed, 0 failed |
-| Browser-verified (DOM) features | 335 |
-| Modules | 125 |
-| Generated | 2026-10-17T11:42:43.162Z |
+| Registered features | **808** |
+| Verified in Node (this run) | 463 passed, 0 failed |
+| Browser-verified (DOM) features | 345 |
+| Modules | 128 |
+| Generated | 2026-10-17T12:51:57.356Z |
 
 ## By area
 
 | Area | Features |
 |---|---|
 | Core shell | 108 |
-| Solar engineering domain | 153 |
-| Crew simulation | 113 |
-| Shell | 83 |
-| Windows (game UI) | 253 |
-| 3D game world | 79 |
+| Solar engineering domain | 160 |
+| Crew simulation | 114 |
+| Shell | 84 |
+| Windows (game UI) | 258 |
+| 3D game world | 84 |
 
 ## business/bank (3)
 
@@ -133,16 +133,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 1 | `biz.staff.accounts` | Contractor names parse out of Xero expense account names | node + browser |
 | 2 | `biz.staff.merge` | Staff, contractor accounts, weekly bank payments and on-site mentions merge into one roster | node + browser |
 
-## business/sync (6)
+## business/sync (7)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
-| 1 | `biz.sync.import` | Importing a raw snapshot builds the model, caches it and reports a digest | node + browser |
-| 2 | `biz.sync.server` | The model loads from /api/business/model with the cloud token, falling back when absent | node + browser |
-| 3 | `biz.sync.state` | Resolving a finding pays its quest reward and hides it; snoozing hides it for a while | node + browser |
-| 4 | `biz.sync.social` | Social drafts wait for approval, can be edited and dismissed, open enquiries are tracked, and publishing goes through the server only once approved | node + browser |
-| 5 | `biz.sync.encrypted` | Encrypted snapshots import with a passphrase and export sealed; a wrong passphrase is refused | node + browser |
-| 6 | `biz.sync.world` | Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links | node + browser |
+| 1 | `biz.sync.shipped` | A sealed snapshot shipped with the site is probed, then unsealed with the passphrase into the model | node + browser |
+| 2 | `biz.sync.import` | Importing a raw snapshot builds the model, caches it and reports a digest | node + browser |
+| 3 | `biz.sync.server` | The model loads from /api/business/model with the cloud token, falling back when absent | node + browser |
+| 4 | `biz.sync.state` | Resolving a finding pays its quest reward and hides it; snoozing hides it for a while | node + browser |
+| 5 | `biz.sync.social` | Social drafts wait for approval, can be edited and dismissed, open enquiries are tracked, and publishing goes through the server only once approved | node + browser |
+| 6 | `biz.sync.encrypted` | Encrypted snapshots import with a passphrase and export sealed; a wrong passphrase is refused | node + browser |
+| 7 | `biz.sync.world` | Real site jobs mirror into the world as realm jobs with the right stage, tasks and business links | node + browser |
 
 ## business/xero (5)
 
@@ -387,18 +388,19 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `commissioning.evaluate.voc` | Voc deviation beyond 5 % fails | node + browser |
 | 7 | `commissioning.irradiance` | Irradiance adequacy for I-V tests | node + browser |
 
-## domain/compliance (8)
+## domain/compliance (9)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
 | 1 | `compliance.processQuery` | A question comes back with its governing tier, Codex evidence, court-safe answer, five tests and audit trail | node + browser |
-| 2 | `compliance.hazardGate` | A question that names a hazard is governed by safety law and carries controls for every hazard | node + browser |
-| 3 | `compliance.competencyRefusal` | Beyond the envelope (read from the question or the context) the engine refuses with a court-safe refusal instead of an answer | node + browser |
-| 4 | `compliance.dnspEvidence` | A network question with a DNSP in context cites that operator's allowance | node + browser |
-| 5 | `compliance.as5033pass` | AS/NZS 5033:2021 check runs the real calculators and passes a sound design | node + browser |
-| 6 | `compliance.as5033fail` | Over-voltage strings, thin cable, a missing isolator and unlisted inverters fail with fixes | node + browser |
-| 7 | `compliance.catalogue` | The function catalogue is honest: reserved slots versus functions that exist | node + browser |
-| 8 | `compliance.health` | System health lists the engines, coverage, crew and the compliance score with a sub-95 % alert | node + browser |
+| 2 | `compliance.libraryEvidence` | With a library loaded, the answer also cites the compiled passages and their sources | node + browser |
+| 3 | `compliance.hazardGate` | A question that names a hazard is governed by safety law and carries controls for every hazard | node + browser |
+| 4 | `compliance.competencyRefusal` | Beyond the envelope (read from the question or the context) the engine refuses with a court-safe refusal instead of an answer | node + browser |
+| 5 | `compliance.dnspEvidence` | A network question with a DNSP in context cites that operator's allowance | node + browser |
+| 6 | `compliance.as5033pass` | AS/NZS 5033:2021 check runs the real calculators and passes a sound design | node + browser |
+| 7 | `compliance.as5033fail` | Over-voltage strings, thin cable, a missing isolator and unlisted inverters fail with fixes | node + browser |
+| 8 | `compliance.catalogue` | The function catalogue is honest: reserved slots versus functions that exist | node + browser |
+| 9 | `compliance.health` | System health lists the engines, coverage, crew and the compliance score with a sub-95 % alert | node + browser |
 
 ## domain/courtsafe (8)
 
@@ -487,6 +489,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `labels.masterSwitch` | Master switch label when > 2 inverter main switches | node + browser |
 | 5 | `labels.ratingText` | Array rating label text | node + browser |
 | 6 | `labels.sheet` | Printable label sheet | node + browser |
+
+## domain/library (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `library.create` | A library is built from the shelf index and whichever books are loaded | node + browser |
+| 2 | `library.search` | Plain-word search ranks by terms and headings; clause numbers and codes boost their passages | node + browser |
+| 3 | `library.clause` | Clause lookup finds every passage citing a clause of a book | node + browser |
+| 4 | `library.coverage` | Coverage scores each book from sources, passages and clause refs, with a bonus for a private index | node + browser |
+| 5 | `library.study` | A study pick prefers the least-studied book and summarises the passage with its clause | node + browser |
+| 6 | `library.load` | loadLibrary fetches the shelf and every book it can, skipping the ones that fail | node + browser |
 
 ## domain/loads (6)
 
@@ -595,6 +608,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 7 | `yield.co2Offset` | CO₂ offset estimate | node + browser |
 | 8 | `yield.selfConsumption` | Self-consumption with battery | node + browser |
 
+## game/assets (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `game.assets.manifest` | The asset manifest names every CC0 kit model the town uses, with houses, trees and landmark models mapped | browser |
+| 2 | `game.assets.fallback` | Before anything loads, instances are null and the status says so, so the town can fall back to its procedural look | browser |
+| 3 | `game.assets.fit` | fitTo scales an object to a footprint and stands it on the ground | browser |
+| 4 | `game.assets.load` | Models load from the site (GLB), clone with shadows, and rigged characters come with their animations | browser |
+
 ## game/awareness (5)
 
 | # | Feature | What it verifies | Runs in |
@@ -617,7 +639,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `game.behaviour.wander` | Idle minions spread across town and move haunts through the day | node + browser |
 | 7 | `game.behaviour.bubble` | Speech bubbles from the feed or from an urgent need | node + browser |
 
-## game/characters (5)
+## game/characters (6)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -626,6 +648,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `game.chibi.animations` | Nine animation states move the right parts | browser |
 | 4 | `game.chibi.face` | Characters turn smoothly toward a heading | browser |
 | 5 | `game.chibi.deterministicSkin` | Skin tone and hat derive from id and role deterministically | browser |
+| 6 | `game.chibi.rigged` | With the character kit loaded, minions are rigged models with a hard hat, a vest stripe and real walk/sit/pick-up clips driven by the mixer | browser |
 
 ## game/game (12)
 
@@ -891,7 +914,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `roster.portraits` | Every minion has an identicon portrait path | node + browser |
 | 5 | `roster.uniqueTitles` | Every minion has a distinct solar title | node + browser |
 
-## sim/shifts (6)
+## sim/shifts (7)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -899,8 +922,9 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `shifts.assignment` | Crew are spread across the shifts in roster order and get a work cycle from their traits | node + browser |
 | 3 | `shifts.pickTask` | Study tasks match expertise: easy ones fall away as a minion grows, hard ones need a base | node + browser |
 | 4 | `shifts.world` | Over a day the crew study on shift, earn credits and XP, take breaks on their cycle and the purse round-trips | node + browser |
-| 5 | `shifts.board` | The roster board shows every shift, who is on it and what they are doing | node + browser |
-| 6 | `shifts.spending` | Minions spend their purse in the shop and the benefit lands on needs, skills or learning speed | node + browser |
+| 5 | `shifts.library` | With a library on the shelf, each finished study task reads a real passage into the minion's memory | node + browser |
+| 6 | `shifts.board` | The roster board shows every shift, who is on it and what they are doing | node + browser |
+| 7 | `shifts.spending` | Minions spend their purse in the shop and the benefit lands on needs, skills or learning speed | node + browser |
 
 ## sim/skills (7)
 
@@ -1237,6 +1261,16 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `win.labels.masterSwitch` | More than two inverter main switches adds the master switch label | browser |
 | 4 | `win.labels.save` | Label settings persist in the design | browser |
 | 5 | `win.labels.html` | Printable label sheet HTML | node + browser |
+
+## windows/library (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.library.shelf` | The shelf shows every book with coverage, licence, facts and sources | browser |
+| 2 | `win.library.search` | Search by words or clause returns passages with their source | browser |
+| 3 | `win.library.study` | The study log lists what each minion has read from the library | browser |
+| 4 | `win.library.harvest` | The harvest tab explains the harvester and offers the private-index import | browser |
+| 5 | `win.library.empty` | With nothing harvested the shelf says so instead of breaking | browser |
 
 ## windows/loads (6)
 

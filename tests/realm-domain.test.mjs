@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 const modules = [
-    'pv', 'ac', 'battery', 'incentives', 'yield', 'loads', 'checklists', 'commissioning', 'labels', 'jobs', 'products', 'report', 'standards', 'jurisdictions', 'hierarchy', 'courtsafe', 'compliance', 'pipeline'
+    'pv', 'ac', 'battery', 'incentives', 'yield', 'loads', 'checklists', 'commissioning', 'labels', 'jobs', 'products', 'report', 'standards', 'jurisdictions', 'hierarchy', 'courtsafe', 'compliance', 'pipeline', 'library'
 ];
 
 for (const name of modules) {

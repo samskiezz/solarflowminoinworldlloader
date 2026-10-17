@@ -4,6 +4,7 @@
  * the simulation clock and the window system (which is the game's UI).
  */
 import { createEngine, buildTown } from './scene.js';
+import { preload as preloadAssets, assetStatus } from './assets.js';
 import { createOverlay } from './overlay.js';
 import { createPlayer } from './player.js';
 import { createNpcs } from './npcs.js';
@@ -67,6 +68,8 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     const audio = ctx.audio || createAudio({ store: ctx.store });
     const awareness = createAwareness({ ctx, npcs, player, overlay, audio });
     const quality = ctx.store.get('ui.quality', {}); engine.setQuality({ shadows: quality.shadows !== false, pixelRatio: quality.pixelRatio || null });
+    // The town appears at once in its procedural look and upgrades to the real model kits as they load (buildings, trees, cars, rigged minions).
+    const assets = autoStart ? preloadAssets({ timeoutMs: 25000 }).then((st) => { if (st.loaded) { town.refreshModels(ctx.jobs()); npcs.refreshModels(); player.refreshModel(); if (interactions.refreshMarkers) interactions.refreshMarkers(); ctx.bus.emit('game:assets', st); } return st; }).catch((error) => { console.warn('asset kits unavailable', error); return assetStatus(); }) : Promise.resolve(assetStatus());
     let touch = null; const touchMode = ctx.store.get('ui.touch', 'auto'); if (overlayHost && autoStart && (touchMode === 'on' || (touchMode === 'auto' && isCoarsePointer()))) touch = createTouchControls(overlayHost.parentElement || overlayHost, { player, onInteract: () => interactions.interact() });
     const state = { hudVisible: true, lastSync: 0, lastMinimap: 0, jobCount: ctx.jobs().length, moved: 0, lastHoverCheck: 0 };
     // Click a minion to select them (opens their crew sheet); hover shows their needs.
@@ -141,7 +144,7 @@ export function startGame(ctx, { canvas, overlayHost, minimapHost = null, tracke
     const labelSuburbs = () => { for (const id of [...overlay.layer.querySelectorAll('.suburb-label')].map((el) => el.dataset.ovId || '')) if (id) overlay.remove(id); for (const c of suburbCentres(ctx.jobs())) { const el = h('div', { class: 'suburb-label', dataset: { ovId: `suburb:${c.name}` } }, `${c.name} · ${c.count}`); overlay.add(`suburb:${c.name}`, { el, anchor: { x: c.x, y: 6, z: c.z }, offsetY: 4, maxDistance: 260 }); } };
     labelSuburbs(); offs.push(ctx.bus.on('business:worldSynced', () => { town.setJobs(ctx.jobs()); interactions.refreshMarkers(); labelSuburbs(); }));
     const goTo = (pos) => { if (!pos) return false; player.setPosition({ x: pos.x, z: pos.z }); player.state.moveTarget = null; return true; };
-    const game = { engine, town, overlay, player, npcs, interactions, awareness, audio, state, get touch() { return touch; }, labelSuburbs,
+    const game = { engine, town, overlay, player, npcs, interactions, awareness, audio, state, assets, assetStatus, get touch() { return touch; }, labelSuburbs,
         goToJob(id) { const lot = lotForJob(ctx.jobs(), id); if (!lot) return false; const d = doorOf({ ...lot, w: lot.w - 2, d: lot.d - 2 }); ctx.setCurrentJob(id); return goTo({ x: d.x, z: d.z + (lot.facing === 0 ? 1.5 : lot.facing === Math.PI ? -1.5 : 0) }); },
         goToSuburb(name) { const c = suburbCentres(ctx.jobs()).find((x) => x.name === name); return c ? goTo({ x: c.x, z: c.z }) : false; }, tutorial: { current: () => currentTutorial(ctx), complete: (id) => completeTutorial(ctx, id) }, renderTracker, drawMinimap: () => mm && drawMinimap(mm, { jobs: ctx.jobs(), npcs: [...npcs.npcs.values()], player: player.state }), tickOnce(dt = 0.05) { engine.clock.elapsed += dt; frame(dt, engine.clock.elapsed); }, dispose() { engine.stop(); stopUpdate(); for (const off of offs) off(); window.removeEventListener('resize', onResize); window.removeEventListener('pointermove', onHover); audio.stopAll(); if (touch) touch.dispose(); document.removeEventListener('visibilitychange', onVis); interactions.dispose(); npcs.dispose(); player.dispose(); overlay.clear(); overlay.layer.remove(); engine.dispose(); } };
     return game;

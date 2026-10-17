@@ -2,6 +2,50 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.10.0] - 2026-10-17
+
+### The librarians go out on the web, and the town gets real models
+
+**Graphics**: Solarhaven is now built from real 3D model kits instead of coloured boxes – the CC0 kits
+by Kenney (City Kit Suburban and Commercial, Car Kit, Mini Characters, Nature Kit; licences shipped
+under `docs/realm/assets/models/`). Houses are suburban models fitted to their lots with the job's
+panels, inverter, battery, scaffold and a work van on the driveway; landmarks are commercial
+buildings with awnings and signs; the skyline, trees, bushes, flowers and parked cars come from the
+kits; and every minion is a rigged, textured character driven by the kit's own animation clips
+(idle, walk, sprint, sit, pick-up, holding, emotes, jump) with a hard hat coloured by role. Image-based
+lighting (RoomEnvironment) and a softer meadow ground finish it. The town appears instantly in its
+procedural look and upgrades as the models load; without them it still renders as before.
+`game/assets.js` loads and fits the kits (vendored GLTFLoader, SkeletonUtils, RoomEnvironment from
+three r161).
+
+
+The crew no longer waits for PDFs. A harvester searches the web for every public source about every
+book on the shelf, reads them (HTML and PDF) and compiles a library the world studies from.
+
+- **The shelf** (`docs/data/knowledge-sources.json`): fourteen books – AS/NZS 3000, 5033, 4777.1,
+  4777.2, 5139, 3008.1.1, 3017, 4836, 3760 and 3012, plus the SAA/CEC installer guidelines, the CER
+  SRES and Cheaper Home Batteries rules, the DNSP connection standards and WHS/electrical safety law –
+  each with its tier, licence, seed URLs and search queries. Add a book by adding a row.
+- **The harvester** (`scripts/knowledge-harvest.mjs`): `--discover` searches the web (DuckDuckGo HTML,
+  allow-listed regulator, publisher, industry and network domains) for more sources, fetches each one
+  (retrying refused pages with a browser identity and, with `--browser`, through Chromium), extracts
+  text with pdftotext/pypdf, splits it into passages, finds clause references and standard codes,
+  compiles facts (amendments, publication dates, supersessions, transition periods) and writes
+  `docs/data/knowledge/<book>.json` plus `index.json`. Full text of every source stays in
+  `data/knowledge/raw/` (gitignored); the committed books carry passages capped per source.
+- **Licensed standards stay licensed**: AS/NZS books get only what is public about them – publisher
+  descriptions and contents, amendment clause lists, regulator advisories, CEC/SAA advice. PDFs you
+  hold licences for go in `data/knowledge/inbox/`; `--inbox` indexes every clause into a private file
+  on your machine (never committed) that the Library window imports into this browser only.
+- **Library module** (`domain/library.js`): search by words, clause number or standard code; clause
+  lookup across every source; coverage score per book; a study pick that favours the least-read book;
+  `loadLibrary()` for the browser and a fixture so the self-tests never depend on a harvest.
+- **Wired in**: `ctx.library` loads at start; the Compliance engine cites library passages (with their
+  source URL) alongside the Codex; on shift, every finished study task reads a real passage into the
+  minion's memory; the Engines tab reports the library as an engine.
+- **Library window** (Shift+X): Shelf (coverage, licence, facts, every source with its link), Search,
+  Study log (what each minion has read), Harvest (how to run it, import a private index).
+
 ## [2.9.0] - 2026-10-17
 
 ### The engines, built into the world

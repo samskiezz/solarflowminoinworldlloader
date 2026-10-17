@@ -7,7 +7,7 @@ export const PLAYER_SPEED = 6;
 export const WORLD_HALF = 185;
 
 export function createPlayer(engine, { obstacles = () => [], position = { x: 0, z: 10 }, id = 'you', listen = true, element = null } = {}) {
-    const chibi = buildChibi({ id, isPlayer: true });
+    let chibi = buildChibi({ id, isPlayer: true });
     engine.scene.add(chibi);
     const state = { pos: { ...position }, heading: Math.PI, moving: false, moveTarget: null, onArrive: null, y: 0, vy: 0, jumping: false, cam: { yaw: 0, pitch: 0.42, dist: 12 }, keys: new Set(), drag: null, dragged: false, anim: 'idle', lastMoved: 0, axis: { x: 0, y: 0 } };
     chibi.position.set(state.pos.x, 0, state.pos.z); chibi.rotation.y = state.heading;
@@ -25,7 +25,9 @@ export function createPlayer(engine, { obstacles = () => [], position = { x: 0, 
     function jump() { if (!state.jumping) { state.jumping = true; state.vy = 5.2; } }
 
     const api = {
-        chibi, state,
+        get chibi() { return chibi; }, state,
+        /** Swap the body for the rigged model once the character kit has loaded. */
+        refreshModel() { const fresh = buildChibi({ id, isPlayer: true }); fresh.position.copy(chibi.position); fresh.rotation.copy(chibi.rotation); engine.scene.remove(chibi); engine.scene.add(fresh); chibi = fresh; return fresh; },
         get pos() { return state.pos; },
         onClick(ndc) { const g = engine.groundPoint(ndc.x, ndc.y); if (g) api.moveTo(g); },
         moveTo(target, onArrive = null) { state.moveTarget = { x: target.x, z: target.z }; state.onArrive = onArrive; },
