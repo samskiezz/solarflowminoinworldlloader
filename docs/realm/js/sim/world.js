@@ -12,11 +12,12 @@ import { epochProgress, companyIndex, epochInputs } from './epochs.js';
 import { Chronicle } from './narrative.js';
 import { tickShifts } from './shifts.js';
 import { Workforce } from './workforce.js';
+import { Programme } from './programme.js';
 
 export const HOURS_PER_DAY = 24;
 
 export class World {
-    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked, population = null, memorial = [], chronicle = null, workforce = null, findings = [] } = {}) {
+    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked, population = null, memorial = [], chronicle = null, workforce = null, findings = [], programme = null } = {}) {
         this.seed = seed;
         this.random = mulberry32(seed);
         this.time = startTime; // ms
@@ -36,6 +37,9 @@ export class World {
         // The Workforce: Ultron, the managers and a thousand workers passing every task research → execute → audit → review → sign-off (sim/workforce.js).
         this.workforce = workforce instanceof Workforce ? workforce : Workforce.fromJSON(workforce);
         this.findings = findings || [];
+        // The Programme: the thousand-feature list as workforce tasks (sim/programme.js). Items load from docs/data/programme.json; the state lives here.
+        this.programme = programme instanceof Programme ? programme : Programme.fromJSON(programme);
+        this.programmeHours = 0;
         this.activeEvent = null;
         this.eventEndsAt = 0;
         this.feed = [];
@@ -134,6 +138,7 @@ export class World {
         tickShifts(this, hours);
         this.chronicle.tick(this, hours);
         this.workforce.tick(this, hours);
+        this.programmeHours += hours; if (this.programmeHours >= 6) { this.programmeHours = 0; if (this.programme.loaded) this.programme.sweep(this, { library: this.library || null }); }
         this.stats.expertAgents = this.agents.filter((a) => Object.keys(a.skills).some((k) => a.level(k) >= 10)).length;
         this.stats.reflections = this.agents.reduce((n, a) => n + a.stats.reflections, 0);
         this.stats.upgradesOwned = this.ledger.owned.length;
@@ -253,11 +258,11 @@ export class World {
     quests() { return this.jobs.filter((j) => j.stage !== 'complete').map(questsForJob); }
 
     toJSON() {
-        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100), population: this.population, memorial: this.memorial, chronicle: this.chronicle.toJSON(), workforce: this.workforce.toJSON() };
+        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100), population: this.population, memorial: this.memorial, chronicle: this.chronicle.toJSON(), programme: this.programme.toJSON(), workforce: this.workforce.toJSON() };
     }
 
     static fromJSON(data) {
-        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked, population: data.population, memorial: data.memorial, chronicle: data.chronicle || null, workforce: data.workforce || null });
+        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked, population: data.population, memorial: data.memorial, chronicle: data.chronicle || null, workforce: data.workforce || null, programme: data.programme || null });
         world.hour = data.hour || 0;
         world.activeEvent = data.activeEvent || null;
         world.eventEndsAt = data.eventEndsAt || 0;

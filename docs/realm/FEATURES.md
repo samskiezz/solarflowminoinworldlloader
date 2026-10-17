@@ -5,21 +5,21 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **826** |
-| Verified in Node (this run) | 473 passed, 0 failed |
-| Browser-verified (DOM) features | 353 |
-| Modules | 133 |
-| Generated | 2026-10-17T14:27:06.612Z |
+| Registered features | **852** |
+| Verified in Node (this run) | 485 passed, 0 failed |
+| Browser-verified (DOM) features | 367 |
+| Modules | 139 |
+| Generated | 2026-10-17T14:51:34.092Z |
 
 ## By area
 
 | Area | Features |
 |---|---|
-| Core shell | 108 |
+| Core shell | 117 |
 | Solar engineering domain | 160 |
-| Crew simulation | 121 |
-| Shell | 84 |
-| Windows (game UI) | 262 |
+| Crew simulation | 125 |
+| Shell | 86 |
+| Windows (game UI) | 273 |
 | 3D game world | 91 |
 
 ## business/bank (3)
@@ -268,6 +268,25 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `core.llm.completeAndRateLimit` | Completes through fetch with rate limiting | node + browser |
 | 5 | `core.llm.replyAs` | Replies as a minion with memories and clause context | node + browser |
 | 6 | `core.llm.errors` | HTTP errors surface as test failures, not crashes | node + browser |
+
+## core/policies (5)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `policies.defs` | Over 120 typed policies and feature flags covering the programme, unique ids, sane defaults | node + browser |
+| 2 | `policies.setHistory` | Set with coercion and bounds, change history with who and when, reset, drift report | node + browser |
+| 3 | `policies.flags` | Feature flags default, switch, expire and report expiring soon | node + browser |
+| 4 | `policies.enforce` | Quiet hours wrap midnight, exponential back-off caps, business-day deadlines skip weekends, emergency stop halts automation | node + browser |
+| 5 | `policies.hooks` | Accessibility policies apply as body classes and CSS variables | browser |
+
+## core/registers (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `registers.defs` | Over 150 typed registers covering the programme, every field typed, every id unique | node + browser |
+| 2 | `registers.crud` | Add, update, remove with validation; job scoping; journaled history | node + browser |
+| 3 | `registers.exportImport` | CSV and JSON export; JSON import rejects invalid rows and keeps valid ones; de-duplication | node + browser |
+| 4 | `registers.alerts` | Date fields raise overdue and due-soon alerts; done rows are quiet; budget variance computed | node + browser |
 
 ## core/registry (3)
 
@@ -779,7 +798,7 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 11 | `game.town.assignLots` | Real jobs are grouped by suburb into neighbouring lots; legacy jobs keep the inner ring | node + browser |
 | 12 | `game.town.spotsForRoster` | Enough bunks, desks and seats for the whole 24-minion roster | node + browser |
 
-## shell (21)
+## shell (23)
 
 | # | Feature | What it verifies | Runs in |
 |---|---|---|---|
@@ -804,6 +823,8 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 19 | `shell.restoreSession` | Reopens the windows from the last session | browser |
 | 20 | `shell.theme` | Themes apply to the document | browser |
 | 21 | `shell.onboarding` | First-run onboarding captures profile and opens the dashboard | browser |
+| 22 | `shell.policyHooks` | Policies apply: high contrast and text scale hit the body, a flagged-off window refuses to open, run mode follows automation policy | browser |
+| 23 | `shell.sessionTimeout` | Idle past the policy warns, then locks and saves; activity resumes | browser |
 
 ## sim/agent (10)
 
@@ -925,6 +946,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `planner.goap` | GOAP plan to claim STCs | node + browser |
 | 6 | `planner.goap.satisfied` | GOAP returns empty plan when goal already met | node + browser |
 | 7 | `planner.goap.impossible` | GOAP reports impossible goals | node + browser |
+
+## sim/programme (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `programme.load` | The programme loads its items, classifies dependencies for specs, and reports counts by status and domain | node + browser |
+| 2 | `programme.sweepAndSign` | Sweeping queues items into the workforce with library citations; the workforce signs them off and specs get written | node + browser |
+| 3 | `programme.modes` | Run modes: full feeds the queue, test feeds five, paused feeds none | node + browser |
+| 4 | `programme.verifyAndPersist` | Self-test results verify live items; state round-trips through the world save | node + browser |
 
 ## sim/roster (5)
 
@@ -1348,6 +1378,23 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 5 | `win.notify.crewOnly` | Townsfolk level-ups stay out of the inbox | browser |
 | 6 | `win.notify.searchClauses` | Search finds standard clauses | browser |
 
+## windows/policies (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.policies.edit` | Policies render by domain with live controls; a change applies, journals and shows as drift | browser |
+| 2 | `win.policies.bounds` | Out-of-range values are refused and the control snaps back | browser |
+| 3 | `win.policies.flags` | Flags switch with an expiry and show their owner | browser |
+
+## windows/programme (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.programme.overview` | Overview shows totals, the status legend, the run mode and progress by domain | browser |
+| 2 | `win.programme.sweepRun` | Sweep now queues items; running a shift signs them off and the counts move | browser |
+| 3 | `win.programme.items` | Items filter by domain, status and search; selecting one shows its backing and evidence | browser |
+| 4 | `win.programme.specs` | Signed-off server-side items appear as specifications with their dependency | browser |
+
 ## windows/proposal (6)
 
 | # | Feature | What it verifies | Runs in |
@@ -1371,6 +1418,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `win.quests.flavour` | Stage flavour text for all nine stages | node + browser |
 | 7 | `win.quests.dailyGoals` | Daily goals track real practice | browser |
 | 8 | `win.quests.completed` | Completed quest history | browser |
+
+## windows/registers (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.registers.catalogue` | Catalogue lists every register by domain with row counts; a card opens its rows | browser |
+| 2 | `win.registers.addEdit` | The row form is built from the definition; adding, editing and deleting rows works with validation | browser |
+| 3 | `win.registers.alerts` | The Due tab lists overdue and due-soon rows across registers | browser |
+| 4 | `win.registers.history` | History tab journals adds, edits and removals for the chosen register | browser |
 
 ## windows/reports (5)
 

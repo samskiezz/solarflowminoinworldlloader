@@ -2,6 +2,34 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.12.0] - 2026-10-17
+
+### The Programme: the thousand-feature list, worked by the minions
+
+- **The Programme** (`sim/programme.js`, `docs/data/programme.json`, Programme window **Alt+P**): the
+  1,000-item feature list is now machine-readable, classified honestly, and worked by Ultron's
+  workforce. Every item becomes a task that flows research → execute → audit → review → sign-off; the
+  research stage cites the harvested library, server-side items get a specification record, live
+  items are verified by the real self-tests. Classification from the build script
+  (`scripts/programme-build.mjs`): **247 live** (backed by named, self-tested realm features),
+  **393 registers**, **130 policies**, **230 specified** (need a server, a device or an
+  external system – the static realm cannot run them, so the minions write the spec instead).
+- **Registers** (`core/registers.js`, Registers window **Alt+R**): 165 typed registers – risks, issues,
+  decisions, RACI, roof planes, critical loads, test records, permits, defects, suppliers, purchase
+  orders, breaches, backups, SLOs and the rest – with validation, job scoping, journaled history,
+  CSV/JSON export, JSON import, de-duplication and due/overdue alerts on every date field.
+- **Policies** (`core/policies.js`, Policies window **Alt+O**): 129 typed policies and 8 feature flags
+  with bounds, change history, drift from defaults and expiry on flags. Enforced in the shell: quiet
+  hours silence event toasts, reduced motion / high contrast / sunlight theme / large targets / text
+  size apply to the page, a session-timeout warning then lock with autosave, flagged-off windows refuse
+  to open, the crowd and bloom follow their flags, the run mode and emergency stop pause the Programme.
+- **Full run mode** (`automation.mode` policy, default `full`): the programme sweeps eighty items into the
+  workforce every six simulated hours until all 1,000 are signed; `test` feeds five, `paused` none.
+- **Headless runner** (`npm run programme` → `scripts/programme-run.mjs`): runs the whole programme in
+  Node against the library, verifies live items with the Node and Chromium self-test results, and
+  writes `docs/data/programme-state.json`, which the site adopts on load. This run: 1,000 of 1,000
+  signed in 0 simulated hours, 230 specifications, 247 live items verified, 0 hand-offs. The nightly routine runs it after the harvest.
+
 ## [2.11.0] - 2026-10-17
 
 ### Ultron, a thousand workers, and the big map

@@ -20,6 +20,8 @@ import { createCloud } from './cloud.js';
 import { createBusiness } from '../business/sync.js';
 import { createBridge } from './bridge.js';
 import { createLibrary, loadLibrary, mergePrivate } from '../domain/library.js';
+import { Registers } from './registers.js';
+import { Policies } from './policies.js';
 
 export const LEGACY_DEFAULT_CREW = [
     { id: 'ATLAS', name: 'Atlas', role: 'Lead installer', tier: 2, traits: ['meticulous', 'steady'], avatar: '🧑‍🔧', skills: { installation: 450, commissioning: 220 } },
@@ -59,9 +61,11 @@ export function createContext({ storage = null, root = null, products = null, se
     const audio = createAudio({ store });
     const cloud = createCloud({ store });
     const business = createBusiness({ store, bus, world, now: () => new Date(now()) });
+    const registers = new Registers({ store, now });
+    const policies = new Policies({ store, now });
 
     const ctx = {
-        store, bus, world, wm, keys, clock, commands, llm, audio, cloud, business, t,
+        store, bus, world, wm, keys, clock, commands, llm, audio, cloud, business, registers, policies, t,
         products: { list: [], byId: new Map(), summary: null, loaded: false, source: null },
         now,
         profile() { return store.get('profile'); },
@@ -104,6 +108,8 @@ export function createContext({ storage = null, root = null, products = null, se
 
     ctx.library = createLibrary(); world.library = ctx.library;
     ctx.setLibrary = (lib) => { ctx.library = lib; world.library = lib; for (const b of Object.values(store.get('knowledge.private') || {})) mergePrivate(lib, b); bus.emit('library:loaded', { books: Object.keys(lib.books).length }); if (wm) wm.refreshAll(); return lib; };
+    /** Load the thousand-feature programme (docs/data/programme.json) into the world; the state is already in the save. */
+    ctx.loadProgramme = async (url) => { try { const res = await fetch(url); if (!res.ok) throw new Error(`HTTP ${res.status}`); const data = await res.json(); world.programme.load(data); world.programme.setMode(policies.automationAllowed() ? policies.get('automation.mode') : 'paused'); try { const sr = await fetch(url.replace(/programme\.json$/, 'programme-state.json')); if (sr.ok) { const st = await sr.json(); world.programme.adopt(st.state || {}); } } catch (e) { /* no nightly state shipped */ } bus.emit('programme:loaded', { total: data.total, signed: world.programme.summary().signedTotal }); return data; } catch (error) { bus.emit('programme:error', { error: error.message }); return null; } };
     ctx.loadLibrary = async (baseUrl) => { try { const lib = await loadLibrary(baseUrl); ctx.setLibrary(lib); return lib; } catch (error) { bus.emit('library:error', { error: error.message, baseUrl }); return ctx.library; } };
     ctx.bridge = createBridge(ctx);
     bus.on('business:loaded', () => { world.findings = (business.model && business.model.findings) || []; });

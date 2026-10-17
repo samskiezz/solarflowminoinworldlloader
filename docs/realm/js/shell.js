@@ -187,13 +187,41 @@ export function wireKeybinds(ctx, palette, dock) {
 /* ---------- toasts for world events, live refresh ---------- */
 export function wireWorldFeedback(ctx) {
     const recentToasts = new Map();
-    ctx.bus.on('world:event', (e) => { const kind = TOAST_EVENTS[e.type]; if (!kind) return; const last = recentToasts.get(e.text) || 0; if (Date.now() - last < 60000) return; recentToasts.set(e.text, Date.now()); toast(e.text, { kind, timeout: e.type === 'achievement' ? 6000 : 3500 }); });
+    ctx.bus.on('world:event', (e) => { const kind = TOAST_EVENTS[e.type]; if (!kind) return; if (ctx.policies && ctx.policies.quiet(new Date(ctx.now()).getHours()) && e.type !== 'achievement') return; const last = recentToasts.get(e.text) || 0; if (Date.now() - last < 60000) return; recentToasts.set(e.text, Date.now()); toast(e.text, { kind, timeout: e.type === 'achievement' ? 6000 : 3500 }); });
     let pending = false;
     ctx.bus.on('clock:tick', () => { if (pending) return; pending = true; setTimeout(() => { pending = false; for (const id of ['dashboard', 'crew', 'quests', 'jobs', 'chat']) if (ctx.wm.isOpen(id)) ctx.wm.refresh(id); }, 900); });
     ctx.bus.on('design:updated', () => { for (const id of ['reports', 'labels', 'jobs']) if (ctx.wm.isOpen(id)) ctx.wm.refresh(id); });
     ctx.bus.on('job:selected', () => { for (const id of ['spellbook', 'checklists', 'commissioning', 'labels', 'loads', 'reports', 'inventory']) if (ctx.wm.isOpen(id)) ctx.wm.refresh(id); });
     ctx.bus.on('products:error', (e) => toast(`Product catalogue unavailable: ${e.error}`, { kind: 'bad', timeout: 8000 }));
     ctx.bus.on('products:loaded', (e) => { if (e.source === 'network') toast(`${e.count.toLocaleString()} CEC products loaded`, { kind: 'ok', timeout: 2500 }); });
+}
+
+/* ---------- policies: enforcement hooks (core/policies.js) ---------- */
+const FLAGGED_WINDOWS = { programme: 'flag.programmeWindow', registers: 'flag.registersWindow' };
+/** Apply the policies that have a visible effect: accessibility body classes and text scale, run mode, flag-gated windows. */
+export function wirePolicies(ctx, { body = typeof document !== 'undefined' ? document.body : null } = {}) {
+    const p = ctx.policies; if (!p) return () => {};
+    const apply = () => { if (body) p.applyHooks(body); if (ctx.world.programme) ctx.world.programme.setMode(p.automationAllowed() ? p.get('automation.mode') : 'paused'); };
+    apply();
+    const origOpen = ctx.wm.open.bind(ctx.wm);
+    ctx.wm.open = (id, options) => { const flag = FLAGGED_WINDOWS[id]; if (flag && !p.flag(flag)) { toast(`${id} is switched off by feature flag ${flag} (Policies › Flags)`, { kind: 'warn' }); return null; } return origOpen(id, options); };
+    const off = ctx.bus.on('policies:changed', apply);
+    return () => { off(); ctx.wm.open = origOpen; };
+}
+/** Session timeout warning: after the policy's idle minutes a banner warns, then the session locks (work is saved; a click resumes). Returns a checker for tests. */
+export function wireSession(ctx, { now = () => Date.now(), setIntervalFn = (fn, ms) => globalThis.setInterval(fn, ms), host = typeof document !== 'undefined' ? document.body : null } = {}) {
+    let lastActive = now(); let banner = null; let locked = false;
+    const touch = () => { lastActive = now(); if (banner && !locked) { banner.remove(); banner = null; } };
+    if (typeof window !== 'undefined') for (const ev of ['keydown', 'pointerdown', 'touchstart']) window.addEventListener(ev, touch, { passive: true });
+    const check = () => {
+        const p = ctx.policies; if (!p) return 'off';
+        const idleMin = (now() - lastActive) / 60000; const timeout = p.get('session.timeoutMinutes'); const warn = p.get('session.warnBeforeMinutes');
+        if (idleMin >= timeout) { if (!locked) { locked = true; ctx.saveWorld(); if (ctx.store.flush) ctx.store.flush(); ctx.bus.emit('session:timeout', { idleMin }); if (host) { if (banner) banner.remove(); banner = h('div', { class: 'session-warning', role: 'alert' }, h('b', {}, 'Session timed out. '), 'Your work is saved – click to resume.', ' ', button('Resume', () => { locked = false; touch(); }, { small: true, kind: 'primary' })); host.append(banner); } } return 'locked'; }
+        if (idleMin >= timeout - warn) { if (!banner && host) { banner = h('div', { class: 'session-warning', role: 'alert' }, `Idle for ${Math.round(idleMin)} min – the session locks in ${Math.max(1, Math.round(timeout - idleMin))} min. `, button('Stay', touch, { small: true, kind: 'primary' })); host.append(banner); } return 'warning'; }
+        return 'active';
+    };
+    const id = setIntervalFn(check, 30000);
+    return { check, touch, stop: () => clearInterval(id), get locked() { return locked; } };
 }
 
 /* ---------- autosave, theme, session ---------- */
@@ -239,11 +267,13 @@ export function mountShell(ctx, { top, bottom, minimap, dock: dockHost }) {
     registerCommands(ctx, palette, dock);
     const unwire = wireKeybinds(ctx, palette, dock);
     wireWorldFeedback(ctx);
+    const unwirePolicies = wirePolicies(ctx);
+    const session = wireSession(ctx);
     ctx.bus.on('profile:updated', () => { applyTheme(ctx); topbar.render(); });
     ctx.bus.on('settings:updated', () => { minimapEl.render(); if (ctx.store.get('ui.chatOpen') === false) dockHost.classList.add('collapsed'); else dockHost.classList.remove('collapsed'); });
     window.addEventListener('error', (e) => ctx.bus.emit('error', { source: 'window', error: e.error || new Error(e.message) }));
     window.addEventListener('unhandledrejection', (e) => ctx.bus.emit('error', { source: 'promise', error: e.reason }));
-    return { topbar, hotbar, minimap: minimapEl, dock, palette, unwire };
+    return { topbar, hotbar, minimap: minimapEl, dock, palette, unwire: () => { unwire(); unwirePolicies(); session.stop(); }, session };
 }
 
 /* ---------- self-tests ---------- */
@@ -271,5 +301,7 @@ export const FEATURES = [
     { id: 'shell.autosave', title: 'Autosave persists world and open windows', dom: true, test: async () => { const t = makeTestCtx(); await withWindows(t); t.ctx.open('crew'); let fn = null; const auto = startAutosave(t.ctx, { setIntervalFn: (f) => { fn = f; return 1; } }); fn(); const ok = t.ctx.store.get('ui.openWindows').some((w) => w.id === 'crew') && t.ctx.store.get('world').jobs.length === 1 && !t.ctx.store.dirty; auto.stop(); t.done(); return ok; } },
     { id: 'shell.restoreSession', title: 'Reopens the windows from the last session', dom: true, test: async () => { const t = makeTestCtx(); await withWindows(t); t.ctx.store.set('ui.openWindows', [{ id: 'codex', tab: 'search' }, { id: 'quests' }]); const n = restoreSession(t.ctx); const ok = n === 2 && t.ctx.wm.isOpen('codex') && t.ctx.wm.windows.get('codex').tab === 'search'; t.done(); return ok; } },
     { id: 'shell.theme', title: 'Themes apply to the document', dom: true, test: () => { const t = makeTestCtx(); t.ctx.store.set('profile.theme', 'parchment'); const ok = applyTheme(t.ctx) === 'parchment' && document.body.dataset.theme === 'parchment'; t.ctx.store.set('profile.theme', 'dusk'); applyTheme(t.ctx); t.done(); return ok; } },
-    { id: 'shell.onboarding', title: 'First-run onboarding captures profile and opens the dashboard', dom: true, test: async () => { const t = makeTestCtx(); await withWindows(t); const p = showOnboarding(t.ctx); await new Promise((r) => setTimeout(r, 10)); const inputs = document.querySelectorAll('#realm-dialogs .onboard input'); inputs[0].value = 'Ada'; inputs[1].value = 'Sunworks'; inputs[2].value = '4000'; document.querySelector('#realm-dialogs .dialog-buttons .primary').click(); const choice = await p; const ok = choice === 'start' && t.ctx.profile().name === 'Ada' && t.ctx.profile().postcode === '4000' && t.ctx.store.get('onboarding.done') === true && t.ctx.wm.isOpen('dashboard') && t.ctx.wm.isOpen('help'); t.done(); return ok; } }
+    { id: 'shell.onboarding', title: 'First-run onboarding captures profile and opens the dashboard', dom: true, test: async () => { const t = makeTestCtx(); await withWindows(t); const p = showOnboarding(t.ctx); await new Promise((r) => setTimeout(r, 10)); const inputs = document.querySelectorAll('#realm-dialogs .onboard input'); inputs[0].value = 'Ada'; inputs[1].value = 'Sunworks'; inputs[2].value = '4000'; document.querySelector('#realm-dialogs .dialog-buttons .primary').click(); const choice = await p; const ok = choice === 'start' && t.ctx.profile().name === 'Ada' && t.ctx.profile().postcode === '4000' && t.ctx.store.get('onboarding.done') === true && t.ctx.wm.isOpen('dashboard') && t.ctx.wm.isOpen('help'); t.done(); return ok; } },
+    { id: 'shell.policyHooks', title: 'Policies apply: high contrast and text scale hit the body, a flagged-off window refuses to open, run mode follows automation policy', dom: true, test: async () => { const t = makeTestCtx(); await withWindows(t); const body = document.createElement('div'); const un = wirePolicies(t.ctx, { body }); t.ctx.policies.set('realm.highContrast', true); t.ctx.policies.set('realm.textScale', 1.2); t.ctx.bus.emit('policies:changed', {}); const hooked = body.classList.contains('high-contrast') && body.style.getPropertyValue('--text-scale') === '1.2'; t.ctx.policies.setFlag('flag.registersWindow', false); const refused = t.ctx.wm.open('registers') === null && !t.ctx.wm.isOpen('registers'); t.ctx.policies.setFlag('flag.registersWindow', true); const opened = Boolean(t.ctx.wm.open('registers')); t.ctx.policies.set('automation.emergencyStop', true); t.ctx.bus.emit('policies:changed', {}); const paused = t.ctx.world.programme.mode === 'paused'; un(); t.done(); return hooked && refused && opened && paused; } },
+    { id: 'shell.sessionTimeout', title: 'Idle past the policy warns, then locks and saves; activity resumes', dom: true, test: () => { const t = makeTestCtx(); let now = 1700000000000; const host = document.createElement('div'); document.body.append(host); const s = wireSession(t.ctx, { now: () => now, setIntervalFn: () => 0, host }); t.ctx.policies.set('session.timeoutMinutes', 10); t.ctx.policies.set('session.warnBeforeMinutes', 3); const a = s.check(); now += 8 * 60000; const w = s.check(); const warned = host.querySelector('.session-warning') !== null; now += 3 * 60000; let fired = false; t.ctx.bus.on('session:timeout', () => { fired = true; }); const l = s.check(); const lockedNow = s.locked; s.touch(); host.querySelector('.session-warning button').click(); const resumed = !s.locked && s.check() === 'active'; host.remove(); t.done(); return a === 'active' && w === 'warning' && warned && l === 'locked' && fired && lockedNow && resumed; } }
 ];

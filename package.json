@@ -1,6 +1,6 @@
 {
   "name": "solarflow-minion-world-loader",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "description": "SolarFlow solar/battery compliance platform: static GitHub Pages front end plus an optional Express/PostgreSQL API",
   "main": "server.js",
   "private": true,
@@ -20,6 +20,7 @@
     "docker:build": "docker build -t solarflow:latest .",
     "docker:run": "docker run --rm -p 3000:3000 --env-file .env solarflow:latest",
     "features:realm": "node scripts/realm-features.mjs",
+    "programme": "node scripts/programme-build.mjs && node scripts/programme-run.mjs",
     "smoke:realm": "node tests/browser/realm-selftest.js docs docs/realm/selftest-browser.json && node tests/browser/realm-app-smoke.js docs"
   },
   "keywords": [

@@ -345,3 +345,21 @@ table.connectors tr.missing td { color: var(--muted); }
 .org-teams { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px; margin-left: 48px; }
 .org-node.team { border-top: 3px solid var(--accent); }
 .task-board td, .roster-table td { vertical-align: middle; }
+
+/* ---------- Programme, Registers, Policies (2.12) ---------- */
+.register-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
+.register-card { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; background: var(--panel); color: var(--text); cursor: pointer; font: inherit; }
+.register-card:hover { border-color: var(--accent); }
+.register-row.overdue td:first-child { border-left: 3px solid var(--bad); } .register-row.due td:first-child { border-left: 3px solid var(--warn); }
+.register-row, .alert-row, .programme-row, .domain-row, .spec-row { cursor: pointer; } .register-row:hover, .programme-row:hover, .domain-row:hover, .spec-row:hover, .alert-row:hover { background: var(--panel-3); }
+.policy-row.changed td:first-child { border-left: 3px solid var(--accent); } .policy-table .input, .policy-table select { max-width: 180px; }
+.status-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; } .legend-item { display: inline-flex; align-items: center; gap: 4px; }
+.programme-evidence code { background: var(--panel-3); padding: 1px 4px; border-radius: 3px; } .programme-spec { border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 6px; } .programme-spec ol, .programme-spec ul { margin: 4px 0 8px; padding-left: 18px; }
+/* Policy enforcement hooks: body classes and the text-scale variable (core/policies.js) */
+body { font-size: calc(14px * var(--text-scale, 1)); }
+body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::after { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
+body.high-contrast { --text: #fff; --muted: #e6e6e6; --border: #9aa; --border-2: #ccd; --panel: #000; --panel-2: #0a0a0a; --panel-3: #161616; --bg: #000; }
+body.sunlight { --bg: #fff; --panel: #fff; --panel-2: #f2f2f2; --panel-3: #e6e6e6; --text: #000; --muted: #333; --border: #777; --border-2: #444; }
+body.large-targets .btn, body.large-targets .input, body.large-targets select, body.large-targets .tab { min-height: 44px; font-size: 15px; } body.large-targets .hotbar-slot { min-width: 56px; min-height: 56px; }
+body.no-flash .toast, body.no-flash .ov-float { animation: none !important; }
+.session-warning { position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 90; background: var(--panel); border: 1px solid var(--warn); border-radius: 8px; padding: 8px 14px; box-shadow: 0 6px 20px rgba(0,0,0,.4); }

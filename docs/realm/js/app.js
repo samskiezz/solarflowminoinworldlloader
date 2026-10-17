@@ -16,6 +16,7 @@ async function boot() {
     ctx.store.set('stats.sessions', (ctx.store.get('stats.sessions') || 0) + 1);
     ctx.loadProducts('../data/cec-products.json');
     ctx.loadLibrary('../data/knowledge');
+    ctx.loadProgramme('../data/programme.json');
     // A sealed real-business snapshot shipped next to the site: offer to unseal it until a model is loaded.
     ctx.business.probeShipped().then((url) => { if (url && !ctx.business.model) { ctx.refresh(); toast('Your sealed business snapshot is here – open Business (Shift+B) and unseal it with your passphrase', { kind: 'info', timeout: 9000 }); } });
     // The real business: model from the server (or the cached/imported snapshot), mirrored into the world as houses and quests.

@@ -117,7 +117,7 @@ export class Workforce {
             task.history.push({ stage: stage.role, team: stage.team, worker: task.worker, at, outcome });
             if (outcome === 'rework') { task.reworks++; this.stats.rejected++; if (worker) worker.rejected++; task.stageIndex = 1; task.status = 'queued'; task.worker = null; this.note(world, `${task.id} ${task.subject}: audit sent it back to ${this.team(task.executeTeam).name} for rework`, 'rework', task); continue; }
             task.stageIndex++; task.worker = null; this.stats.handoffs++;
-            if (task.stageIndex >= task.stages.length) { task.status = 'done'; task.doneAt = at; this.stats.done++; this.stats.signoffs++; this.stats.byTeam[task.executeTeam] = (this.stats.byTeam[task.executeTeam] || 0) + 1; this.note(world, `${ULTRON.name} signed off ${task.subject} (${task.kind}, ${task.history.length} hand-offs${task.reworks ? `, ${task.reworks} rework` : ''})`, 'signoff', task); continue; }
+            if (task.stageIndex >= task.stages.length) { task.status = 'done'; task.doneAt = at; this.stats.done++; this.stats.signoffs++; if (task.kind === 'feature' && world.programme) world.programme.onSignoff(task, world); this.stats.byTeam[task.executeTeam] = (this.stats.byTeam[task.executeTeam] || 0) + 1; this.note(world, `${ULTRON.name} signed off ${task.subject} (${task.kind}, ${task.history.length} hand-offs${task.reworks ? `, ${task.reworks} rework` : ''})`, 'signoff', task); continue; }
             task.status = 'queued';
         }
         // assign queued work, highest priority first

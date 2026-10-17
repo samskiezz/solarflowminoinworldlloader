@@ -1,7 +1,7 @@
 {
- "at": "2026-10-17T14:26:42.999Z",
- "total": 826,
- "passed": 826,
+ "at": "2026-10-17T14:53:20.852Z",
+ "total": 852,
+ "passed": 852,
  "failed": 0,
  "results": [
   {
@@ -494,6 +494,60 @@
    "id": "core.cmd.errors",
    "module": "core/commands",
    "title": "Command errors are reported, not thrown",
+   "status": "passed"
+  },
+  {
+   "id": "registers.defs",
+   "module": "core/registers",
+   "title": "Over 150 typed registers covering the programme, every field typed, every id unique",
+   "status": "passed"
+  },
+  {
+   "id": "registers.crud",
+   "module": "core/registers",
+   "title": "Add, update, remove with validation; job scoping; journaled history",
+   "status": "passed"
+  },
+  {
+   "id": "registers.exportImport",
+   "module": "core/registers",
+   "title": "CSV and JSON export; JSON import rejects invalid rows and keeps valid ones; de-duplication",
+   "status": "passed"
+  },
+  {
+   "id": "registers.alerts",
+   "module": "core/registers",
+   "title": "Date fields raise overdue and due-soon alerts; done rows are quiet; budget variance computed",
+   "status": "passed"
+  },
+  {
+   "id": "policies.defs",
+   "module": "core/policies",
+   "title": "Over 120 typed policies and feature flags covering the programme, unique ids, sane defaults",
+   "status": "passed"
+  },
+  {
+   "id": "policies.setHistory",
+   "module": "core/policies",
+   "title": "Set with coercion and bounds, change history with who and when, reset, drift report",
+   "status": "passed"
+  },
+  {
+   "id": "policies.flags",
+   "module": "core/policies",
+   "title": "Feature flags default, switch, expire and report expiring soon",
+   "status": "passed"
+  },
+  {
+   "id": "policies.enforce",
+   "module": "core/policies",
+   "title": "Quiet hours wrap midnight, exponential back-off caps, business-day deadlines skip weekends, emergency stop halts automation",
+   "status": "passed"
+  },
+  {
+   "id": "policies.hooks",
+   "module": "core/policies",
+   "title": "Accessibility policies apply as body classes and CSS variables",
    "status": "passed"
   },
   {
@@ -2312,6 +2366,30 @@
    "id": "workforce.board",
    "module": "sim/workforce",
    "title": "The board lists open tasks by priority with their current stage and team",
+   "status": "passed"
+  },
+  {
+   "id": "programme.load",
+   "module": "sim/programme",
+   "title": "The programme loads its items, classifies dependencies for specs, and reports counts by status and domain",
+   "status": "passed"
+  },
+  {
+   "id": "programme.sweepAndSign",
+   "module": "sim/programme",
+   "title": "Sweeping queues items into the workforce with library citations; the workforce signs them off and specs get written",
+   "status": "passed"
+  },
+  {
+   "id": "programme.modes",
+   "module": "sim/programme",
+   "title": "Run modes: full feeds the queue, test feeds five, paused feeds none",
+   "status": "passed"
+  },
+  {
+   "id": "programme.verifyAndPersist",
+   "module": "sim/programme",
+   "title": "Self-test results verify live items; state round-trips through the world save",
    "status": "passed"
   },
   {
@@ -4289,6 +4367,72 @@
    "status": "passed"
   },
   {
+   "id": "win.programme.overview",
+   "module": "windows/programme",
+   "title": "Overview shows totals, the status legend, the run mode and progress by domain",
+   "status": "passed"
+  },
+  {
+   "id": "win.programme.sweepRun",
+   "module": "windows/programme",
+   "title": "Sweep now queues items; running a shift signs them off and the counts move",
+   "status": "passed"
+  },
+  {
+   "id": "win.programme.items",
+   "module": "windows/programme",
+   "title": "Items filter by domain, status and search; selecting one shows its backing and evidence",
+   "status": "passed"
+  },
+  {
+   "id": "win.programme.specs",
+   "module": "windows/programme",
+   "title": "Signed-off server-side items appear as specifications with their dependency",
+   "status": "passed"
+  },
+  {
+   "id": "win.registers.catalogue",
+   "module": "windows/registers",
+   "title": "Catalogue lists every register by domain with row counts; a card opens its rows",
+   "status": "passed"
+  },
+  {
+   "id": "win.registers.addEdit",
+   "module": "windows/registers",
+   "title": "The row form is built from the definition; adding, editing and deleting rows works with validation",
+   "status": "passed"
+  },
+  {
+   "id": "win.registers.alerts",
+   "module": "windows/registers",
+   "title": "The Due tab lists overdue and due-soon rows across registers",
+   "status": "passed"
+  },
+  {
+   "id": "win.registers.history",
+   "module": "windows/registers",
+   "title": "History tab journals adds, edits and removals for the chosen register",
+   "status": "passed"
+  },
+  {
+   "id": "win.policies.edit",
+   "module": "windows/policies",
+   "title": "Policies render by domain with live controls; a change applies, journals and shows as drift",
+   "status": "passed"
+  },
+  {
+   "id": "win.policies.bounds",
+   "module": "windows/policies",
+   "title": "Out-of-range values are refused and the control snaps back",
+   "status": "passed"
+  },
+  {
+   "id": "win.policies.flags",
+   "module": "windows/policies",
+   "title": "Flags switch with an expiry and show their owner",
+   "status": "passed"
+  },
+  {
    "id": "shell.registerWindows",
    "module": "shell",
    "title": "All window modules register with the window manager",
@@ -4412,6 +4556,18 @@
    "id": "shell.onboarding",
    "module": "shell",
    "title": "First-run onboarding captures profile and opens the dashboard",
+   "status": "passed"
+  },
+  {
+   "id": "shell.policyHooks",
+   "module": "shell",
+   "title": "Policies apply: high contrast and text scale hit the body, a flagged-off window refuses to open, run mode follows automation policy",
+   "status": "passed"
+  },
+  {
+   "id": "shell.sessionTimeout",
+   "module": "shell",
+   "title": "Idle past the policy warns, then locks and saves; activity resumes",
    "status": "passed"
   },
   {

@@ -11,7 +11,7 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0, the library in 2.10.0, Ultron and the big map in 2.11.0)
+## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0, the library in 2.10.0, Ultron and the big map in 2.11.0, the thousand-feature Programme in 2.12.0)
 
 `docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
 third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
@@ -131,6 +131,18 @@ their source; minions on shift read from it between jobs.
 AS/NZS standards are sold by Standards Australia and their text is never scraped. Put the PDFs you hold
 licences for in `data/knowledge/inbox/` and run the harvester with `--inbox`: every clause is indexed
 into a private file on your machine (gitignored) that you import in Library › Harvest.
+
+### The Programme (2.12.0)
+
+The 1,000-item feature list lives in `docs/data/programme-list.txt`; `npm run programme` classifies every
+item (`docs/data/programme.json`) and runs it through Ultron's workforce headless, writing
+`docs/data/programme-state.json`. Inside the realm, **Alt+P** opens the Programme (progress by domain, every
+item with its backing and evidence, the specifications the minions wrote), **Alt+R** the Registers (165 typed
+registers with history, export and due alerts) and **Alt+O** the Policies (129 policies, 8 feature flags,
+enforced in the shell). Status meanings, honestly: *live* = a named self-tested realm feature does it;
+*register* = a typed register implements it; *policy* = a configurable, enforced setting; *specified* = the
+static realm cannot run it (server, device or external system), so the minions research it against the
+library and write a specification record for whoever builds it.
 
 ## What the data is (and is not)
 
