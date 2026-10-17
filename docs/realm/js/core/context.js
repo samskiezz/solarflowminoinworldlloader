@@ -18,6 +18,7 @@ import { createLlm } from './llm.js';
 import { createAudio } from './audio.js';
 import { createCloud } from './cloud.js';
 import { createBusiness } from '../business/sync.js';
+import { createBridge } from './bridge.js';
 
 export const LEGACY_DEFAULT_CREW = [
     { id: 'ATLAS', name: 'Atlas', role: 'Lead installer', tier: 2, traits: ['meticulous', 'steady'], avatar: '🧑‍🔧', skills: { installation: 450, commissioning: 220 } },
@@ -100,6 +101,7 @@ export function createContext({ storage = null, root = null, products = null, se
         }
     };
 
+    ctx.bridge = createBridge(ctx);
     world.on((entry) => { bus.emit('world:event', entry); bus.emit(`world:${entry.type}`, entry); });
     if (products) ctx.setProducts(products);
     return ctx;

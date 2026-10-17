@@ -11,7 +11,7 @@ SolarFlow is a solar and battery compliance workspace for the Australian market,
 | `server.js` + `src/` | Optional Express API: users, per-user data, product search API, compliance screening, audit log, WebSocket updates | Node.js 18+ (PostgreSQL optional) |
 | `server/vps-server.js` | Tiny file-backed persistence server for the realm state | Node.js 18+ |
 
-## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0)
+## SolarFlow Realm – the game (new in 2.5.0, on your real business since 2.6.0, breeding minions and social media in 2.7.0, the complete business in 2.8.0, the engines in 2.9.0)
 
 `docs/realm/index.html` is a 3D game, **Solarhaven**: a town where your solar crew live and work. You walk a
 third-person character through it (W A S D, mouse-orbit camera, Space to jump, E to talk or enter), your
@@ -81,6 +81,25 @@ by what was sold or bought), the whole mailbox, every handover folder listed dir
 feed and the calendar from the first month. Finance › Invoices shows outstanding totals, product mix,
 spend by supplier and invoiced by month; the per-item findings that would otherwise number in the
 hundreds roll up so the queue stays readable.
+
+### The engines (2.9.0)
+
+The project's own engines – the six-tier regulatory hierarchy with auto-citation, the court-safe
+framework with its five defensibility tests, the AS/NZS 5033:2021 check, the document and data
+pipeline, the narrative engine and the 100-minion shift roster – are built into the running world as
+tested modules (`docs/realm/js/domain/hierarchy.js`, `courtsafe.js`, `compliance.js`, `pipeline.js`,
+`sim/narrative.js`, `sim/shifts.js`, `core/bridge.js`). The original standalone scripts stay in
+`docs/*.js` for reference; the Realm versions are the ones that run.
+
+| Window | Key | Shows |
+|---|---|---|
+| Compliance engine | Shift+R | ask any question: governing tier, Codex and DNSP evidence, court-safe answer, the five tests, disclaimer and audit trail; the six tiers and precedence; the AS/NZS 5033:2021 check on the current job; the tier validator; engine health, the honest function catalogue and minion capabilities |
+| Chronicle | Shift+U | the stories the town tells, every minion's archetype, quests and journey, the conflicts and philosophical debates |
+| Shift roster | Shift+V | who is on which shift and what they are doing, study tasks and work cycles, purses, the shop and purchases |
+
+Every answer the engine gives is governed by the highest regulatory tier that applies, cites its
+authority, is rewritten in court-safe language and must pass the personal, coroner, regulator, judge
+and insurer tests; beyond the competency envelope it refuses with conservative guidance instead.
 
 ## What the data is (and is not)
 

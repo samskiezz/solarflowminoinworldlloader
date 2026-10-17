@@ -2,6 +2,60 @@
 
 All notable changes to SolarFlow Minion World Loader.
 
+## [2.9.0] - 2026-10-17
+
+### The engines, built into the world
+
+The project's own engines – the files that lived in `docs/*.js` as standalone scripts – are now real
+Realm modules with self-tests, wired into the simulation and given windows. Nothing is a stub: every
+function listed exists, is tested in Node and in Chromium, and is reachable from the running world.
+
+- **Six-tier regulatory hierarchy** (`domain/hierarchy.js`, from `solar_compliance_engine.js`): safety
+  law, AS/NZS standards, network (DNSP) rules, SAA/CEC guidelines, CER/SRES rules and manufacturer
+  instructions. A question is governed by the highest tier it clearly touches; citations come from the
+  Codex for standards and the DNSP register for networks; `precedence()` says which of two conflicting
+  sources wins and why; `autoCite()` writes the basis sentence every answer carries.
+- **Court-safe framework** (`domain/courtsafe.js`, from `court_safe_framework.js`): the five
+  defensibility tests 479–483 (personal, coroner, regulator, judge, insurer) with deterministic scores
+  and the original thresholds (80/95/90/85/75 %), court-safe language rewriting in one pass, legal
+  framing, professional disclaimers per category, the conservative alternative, the defensibility
+  package with its audit trail, the competency envelope (1000 V, 100 A, 100 kW, high complexity) and a
+  verdict of defensible, conditional or refused.
+- **Compliance engine** (`domain/compliance.js`): `processQuery()` runs a question through the
+  competency gate (parameters read from the question itself – "1500 V", "2 MW"), the governing tier,
+  Codex and DNSP evidence, hazard detection with a control for every hazard, court-safe framing and the
+  five tests. `checkAS5033_2021()` runs the real calculators – array voltage against the installation
+  class limit, 1.25 × Isc cable current, d.c. voltage drop, d.c.:a.c. ratio, isolation at the inverter,
+  arc hazards, IEC 62109-2 / AS/NZS 4777.2 inverters, required labels – and returns pass/fail/advisory
+  checks with clause citations and fixes. The function catalogue is honest: the original reserved 500
+  numbered slots; the catalogue lists the ones that exist as tested code and the coverage figure.
+- **Document and data pipeline** (`domain/pipeline.js`, from `australian-solar-pipeline.js` and
+  `australian_data_processor.js`): fifteen document types (product literature and the job-pack
+  documents the Drive importer expects) classified by name, folder and MIME type; priority queueing
+  (manuals, popular brands, big modules, compliance paperwork first); the product catalogue indexed as
+  a knowledge base answered in plain words ("voc of the Trina 440W"); and `validateSystemData()` –
+  eight rules across the tiers with the highest failing tier governing the fix.
+- **Narrative engine** (`sim/narrative.js`, from `narrative-engine.js`): the Chronicle. Every minion
+  gets an archetype from role, specialties and genes (Visionary, Rebel, Mentor, Innovator, Philosopher,
+  Guardian, Explorer, Healer), two quests, a journey with stages and breakthroughs, secrets, fears and
+  desires. Four conflicts and three debates are seeded from the archetypes in town, and a story is
+  written into the world feed every twelve simulated hours (breakthroughs, relationships from the
+  lifecycle system, conflicts, discoveries, culture, insights). Seeded from the world's random stream;
+  round-trips with the save.
+- **Shift roster** (`sim/shifts.js`, from `minion-roster-system.js`): three shifts (07–15, 15–23,
+  23–07), work cycles (standard, intensive, maintenance), seven study tasks that pay credits into a
+  personal purse and XP into the matching skill, breaks, a shop whose purchases land on needs, skills
+  or learning speed, savings goals, and short- and long-term goals. Job tasks keep priority; study
+  fills the rest of the shift. State rides in `agent.meta.shift`.
+- **Engine bridge** (`core/bridge.js`, from `ml-llm-api-bridge.js`): one place that routes a question
+  to product knowledge or the compliance pipeline, lets a minion answer through the configured LLM
+  with the engines' findings in context, reports every crew member's capability level, archetype and
+  engines, and rolls up health and metrics. Available as `ctx.bridge`.
+- **Windows**: Compliance engine (Shift+R: Ask, Hierarchy, AS/NZS 5033, Validate, Engines), Chronicle
+  (Shift+U: Stories, Journeys, Conflicts & debates) and Shift roster (Shift+V: Board, Study, Economy).
+- The world feed keeps 600 entries (was 300) so births and partnerships survive a busy week of stories.
+- 789 registered features (was 731), all passing in Node and Chromium; app smoke 33/33.
+
 ## [2.8.0] - 2026-10-12
 
 ### The whole business, not a sample

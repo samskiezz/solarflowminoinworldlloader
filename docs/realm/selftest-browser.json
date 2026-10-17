@@ -1,7 +1,7 @@
 {
- "at": "2026-10-12T03:21:55.739Z",
- "total": 731,
- "passed": 731,
+ "at": "2026-10-17T11:43:34.612Z",
+ "total": 789,
+ "passed": 789,
  "failed": 0,
  "results": [
   {
@@ -1283,6 +1283,180 @@
    "status": "passed"
   },
   {
+   "id": "hierarchy.tiers",
+   "module": "domain/hierarchy",
+   "title": "Six regulatory tiers from safety law down to manufacturer instructions",
+   "status": "passed"
+  },
+  {
+   "id": "hierarchy.governing",
+   "module": "domain/hierarchy",
+   "title": "A question is governed by the highest tier that applies",
+   "status": "passed"
+  },
+  {
+   "id": "hierarchy.safetyWins",
+   "module": "domain/hierarchy",
+   "title": "When safety and a standard both apply, safety law governs",
+   "status": "passed"
+  },
+  {
+   "id": "hierarchy.citations",
+   "module": "domain/hierarchy",
+   "title": "Citations come from the Codex for standards and the DNSP register for networks",
+   "status": "passed"
+  },
+  {
+   "id": "hierarchy.precedence",
+   "module": "domain/hierarchy",
+   "title": "Precedence between conflicting sources: the higher tier overrides",
+   "status": "passed"
+  },
+  {
+   "id": "hierarchy.autoCite",
+   "module": "domain/hierarchy",
+   "title": "Auto-citation record with basis sentence and the other tiers that apply",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.tests",
+   "module": "domain/courtsafe",
+   "title": "The five defensibility tests 479–483 with their thresholds",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.allPass",
+   "module": "domain/courtsafe",
+   "title": "A controlled, cited, verified decision passes all five tests",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.coronerFails",
+   "module": "domain/courtsafe",
+   "title": "One uncontrolled hazard fails the coroner test and the decision is refused; a soft failure is conditional",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.regulator",
+   "module": "domain/courtsafe",
+   "title": "Unqualified consumer claims fail the regulator test",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.judicial",
+   "module": "domain/courtsafe",
+   "title": "Reasoning without evidence or assumptions fails the judicial test",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.language",
+   "module": "domain/courtsafe",
+   "title": "Court-safe language rewrites absolutes once, keeping capitalisation",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.competency",
+   "module": "domain/courtsafe",
+   "title": "Questions beyond the envelope are refused with conservative guidance",
+   "status": "passed"
+  },
+  {
+   "id": "courtsafe.package",
+   "module": "domain/courtsafe",
+   "title": "Defensibility package with evidence, citations, risk assessment, audit trail and disclaimers",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.processQuery",
+   "module": "domain/compliance",
+   "title": "A question comes back with its governing tier, Codex evidence, court-safe answer, five tests and audit trail",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.hazardGate",
+   "module": "domain/compliance",
+   "title": "A question that names a hazard is governed by safety law and carries controls for every hazard",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.competencyRefusal",
+   "module": "domain/compliance",
+   "title": "Beyond the envelope (read from the question or the context) the engine refuses with a court-safe refusal instead of an answer",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.dnspEvidence",
+   "module": "domain/compliance",
+   "title": "A network question with a DNSP in context cites that operator's allowance",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.as5033pass",
+   "module": "domain/compliance",
+   "title": "AS/NZS 5033:2021 check runs the real calculators and passes a sound design",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.as5033fail",
+   "module": "domain/compliance",
+   "title": "Over-voltage strings, thin cable, a missing isolator and unlisted inverters fail with fixes",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.catalogue",
+   "module": "domain/compliance",
+   "title": "The function catalogue is honest: reserved slots versus functions that exist",
+   "status": "passed"
+  },
+  {
+   "id": "compliance.health",
+   "module": "domain/compliance",
+   "title": "System health lists the engines, coverage, crew and the compliance score with a sub-95 % alert",
+   "status": "passed"
+  },
+  {
+   "id": "pipeline.classify",
+   "module": "domain/pipeline",
+   "title": "Documents are classified by name, folder and MIME type into product, job and reference types",
+   "status": "passed"
+  },
+  {
+   "id": "pipeline.priority",
+   "module": "domain/pipeline",
+   "title": "Manuals, popular brands and big modules go first; compliance paperwork jumps the queue",
+   "status": "passed"
+  },
+  {
+   "id": "pipeline.queue",
+   "module": "domain/pipeline",
+   "title": "A queue is built per product and loose file, sorted by priority, with stats",
+   "status": "passed"
+  },
+  {
+   "id": "pipeline.index",
+   "module": "domain/pipeline",
+   "title": "The product catalogue indexes into knowledge entries with power, Voc, capacity and standard facts",
+   "status": "passed"
+  },
+  {
+   "id": "pipeline.query",
+   "module": "domain/pipeline",
+   "title": "Plain-word questions find the product and answer the fact asked for",
+   "status": "passed"
+  },
+  {
+   "id": "pipeline.validatePass",
+   "module": "domain/pipeline",
+   "title": "A sound system record passes every tier",
+   "status": "passed"
+  },
+  {
+   "id": "pipeline.validateFail",
+   "module": "domain/pipeline",
+   "title": "Failures are reported per tier and the highest failing tier governs",
+   "status": "passed"
+  },
+  {
    "id": "needs.curves",
    "module": "sim/needs",
    "title": "Response curves (linear, quadratic, sqrt, logistic, inverse)",
@@ -1976,6 +2150,102 @@
    "id": "core.cloud.legacyCoexists",
    "module": "core/cloud",
    "title": "Legacy state on the server is preserved next to the realm save",
+   "status": "passed"
+  },
+  {
+   "id": "narrative.archetypes",
+   "module": "sim/narrative",
+   "title": "Eight archetypes assigned from role, specialties and genes, deterministically",
+   "status": "passed"
+  },
+  {
+   "id": "narrative.journey",
+   "module": "sim/narrative",
+   "title": "A journey has two quests, a path, secrets, fears, desires and a stage that advances with breakthroughs",
+   "status": "passed"
+  },
+  {
+   "id": "narrative.seed",
+   "module": "sim/narrative",
+   "title": "Conflicts and debates are seeded from the archetypes present",
+   "status": "passed"
+  },
+  {
+   "id": "narrative.worldStories",
+   "module": "sim/narrative",
+   "title": "The world writes a story into its feed every twelve hours and the chronicle round-trips",
+   "status": "passed"
+  },
+  {
+   "id": "narrative.deterministic",
+   "module": "sim/narrative",
+   "title": "The same seed tells the same story",
+   "status": "passed"
+  },
+  {
+   "id": "narrative.summary",
+   "module": "sim/narrative",
+   "title": "The summary counts archetypes, conflicts, debates, discoveries, culture, breakthroughs and the evolution stage",
+   "status": "passed"
+  },
+  {
+   "id": "shifts.shifts",
+   "module": "sim/shifts",
+   "title": "Three shifts cover the clock: 07–15, 15–23, 23–07",
+   "status": "passed"
+  },
+  {
+   "id": "shifts.assignment",
+   "module": "sim/shifts",
+   "title": "Crew are spread across the shifts in roster order and get a work cycle from their traits",
+   "status": "passed"
+  },
+  {
+   "id": "shifts.pickTask",
+   "module": "sim/shifts",
+   "title": "Study tasks match expertise: easy ones fall away as a minion grows, hard ones need a base",
+   "status": "passed"
+  },
+  {
+   "id": "shifts.world",
+   "module": "sim/shifts",
+   "title": "Over a day the crew study on shift, earn credits and XP, take breaks on their cycle and the purse round-trips",
+   "status": "passed"
+  },
+  {
+   "id": "shifts.board",
+   "module": "sim/shifts",
+   "title": "The roster board shows every shift, who is on it and what they are doing",
+   "status": "passed"
+  },
+  {
+   "id": "shifts.spending",
+   "module": "sim/shifts",
+   "title": "Minions spend their purse in the shop and the benefit lands on needs, skills or learning speed",
+   "status": "passed"
+  },
+  {
+   "id": "bridge.route",
+   "module": "core/bridge",
+   "title": "Questions route to product knowledge or the compliance pipeline",
+   "status": "passed"
+  },
+  {
+   "id": "bridge.ask",
+   "module": "core/bridge",
+   "title": "Asking returns the product fact or the full court-safe compliance record and counts the metrics",
+   "status": "passed"
+  },
+  {
+   "id": "bridge.capabilities",
+   "module": "core/bridge",
+   "title": "Every crew minion reports a capability level, archetype and the engines they draw on",
+   "status": "passed"
+  },
+  {
+   "id": "bridge.status",
+   "module": "core/bridge",
+   "title": "Status rolls up engine health, the catalogue, metrics, products and the LLM state",
    "status": "passed"
   },
   {
@@ -3788,6 +4058,84 @@
    "id": "win.social.posts",
    "module": "windows/social",
    "title": "Posts tab lists the history across platforms with engagement and links",
+   "status": "passed"
+  },
+  {
+   "id": "win.compliance.ask",
+   "module": "windows/compliance",
+   "title": "A question gets a tier, a court-safe answer, the five tests and a disclaimer",
+   "status": "passed"
+  },
+  {
+   "id": "win.compliance.refusal",
+   "module": "windows/compliance",
+   "title": "Beyond the envelope the window shows the refusal and the conservative guidance",
+   "status": "passed"
+  },
+  {
+   "id": "win.compliance.hierarchy",
+   "module": "windows/compliance",
+   "title": "Six tiers tabled and precedence resolved between two sources",
+   "status": "passed"
+  },
+  {
+   "id": "win.compliance.as5033",
+   "module": "windows/compliance",
+   "title": "The AS/NZS 5033 check runs on the current job, saves the result into the design and counts the stat",
+   "status": "passed"
+  },
+  {
+   "id": "win.compliance.validate",
+   "module": "windows/compliance",
+   "title": "The tier validator runs eight rules and names the governing failure",
+   "status": "passed"
+  },
+  {
+   "id": "win.compliance.engines",
+   "module": "windows/compliance",
+   "title": "Engines tab: eight engines, the honest catalogue, crew capabilities and metrics",
+   "status": "passed"
+  },
+  {
+   "id": "win.chronicle.stories",
+   "module": "windows/chronicle",
+   "title": "The story feed shows the town's tales and a story can be told on demand",
+   "status": "passed"
+  },
+  {
+   "id": "win.chronicle.journeys",
+   "module": "windows/chronicle",
+   "title": "Every minion has a journey with archetype, quests, fears and desires; the archetype filter narrows the list",
+   "status": "passed"
+  },
+  {
+   "id": "win.chronicle.conflicts",
+   "module": "windows/chronicle",
+   "title": "Four seeded conflicts with intensity and three debates with positions",
+   "status": "passed"
+  },
+  {
+   "id": "win.roster.board",
+   "module": "windows/roster",
+   "title": "The board lists all three shifts with every crew member and marks the one on now",
+   "status": "passed"
+  },
+  {
+   "id": "win.roster.move",
+   "module": "windows/roster",
+   "title": "A minion can be moved to another shift and the change persists in the world",
+   "status": "passed"
+  },
+  {
+   "id": "win.roster.study",
+   "module": "windows/roster",
+   "title": "Study tab tables the seven tasks, three cycles and every minion's goals",
+   "status": "passed"
+  },
+  {
+   "id": "win.roster.economy",
+   "module": "windows/roster",
+   "title": "Economy tab shows purses, the shop, purchases and can run the next shift",
    "status": "passed"
   },
   {

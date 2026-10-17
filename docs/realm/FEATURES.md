@@ -5,21 +5,21 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 
 | Metric | Value |
 |---|---|
-| Registered features | **731** |
-| Verified in Node (this run) | 409 passed, 0 failed |
-| Browser-verified (DOM) features | 322 |
-| Modules | 115 |
-| Generated | 2026-10-12T03:18:35.503Z |
+| Registered features | **789** |
+| Verified in Node (this run) | 454 passed, 0 failed |
+| Browser-verified (DOM) features | 335 |
+| Modules | 125 |
+| Generated | 2026-10-17T11:42:43.162Z |
 
 ## By area
 
 | Area | Features |
 |---|---|
-| Core shell | 104 |
-| Solar engineering domain | 124 |
-| Crew simulation | 101 |
+| Core shell | 108 |
+| Solar engineering domain | 153 |
+| Crew simulation | 113 |
 | Shell | 83 |
-| Windows (game UI) | 240 |
+| Windows (game UI) | 253 |
 | 3D game world | 79 |
 
 ## business/bank (3)
@@ -162,6 +162,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `core.audio.synth` | Nine synthesised cues play when enabled | node + browser |
 | 3 | `core.audio.loops` | Ambience loops follow phase, weather and the campfire | node + browser |
 | 4 | `core.audio.noContext` | Without WebAudio support everything is a safe no-op | node + browser |
+
+## core/bridge (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `bridge.route` | Questions route to product knowledge or the compliance pipeline | node + browser |
+| 2 | `bridge.ask` | Asking returns the product fact or the full court-safe compliance record and counts the metrics | node + browser |
+| 3 | `bridge.capabilities` | Every crew minion reports a capability level, archetype and the engines they draw on | node + browser |
+| 4 | `bridge.status` | Status rolls up engine health, the catalogue, metrics, products and the LLM state | node + browser |
 
 ## core/bus (6)
 
@@ -378,6 +387,32 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `commissioning.evaluate.voc` | Voc deviation beyond 5 % fails | node + browser |
 | 7 | `commissioning.irradiance` | Irradiance adequacy for I-V tests | node + browser |
 
+## domain/compliance (8)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `compliance.processQuery` | A question comes back with its governing tier, Codex evidence, court-safe answer, five tests and audit trail | node + browser |
+| 2 | `compliance.hazardGate` | A question that names a hazard is governed by safety law and carries controls for every hazard | node + browser |
+| 3 | `compliance.competencyRefusal` | Beyond the envelope (read from the question or the context) the engine refuses with a court-safe refusal instead of an answer | node + browser |
+| 4 | `compliance.dnspEvidence` | A network question with a DNSP in context cites that operator's allowance | node + browser |
+| 5 | `compliance.as5033pass` | AS/NZS 5033:2021 check runs the real calculators and passes a sound design | node + browser |
+| 6 | `compliance.as5033fail` | Over-voltage strings, thin cable, a missing isolator and unlisted inverters fail with fixes | node + browser |
+| 7 | `compliance.catalogue` | The function catalogue is honest: reserved slots versus functions that exist | node + browser |
+| 8 | `compliance.health` | System health lists the engines, coverage, crew and the compliance score with a sub-95 % alert | node + browser |
+
+## domain/courtsafe (8)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `courtsafe.tests` | The five defensibility tests 479–483 with their thresholds | node + browser |
+| 2 | `courtsafe.allPass` | A controlled, cited, verified decision passes all five tests | node + browser |
+| 3 | `courtsafe.coronerFails` | One uncontrolled hazard fails the coroner test and the decision is refused; a soft failure is conditional | node + browser |
+| 4 | `courtsafe.regulator` | Unqualified consumer claims fail the regulator test | node + browser |
+| 5 | `courtsafe.judicial` | Reasoning without evidence or assumptions fails the judicial test | node + browser |
+| 6 | `courtsafe.language` | Court-safe language rewrites absolutes once, keeping capitalisation | node + browser |
+| 7 | `courtsafe.competency` | Questions beyond the envelope are refused with conservative guidance | node + browser |
+| 8 | `courtsafe.package` | Defensibility package with evidence, citations, risk assessment, audit trail and disclaimers | node + browser |
+
 ## domain/dnsp (4)
 
 | # | Feature | What it verifies | Runs in |
@@ -395,6 +430,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 2 | `handover.warranty` | Warranty register with product and performance terms | node + browser |
 | 3 | `handover.maintenance` | Maintenance schedule with owner and installer items | node + browser |
 | 4 | `handover.manual` | Owner's manual text with shutdown procedure | node + browser |
+
+## domain/hierarchy (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `hierarchy.tiers` | Six regulatory tiers from safety law down to manufacturer instructions | node + browser |
+| 2 | `hierarchy.governing` | A question is governed by the highest tier that applies | node + browser |
+| 3 | `hierarchy.safetyWins` | When safety and a standard both apply, safety law governs | node + browser |
+| 4 | `hierarchy.citations` | Citations come from the Codex for standards and the DNSP register for networks | node + browser |
+| 5 | `hierarchy.precedence` | Precedence between conflicting sources: the higher tier overrides | node + browser |
+| 6 | `hierarchy.autoCite` | Auto-citation record with basis sentence and the other tiers that apply | node + browser |
 
 ## domain/incentives (7)
 
@@ -452,6 +498,18 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 4 | `loads.peakKw` | Peak demand (kW) | node + browser |
 | 5 | `loads.eveningSharePct` | Evening share for battery sizing | node + browser |
 | 6 | `loads.maximumDemandA` | Maximum demand estimate | node + browser |
+
+## domain/pipeline (7)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `pipeline.classify` | Documents are classified by name, folder and MIME type into product, job and reference types | node + browser |
+| 2 | `pipeline.priority` | Manuals, popular brands and big modules go first; compliance paperwork jumps the queue | node + browser |
+| 3 | `pipeline.queue` | A queue is built per product and loose file, sorted by priority, with stats | node + browser |
+| 4 | `pipeline.index` | The product catalogue indexes into knowledge entries with power, Voc, capacity and standard facts | node + browser |
+| 5 | `pipeline.query` | Plain-word questions find the product and answer the fact asked for | node + browser |
+| 6 | `pipeline.validatePass` | A sound system record passes every tier | node + browser |
+| 7 | `pipeline.validateFail` | Failures are reported per tier and the highest failing tier governs | node + browser |
 
 ## domain/pricing (6)
 
@@ -788,6 +846,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `memory.reflect` | Reflection synthesises insights from failures | node + browser |
 | 7 | `memory.serialise` | Serialise and restore | node + browser |
 
+## sim/narrative (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `narrative.archetypes` | Eight archetypes assigned from role, specialties and genes, deterministically | node + browser |
+| 2 | `narrative.journey` | A journey has two quests, a path, secrets, fears, desires and a stage that advances with breakthroughs | node + browser |
+| 3 | `narrative.seed` | Conflicts and debates are seeded from the archetypes present | node + browser |
+| 4 | `narrative.worldStories` | The world writes a story into its feed every twelve hours and the chronicle round-trips | node + browser |
+| 5 | `narrative.deterministic` | The same seed tells the same story | node + browser |
+| 6 | `narrative.summary` | The summary counts archetypes, conflicts, debates, discoveries, culture, breakthroughs and the evolution stage | node + browser |
+
 ## sim/needs (7)
 
 | # | Feature | What it verifies | Runs in |
@@ -821,6 +890,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `roster.founding` | Six founding crew are hired; the rest can be recruited by tier cost | node + browser |
 | 4 | `roster.portraits` | Every minion has an identicon portrait path | node + browser |
 | 5 | `roster.uniqueTitles` | Every minion has a distinct solar title | node + browser |
+
+## sim/shifts (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `shifts.shifts` | Three shifts cover the clock: 07–15, 15–23, 23–07 | node + browser |
+| 2 | `shifts.assignment` | Crew are spread across the shifts in roster order and get a work cycle from their traits | node + browser |
+| 3 | `shifts.pickTask` | Study tasks match expertise: easy ones fall away as a minion grows, hard ones need a base | node + browser |
+| 4 | `shifts.world` | Over a day the crew study on shift, earn credits and XP, take breaks on their cycle and the purse round-trips | node + browser |
+| 5 | `shifts.board` | The roster board shows every shift, who is on it and what they are doing | node + browser |
+| 6 | `shifts.spending` | Minions spend their purse in the shop and the benefit lands on needs, skills or learning speed | node + browser |
 
 ## sim/skills (7)
 
@@ -953,6 +1033,14 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 8 | `win.check.catalogue` | Checklist catalogue with clause references | browser |
 | 9 | `win.check.csv` | Checklist CSV export | node + browser |
 
+## windows/chronicle (3)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.chronicle.stories` | The story feed shows the town's tales and a story can be told on demand | browser |
+| 2 | `win.chronicle.journeys` | Every minion has a journey with archetype, quests, fears and desires; the archetype filter narrows the list | browser |
+| 3 | `win.chronicle.conflicts` | Four seeded conflicts with intensity and three debates with positions | browser |
+
 ## windows/codex (10)
 
 | # | Feature | What it verifies | Runs in |
@@ -980,6 +1068,17 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 6 | `win.comm.irradiance` | Low irradiance warning | browser |
 | 7 | `win.comm.reference` | Acceptance criteria reference | browser |
 | 8 | `win.comm.csv` | Commissioning CSV export | node + browser |
+
+## windows/compliance (6)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.compliance.ask` | A question gets a tier, a court-safe answer, the five tests and a disclaimer | browser |
+| 2 | `win.compliance.refusal` | Beyond the envelope the window shows the refusal and the conservative guidance | browser |
+| 3 | `win.compliance.hierarchy` | Six tiers tabled and precedence resolved between two sources | browser |
+| 4 | `win.compliance.as5033` | The AS/NZS 5033 check runs on the current job, saves the result into the design and counts the stat | browser |
+| 5 | `win.compliance.validate` | The tier validator runs eight rules and names the governing failure | browser |
+| 6 | `win.compliance.engines` | Engines tab: eight engines, the honest catalogue, crew capabilities and metrics | browser |
 
 ## windows/crew (14)
 
@@ -1214,6 +1313,15 @@ verified in Node for the pure features and in Chromium (`npm run smoke:realm`, o
 | 3 | `win.reports.summary` | Markdown design summary | browser |
 | 4 | `win.reports.extras` | Report includes proposal, serials and warranties when present | browser |
 | 5 | `win.reports.escaping` | Customer input is HTML-escaped in reports | browser |
+
+## windows/roster (4)
+
+| # | Feature | What it verifies | Runs in |
+|---|---|---|---|
+| 1 | `win.roster.board` | The board lists all three shifts with every crew member and marks the one on now | browser |
+| 2 | `win.roster.move` | A minion can be moved to another shift and the change persists in the world | browser |
+| 3 | `win.roster.study` | Study tab tables the seven tasks, three cycles and every minion's goals | browser |
+| 4 | `win.roster.economy` | Economy tab shows purses, the shop, purchases and can run the next shift | browser |
 
 ## windows/schedule (6)
 

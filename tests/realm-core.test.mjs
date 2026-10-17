@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-const modules = ['bus', 'store', 'registry', 'keybinds', 'i18n', 'clock', 'ui', 'wm', 'commands', 'context'];
+const modules = ['bus', 'store', 'registry', 'keybinds', 'i18n', 'clock', 'ui', 'wm', 'commands', 'context', 'bridge'];
 
 for (const name of modules) {
     test(`core/${name}: registered self-tests pass`, async () => {

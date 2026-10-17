@@ -308,3 +308,26 @@ table.connectors tr.missing td { color: var(--muted); }
 .social-draft textarea.draft-text { width: 100%; font-family: inherit; margin: 6px 0; }
 .social-draft.status-published { opacity: 0.8; }
 .social-draft.status-dismissed { opacity: 0.6; }
+
+/* ---- engines 2.9: compliance, chronicle, roster ---- */
+.tier-badge { font-weight: 600; letter-spacing: .2px; }
+.compliance-query { flex: 1; min-width: 240px; }
+.compliance-answer { font-size: 15px; line-height: 1.5; }
+.five-tests { display: grid; gap: 8px; }
+.five-test { border: 1px solid var(--border); border-left: 4px solid var(--ok); border-radius: 6px; padding: 8px 10px; background: var(--panel-2); }
+.five-test.fail { border-left-color: var(--bad); }
+.five-test-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
+.as5033-checks .result, .validate-rules .result, .engine-list .result { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.result-ref.small { color: var(--muted); }
+.story-feed .feed-item.story { align-items: baseline; }
+.journeys { display: grid; gap: 6px; }
+.journey { border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; background: var(--panel-2); }
+.journey > summary { cursor: pointer; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.journey-body { padding: 6px 0 2px; }
+.conflicts { display: grid; gap: 6px; }
+.debate { border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; background: var(--panel-2); }
+.debate > summary { cursor: pointer; }
+.shift-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
+.shift-head .panel-title { margin: 0; }
+.shift-head.on .panel-title { color: var(--ok); }
+.shift-table td, .study-table td, .goals-table td, .richest-table td { vertical-align: middle; }

@@ -9,11 +9,13 @@ import { createJob, completeTask, stageTasks } from '../domain/jobs.js';
 import { ensureGenes, lifeStage, capability, socialise, maybePartner, canBreed, makeChild, linkFamily, determineDeath, partnerOf, familyTree, POPULATION_CAP, DAY } from './lifecycle.js';
 import { trait } from './genetics.js';
 import { epochProgress, companyIndex, epochInputs } from './epochs.js';
+import { Chronicle } from './narrative.js';
+import { tickShifts } from './shifts.js';
 
 export const HOURS_PER_DAY = 24;
 
 export class World {
-    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked, population = null, memorial = [] } = {}) {
+    constructor({ seed = 1, startTime = Date.UTC(2026, 0, 5, 7), agents = [], jobs = [], ledger, stats, unlocked, population = null, memorial = [], chronicle = null } = {}) {
         this.seed = seed;
         this.random = mulberry32(seed);
         this.time = startTime; // ms
@@ -28,6 +30,8 @@ export class World {
         this.memorial = memorial || [];
         for (const a of this.agents) ensureGenes(a);
         this.unlocked = unlocked || [];
+        // The Chronicle: archetypes, quests, conflicts, debates and the stories the town tells (sim/narrative.js).
+        this.chronicle = chronicle instanceof Chronicle ? chronicle : Chronicle.fromJSON(chronicle);
         this.activeEvent = null;
         this.eventEndsAt = 0;
         this.feed = [];
@@ -38,7 +42,7 @@ export class World {
     emit(entry) {
         const item = { at: this.time, hour: this.hour, ...entry };
         this.feed.push(item);
-        if (this.feed.length > 300) this.feed.splice(0, this.feed.length - 300);
+        if (this.feed.length > 600) this.feed.splice(0, this.feed.length - 600);
         for (const l of this.listeners) { try { l(item); } catch (error) { /* listener errors never break the sim */ } }
         return item;
     }
@@ -123,6 +127,8 @@ export class World {
             summary.push({ agentId: agent.id, events: result.events, mood: result.mood });
         }
         this.tickLife(hours);
+        tickShifts(this, hours);
+        this.chronicle.tick(this, hours);
         this.stats.expertAgents = this.agents.filter((a) => Object.keys(a.skills).some((k) => a.level(k) >= 10)).length;
         this.stats.reflections = this.agents.reduce((n, a) => n + a.stats.reflections, 0);
         this.stats.upgradesOwned = this.ledger.owned.length;
@@ -242,11 +248,11 @@ export class World {
     quests() { return this.jobs.filter((j) => j.stage !== 'complete').map(questsForJob); }
 
     toJSON() {
-        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100), population: this.population, memorial: this.memorial };
+        return { seed: this.seed, time: this.time, hour: this.hour, agents: this.agents.map((a) => a.toJSON()), jobs: this.jobs, ledger: this.ledger, stats: this.stats, unlocked: this.unlocked, activeEvent: this.activeEvent, eventEndsAt: this.eventEndsAt, feed: this.feed.slice(-100), population: this.population, memorial: this.memorial, chronicle: this.chronicle.toJSON() };
     }
 
     static fromJSON(data) {
-        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked, population: data.population, memorial: data.memorial });
+        const world = new World({ seed: data.seed, startTime: data.time, agents: data.agents || [], jobs: data.jobs || [], ledger: data.ledger, stats: data.stats, unlocked: data.unlocked, population: data.population, memorial: data.memorial, chronicle: data.chronicle || null });
         world.hour = data.hour || 0;
         world.activeEvent = data.activeEvent || null;
         world.eventEndsAt = data.eventEndsAt || 0;
